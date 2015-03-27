@@ -1,0 +1,204 @@
+.sidemenu-icon {
+  width:96px;
+  height:96px;
+  border-radius:48px;
+  -webkit-border-radius:48px;
+  -moz-border-radius:48px;
+  display:inline-block;
+  vertical-align:middle;
+  margin-left:15px;
+  background-size:96px 96px;
+}
+
+.circular-login {
+      width: 54px;
+      height: 54px;
+      border-radius: 27px;
+      -webkit-border-radius: 27px;
+      -moz-border-radius: 27px;
+      background: url(../../assets/images/markroper.png) no-repeat;
+      background-size: 100%;
+      margin-left:20px;
+      cursor:pointer;
+      }
+      
+.md-button > span {
+  margin-left:20px;
+}
+.sidemenu-icon.behavior { background: url(../assets/images/behavior-icon.png) no-repeat; }
+.sidemenu-icon.attendance { background: url(../assets/images/attendance.png) no-repeat; }
+.sidemenu-icon.grades { background: url(../assets/images/grades.png) no-repeat; }
+.sidemenu-icon.goals { background: url(../assets/images/goals.jpeg) no-repeat; }
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+.jumbotron {
+  background-color:rgba(0, 0, 0, 0.0);
+  height: 275px;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+  font-family: Lato,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  text-align:center;
+}
+.student-prototype {
+  opacity: 0.4;
+  position:fixed;
+  left:0px;
+  bottom:0px;
+  height:65px;
+  width:100%;
+  text-align:center;
+  font-weight:bold;
+  font-size:4em;
+}
+.thumbnail {
+  height: 200px;
+
+  img.pull-right {
+    width: 50px;
+  }
+}
+html, body {
+  font-family: 'Roboto', sans-serif;
+  font-size:14px;
+  height:100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+/* Toolbar area */
+
+.menu {
+  background-color: transparent;
+  border: none;
+  height: 38px;
+  margin: 16px;
+  width: 36px;
+}
+
+md-toolbar h1 {
+  margin: auto;
+}
+
+/* Sidenav area */
+
+md-list .md-button {
+  color: inherit;
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+}
+  md-list .md-button.selected {
+    color: #03a9f4;
+  }
+
+  md-sidenav  md-list {
+    padding: 0px 0px 8px 0px;
+  }
+
+
+/* Primary content area */
+
+#content {
+  overflow: hidden;
+}
+
+#content  {
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 5px;
+}
+
+#content .md-button.share {
+  background-color: transparent;
+  border: none;
+  width: 48px;
+  height: 48px;
+  margin: 8px auto 16px 0;
+  position: absolute;
+  top: 10px;
+  right: 25px;
+}
+
+#content md-icon.avatar {
+  margin-top: 10px;
+}
+
+#content .md-button.share > md-icon {
+  fill:black;
+  width:36px;
+  height:36px;
+}
+
+md-button.menuBtn > md-icon {
+  fill:white;
+  width:24px;
+  height:24px;
+}
+
+#content .md-button.share:active > md-icon {
+  background-color: #dadada;
+  border-radius: 75%;
+  padding:4px;
+  transition: all 100ms ease-out 30ms;
+}
+
+#content img {
+  display: block;
+  height: auto;
+  max-width: 500px;
+}
+
+/* Utils */
+
+.content-wrapper {
+  position: relative;
+}
+
+/* Typography support coming in 0.8.0 */
+
+md-toolbar h1 {
+  font-size: 1.250em;
+  font-weight: 400;
+}
+
+.avatar {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  display: inline-block;
+  overflow: hidden;
+  margin: 0px;
+  vertical-align: middle;
+  zoom:0.70;
+  transform: translateZ(0);
+  -webkit-transform: scale(0.70);
+  -moz-transform:scale(0.70);
+}
+
+
+md-bottom-sheet  md-icon {
+  margin-right:20px;
+}
+
+span.name {
+  font-weight: bold;
+  font-size:1.1em;
+  padding-left:5px;
+}
+
+// injector
+@import 'assignments/assignments.scss';
+@import 'behavior/behavior.scss';
+@import 'courses/courses.scss';
+@import '../components/chorocalendar/choropleth.scss';
+@import '../components/goals/studentgoals.scss';
+@import '../components/gradedonut/gradedonut.scss';
+@import '../components/navbar/navbar.scss';
+@import '../components/scatterplot/scatterplot.scss';
+// endinjector

@@ -1,0 +1,132 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Excel Academy</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    
+    <!-- build:css({.tmp,src}) styles/vendor.css -->
+    <link rel="stylesheet" href="app/vendor.css">
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="../bower_components/c3/c3.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    
+
+    <!-- build:css({.tmp,src}) styles/app.css -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="app/index.css">
+    <!-- endinject -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/modernizr.js -->
+    <script src="../bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+  </head>
+  <body layout="column" ng-app="studentdashboard">
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <md-toolbar layout="row">
+      <md-button class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show User List">
+        <md-icon md-svg-icon="menu" ></md-icon>
+      </md-button>
+      <div class="md-toolbar-tools" tabindex="0">
+        <span>Student Dashboard</span>
+        <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
+          <div class="circular-login"></div>
+        </div>
+      </div>
+
+    </md-toolbar>
+
+    <div flex layout="row" ng-controller="SidenavCtrl">
+
+        <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2" md-component-id="left">
+          <md-list>
+            <md-item>
+                <md-button ng-click="goToGoals()">
+                <div class="sidemenu-icon goals"></div>
+                  <span>Goals</span>
+                </md-button>
+            </md-item>
+            <md-item>
+                <md-button ng-click="goToCourses()">
+                <div class="sidemenu-icon grades"></div>
+                <span>Courses</span>
+                </md-button>
+            </md-item>
+            <md-item>
+                <md-button ng-click="goToAssignments()">
+                <div class="sidemenu-icon attendance"></div>
+                <span>Assignments</span>
+                </md-button>
+            </md-item>
+            <md-item>
+                <md-button ng-click="goToBehavior()">
+                <div class="sidemenu-icon behavior"></div>
+                <span>Behavior</span>
+                </md-button>
+            </md-item>  
+          </md-list>
+        </md-sidenav>
+
+        <md-content flex id="content">
+          <div ui-view class="main-container"></div>
+        </md-content>
+    </div>
+    <div class="student-prototype">PROTOTYPE</div>
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="../bower_components/es5-shim/es5-shim.js"></script>
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-aria/angular-aria.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../bower_components/angular-resource/angular-resource.js"></script>
+    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="../bower_components/angular-material/angular-material.js"></script>
+    <script src="../bower_components/d3/d3.js"></script>
+    <script src="../bower_components/json3/lib/json3.min.js"></script>
+    <script src="../bower_components/raphael/raphael.js"></script>
+    <script src="../bower_components/justgage-bower/justgage.js"></script>
+    <script src="../bower_components/angular-gage/dist/angular-gage.js"></script>
+    <script src="../bower_components/c3/c3.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:js({.tmp,src}) scripts/app.js -->
+    <!-- inject:js -->
+    <script src="app/index.js"></script>
+    <script src="components/sidenav/sidenav.js"></script>
+    <script src="components/scatterplot/scatterplot.js"></script>
+    <script src="components/navbar/navjumbotron.js"></script>
+    <script src="components/gradedonut/gradedonut.js"></script>
+    <script src="components/goals/studentgoals.js"></script>
+    <script src="components/chorocalendar/choropleth.js"></script>
+    <script src="app/home/home.controller.js"></script>
+    <script src="app/courses/courses.js"></script>
+    <script src="app/behavior/behavior.js"></script>
+    <script src="app/assignments/assignments.js"></script>
+    <!-- endinject -->
+    <!-- inject:partials -->
+    <!-- angular templates will be automatically converted in js and inserted here -->
+    <!-- endinject -->
+    <!-- endbuild -->
+  </body>
+</html>

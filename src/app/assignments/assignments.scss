@@ -1,0 +1,27 @@
+.assignments-container {
+  text-align: center;
+  margin: 0em 2em 0em 2em;
+  display: flex;
+  flex-wrap: no-wrap;
+  justify-content: center;
+  align-items:center;
+  .scatterplot {
+  	flex-grow:2;
+  }
+  .column {
+  	flex-grow:1;
+  	min-width:450px;
+  }
+  .column > div {
+    background-color: #f2f2f2;
+    border-radius:5px;
+    box-sizing: border-box;
+  }
+}
+
+/* Medium screens */
+@media all and (max-width: 850px) {
+  .assignments-container { 
+  	flex-wrap: wrap; 
+  }
+}

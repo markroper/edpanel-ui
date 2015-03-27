@@ -1,0 +1,32 @@
+<div class='student-goals'>
+	<h1><small>Current Goals</small></h1>
+	<div class="column-container">
+		<div class="column column-one" ng-click="goToAssignments()">
+			<div justgage
+				title="Homework Completion"
+				value="92"
+				min="0" max="100"
+				label="percent"
+				level-colors="{{levelColors}}">
+			</div>
+		</div>
+		<div class="column column-two" ng-click="goToBehavior()">
+			<div justgage
+				title="Weekly Behavior"
+				value="8"
+				min="0" max="10"
+				label="demerits received">
+			</div>
+		</div>
+		<div class="column column-three" ng-click="goToCourses()">
+			<div justgage
+				title="GPA"
+				value="3.3"
+				min="0" max="4"
+				decimals="1"
+				label="current GPA"
+				level-colors="{{levelColors}}">
+			</div>
+		</div>
+	</div>
+<div>
