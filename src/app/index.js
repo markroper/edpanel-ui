@@ -1,28 +1,28 @@
 'use strict';
 
-angular.module('studentdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ui.bootstrap', 'frapontillo.gage', 'ngMaterial'])
+angular.module('studentdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial'])
   .config(function ($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider) {
     $stateProvider
       .state('home', {
         url: '/',
         templateUrl: 'app/home/home.html',
         controller: 'HomeCtrl'
-      })
-      .state('behavior', {
-      	url: '/behavior',
-      	templateUrl: 'app/behavior/behavior.html',
-      	controller: 'BehaviorCtrl'
-      })
-      .state('assignments', {
-      	url: '/assignments',
-      	templateUrl: 'app/assignments/assignments.html',
-      	controller: 'AssignmentsCtrl'
-      })
-      .state('courses', {
-      	url: '/courses',
-      	templateUrl: 'app/courses/courses.html',
-      	controller: 'CoursesCtrl'
       });
+      // .state('behavior', {
+      // 	url: '/behavior',
+      // 	templateUrl: 'app/behavior/behavior.html',
+      // 	controller: 'BehaviorCtrl'
+      // })
+      // .state('assignments', {
+      // 	url: '/assignments',
+      // 	templateUrl: 'app/assignments/assignments.html',
+      // 	controller: 'AssignmentsCtrl'
+      // })
+      // .state('courses', {
+      // 	url: '/courses',
+      // 	templateUrl: 'app/courses/courses.html',
+      // 	controller: 'CoursesCtrl'
+      // });
 
     $urlRouterProvider.otherwise('/');
 

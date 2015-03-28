@@ -1,7 +1,9 @@
 {
   "name": "studentdashboard",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "node-sass": "^2.0.1"
+  },
   "devDependencies": {
     "gulp": "~3.8.10",
     "gulp-autoprefixer": "~2.0.0",
@@ -39,10 +41,9 @@
     "chalk": "~0.5.1",
     "protractor": "~1.4.0",
     "uglify-save-license": "~0.4.1",
-    "orchestrator":"~0.3.7",
-    "gulp-util":"~2.2.12",
-    "ansi-regex":"~1.1.0"
-    
+    "orchestrator": "~0.3.7",
+    "gulp-util": "~2.2.12",
+    "ansi-regex": "~1.1.0"
   },
   "engines": {
     "node": ">=0.10.0"
