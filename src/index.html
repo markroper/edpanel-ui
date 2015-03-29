@@ -26,12 +26,12 @@
     <script src="../bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
   </head>
-  <body layout="column" ng-app="studentdashboard">
+  <body layout="column" ng-app="studentdashboard" ng-controller="SidenavCtrl">
     <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <md-toolbar layout="row">
-      <md-button class="menu" hide-gt-sm ng-click="ul.toggleList()" aria-label="Show User List">
+      <md-button class="menu" hide-gt-sm ng-click="toggleList()" aria-label="Show User List">
         <md-icon md-svg-icon="menu" ></md-icon>
       </md-button>
       <div class="md-toolbar-tools" tabindex="0">
@@ -43,9 +43,9 @@
 
     </md-toolbar>
 
-    <div flex layout="row" ng-controller="SidenavCtrl">
+    <div flex layout="row">
 
-        <md-sidenav md-is-locked-open="true" class="md-whiteframe-z2" md-component-id="left">
+        <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left">
           <md-list>
             <md-item>
                 <md-button ng-click="goToGoals()">
