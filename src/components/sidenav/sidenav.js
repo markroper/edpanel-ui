@@ -1,5 +1,5 @@
 'use strict';
-angular.module('studentdashboard').controller('SidenavCtrl', ['$scope', '$state', '$mdSidenav',
+angular.module('teacherdashboard').controller('SidenavCtrl', ['$scope', '$state', '$mdSidenav',
 function($scope, $state, $mdSidenav) {
     $scope.goToBehavior = function() {
       $state.go('behavior');
@@ -15,5 +15,5 @@ function($scope, $state, $mdSidenav) {
     };
     $scope.toggleList =  function() {
       $mdSidenav('left').toggle();
-    }
+    };
   }]);

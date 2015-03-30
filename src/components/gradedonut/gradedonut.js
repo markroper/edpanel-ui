@@ -1,5 +1,5 @@
 'use strict';
-angular.module('studentdashboard')
+angular.module('teacherdashboard')
   .directive('gradedonut', ['$window', function($window) {
     return {
       scope: {

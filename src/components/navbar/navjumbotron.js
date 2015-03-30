@@ -1,5 +1,5 @@
 'use strict';
-angular.module('studentdashboard')
+angular.module('teacherdashboard')
   .directive('navjumbotron', ['$interval', function($interval) {
     return {
       scope: {

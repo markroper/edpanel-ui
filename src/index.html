@@ -26,7 +26,7 @@
     <script src="../bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
   </head>
-  <body layout="column" ng-app="studentdashboard" ng-controller="SidenavCtrl">
+  <body layout="column" ng-app="teacherdashboard" ng-controller="SidenavCtrl">
     <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -35,42 +35,34 @@
         <md-icon md-svg-icon="menu" ></md-icon>
       </md-button>
       <div class="md-toolbar-tools" tabindex="0">
-        <span>Student Dashboard</span>
+        <span>Teacher Dashboard</span>
         <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
           <div class="circular-login"></div>
         </div>
       </div>
-
     </md-toolbar>
 
     <div flex layout="row">
-
         <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left">
           <md-list>
             <md-item>
                 <md-button ng-click="goToGoals()">
                 <div class="sidemenu-icon goals"></div>
-                  <span>Goals</span>
+                  <span>MY STUDENTS</span>
                 </md-button>
             </md-item>
             <md-item>
                 <md-button ng-click="goToCourses()">
                 <div class="sidemenu-icon grades"></div>
-                <span>Courses</span>
+                <span>SCHOOL REPORTS</span>
                 </md-button>
             </md-item>
             <md-item>
                 <md-button ng-click="goToAssignments()">
                 <div class="sidemenu-icon attendance"></div>
-                <span>Assignments</span>
+                <span>REPORT BUILDER</span>
                 </md-button>
             </md-item>
-            <md-item>
-                <md-button ng-click="goToBehavior()">
-                <div class="sidemenu-icon behavior"></div>
-                <span>Behavior</span>
-                </md-button>
-            </md-item>  
           </md-list>
         </md-sidenav>
 
@@ -78,6 +70,7 @@
           <div ui-view class="main-container"></div>
         </md-content>
     </div>
+
     <div class="student-prototype">PROTOTYPE</div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
@@ -90,6 +83,7 @@
     </script>
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
     <script src="../bower_components/angular/angular.js"></script>
     <script src="../bower_components/angular-animate/angular-animate.js"></script>
     <script src="../bower_components/angular-aria/angular-aria.js"></script>
@@ -98,11 +92,14 @@
     <script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="../bower_components/angular-resource/angular-resource.js"></script>
     <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,src}) scripts/app.js -->
     <!-- inject:js -->
     <script src="app/index.js"></script>
+    <script src="components/studentsoverview/students.grid.js"></script>
+    <script src="components/studentsoverview/student.js"></script>
     <script src="components/sidenav/sidenav.js"></script>
     <script src="components/navbar/navjumbotron.js"></script>
     <script src="components/gradedonut/gradedonut.js"></script>

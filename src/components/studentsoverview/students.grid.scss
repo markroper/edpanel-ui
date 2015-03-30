@@ -1,0 +1,71 @@
+.students-grid {
+	.table-container{
+		display: table;
+		width:100%;
+		text-align: center;
+		vertical-align: middle;
+		.table-row:hover {
+			background-color: #EBEBEB;
+		}
+		.row-header {
+			display: table-row;
+			.table-cell {
+				display: table-cell;
+			}
+		}
+		.table-row {
+			-webkit-transition: background-color 250ms linear;
+		    -moz-transition: background-color 250ms linear;
+		    -o-transition: background-color 250ms linear;
+		    -ms-transition: background-color 250ms linear;
+		    transition: background-color 250ms linear;
+			display: table-row;
+			.table-cell {
+				display: table-cell;
+				padding: 4px;
+				width:20%;
+				vertical-align: middle;
+				.student-link {
+					cursor: pointer;
+				}
+				.choropleth {
+					vertical-align: inherit;
+					height:50px;
+					max-width: 300px;
+					border-radius:5px;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+	.band-0-10 {
+		background-color: #ff0000;
+	}
+	.band-10-20 {
+		background-color: #ff0000;
+	}
+	.band-20-30 {
+		background-color: #ff0000;
+	}
+	.band-30-40 {
+		background-color: #ff0000;
+	}	
+	.band-40-50 {
+		background-color: #ff0000;
+	}
+	.band-50-60 {
+		background-color: #ff0000;
+	}
+	.band-60-70 {
+		background-color: #F9C802;
+	}
+	.band-70-80 {
+		background-color: #F9C802;
+	}
+	.band-80-90 {
+		background-color: #a9d70b;
+	}
+	.band-90-100 {
+		background-color: #a9d70b;
+	}
+}
