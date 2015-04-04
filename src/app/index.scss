@@ -102,10 +102,6 @@ md-list .md-button {
 
 /* Primary content area */
 
-#content {
-  overflow: hidden;
-}
-
 #content  {
   padding-right: 5px;
   padding-top: 5px;
@@ -193,6 +189,7 @@ span.name {
 
 // injector
 @import 'home/home.scss';
+@import 'student/student.scss';
 @import '../components/gradedonut/gradedonut.scss';
 @import '../components/navbar/navbar.scss';
 @import '../components/studentsoverview/students.grid.scss';

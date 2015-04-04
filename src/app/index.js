@@ -7,22 +7,12 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         url: '/',
         templateUrl: 'app/home/home.html',
         controller: 'HomeCtrl'
+      })
+      .state('student', {
+      	url: '/student',
+      	templateUrl: 'app/student/student.html',
+      	controller: 'StudentCtrl'
       });
-      // .state('behavior', {
-      // 	url: '/behavior',
-      // 	templateUrl: 'app/behavior/behavior.html',
-      // 	controller: 'BehaviorCtrl'
-      // })
-      // .state('assignments', {
-      // 	url: '/assignments',
-      // 	templateUrl: 'app/assignments/assignments.html',
-      // 	controller: 'AssignmentsCtrl'
-      // })
-      // .state('courses', {
-      // 	url: '/courses',
-      // 	templateUrl: 'app/courses/courses.html',
-      // 	controller: 'CoursesCtrl'
-      // });
 
     $urlRouterProvider.otherwise('/');
 

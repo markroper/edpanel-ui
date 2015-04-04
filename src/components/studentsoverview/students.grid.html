@@ -7,7 +7,7 @@
 			<div class="table-cell"><b>Attendance</b></div>
 			<div class="table-cell"><b>GPA</b></div>
 		</div>
-		<div class="table-row" ng-repeat="student in studentsData">
+		<div class="table-row" ng-repeat="student in studentsData" ng-click="goToStudent()">
 			<div class="table-cell"><span class="student-link"><b>{{student.name}}</b></span></div>
 			<div class="table-cell"><div class="choropleth band-{{student.behaviorClass}}" title="{{student.behavior}}"></div></div>
 			<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}" title="{{student.homework}}"></div></div>

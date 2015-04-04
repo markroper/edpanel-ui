@@ -1,0 +1,77 @@
+.student-detail {
+	/*COURSE DONUTS*/
+	.courses {
+	    display: flex;
+	    flex-wrap: wrap;
+	    justify-content: center;
+	    align-items:center;
+	    > div {
+	      flex-grow:1;
+	    	min-width:450px;
+	    	max-width:800px;
+	    }
+	  }
+
+	.goals-container{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: center;
+		.student-goal{
+			-webkit-transition: background-color 250ms linear;
+		    -moz-transition: background-color 250ms linear;
+		    -o-transition: background-color 250ms linear;
+		    -ms-transition: background-color 250ms linear;
+		    transition: background-color 250ms linear;
+		    padding:15px 20px 20px 20px;
+		    position: relative;
+			width:250px;
+			height:150px;
+			margin: 15px;
+			border-radius: 5px;
+			border: 1px solid #b9b9b9;
+			.row {
+				margin: 15px 0px 15px 0px;
+				.goal-value {
+					float: right;
+					margin-right: 20px;
+				}
+			}
+			.goal-footer {
+				display: flex;
+				position:absolute;
+				bottom:0;
+				left:0;
+				right:0;
+				height:35px;
+				div {
+					margin:auto;
+					width:25px;
+					height:25px;
+					background-size: cover;
+					cursor:pointer;
+					-webkit-transition: background-image 250ms linear;
+				    -moz-transition: background-image 250ms linear;
+				    -o-transition: background-image 250ms linear;
+				    -ms-transition: background-image 250ms linear;
+				    transition: background-image 250ms linear;
+				}
+			}
+		}
+		.student-goal:hover {
+			background-color: #f0f0f0;
+			.goal-chat {
+				background-image: url(../../assets/images/chat.png);
+			}
+			.goal-edit {
+				background-image: url(../../assets/images/edit.png);
+			}
+			.goal-delete {
+				background-image: url(../../assets/images/editing-delete-icon.png);
+			}
+		}
+	}
+	h1 {
+		text-align: center;
+	}
+}

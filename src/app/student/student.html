@@ -1,0 +1,70 @@
+<div class="student-detail">
+	<h1>MARK ROPER</h1>
+	<student-grid students-data="students"></student-grid>
+	<h1>GOALS</h1>
+	<div class="goals-container">
+		<div class="student-goal">
+			<div class="row"><b>GPA goal:</b> <span class="goal-value">4.0</span></div>
+			<div class="row"><b>Current GPA:</b> <span class="goal-value">3.5</span></div>
+			<div class="row"><b>Class average:</b> <span class="goal-value">3.1</span></div>
+			<div class="goal-footer">
+				<div class="goal-chat"></div>
+				<div class="goal-edit"></div>
+				<div class="goal-delete"></div>
+			</div>
+		</div>
+		<div class="student-goal">
+			<div class="row"><b>Weekly demerit goal:</b> <span class="goal-value">10</span></div>
+			<div class="row"><b>Current demerits:</b> <span class="goal-value">8</span></div>
+			<div class="row"><b>Class average:</b> <span class="goal-value">12</span></div>
+			<div class="goal-footer">
+				<div class="goal-chat"></div>
+				<div class="goal-edit"></div>
+				<div class="goal-delete"></div>
+			</div>
+		</div>
+		<div class="student-goal">
+			<div class="row"><b>Quarterly absense goal:</b> <span class="goal-value">2</span></div>
+			<div class="row"><b>Current absenses:</b> <span class="goal-value">5</span></div>
+			<div class="row"><b>Class average:</b> <span class="goal-value">2</span></div>
+			<div class="goal-footer">
+				<div class="goal-chat"></div>
+				<div class="goal-edit"></div>
+				<div class="goal-delete"></div>
+			</div>
+		</div>
+		<div class="student-goal">
+			<div class="row"><b>Weekly HW goal:</b> <span class="goal-value">100%</span></div>
+			<div class="row"><b>Current HW completion:</b> <span class="goal-value">85%</span></div>
+			<div class="row"><b>Class average:</b> <span class="goal-value">90%</span></div>
+			<div class="goal-footer">
+				<div class="goal-chat"></div>
+				<div class="goal-edit"></div>
+				<div class="goal-delete"></div>
+			</div>
+		</div>
+	</div>
+	<h1>COURSES</h1>
+	<div class="courses">
+		<div>
+			<h3>{{math.course}}</h3>
+			<gradedonut course-title="{{math.grade}}" grade-weights="math.gradeWeights"></gradedonut>
+		</div>
+		<div>
+			<h3>{{biology.course}}</h3>
+			<gradedonut course-title="{{biology.grade}}" grade-weights="biology.gradeWeights"></gradedonut>
+		</div>
+		<div>
+			<h3>{{physics.course}}</h3>
+			<gradedonut course-title="{{physics.grade}}" grade-weights="physics.gradeWeights"></gradedonut>
+		</div>
+		<div>
+			<h3>{{spanish.course}}</h3>
+			<gradedonut course-title="{{spanish.grade}}" grade-weights="spanish.gradeWeights"></gradedonut>
+		</div>
+		<div>
+			<h3>{{history.course}}</h3>
+			<gradedonut course-title="{{history.grade}}" grade-weights="history.gradeWeights"></gradedonut>
+		</div>
+	</div>
+</div>

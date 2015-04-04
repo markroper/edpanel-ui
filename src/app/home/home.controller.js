@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('HomeCtrl', function ($scope) {
+  .controller('HomeCtrl', ['$scope', function ($scope) {
   		$scope.value = {};
   		$scope.students = [
   			{ 'name' : 'Mark Roper', 
@@ -25,4 +25,4 @@ angular.module('teacherdashboard')
   				'attendance': 70, 'attendanceClass':'70-80', 
   				'gpa': 3, 'gpaClass':'70-80' },
   		];
-  });
+  }]);
