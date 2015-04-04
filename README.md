@@ -1,4 +1,4 @@
-# Student Dashboard #
+# Teacher Dashboard #
 
 Projects depends on Node (JS runtime), Bower (browser javascript dependency manager), and Gulp (node-based task editor for building, executing tests, and so on).  Project includes Karma test runner and Jasmine test framework.  The client side application is developed in AngularJS and the server component is a node-based application using the Express web app framework. Available gulp commands used to run the server, tests and so on include:
 
