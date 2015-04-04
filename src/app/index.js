@@ -12,6 +12,16 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       	url: '/student',
       	templateUrl: 'app/student/student.html',
       	controller: 'StudentCtrl'
+      })
+      .state('reports', {
+        url: '/reports',
+        templateUrl: 'app/reports/reports.html',
+        controller: 'ReportCtrl'
+      })
+      .state('reportbuilder', {
+        url: '/reportbuilder',
+        templateUrl: 'app/reportbuilder/reportbuilder.html',
+        controller: 'ReportBuilderCtrl'
       });
 
     $urlRouterProvider.otherwise('/');

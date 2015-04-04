@@ -47,19 +47,19 @@
         <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left">
           <md-list>
             <md-item>
-                <md-button ng-click="goToGoals()">
+                <md-button ng-click="goToStudents()">
                 <div class="sidemenu-icon goals"></div>
                   <span>MY STUDENTS</span>
                 </md-button>
             </md-item>
             <md-item>
-                <md-button ng-click="goToCourses()">
+                <md-button ng-click="goToReports()">
                 <div class="sidemenu-icon grades"></div>
                 <span>SCHOOL REPORTS</span>
                 </md-button>
             </md-item>
             <md-item>
-                <md-button ng-click="goToAssignments()">
+                <md-button ng-click="goToReportBuilder()">
                 <div class="sidemenu-icon attendance"></div>
                 <span>REPORT BUILDER</span>
                 </md-button>
@@ -102,11 +102,11 @@
     <!-- inject:js -->
     <script src="app/index.js"></script>
     <script src="app/student/student.js"></script>
+    <script src="app/home/home.controller.js"></script>
     <script src="components/studentsoverview/students.grid.js"></script>
     <script src="components/sidenav/sidenav.js"></script>
     <script src="components/navbar/navjumbotron.js"></script>
     <script src="components/gradedonut/gradedonut.js"></script>
-    <script src="app/home/home.controller.js"></script>
     <!-- endinject -->
     <!-- inject:partials -->
     <!-- angular templates will be automatically converted in js and inserted here -->
