@@ -11,7 +11,7 @@ angular.module('teacherdashboard')
   		];
 
   		$scope.math = {
-  			grade: 3.5,
+  			grade: '85%',
   			course: 'BC Calc',
   			gradeWeights: [
   				[ 'homework', 30 ],
@@ -22,7 +22,7 @@ angular.module('teacherdashboard')
   			]
   		};
   		$scope.biology = {
-  			grade: 3.0,
+  			grade: '80%',
   			course: 'Biology',
   			gradeWeights: [
   				[ 'homework', 30 ],
@@ -32,7 +32,7 @@ angular.module('teacherdashboard')
   			]
   		};
   		$scope.physics = {
-  			grade: 2.8,
+  			grade: '78%',
   			course: 'Physics',
   			gradeWeights: [
   				[ 'homework', 30 ],
@@ -40,7 +40,7 @@ angular.module('teacherdashboard')
   			]
   		};
   		$scope.history = {
-  			grade: 3.8,
+  			grade: '95%',
   			course: 'History',
   			gradeWeights: [
   				[ 'homework', 30 ],
@@ -49,7 +49,7 @@ angular.module('teacherdashboard')
   			]
   		};
   		$scope.spanish = {
-  			grade: 3.9,
+  			grade: '84%',
   			course: 'Spanish',
   			gradeWeights: [
   				[ 'homework', 30 ],

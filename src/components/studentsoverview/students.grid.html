@@ -9,10 +9,10 @@
 		</div>
 		<div class="table-row" ng-repeat="student in studentsData" ng-click="goToStudent()">
 			<div class="table-cell"><span class="student-link"><b>{{student.name}}</b></span></div>
-			<div class="table-cell"><div class="choropleth band-{{student.behaviorClass}}" title="{{student.behavior}}"></div></div>
-			<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}" title="{{student.homework}}"></div></div>
-			<div class="table-cell"><div class="choropleth band-{{student.attendanceClass}}" title="{{student.attendance}}"></div></div>
-			<div class="table-cell"><div class="choropleth band-{{student.gpaClass}}" title="{{student.gpa}}"></div></div>
+			<div class="table-cell"><div class="choropleth band-{{student.behaviorClass}}" tooltip-placement="bottom" tooltip="{{student.behavior}} demerits"></div></div>
+			<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}" tooltip-placement="bottom"  tooltip="{{student.homework}}% completion"></div></div>
+			<div class="table-cell"><div class="choropleth band-{{student.attendanceClass}}" tooltip-placement="bottom" tooltip="{{student.attendance}} absenses"></div></div>
+			<div class="table-cell"><div class="choropleth band-{{student.gpaClass}}" tooltip-placement="bottom" tooltip="{{student.gpa}}"></div></div>
 		</div>
 	</div>
 </div>
