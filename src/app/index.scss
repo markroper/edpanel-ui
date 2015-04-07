@@ -28,7 +28,7 @@
 .sidemenu-icon.behavior { background: url(../assets/images/behavior-icon.png) no-repeat; }
 .sidemenu-icon.attendance { background: url(../assets/images/attendance.png) no-repeat; }
 .sidemenu-icon.grades { background: url(../assets/images/grades.png) no-repeat; }
-.sidemenu-icon.goals { background: url(../assets/images/goals.jpeg) no-repeat; }
+.sidemenu-icon.goals { background: url(../assets/images/goals.png) no-repeat; }
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
@@ -190,7 +190,7 @@ span.name {
 // injector
 @import 'home/home.scss';
 @import 'student/student.scss';
-@import '../components/gradedonut/gradedonut.scss';
 @import '../components/navbar/navbar.scss';
+@import '../components/gradedonut/gradedonut.scss';
 @import '../components/studentsoverview/students.grid.scss';
 // endinjector
