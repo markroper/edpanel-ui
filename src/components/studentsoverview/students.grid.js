@@ -10,7 +10,7 @@ angular.module('teacherdashboard')
       replace: true,
       controller: function($scope) {
         $scope.goToStudent = function() {
-          $state.go('student');
+          $state.go('app.student');
         };
       }
     };

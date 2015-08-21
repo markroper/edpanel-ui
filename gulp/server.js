@@ -8,6 +8,13 @@ var browserSync = require('browser-sync');
 
 var middleware = require('./proxy');
 
+var modRewrite = require('connect-modrewrite');
+
+var corsMiddleware = function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+};
+
 function browserSyncInit(baseDir, files, browser) {
   browser = browser === undefined ? 'default' : browser;
 
@@ -22,10 +29,16 @@ function browserSyncInit(baseDir, files, browser) {
     startPath: '/',
     server: {
       baseDir: baseDir,
-      middleware: middleware,
+      middleware: [
+        corsMiddleware,
+        modRewrite([
+          '!\\.\\w+$ /index.html [L]'
+        ])
+      ],
       routes: routes
     },
-    browser: browser
+    browser: browser,
+    https: true
   });
 
 }
