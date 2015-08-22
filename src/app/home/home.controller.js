@@ -52,5 +52,71 @@ angular.module('teacherdashboard')
 
       $q.all(promises).then(function(){
         console.log('$q.all().then() callback called!');
+
+        statebag.students.forEach(function(student){
+          var studentPromises = [];
+          studentPromises.push(api.studentGpa.get({studentId: student.id}).$promise);
+          //TODO: unhardcode the queryId
+          var attendanceAndHwQuery = {"aggregateMeasures":
+          [
+            {"measure":"HW_COMPLETION","aggregation":"AVG"},
+            {"measure":"ATTENDANCE","aggregation":"SUM"}
+          ],
+          "fields":[
+            {"dimension":"STUDENT","field":"ID"}
+          ],
+          "filter": {
+            "type":"EXPRESSION",
+            "leftHandSide": { 
+              "type":"EXPRESSION",
+              "leftHandSide":{
+                "type":"EXPRESSION",
+                "leftHandSide":{
+                  "value":{"dimension":"TERM","field":"ID"},
+                  "type":"DIMENSION"},
+                  "operator":"EQUAL",
+                  "rightHandSide":{"type":"NUMERIC","value": statebag.school.terms[1].id}
+                },
+                "operator":"AND",
+                "rightHandSide":{
+                  "type":"EXPRESSION",
+                  "leftHandSide":{
+                    "value":{"dimension":"YEAR","field":"ID"},
+                    "type":"DIMENSION"
+                  },
+                  "operator":"EQUAL",
+                  "rightHandSide":{
+                    "type":"NUMERIC",
+                    "value":statebag.school.years[0].id
+                  }
+                }
+              },
+              "operator":"AND",
+              "rightHandSide":{
+                "type":"EXPRESSION",
+                "leftHandSide":{
+                  "type":"DIMENSION",
+                  "value":{"dimension":"SECTION","field":"ID"}
+                },
+                "operator":"NOT_EQUAL",
+                "rightHandSide":{"type":"NUMERIC","value":0
+              }
+            }
+          }
+        };
+          studentPromises.push(api.query.results(schoolId: statebag.school.id, queryId: 1).$promise);
+          $q.all(studentPromises).then(function(studentResults){
+              console.log(JSON.stringify(studentResults));
+          });
+        });
+        //Get GPA
+
+        //Get attendance
+
+        //homework completion
+
+        //MOCK behavior
+
+
       });
   }]);

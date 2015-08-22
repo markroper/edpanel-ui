@@ -161,6 +161,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         //students enpoints
         student: $resource(base + '/students/:studentId'),
         students: $resource(base + '/students', {}, { 'get': { isArray: true }}),
+        studentGpa: $resource(base + '/students/:studentId/gpa/4'),
 
         teacher: $resource(base + '/teachers/:teacherId'),
         year: $resource(base + '/schools/:schoolId/years/:yearId'),
@@ -169,7 +170,8 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         course: $resource(base + '/schools/:schoolId/courses/:courseId'),
         assignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId'),
         studentAssignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId/studentassignments/:studentassignment'),
-        studentSectionGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId')
+        studentSectionGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId'),
+        query: $resource(base + 'schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }});
     }
 })
 .service('statebag', function() {
