@@ -189,10 +189,10 @@ span.name {
 }
 
 // injector
-@import '../components/gradedonut/gradedonut.scss';
-@import '../components/navbar/navbar.scss';
-@import '../components/studentsoverview/students.grid.scss';
 @import 'home/home.scss';
 @import 'login/login.scss';
 @import 'student/student.scss';
+@import '../components/gradedonut/gradedonut.scss';
+@import '../components/navbar/navbar.scss';
+@import '../components/studentsoverview/students.grid.scss';
 // endinjector
