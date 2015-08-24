@@ -171,7 +171,11 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         assignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId'),
         studentAssignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId/studentassignments/:studentassignment'),
         studentSectionGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId'),
-        query: $resource(base + 'schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }});
+        //Query execution
+        savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
+        query: $resource(base + '/schools/:schoolId/queries/results', {}),
+        //GPA
+        gpa: $resource(base + '/schools/:schoolId/gpas/4')
     }
 })
 .service('statebag', function() {
