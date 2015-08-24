@@ -149,8 +149,15 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
   }
 ])
 //Api service
-.service('api', function($resource) {
-    var base = 'https://localhost:8443/warehouse/api/v1';
+.service('api', function($resource, $location) {
+    var host = $location.host();
+    var apiSuffix = '/warehouse/api/v1';
+    var base = $location.protocol() + '://' + host;
+    //Hack - if we're dealing with localhost, configure the call to run through browsersync
+    if(host === 'localhost') {
+      base += ':8443';
+    }
+    base += apiSuffix;
     return {
       login: $resource(base + "/login"),
       logout: $resource(base + "/logout"),
