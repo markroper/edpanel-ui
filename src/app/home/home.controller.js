@@ -3,65 +3,77 @@
 angular.module('teacherdashboard')
   .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', function ($scope, api, statebag, $q) {
   		$scope.value = {};
-  		$scope.students = [];
-
+  		$scope.students = statebag.studentPerfData;
       var context = this;
-      var promises = [];
+      //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old
+      if(!statebag.school || !statebag.currentYear || !statebag.currentTerm 
+        || !statebag.studentPerfData || !statebag.students || !statebag.lastFullRefresh
+        || statebag.lastFullRefresh > (new Date().getTime() - 1000 * 60 * 5))
+        {
+          /* This code block 2 api calls, followed by 2 more api calls if the first two both succeed.
+           * The first two calls resolve the school and the students.  The second two calls
+           * resolve different data about each of the students for use on the home page dashboard.
+           * When the API calls resolve, the data is formatted a bit and then bound to the controller 
+           * scope variables that are bound to DOM elements.
+          */
+          var promises = [];
+          //Resolve the school
+          promises.push(api.schools.get(
+            {},
+            //Success callback
+            function(data){
+                statebag.school = data[0];
+                statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
+                statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
+            },
+            //Error callback
+            function(error){
+                alert('failed to resolve the school!');
+            }).$promise);
 
-      //Resolve the school
-      promises.push(api.schools.get(
-        {},
-        //Success callback
-        function(data){
-            statebag.school = data[0];
-            statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
-            statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
-        },
-        //Error callback
-        function(error){
-            alert('failed to resolve the school!');
-        }).$promise);
+          //Resolve the students!
+          promises.push(api.students.get(
+            {},
+            //Success callback
+            function(data){
+              statebag.students = data;
+            },
+            //Error callback
+            function(error){
+              alert('failed to resolve the students!');
+            }).$promise);
 
-      //Resolve the students!
-      promises.push(api.students.get(
-        {},
-        //Success callback
-        function(data){
-          statebag.students = data;
-        },
-        //Error callback
-        function(error){
-          alert('failed to resolve the students!');
-        }).$promise);
-
-      //After the school and students are resolved, resolve the student performance data
-      $q.all(promises).then(function(){
-        var attendanceAndHwQuery = getHwAndAttendanceQuery(statebag.currentYear.id, statebag.currentTerm.id);
-        var studentDataPromises = [];
-        //Get attendance & HW completion
-        studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceAndHwQuery).$promise);
-        //Get the GPA results
-        var studentIds = [];
-        for(var i = 0; i < statebag.students.length; i++) {
-          studentIds.push(statebag.students[i].id);
-        }
-        studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
-        
-        //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
-        $q.all(studentDataPromises).then(function(responses){
-          var resolvedStudents = [];
-          responses[0].records.forEach(function(student){
-            resolvedStudents.push(resolveStudentScopeObject(student.values));
+          //After the school and students are resolved, resolve the student performance data
+          $q.all(promises).then(function(){
+            var attendanceAndHwQuery = getHwAndAttendanceQuery(statebag.currentYear.id, statebag.currentTerm.id);
+            var studentDataPromises = [];
+            //Get attendance & HW completion
+            studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceAndHwQuery).$promise);
+            //Get the GPA results
+            var studentIds = [];
+            for(var i = 0; i < statebag.students.length; i++) {
+              studentIds.push(statebag.students[i].id);
+            }
+            studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
+            
+            //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
+            $q.all(studentDataPromises).then(function(responses){
+              var resolvedStudents = [];
+              responses[0].records.forEach(function(student){
+                resolvedStudents.push(resolveStudentScopeObject(student.values));
+              });
+              for(var i=0; i < resolvedStudents.length; i++) {
+                var studentGpa = responses[1][resolvedStudents[i].id];
+                resolvedStudents[i].gpa = studentGpa;
+                resolvedStudents[i].gpaClass = resolveGpaClass(studentGpa);
+              }
+              $scope.students = statebag.studentPerfData = resolvedStudents;
+            });
           });
-          for(var i=0; i < resolvedStudents.length; i++) {
-            var studentGpa = responses[1][resolvedStudents[i].id];
-            resolvedStudents[i].gpa = studentGpa;
-            resolvedStudents[i].gpaClass = resolveGpaClass(studentGpa);
-          }
-          $scope.students = resolvedStudents;
-        });
-      });
-
+        }
+      /*
+       * Helper functions below
+      **/
       function resolveStudentScopeObject(inputStudent) {
         var student = {};
         student.id = inputStudent[0];

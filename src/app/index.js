@@ -9,7 +9,6 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       enabled: true,
       requireBase: false
     });
-
     var ADMIN = 'ADMIN',
         TEACHER = 'TEACHER',
         STUDENT = 'STUDENT',
@@ -153,29 +152,29 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
 .service('api', function($resource) {
     var base = 'https://localhost:8443/warehouse/api/v1';
     return {
-        login: $resource(base + "/login"),
-        logout: $resource(base + "/logout"),
-        //School endpoints
-        school: $resource(base + '/schools/:schoolId'),
-        schools: $resource(base + '/schools', {}, { 'get': { isArray: true }}),
-        //students enpoints
-        student: $resource(base + '/students/:studentId'),
-        students: $resource(base + '/students', {}, { 'get': { isArray: true }}),
-        studentGpa: $resource(base + '/students/:studentId/gpa/4'),
-
-        teacher: $resource(base + '/teachers/:teacherId'),
-        year: $resource(base + '/schools/:schoolId/years/:yearId'),
-        term: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId'),
-        section: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId'),
-        course: $resource(base + '/schools/:schoolId/courses/:courseId'),
-        assignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId'),
-        studentAssignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId/studentassignments/:studentassignment'),
-        studentSectionGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId'),
-        //Query execution
-        savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
-        query: $resource(base + '/schools/:schoolId/queries/results', {}),
-        //GPA
-        gpa: $resource(base + '/schools/:schoolId/gpas/4')
+      login: $resource(base + "/login"),
+      logout: $resource(base + "/logout"),
+      //School endpoints
+      school: $resource(base + '/schools/:schoolId'),
+      schools: $resource(base + '/schools', {}, { 'get': { isArray: true }}),
+      //students enpoints
+      student: $resource(base + '/students/:studentId'),
+      students: $resource(base + '/students', {}, { 'get': { isArray: true }}),
+      studentGpa: $resource(base + '/students/:studentId/gpa/4'),
+      //Other endpoints
+      teacher: $resource(base + '/teachers/:teacherId'),
+      year: $resource(base + '/schools/:schoolId/years/:yearId'),
+      term: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId'),
+      section: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId'),
+      course: $resource(base + '/schools/:schoolId/courses/:courseId'),
+      assignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId'),
+      studentAssignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId/studentassignments/:studentassignment'),
+      studentSectionGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId'),
+      //Query execution
+      savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
+      query: $resource(base + '/schools/:schoolId/queries/results', {}),
+      //GPA
+      gpa: $resource(base + '/schools/:schoolId/gpas/4')
     }
 })
 .service('statebag', function() {
@@ -183,12 +182,15 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       currentYear = null,
       currentTerm = null,
       currentSections = [],
+      //Student caches
       students = [],
+      studentPerfData = null,
       currentStudent = null,
       currentStudentSectionAssignments = null,
       currentStudentBehaviorEvents = [],
       currentStudentGpa = null,
-      studentsPerformanceSummary = [];
+      studentsPerformanceSummary = [],
+      lastFullRefresh = null;
 })
 .run(['$rootScope', '$state', '$stateParams', 'authorization', 'authentication',
     function($rootScope, $state, $stateParams, authorization, authentication) {
