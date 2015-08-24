@@ -4,11 +4,10 @@ angular.module('teacherdashboard')
   .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', function ($scope, api, statebag, $q) {
   		$scope.value = {};
   		$scope.students = statebag.studentPerfData;
-      var context = this;
       //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old
-      if(!statebag.school || !statebag.currentYear || !statebag.currentTerm 
-        || !statebag.studentPerfData || !statebag.students || !statebag.lastFullRefresh
-        || statebag.lastFullRefresh > (new Date().getTime() - 1000 * 60 * 5))
+      if(!statebag.school || !statebag.currentYear || !statebag.currentTerm || 
+        !statebag.studentPerfData || !statebag.students || !statebag.lastFullRefresh || 
+        statebag.lastFullRefresh > (new Date().getTime() - 1000 * 60 * 5))
         {
           /* This code block makes 2 api calls, followed by 2 more api calls if the first two both succeed.
            * The first two calls resolve the school and the students.  The second two calls
@@ -27,7 +26,7 @@ angular.module('teacherdashboard')
                 statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
             },
             //Error callback
-            function(error){
+            function(){
                 alert('failed to resolve the school!');
             }).$promise);
 
@@ -39,7 +38,7 @@ angular.module('teacherdashboard')
               statebag.students = data;
             },
             //Error callback
-            function(error){
+            function(){
               alert('failed to resolve the students!');
             }).$promise);
 
@@ -87,13 +86,13 @@ angular.module('teacherdashboard')
         student.gpa = null;
         student.gpaClass = resolveGpaClass(student.gpa);
         return student;
-      };
+      }
       function resolveBehaviorClass(behaviorScore) {
         return '0';
       }
       function resolveHomeworkClass(homeworkScore) {
         if(homeworkScore < 0.45) {
-          return '40-50'
+          return '40-50';
         } else if(homeworkScore < 0.47) {
           return '50-60';
         } else if(homeworkScore < 0.49) {
@@ -138,49 +137,49 @@ angular.module('teacherdashboard')
       }
       function getHwAndAttendanceQuery(schoolYearId, termId) {
         var attendanceAndHwQuery = {
-          "aggregateMeasures": [
-            {"measure":"HW_COMPLETION","aggregation":"AVG"},
-            {"measure":"ATTENDANCE","aggregation":"SUM"}
+          'aggregateMeasures': [
+            {'measure':'HW_COMPLETION','aggregation':'AVG'},
+            {'measure':'ATTENDANCE','aggregation':'SUM'}
           ],
-          "fields":[
-            {"dimension":"STUDENT","field":"ID"},
-            {"dimension":"STUDENT","field":"Name"}
+          'fields':[
+            {'dimension':'STUDENT','field':'ID'},
+            {'dimension':'STUDENT','field':'Name'}
           ],
-          "filter": {
-            "type":"EXPRESSION",
-            "leftHandSide": { 
-              "type":"EXPRESSION",
-              "leftHandSide":{
-                "type":"EXPRESSION",
-                "leftHandSide":{
-                  "value":{"dimension":"TERM","field":"ID"},
-                  "type":"DIMENSION"},
-                  "operator":"EQUAL",
-                  "rightHandSide":{"type":"NUMERIC","value": termId}
+          'filter': {
+            'type':'EXPRESSION',
+            'leftHandSide': { 
+              'type':'EXPRESSION',
+              'leftHandSide':{
+                'type':'EXPRESSION',
+                'leftHandSide':{
+                  'value':{'dimension':'TERM','field':'ID'},
+                  'type':'DIMENSION'},
+                  'operator':'EQUAL',
+                  'rightHandSide':{'type':'NUMERIC','value': termId}
                 },
-                "operator":"AND",
-                "rightHandSide":{
-                  "type":"EXPRESSION",
-                  "leftHandSide":{
-                    "value":{"dimension":"YEAR","field":"ID"},
-                    "type":"DIMENSION"
+                'operator':'AND',
+                'rightHandSide':{
+                  'type':'EXPRESSION',
+                  'leftHandSide':{
+                    'value':{'dimension':'YEAR','field':'ID'},
+                    'type':'DIMENSION'
                   },
-                  "operator":"EQUAL",
-                  "rightHandSide":{
-                    "type":"NUMERIC",
-                    "value": schoolYearId
+                  'operator':'EQUAL',
+                  'rightHandSide':{
+                    'type':'NUMERIC',
+                    'value': schoolYearId
                   }
                 }
               },
-              "operator":"AND",
-              "rightHandSide":{
-                "type":"EXPRESSION",
-                "leftHandSide":{
-                  "type":"DIMENSION",
-                  "value":{"dimension":"SECTION","field":"ID"}
+              'operator':'AND',
+              'rightHandSide':{
+                'type':'EXPRESSION',
+                'leftHandSide':{
+                  'type':'DIMENSION',
+                  'value':{'dimension':'SECTION','field':'ID'}
                 },
-                "operator":"NOT_EQUAL",
-                "rightHandSide":{"type":"NUMERIC","value":0
+                'operator':'NOT_EQUAL',
+                'rightHandSide':{'type':'NUMERIC','value':0
               }
             }
           }

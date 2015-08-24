@@ -9,6 +9,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       enabled: true,
       requireBase: false
     });
+    var rootUrl = '/edpanel';
     var ADMIN = 'ADMIN',
         TEACHER = 'TEACHER',
         STUDENT = 'STUDENT',
@@ -17,18 +18,18 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
 
     $stateProvider
       .state('login', {
-        url: '/login',
+        url: rootUrl + '/login',
         templateUrl: 'app/login/login.html',
         controller: 'LoginController',
         data: {}
       })
       .state('accessdenied', {
-        url: '/accessdenied',
+        url: rootUrl + '/accessdenied',
         template: '<h2>access denied</h2>',
         data: {}
       })
       .state('app', {
-        url: '/',
+        url: rootUrl + '/',
         templateUrl: 'app/navinclude/navinclude.html',
         controller: 'SidenavCtrl',
         data: {
@@ -68,7 +69,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         }
       });
 
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise(rootUrl + '/');
 
     $mdIconProvider
       .defaultIconSet('./assets/svg/avatars.svg', 128)
@@ -83,9 +84,8 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
           .primaryPalette('brown')
           .accentPalette('red');
   })
-.factory('authentication', ['$q', '$http', '$timeout',
-  function($q, $http, $timeout) {
-    var _identity = undefined,
+.factory('authentication', [function() {
+    var _identity,
       _authenticated = false,
       _roles = Object.freeze(['ADMIN', 'TEACHER', 'STUDENT', 'GUARDIAN', 'SUDO']);
 
@@ -100,22 +100,27 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         return _authenticated;
       },
       isInRole: function(role) {
-        if (!_authenticated || !_identity.roles) return false;
-
-        return _identity.roles.indexOf(role) != -1;
+        if (!_authenticated || !_identity.roles) {
+          return false;
+        }
+        return _identity.roles.indexOf(role) !== -1;
       },
       isInAnyRole: function(roles) {
-        if (!_authenticated || !_identity.roles) return false;
+        if (!_authenticated || !_identity.roles) {
+          return false;
+        }
         for (var i = 0; i < roles.length; i++) {
-          if (this.isInRole(roles[i])) return true;
+          if (this.isInRole(roles[i])) {
+            return true;
+          }
         }
         return false;
       },
       authenticate: function(identity) {
         _identity = identity;
-        _authenticated = identity != null;
+        _authenticated = identity !== null;
       },
-      identity: function(force) {
+      identity: function() {
         return _identity;
       }
     };
@@ -127,8 +132,8 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
     return {
       authorize: function(event) {
         var isAuthenticated = authentication.isAuthenticated();
-        if ($rootScope.toState.data.roles && $rootScope.toState.data.roles.length > 0 
-              && !authentication.isInAnyRole($rootScope.toState.data.roles)) {
+        if ($rootScope.toState.data.roles && $rootScope.toState.data.roles.length > 0 && 
+          !authentication.isInAnyRole($rootScope.toState.data.roles)) {
             //Prevent the previous event from redirecting the URL
             event.preventDefault();
             if (isAuthenticated) { 
@@ -157,8 +162,8 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
     }
     base += apiSuffix;
     return {
-      login: $resource(base + "/login"),
-      logout: $resource(base + "/logout"),
+      login: $resource(base + '/login'),
+      logout: $resource(base + '/logout'),
       //School endpoints
       school: $resource(base + '/schools/:schoolId'),
       schools: $resource(base + '/schools', {}, { 'get': { isArray: true }}),
@@ -180,7 +185,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
       //GPA
       gpa: $resource(base + '/schools/:schoolId/gpas/4')
-    }
+    };
 })
 .service('statebag', function() {
   var school = null,
@@ -197,13 +202,13 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       studentsPerformanceSummary = [],
       lastFullRefresh = null;
 })
-.run(['$rootScope', '$state', '$stateParams', 'authorization', 'authentication',
-    function($rootScope, $state, $stateParams, authorization, authentication) {
-      $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-        // track the state the user wants to go to; authorization service needs this
-        $rootScope.toState = toState;
-        $rootScope.toStateParams = toStateParams;
-        authorization.authorize(event);
-      });
-    }
-  ]);;
+.run(['$rootScope', '$state', '$stateParams', 'authorization',
+      function($rootScope, $state, $stateParams, authorization) {
+    $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
+      // track the state the user wants to go to; authorization service needs this
+      $rootScope.toState = toState;
+      $rootScope.toStateParams = toStateParams;
+      authorization.authorize(event);
+    });
+  }
+]);
