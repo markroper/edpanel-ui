@@ -132,14 +132,12 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
             //Prevent the previous event from redirecting the URL
             event.preventDefault();
             if (isAuthenticated) { 
-              console.log('redirecting to access denied');
               $state.go('accessdenied');
             } else {
               // user is not authenticated. stow the state they wanted before you
               // send them to the signin state, so you can return them when you're done
               $rootScope.returnToState = $rootScope.toState;
               $rootScope.returnToStateParams = $rootScope.toStateParams;
-              console.log('redirecting to login');
               // now, send them to the signin state so they can log in
               $state.go('login');
             }

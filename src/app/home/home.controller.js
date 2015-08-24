@@ -10,11 +10,11 @@ angular.module('teacherdashboard')
         || !statebag.studentPerfData || !statebag.students || !statebag.lastFullRefresh
         || statebag.lastFullRefresh > (new Date().getTime() - 1000 * 60 * 5))
         {
-          /* This code block 2 api calls, followed by 2 more api calls if the first two both succeed.
+          /* This code block makes 2 api calls, followed by 2 more api calls if the first two both succeed.
            * The first two calls resolve the school and the students.  The second two calls
            * resolve different data about each of the students for use on the home page dashboard.
            * When the API calls resolve, the data is formatted a bit and then bound to the controller 
-           * scope variables that are bound to DOM elements.
+           * scope variables that are bound to DOM elements
           */
           var promises = [];
           //Resolve the school

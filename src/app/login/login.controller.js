@@ -6,7 +6,6 @@ angular.module('teacherdashboard')
 	    $scope.inputEmail = '';
       $scope.password = '';
       $scope.showErrorMsg = false;
-      console.log('username: ' + $scope.inputEmail + ' password: ' + $scope.password);
       $scope.authenticate = function() {
       	var authBody = {
 			    username: $scope.inputEmail,
@@ -26,7 +25,7 @@ angular.module('teacherdashboard')
             $state.go('app.home');
         	},
           //Error callback
-          function(error) {
+          function() {
             $scope.showErrorMsg = true;
           }
         );
