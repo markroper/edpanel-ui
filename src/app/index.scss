@@ -105,6 +105,7 @@ md-list .md-button {
 #content  {
   padding-right: 5px;
   padding-top: 5px;
+  height:100vh;
 }
 
 #content .md-button.share {
@@ -189,6 +190,7 @@ span.name {
 
 // injector
 @import 'home/home.scss';
+@import 'login/login.scss';
 @import 'student/student.scss';
 @import '../components/gradedonut/gradedonut.scss';
 @import '../components/navbar/navbar.scss';

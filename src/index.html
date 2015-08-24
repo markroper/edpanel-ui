@@ -27,52 +27,12 @@
     <script src="../bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
   </head>
-  <body layout="column" ng-app="teacherdashboard" ng-controller="SidenavCtrl">
+  <body layout="column" ng-app="teacherdashboard">
     <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <md-toolbar layout="row">
-      <md-button class="menu" hide-gt-sm ng-click="toggleList()" aria-label="Show User List">
-        <md-icon md-svg-icon="menu" ></md-icon>
-      </md-button>
-      <div class="md-toolbar-tools" tabindex="0">
-        <span>Teacher Dashboard</span>
-        <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
-          <div class="circular-login"></div>
-        </div>
-      </div>
-    </md-toolbar>
+    <div ui-view></div>
 
-    <div flex layout="row">
-        <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left">
-          <md-list>
-            <md-item>
-                <md-button ng-click="goToStudents()">
-                <div class="sidemenu-icon goals"></div>
-                  <span>MY STUDENTS</span>
-                </md-button>
-            </md-item>
-            <md-item>
-                <md-button ng-click="goToReports()">
-                <div class="sidemenu-icon grades"></div>
-                <span>SCHOOL REPORTS</span>
-                </md-button>
-            </md-item>
-            <md-item>
-                <md-button ng-click="goToReportBuilder()">
-                <div class="sidemenu-icon attendance"></div>
-                <span>REPORT BUILDER</span>
-                </md-button>
-            </md-item>
-          </md-list>
-        </md-sidenav>
-
-        <md-content flex id="content">
-          <div ui-view class="main-container"></div>
-        </md-content>
-    </div>
-
-    <div class="student-prototype">PROTOTYPE</div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
@@ -102,12 +62,13 @@
     <!-- build:js({.tmp,src}) scripts/app.js -->
     <!-- inject:js -->
     <script src="app/index.js"></script>
-    <script src="app/student/student.js"></script>
-    <script src="app/home/home.controller.js"></script>
     <script src="components/studentsoverview/students.grid.js"></script>
     <script src="components/sidenav/sidenav.js"></script>
     <script src="components/navbar/navjumbotron.js"></script>
     <script src="components/gradedonut/gradedonut.js"></script>
+    <script src="app/student/student.js"></script>
+    <script src="app/login/login.controller.js"></script>
+    <script src="app/home/home.controller.js"></script>
     <!-- endinject -->
     <!-- inject:partials -->
     <!-- angular templates will be automatically converted in js and inserted here -->

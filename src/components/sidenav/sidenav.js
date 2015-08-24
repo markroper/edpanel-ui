@@ -5,12 +5,12 @@ function($scope, $state, $mdSidenav) {
       $mdSidenav('left').toggle();
     };
     $scope.goToStudents = function() {
-      $state.go('home');
+      $state.go('app.home');
     };
     $scope.goToReports = function() {
-      $state.go('reports');
+      $state.go('app.reports');
     };
     $scope.goToReportBuilder = function() {
-      $state.go('reportbuilder');
+      $state.go('app.reportbuilder');
     };
   }]);

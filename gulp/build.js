@@ -102,6 +102,7 @@ gulp.task('html', ['wiredep', 'injector:css', 'injector:js', 'partials'], functi
     .pipe(jsFilter.restore())
     .pipe(cssFilter)
     .pipe($.replace('../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap','../fonts'))
+    .pipe($.replace('../../bower_components/bootstrap-sass/assets/fonts/bootstrap','../fonts'))
     .pipe($.csso())
     .pipe(cssFilter.restore())
     .pipe(assets.restore())
@@ -128,9 +129,14 @@ gulp.task('images', function () {
     .pipe(gulp.dest('dist/assets/images/'));
 });
 
+gulp.task('svg', function () {
+  return gulp.src('src/assets/svg/**/*')
+    .pipe(gulp.dest('dist/assets/svg/'));
+});
+
 gulp.task('fonts', function () {
   return gulp.src($.mainBowerFiles())
-    .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
+    .pipe($.filter('**/*.{eot,svg,ttf,woff,woff2}'))
     .pipe($.flatten())
     .pipe(gulp.dest('dist/fonts/'));
 });
@@ -144,4 +150,4 @@ gulp.task('clean', function (done) {
   $.del(['dist/', '.tmp/'], done);
 });
 
-gulp.task('build', ['html', 'images', 'fonts', 'misc']);
+gulp.task('build', ['html', 'images', 'fonts', 'svg', 'misc']);
