@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', function ($scope, api, statebag, $q) {
+  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', 
+    function ($scope, api, statebag, $q, $stateParams) {
   		$scope.value = {};
   		$scope.students = statebag.studentPerfData;
       //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old
@@ -16,19 +17,21 @@ angular.module('teacherdashboard')
            * scope variables that are bound to DOM elements
           */
           var promises = [];
-          //Resolve the school
-          promises.push(api.schools.get(
-            {},
-            //Success callback
-            function(data){
-                statebag.school = data[0];
-                statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
-                statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
-            },
-            //Error callback
-            function(){
-                alert('failed to resolve the school!');
+          if(!statebag.school) {
+            //Resolve the school
+            promises.push(api.school.get(
+              { schoolId: $stateParams.schoolId },
+              //Success callback
+              function(data){
+                  statebag.school = data[0];
+                  statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
+                  statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
+              },
+              //Error callback
+              function(){
+                  alert('failed to resolve the school!');
             }).$promise);
+          }
 
           //Resolve the students!
           promises.push(api.students.get(

@@ -77,7 +77,8 @@ gulp.task('partials', function () {
       quotes: true
     }))
     .pipe($.angularTemplatecache('templateCacheHtml.js', {
-      module: 'teacherdashboard'
+      module: 'teacherdashboard',
+      root: '/edpanel'
     }))
     .pipe(gulp.dest('.tmp/inject/'));
 });

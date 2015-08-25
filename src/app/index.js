@@ -19,7 +19,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
     $stateProvider
       .state('login', {
         url: rootUrl + '/login',
-        templateUrl: 'app/login/login.html',
+        templateUrl: rootUrl + '/app/login/login.html',
         controller: 'LoginController',
         data: {}
       })
@@ -30,40 +30,40 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       })
       .state('app', {
         url: rootUrl + '/',
-        templateUrl: 'app/navinclude/navinclude.html',
+        templateUrl: rootUrl + '/app/navinclude/navinclude.html',
         controller: 'SidenavCtrl',
         data: {
           roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
         },
       })
       .state('app.home', {
-        url: 'home',
-        templateUrl: 'app/home/home.html',
+        url: 'schools/:schoolId',
+        templateUrl: rootUrl + '/app/home/home.html',
         controller: 'HomeCtrl',
         data: {
           roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
         },
       })
       .state('app.student', {
-      	url: 'student',
-      	templateUrl: 'app/student/student.html',
+      	url: 'schools/:schoolId/student/:studentId',
+      	templateUrl: rootUrl + '/app/student/student.html',
       	controller: 'StudentCtrl',
         data: {
           roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
         },
       })
       .state('app.reports', {
-        url: 'reports',
-        templateUrl: 'app/reports/reports.html',
-        controller: 'ReportCtrl',
+        url: 'schools/:schoolId/reports/:reportId',
+        templateUrl: rootUrl + '/app/reports/reports.html',
+        //controller: 'ReportCtrl',
         data: {
           roles: [ADMIN, TEACHER, SUPER_ADMIN]
         },
       })
       .state('app.reportbuilder', {
-        url: 'reportbuilder',
-        templateUrl: 'app/reportbuilder/reportbuilder.html',
-        controller: 'ReportBuilderCtrl',
+        url: 'schools/:schoolId/reportbuilder',
+        templateUrl: rootUrl + '/app/reportbuilder/reportbuilder.html',
+        //controller: 'ReportBuilderCtrl',
         data: {
           roles: [ADMIN, TEACHER, SUPER_ADMIN]
         }
@@ -186,7 +186,8 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
       //GPA
-      gpa: $resource(base + '/schools/:schoolId/gpas/4')
+      gpa: $resource(base + '/schools/:schoolId/gpas/4'),
+      basePrefix: '/edpanel'
     };
 })
 .service('statebag', function() {

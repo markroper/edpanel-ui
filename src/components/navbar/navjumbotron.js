@@ -1,11 +1,11 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('navjumbotron', ['$interval', function($interval) {
+  .directive('navjumbotron', ['$interval', 'api', function($interval, api) {
     return {
       scope: {
       },
       restrict: 'E',
-      templateUrl: 'components/navbar/navjumbotron.html',
+      templateUrl: api.basePrefix + '/components/navbar/navjumbotron.html',
       replace: true,
       link: function(scope, elem){
           var jumbotronImages = [

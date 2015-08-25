@@ -1,13 +1,13 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('gradedonut', ['$window', function($window) {
+  .directive('gradedonut', ['$window', 'api', function($window, api) {
     return {
       scope: {
         courseTitle: '@',
         gradeWeights: '='
       },
       restrict: 'E',
-      templateUrl: 'components/gradedonut/gradedonut.html',
+      templateUrl: api.basePrefix + '/components/gradedonut/gradedonut.html',
       replace: true,
       link: function(scope, elem){
           scope.element = elem;

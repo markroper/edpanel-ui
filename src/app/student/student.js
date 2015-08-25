@@ -1,18 +1,16 @@
 'use strict';
-
 angular.module('teacherdashboard')
   .controller('StudentCtrl', ['$scope','statebag', 'api', '$q', function ($scope, statebag, api, $q) {
     $scope.students = [];
     $scope.sections = [];
     $scope.students.push(statebag.currentStudent);
-
-    var studentSectionPromise = api.studentSections.get({ 
+    var studentSectionsPromise = api.studentSections.get({ 
       studentId: statebag.currentStudent.id, 
       schoolId: statebag.school.id,
       yearId: statebag.currentYear.id,
       termId: statebag.currentTerm.id,
     }).$promise;
-    studentSectionPromise.then(
+    studentSectionsPromise.then(
       function(sections){
         var sectionGradePromises = [];
         for(var i = 0; i < sections.length; i++) { //var sect in sections) {
@@ -48,7 +46,9 @@ angular.module('teacherdashboard')
       function(error){
         alert('failed to load the student sections and student grades');
       });
-
+      /*
+       * Maps a numeric grade to a letter grade for display
+      */
       function resolveGrade(input) {
         if(isNaN(input)) {
           return '--';
