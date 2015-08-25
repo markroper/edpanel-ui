@@ -1,60 +1,81 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('StudentCtrl', function ($scope) {
-		$scope.students = [
-  			{ 'name' : 'Mark Roper', 
-  				'behavior': 90, 'behaviorClass': '90-100', 
-  				'homework': 82, 'homeworkClass':'80-90', 
-  				'attendance': 70, 'attendanceClass':'70-80', 
-  				'gpa': 3, 'gpaClass':'70-80' }
-  		];
+  .controller('StudentCtrl', ['$scope','statebag', 'api', '$q', function ($scope, statebag, api, $q) {
+    $scope.students = [];
+    $scope.sections = [];
+    $scope.students.push(statebag.currentStudent);
 
-  		$scope.math = {
-  			grade: '85%',
-  			course: 'BC Calc',
-  			gradeWeights: [
-  				[ 'homework', 30 ],
-  				[ 'midterm', 20 ],
-  				[ 'final', 20 ],
-  				[ 'attendence', 10 ],
-  				[ 'participation', 10 ]
-  			]
-  		};
-  		$scope.biology = {
-  			grade: '80%',
-  			course: 'Biology',
-  			gradeWeights: [
-  				[ 'homework', 30 ],
-  				[ 'midterm', 20 ],
-  				[ 'final', 20 ],
-  				[ 'labs', 30 ]
-  			]
-  		};
-  		$scope.physics = {
-  			grade: '78%',
-  			course: 'Physics',
-  			gradeWeights: [
-  				[ 'homework', 30 ],
-  				[ 'final', 70 ]
-  			]
-  		};
-  		$scope.history = {
-  			grade: '95%',
-  			course: 'History',
-  			gradeWeights: [
-  				[ 'homework', 30 ],
-  				[ 'final', 20 ],
-  				[ 'final paper', 50 ]
-  			]
-  		};
-  		$scope.spanish = {
-  			grade: '84%',
-  			course: 'Spanish',
-  			gradeWeights: [
-  				[ 'homework', 30 ],
-  				[ 'final', 30 ],
-  				[ 'midterm', 40 ]
-  			]
-  		};
-  });
+    var studentSectionPromise = api.studentSections.get({ 
+      studentId: statebag.currentStudent.id, 
+      schoolId: statebag.school.id,
+      yearId: statebag.currentYear.id,
+      termId: statebag.currentTerm.id,
+    }).$promise;
+    studentSectionPromise.then(
+      function(sections){
+        var sectionGradePromises = [];
+        for(var i = 0; i < sections.length; i++) { //var sect in sections) {
+          var section = sections[i];
+          //Resolve the current student's grade in the course
+          sectionGradePromises.push(api.studentSectionGrade.get({
+            studentId: statebag.currentStudent.id,
+            schoolId: statebag.school.id,
+            yearId: statebag.currentYear.id,
+            termId: statebag.currentTerm.id,
+            sectionId: section.id
+          }).$promise);
+          //Transform the grade formula weights into a form that can be used by visualization lib
+          var weights = section.gradeFormula.assignmentTypeWeights;
+          var arrayWeights = [];
+          for(var key in weights) {
+            var tempArr = [];
+            tempArr.push(key.toLowerCase());
+            tempArr.push(weights[key]);
+            arrayWeights.push(tempArr);
+          }
+          section.gradeFormula.assignmentTypeWeights = arrayWeights;
+        }
+        //When the sections are loaded and the student grades calculated, bind 
+        //The collection of sections to the scope variable bound to the DOM
+        $q.all(sectionGradePromises).then(function(gradeResults){
+          for(var i = 0; i < gradeResults.length; i++) {
+            sections[i].grade = resolveGrade(gradeResults[i].grade);
+          }
+          $scope.sections = sections;
+        });
+      },
+      function(error){
+        alert('failed to load the student sections and student grades');
+      });
+
+      function resolveGrade(input) {
+        if(isNaN(input)) {
+          return '--';
+        }
+        if(input > 94) {
+          return 'A';
+        } else if(input > 89) {
+          return 'A-';
+        } else if(input > 86) {
+          return 'B+';
+        } else if(input > 83) {
+          return 'B';
+        } else if(input > 79) {
+          return 'B-';
+        } else if(input > 76) {
+          return 'C+';
+        } else if(input > 73) {
+          return 'C';
+        } else if(input > 69) {
+          return 'C-';
+        } else if(input > 66) {
+          return 'D+';
+        } else if(input > 63) {
+          return 'D';
+        } else if(input > 59) {
+          return 'D-';
+        }
+        return 'F';
+      }
+  }]);

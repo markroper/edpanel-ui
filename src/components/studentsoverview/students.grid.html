@@ -17,7 +17,7 @@
 			<div class="table-cell"><b>Attendance</b></div>
 			<div class="table-cell"><b>GPA</b></div>
 		</div>
-		<div class="table-row" ng-repeat="student in studentsData | filter:search:strict" ng-click="goToStudent()">
+		<div class="table-row" ng-repeat="student in studentsData | filter:search:strict" ng-click="goToStudent(student)">
 			<div class="table-cell"><span class="student-link"><b>{{student.name}}</b></span></div>
 			<div class="table-cell"><div class="choropleth band-{{student.behaviorClass}}" tooltip-placement="bottom" tooltip="{{student.behavior}} demerits"></div></div>
 			<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}" tooltip-placement="bottom"  tooltip="{{student.homework}}% completion"></div></div>

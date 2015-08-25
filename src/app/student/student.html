@@ -1,5 +1,5 @@
 <div class="student-detail">
-	<h1>MARK ROPER</h1>
+	<h1>{{students[0].name | uppercase}}</h1>
 	<student-grid students-data="students"></student-grid>
 	<h1>GOALS</h1>
 	<div class="goals-container">
@@ -44,27 +44,11 @@
 			</div>
 		</div>
 	</div>
-	<h1>COURSES</h1>
+	<h1>CURRENT COURSES</h1>
 	<div class="courses">
-		<div>
-			<h3>{{math.course}}</h3>
-			<gradedonut course-title="{{math.grade}}" grade-weights="math.gradeWeights"></gradedonut>
+		<div class="" ng-repeat="section in sections">
+			<h3>{{section.course.name}}</h3>
+			<gradedonut course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
 		</div>
-		<div>
-			<h3>{{biology.course}}</h3>
-			<gradedonut course-title="{{biology.grade}}" grade-weights="biology.gradeWeights"></gradedonut>
-		</div>
-		<div>
-			<h3>{{physics.course}}</h3>
-			<gradedonut course-title="{{physics.grade}}" grade-weights="physics.gradeWeights"></gradedonut>
-		</div>
-		<div>
-			<h3>{{spanish.course}}</h3>
-			<gradedonut course-title="{{spanish.grade}}" grade-weights="spanish.gradeWeights"></gradedonut>
-		</div>
-		<div>
-			<h3>{{history.course}}</h3>
-			<gradedonut course-title="{{history.grade}}" grade-weights="history.gradeWeights"></gradedonut>
-		</div>
-	</div>
+	<div class="courses">
 </div>

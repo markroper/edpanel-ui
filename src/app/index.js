@@ -175,7 +175,9 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       teacher: $resource(base + '/teachers/:teacherId'),
       year: $resource(base + '/schools/:schoolId/years/:yearId'),
       term: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId'),
+      //Sections
       section: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId'),
+      studentSections: $resource(base + '/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId/sections', {}, { 'get': { isArray: true }}),
       course: $resource(base + '/schools/:schoolId/courses/:courseId'),
       assignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId'),
       studentAssignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId/studentassignments/:studentassignment'),
