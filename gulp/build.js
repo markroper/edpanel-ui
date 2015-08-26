@@ -155,4 +155,9 @@ gulp.task('clean', function (done) {
   $.del(['dist/', '.tmp/'], done);
 });
 
-gulp.task('build', ['html', 'images', 'fonts', 'svg', 'misc']);
+gulp.task('htaccess', function(){
+  return gulp.src(['src/.htaccess'])
+  .pipe(gulp.dest('dist'));
+});
+
+gulp.task('build', ['html', 'images', 'fonts', 'svg', 'htaccess','misc']);
