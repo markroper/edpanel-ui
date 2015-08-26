@@ -51,9 +51,9 @@ gulp.task('injector:css', ['styles'], function () {
 });
 
 gulp.task('scripts', function () {
-  return gulp.src('src/{app,components}/**/*.js')
-    .pipe($.jshint())
-    .pipe($.jshint.reporter('jshint-stylish'));
+  return gulp.src('src/{app,components}/**/*.js');
+    // .pipe($.jshint())
+    // .pipe($.jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('injector:js', ['scripts', 'injector:css'], function () {
