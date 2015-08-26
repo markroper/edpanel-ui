@@ -2,7 +2,8 @@
   "name": "teacherdashboard",
   "version": "0.0.0",
   "dependencies": {
-    "node-sass": "^2.0.1"
+    "node-sass": "^2.0.1",
+    "wiredep":"2.2.2"
   },
   "devDependencies": {
     "ansi-regex": "~1.1.0",
@@ -40,7 +41,6 @@
     "karma-jasmine": "~0.3.1",
     "karma-phantomjs-launcher": "~0.1.4",
     "main-bower-files": "~2.4.0",
-    "mout": "^0.11.0",
     "orchestrator": "~0.3.7",
     "protractor": "~1.4.0",
     "require-dir": "~0.1.0",
