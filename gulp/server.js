@@ -26,14 +26,14 @@ function browserSyncInit(baseDir, files, browser) {
   }
 
   browserSync.instance = browserSync.init(files, {
-    startPath: '/edpanel/',
+    startPath: '/ui/',
     server: {
       baseDir: baseDir,
       middleware: [
         corsMiddleware,
         modRewrite([
           '!\\.\\w+$ /index.html [L]',
-          '(.*)/edpanel/(.*) $1/$2'
+          '(.*)/ui/(.*) $1/$2'
         ])
       ],
       routes: routes

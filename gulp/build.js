@@ -78,7 +78,7 @@ gulp.task('partials', function () {
     }))
     .pipe($.angularTemplatecache('templateCacheHtml.js', {
       module: 'teacherdashboard',
-      root: '/edpanel'
+      root: '/ui'
     }))
     .pipe(gulp.dest('.tmp/inject/'));
 });
@@ -116,8 +116,8 @@ gulp.task('html', ['wiredep', 'injector:css', 'injector:js', 'partials'], functi
       quotes: true
     }))
     .pipe(htmlFilter.restore())
-    .pipe($.replace('scripts/', '/edpanel/scripts/'))
-    .pipe($.replace('styles/', '/edpanel/styles/'))
+    .pipe($.replace('scripts/', '/ui/scripts/'))
+    .pipe($.replace('styles/', '/ui/styles/'))
     .pipe($.replace('http://fonts.googleapis.com/css?', 'https://fonts.googleapis.com/css?'))
     .pipe(gulp.dest('dist/'))
     .pipe($.size({ title: 'dist/', showFiles: true }));

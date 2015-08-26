@@ -9,7 +9,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       enabled: true,
       requireBase: false
     });
-    var rootUrl = '/edpanel';
+    var rootUrl = '/ui';
     var ADMIN = 'ADMIN',
         TEACHER = 'TEACHER',
         STUDENT = 'STUDENT',
@@ -73,12 +73,12 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
 
     $mdIconProvider
       .defaultIconSet('/assets/svg/avatars.svg', 128)
-      .icon('menu'       , '/edpanel/assets/svg/menu.svg'        , 24)
-      .icon('share'      , '/edpanel/assets/svg/share.svg'       , 24)
-      .icon('google_plus', '/edpanel/assets/svg/google_plus.svg' , 512)
-      .icon('hangouts'   , '/edpanel/assets/svg/hangouts.svg'    , 512)
-      .icon('twitter'    , '/edpanel/assets/svg/twitter.svg'     , 512)
-      .icon('phone'      , '/edpanel/assets/svg/phone.svg'       , 512);
+      .icon('menu'       , '/ui/assets/svg/menu.svg'        , 24)
+      .icon('share'      , '/ui/assets/svg/share.svg'       , 24)
+      .icon('google_plus', '/ui/assets/svg/google_plus.svg' , 512)
+      .icon('hangouts'   , '/ui/assets/svg/hangouts.svg'    , 512)
+      .icon('twitter'    , '/ui/assets/svg/twitter.svg'     , 512)
+      .icon('phone'      , '/ui/assets/svg/phone.svg'       , 512);
 
       $mdThemingProvider.theme('default')
           .primaryPalette('brown')
@@ -187,7 +187,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
       //GPA
       gpa: $resource(base + '/schools/:schoolId/gpas/4'),
-      basePrefix: '/edpanel'
+      basePrefix: '/ui'
     };
 })
 .service('statebag', function() {
