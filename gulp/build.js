@@ -45,7 +45,7 @@ gulp.task('injector:css', ['styles'], function () {
         '!.tmp/app/vendor.css'
       ], {read: false}), {
       ignorePath: '.tmp',
-      addRootSlash: false
+      addRootSlash: true
     }))
     .pipe(gulp.dest('src/'));
 });
@@ -64,8 +64,8 @@ gulp.task('injector:js', ['scripts', 'injector:css'], function () {
       '!src/{app,components}/**/*.mock.js'
     ]).pipe($.angularFilesort()), {
       ignorePath: 'src',
-      addRootSlash: false
-    }))
+      addRootSlash: true
+    }), {addRootSlash: true})
     .pipe(gulp.dest('src/'));
 });
 
@@ -93,13 +93,14 @@ gulp.task('html', ['wiredep', 'injector:css', 'injector:js', 'partials'], functi
     .pipe($.inject(gulp.src('.tmp/inject/templateCacheHtml.js', {read: false}), {
       starttag: '<!-- inject:partials -->',
       ignorePath: '.tmp',
-      addRootSlash: false
+      addRootSlash: true
     }))
     .pipe(assets = $.useref.assets())
     .pipe($.rev())
     .pipe(jsFilter)
     .pipe($.ngAnnotate())
-    .pipe($.uglify({preserveComments: $.uglifySaveLicense}))
+    //.pipe($.uglify({preserveComments: $.uglifySaveLicense}))
+    //.pipe($.replace('scripts/', '/scripts/'))
     .pipe(jsFilter.restore())
     .pipe(cssFilter)
     .pipe($.replace('../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap','../fonts'))
@@ -116,6 +117,9 @@ gulp.task('html', ['wiredep', 'injector:css', 'injector:js', 'partials'], functi
       quotes: true
     }))
     .pipe(htmlFilter.restore())
+    .pipe($.replace('scripts/', '/edpanel/scripts/'))
+    .pipe($.replace('styles/', '/edpanel/styles/'))
+    .pipe($.replace('http://fonts.googleapis.com/css?', 'https://fonts.googleapis.com/css?'))
     .pipe(gulp.dest('dist/'))
     .pipe($.size({ title: 'dist/', showFiles: true }));
 });
