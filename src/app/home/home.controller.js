@@ -92,30 +92,30 @@ angular.module('teacherdashboard')
         return '0';
       }
       function resolveHomeworkClass(homeworkScore) {
-        if(homeworkScore < 0.45) {
+        if(homeworkScore < 0.88) {
           return '40-50';
-        } else if(homeworkScore < 0.47) {
+        } else if(homeworkScore < 0.89) {
           return '50-60';
-        } else if(homeworkScore < 0.49) {
+        } else if(homeworkScore < 0.90) {
           return '60-70';
-        } else if(homeworkScore < 0.5) {
+        } else if(homeworkScore < 0.91) {
           return '70-80';
-        } else if(homeworkScore < 0.51) {
+        } else if(homeworkScore < 0.92) {
           return '80-90';
         } else {
           return '90-100';
         }
       }
       function resolveAttendanceClass(attendanceScore) {
-        if(attendanceScore < 290) {
+        if(attendanceScore < 43) {
           return '90-100';
-        } else if(attendanceScore < 295) {
+        } else if(attendanceScore < 46) {
           return '80-90';
-        } else if(attendanceScore < 300) {
+        } else if(attendanceScore < 49) {
           return '70-80';
-        } else if(attendanceScore < 305) {
+        } else if(attendanceScore < 52) {
           return '60-70';
-        } else if(attendanceScore < 310) {
+        } else if(attendanceScore < 55) {
           return '50-60';
         } else {
           return '40-50';
