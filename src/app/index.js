@@ -31,7 +31,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       .state('app', {
         url: rootUrl + '/',
         templateUrl: rootUrl + '/app/navinclude/navinclude.html',
-        controller: 'SidenavCtrl',
+        controller: 'NavCtrl',
         data: {
           roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
         },

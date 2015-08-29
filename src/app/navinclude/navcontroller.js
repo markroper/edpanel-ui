@@ -1,5 +1,5 @@
 'use strict';
-angular.module('teacherdashboard').controller('SidenavCtrl', ['$scope', '$state', '$mdSidenav', 'api',
+angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api',
 function($scope, $state, $mdSidenav, api) {
     $scope.toggleList =  function() {
       $mdSidenav('left').toggle();
