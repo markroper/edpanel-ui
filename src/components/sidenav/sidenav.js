@@ -1,6 +1,6 @@
 'use strict';
-angular.module('teacherdashboard').controller('SidenavCtrl', ['$scope', '$state', '$mdSidenav',
-function($scope, $state, $mdSidenav) {
+angular.module('teacherdashboard').controller('SidenavCtrl', ['$scope', '$state', '$mdSidenav', 'api',
+function($scope, $state, $mdSidenav, api) {
     $scope.toggleList =  function() {
       $mdSidenav('left').toggle();
     };
@@ -13,4 +13,11 @@ function($scope, $state, $mdSidenav) {
     $scope.goToReportBuilder = function() {
       $state.go('app.reportbuilder', { schoolId: $state.params.schoolId });
     };
+    $scope.logout = function() {
+        api.logout.save(
+          {}, 
+          function(data){
+            $state.go('login');
+          });
+    }
   }]);

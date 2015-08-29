@@ -1,6 +1,23 @@
 'use strict';
 
 angular.module('teacherdashboard')
+  .directive('edpanelEnterKeypress', function() {
+    return function(scope, element, attrs) {
+
+        element.bind("keydown keypress", function(event) {
+            var keyCode = event.which || event.keyCode;
+
+            // If enter key is pressed
+            if (keyCode === 13) {
+                scope.$apply(function() {
+                        // Evaluate the expression
+                    scope.$eval(attrs.edpanelEnterKeypress);
+                });
+                event.preventDefault();
+            }
+        });
+    };
+  })
   .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag',
     function ($scope, api, $state, authentication, statebag) {
 	    $scope.inputEmail = '';
@@ -44,4 +61,4 @@ angular.module('teacherdashboard')
           }
         );
       };
-}]);
+  }]);

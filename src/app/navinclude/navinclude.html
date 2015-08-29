@@ -5,11 +5,17 @@
   <div class="md-toolbar-tools" tabindex="0">
     <span>Teacher Dashboard</span>
     <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
-      <div class="circular-login"></div>
+      <div dropdown style="position:relative;">
+        <div id="user-menu" class="circular-login" dropdown-toggle></div>
+        <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="user-menu">
+          <li role="menuitem"><a>Account settings</a></li>
+          <li class="divider"></li>
+          <li role="menuitem"><a ng-click="logout()">Log out</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </md-toolbar>
-
 <div flex layout="row">
     <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left">
       <md-list>
