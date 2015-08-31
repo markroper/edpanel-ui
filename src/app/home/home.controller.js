@@ -46,9 +46,11 @@ angular.module('teacherdashboard')
           //After the school and students are resolved, resolve the student performance data
           $q.all(promises).then(function(){
             var attendanceAndHwQuery = getHwAndAttendanceQuery(statebag.currentYear.id, statebag.currentTerm.id);
+            var behaviorQuery = getBehaviorQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate);
             var studentDataPromises = [];
             //Get attendance & HW completion
             studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceAndHwQuery).$promise);
+            studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise)
             //Get the GPA results
             var studentIds = [];
             for(var i = 0; i < statebag.students.length; i++) {
@@ -57,15 +59,29 @@ angular.module('teacherdashboard')
             studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
             
             //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
-            $q.all(studentDataPromises).then(function(responses){
+            $q.all(studentDataPromises).then(function(responses) {
               var resolvedStudents = [];
+              var studentMap = {};
+              //Handle the HW completion & attendance values
               responses[0].records.forEach(function(student){
-                resolvedStudents.push(resolveStudentScopeObject(student.values));
+                studentMap[student.values[0]] = resolveStudentScopeObject(student.values);
               });
-              for(var i=0; i < resolvedStudents.length; i++) {
-                var studentGpa = responses[1][resolvedStudents[i].id];
-                resolvedStudents[i].gpa = studentGpa;
-                resolvedStudents[i].gpaClass = resolveGpaClass(studentGpa);
+              //Update the behavior demerit counts
+              responses[1].records.forEach(function(student) {
+                var studentDemerits = student.values;
+                var pluckedStudent = studentMap[studentDemerits[0]];
+                pluckedStudent.behavior = studentDemerits[1];
+                pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
+              });
+              //Update the GPA
+              for (var idKey in responses[2]) {
+                if (responses[2].hasOwnProperty(idKey) && 
+                    !isNaN(idKey)) {
+                  var pluckedStudent = studentMap[idKey];
+                  pluckedStudent.gpa = responses[2][idKey];
+                  pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
+                  resolvedStudents.unshift(pluckedStudent);
+                }
               }
               $scope.students = statebag.studentPerfData = resolvedStudents;
             });
@@ -89,7 +105,19 @@ angular.module('teacherdashboard')
         return student;
       }
       function resolveBehaviorClass(behaviorScore) {
-        return '0';
+        if(behaviorScore < 35) {
+          return '90-100';
+        } else if(behaviorScore < 45) {
+          return '80-90';
+        } else if(behaviorScore < 55) {
+          return '70-80';
+        } else if(behaviorScore < 65) {
+          return '60-70';
+        } else if(behaviorScore < 75) {
+          return '50-60';
+        } else {
+          return '40-50';
+        }
       }
       function resolveHomeworkClass(homeworkScore) {
         if(homeworkScore < 0.88) {
@@ -135,6 +163,57 @@ angular.module('teacherdashboard')
         } else {
           return '0';
         }
+      }
+      function getBehaviorQuery(minDate, maxDate) {
+        var behaviorQuery = {
+            'aggregateMeasures': [
+                {
+                    'measure': 'DEMERIT',
+                    'aggregation': 'SUM'
+                }
+            ],
+            'fields': [
+                {
+                    'dimension': 'STUDENT',
+                    'field': 'ID'
+                }
+            ],
+            'filter': {
+                'type': 'EXPRESSION',
+                'leftHandSide': {
+                    'type': 'EXPRESSION',
+                    'leftHandSide': {
+                        'type': 'MEASURE',
+                        'value': {
+                            'measure': 'DEMERIT',
+                            'field': 'Behavior Date'
+                        }
+                    },
+                    'operator': 'GREATER_THAN',
+                    'rightHandSide': {
+                        'type': 'DATE',
+                        'value': minDate
+                    }
+                },
+                'operator': 'AND',
+                'rightHandSide': {
+                    'type': 'EXPRESSION',
+                    'leftHandSide': {
+                        'type': 'MEASURE',
+                        'value': {
+                            'measure': 'DEMERIT',
+                            'field': 'Behavior Date'
+                        }
+                    },
+                    'operator': 'LESS_THAN',
+                    'rightHandSide': {
+                        'type': 'DATE',
+                        'value': maxDate
+                    }
+                }
+            }
+        };
+        return behaviorQuery;
       }
       function getHwAndAttendanceQuery(schoolYearId, termId) {
         var attendanceAndHwQuery = {
