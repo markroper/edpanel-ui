@@ -50,7 +50,7 @@ angular.module('teacherdashboard')
             var studentDataPromises = [];
             //Get attendance & HW completion
             studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceAndHwQuery).$promise);
-            studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise)
+            studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise);
             //Get the GPA results
             var studentIds = [];
             for(var i = 0; i < statebag.students.length; i++) {
@@ -78,9 +78,11 @@ angular.module('teacherdashboard')
                 if (responses[2].hasOwnProperty(idKey) && 
                     !isNaN(idKey)) {
                   var pluckedStudent = studentMap[idKey];
-                  pluckedStudent.gpa = responses[2][idKey];
-                  pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
-                  resolvedStudents.unshift(pluckedStudent);
+                  if(pluckedStudent) {
+                    pluckedStudent.gpa = responses[2][idKey];
+                    pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
+                    resolvedStudents.unshift(pluckedStudent);
+                  }
                 }
               }
               $scope.students = statebag.studentPerfData = resolvedStudents;
