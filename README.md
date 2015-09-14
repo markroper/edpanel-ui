@@ -1,4 +1,4 @@
-# Teacher Dashboard #
+# EdPanel UI #
 
 Projects depends on Node (JS runtime), Bower (browser javascript dependency manager), and Gulp (node-based task editor for building, executing tests, and so on).  Project includes Karma test runner and Jasmine test framework.  The client side application is developed in AngularJS and the server component is a node-based application using the Express web app framework. Available gulp commands used to run the server, tests and so on include:
 
@@ -20,3 +20,5 @@ Projects depends on Node (JS runtime), Bower (browser javascript dependency mana
 * Once node is installed and on the path, run `npm install -g bower gulp`
 * Go to the root of the repo and run `npm install && bower install`
 * Change directory to the root of the project and experiment with the gulp commands!
+
+In order to actually interact with the UI in a meaningful way, you'll need to have the server side API running, which means installing, building and deploying `ScholarScore` project.  Default admin credentials to use on the login page are `mroper/admin`.
