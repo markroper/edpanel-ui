@@ -169,7 +169,11 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       schools: $resource(base + '/schools', {}, { 'get': { isArray: true }}),
       //students enpoints
       student: $resource(base + '/students/:studentId'),
-      students: $resource(base + '/students', {}, { 'get': { isArray: true }}),
+      allStudents: $resource(base + '/students', {}, { 'get': { isArray: true }}),
+      termTeacherStudents: $resource(base + 
+        '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/students', 
+        {}, 
+        { 'get': { isArray: true }}),
       studentGpa: $resource(base + '/students/:studentId/gpa/4'),
       //Other endpoints
       teacher: $resource(base + '/teachers/:teacherId'),

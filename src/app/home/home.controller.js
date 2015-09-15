@@ -32,8 +32,14 @@ angular.module('teacherdashboard')
           }
 
           //Resolve the students!
-          promises.push(api.students.get(
-            {},
+          promises.push(api.termTeacherStudents.get(
+            {
+              schoolId: statebag.school.id, 
+              yearId: statebag.currentYear.id, 
+              termId: statebag.currentTerm.id,
+              //TODO: make this dynamic after merging in Matt G's changes to return user identity in login
+              teacherId: 1
+            },
             //Success callback
             function(data){
               statebag.students = data;
