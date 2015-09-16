@@ -210,6 +210,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
   var school = null,
       currentYear = null,
       currentTerm = null,
+      currentSection = null,
       currentSections = [],
       //Student caches
       students = [],
