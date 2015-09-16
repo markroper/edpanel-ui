@@ -52,6 +52,14 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
           roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
         },
       })
+      .state('app.studentSectDrill', {
+        url: 'schools/:schoolId/student/:studentId/sections/:sectionId/types/:assignmentTypes',
+        templateUrl: rootUrl + '/app/studentSectDrill/studentSectDrill.html',
+        controller: 'StudentSectDrillCtrl',
+        data: {
+          roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
+        },
+      })
       .state('app.reports', {
         url: 'schools/:schoolId/reports/:reportId',
         templateUrl: rootUrl + '/app/reports/reports.html',
@@ -185,6 +193,10 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       course: $resource(base + '/schools/:schoolId/courses/:courseId'),
       assignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId'),
       studentAssignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId/studentassignments/:studentassignment'),
+      studentSectionAssignments: $resource(
+        base + '/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/studentassignments',
+        {},
+        { 'get': { isArray: true }}),
       studentSectionGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId'),
       //Query execution
       savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),

@@ -1,7 +1,7 @@
 <div class="student-detail">
 	<h1>{{students[0].name | uppercase}}</h1>
 	<student-grid students-data="students"></student-grid>
-	<h1>GOALS</h1>
+	<h1>Goals</h1>
 	<div class="goals-container">
 		<div class="student-goal">
 			<div class="row"><b>GPA goal:</b> <span class="goal-value">4.0</span></div>
@@ -44,11 +44,11 @@
 			</div>
 		</div>
 	</div>
-	<h1>CURRENT COURSES</h1>
+	<h1>Grades & Grade Formulas</h1>
 	<div class="courses">
 		<div class="" ng-repeat="section in sections">
 			<h3>{{section.course.name}}</h3>
-			<gradedonut course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
+			<gradedonut section-id="{{section.id}}" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
 		</div>
 	<div class="courses">
 </div>
