@@ -85,7 +85,7 @@ angular.module('teacherdashboard')
                     !isNaN(idKey)) {
                   var pluckedStudent = studentMap[idKey];
                   if(pluckedStudent) {
-                    pluckedStudent.gpa = responses[2][idKey];
+                    pluckedStudent.gpa = Math.round( responses[2][idKey] * 10 ) / 10;
                     pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
                     resolvedStudents.unshift(pluckedStudent);
                   }
@@ -160,11 +160,11 @@ angular.module('teacherdashboard')
       function resolveGpaClass(gpa) {
         if(gpa > 3.5) {
           return '90-100';
-        } else if(gpa > 3.0) {
+        } else if(gpa > 3.2) {
           return '80-90';
-        } else if(gpa > 2.5) {
+        } else if(gpa > 3.0) {
           return '70-80';
-        } else if(gpa > 2.0) {
+        } else if(gpa > 2.8) {
           return '60-70';
         } else if (gpa > 0){
           return '50-60';
