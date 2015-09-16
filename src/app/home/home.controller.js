@@ -32,8 +32,14 @@ angular.module('teacherdashboard')
           }
 
           //Resolve the students!
-          promises.push(api.students.get(
-            {},
+          promises.push(api.termTeacherStudents.get(
+            {
+              schoolId: statebag.school.id, 
+              yearId: statebag.currentYear.id, 
+              termId: statebag.currentTerm.id,
+              //TODO: make this dynamic after merging in Matt G's changes to return user identity in login
+              teacherId: 1
+            },
             //Success callback
             function(data){
               statebag.students = data;
@@ -79,7 +85,7 @@ angular.module('teacherdashboard')
                     !isNaN(idKey)) {
                   var pluckedStudent = studentMap[idKey];
                   if(pluckedStudent) {
-                    pluckedStudent.gpa = responses[2][idKey];
+                    pluckedStudent.gpa = Math.round( responses[2][idKey] * 10 ) / 10;
                     pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
                     resolvedStudents.unshift(pluckedStudent);
                   }
@@ -154,11 +160,11 @@ angular.module('teacherdashboard')
       function resolveGpaClass(gpa) {
         if(gpa > 3.5) {
           return '90-100';
-        } else if(gpa > 3.0) {
+        } else if(gpa > 3.2) {
           return '80-90';
-        } else if(gpa > 2.5) {
+        } else if(gpa > 3.0) {
           return '70-80';
-        } else if(gpa > 2.0) {
+        } else if(gpa > 2.8) {
           return '60-70';
         } else if (gpa > 0){
           return '50-60';
