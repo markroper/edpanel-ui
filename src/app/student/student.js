@@ -29,7 +29,7 @@ angular.module('teacherdashboard')
           for(var key in weights) {
             var tempArr = [];
             tempArr.push(key.toLowerCase());
-            tempArr.push(weights[key]);
+            tempArr.push(Math.round(weights[key]));
             arrayWeights.push(tempArr);
           }
           section.gradeFormula.assignmentTypeWeights = arrayWeights;

@@ -48,7 +48,7 @@
 	<div class="courses">
 		<div class="" ng-repeat="section in sections">
 			<h3>{{section.course.name}}</h3>
-			<gradedonut section-id="{{section.id}}" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
+			<gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
 		</div>
 	<div class="courses">
 </div>

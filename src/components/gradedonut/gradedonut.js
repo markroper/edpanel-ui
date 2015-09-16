@@ -5,7 +5,7 @@ angular.module('teacherdashboard')
       scope: {
         courseTitle: '@',
         gradeWeights: '=',
-        sectionId: '@'
+        section: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/gradedonut/gradedonut.html',
@@ -27,7 +27,7 @@ angular.module('teacherdashboard')
                   parseInt(result[2], 16) + ', ' + 
                   parseInt(result[3], 16) + ', 0.8);'
               : null;
-          }
+          };
 
           scope.chart = $window.c3.generate({
               bindto: elem[0],
@@ -40,29 +40,32 @@ angular.module('teacherdashboard')
                     schoolId: statebag.school.id, 
                     yearId: statebag.currentYear.id, 
                     termId: statebag.currentTerm.id,
-                    sectionId: scope.sectionId }).$promise;
+                    sectionId: scope.section.id }).$promise;
 
                   studentAssignmentsPromise.then(
                       //Success callback
                       function(payload){
-                        statebag.currentSectionId = scope.sectionId;
+                        statebag.currentSection = scope.section;
                         statebag.currentStudentSectionAssignments = payload;
                         $state.go(
                           'app.studentSectDrill', 
                           { 
                             schoolId: statebag.school.id,
                             studentId: statebag.currentStudent.id,
-                            sectionId: statebag.currentSectionId,
+                            sectionId: statebag.currentSection.id,
                             assignmentTypes: 'assignments' });
                         console.log(JSON.stringify(payload));
                       }, 
                       //Failure callback
                       function(error){
-                        console.log(JSON.stringify(payload))
+                        console.log(JSON.stringify(error));
                       });
                 }
               },
               donut: {
+                label: {
+                  show: false
+                },
                 title: scope.courseTitle
               },
               legend: {
