@@ -54,7 +54,6 @@ angular.module('teacherdashboard')
                             studentId: statebag.currentStudent.id,
                             sectionId: statebag.currentSection.id,
                             assignmentTypes: 'assignments' });
-                        console.log(JSON.stringify(payload));
                       }, 
                       //Failure callback
                       function(error){
