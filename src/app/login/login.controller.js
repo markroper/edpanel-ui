@@ -35,7 +35,8 @@ angular.module('teacherdashboard')
         	function(data) {
             var identity = {
               username: $scope.inputEmail,
-              id: null,
+              name: data.identity.name,
+              id: data.identity.id,
               roles: [data.authorities[0].authority]
             };
         		authentication.authenticate(identity);
