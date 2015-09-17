@@ -4,7 +4,7 @@ function($scope, $state, $mdSidenav, api) {
     $scope.toggleList =  function() {
       $mdSidenav('left').toggle();
     };
-    $scope.goToStudents = function() {
+    $scope.goToHome = function() {
       $state.go('app.home', { schoolId: $state.params.schoolId });
     };
     $scope.goToReports = function() {

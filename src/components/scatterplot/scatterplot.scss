@@ -1,0 +1,94 @@
+.scatterplot {  
+  h2 {
+    text-align: center;
+  }
+  font-size: 12px;
+  font-family: Roboto, sans-serif;
+
+  .svg-container {
+    margin: 5em 5em 10em 5em;
+    background:white;
+    border-radius:5px;
+  }
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #737373;
+    stroke-width:1px;
+    shape-rendering: crispEdges;
+  }
+
+  circle:hover {
+    fill-opacity: 1;
+  }
+  
+  circle {
+    fill-opacity: 0.75;
+    cursor:pointer;
+    -webkit-transition: fill .4s ease;
+    -moz-transition: fill 1s ease;
+    -o-transition: fill 1s ease;
+    transition: fill 1s ease;
+  }
+  .Gym {
+    fill:rgb(255,204,0);
+  }
+  .Art, .test {
+    fill: rgb(117, 107, 177);
+  }
+  .Spanish, .lab {
+    fill: rgb(31,119,180);
+  }
+  .Geometry, .final {
+    fill: rgb(255,127,14);
+  }
+  .History, .midterm {
+    fill:  rgb(44,160,44);
+  }
+  .Calculus, .quiz {
+    fill: #800;
+  }
+  .Biology, .attendance {
+    fill: #080;
+  }
+  .Chemistry, .homework {
+    fill: #008;
+  }
+}
+.scatterplot.Disablehomework .homework,
+.scatterplot.Disableattendance .attendance,
+.scatterplot.Disablequiz .quiz,
+.scatterplot.Disablemidterm .midterm,
+.scatterplot.Disablefinal .final,
+.scatterplot.Disablelab .lab,
+.scatterplot.Disabletest .test,
+.scatterplot.DisableGym .Gym,
+.scatterplot.DisableArt .Art,
+.scatterplot.DisableSpanish .Spanish,
+.scatterplot.DisableGeometry .Geometry,
+.scatterplot.DisableHistory .History,
+.scatterplot.DisableCalculus .Calculus, 
+.scatterplot.DisableBiology .Biology, 
+.scatterplot.DisableChemistry .Chemistry {
+  fill:#BBB;
+  fill-opacity: 0.2;
+}
+
+.tooltip-inner, .tooltip-arrow {
+  opacity:0.95;
+}
+.tooltip-inner{
+  background-color:#3B3B3B;
+}
+.tooltip.top > .tooltip-arrow {
+  border-top-color:#3B3B3B;
+}
+.tooltip.bottom > .tooltip-arrow {
+  border-bottom-color:#3B3B3B;
+}
+.tooltip.left > .tooltip-arrow {
+  border-left-color:#3B3B3B;
+}
+.tooltip.right > .tooltip-arrow {
+  border-right-color:#3B3B3B;
+}

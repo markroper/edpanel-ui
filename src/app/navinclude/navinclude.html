@@ -1,11 +1,10 @@
 <md-toolbar layout="row">
   <div class="md-toolbar-tools" tabindex="0">
-    <span>Teacher Dashboard</span>
+    <span ng-click="goToHome()">Teacher Dashboard</span>
     <span flex></span>
     <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
       <md-menu md-position-mode="target-right target" md-offset="0 78" >
         <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-          <!--<md-icon md-menu-origin md-svg-icon="call:portable-wifi-off"></md-icon>-->
           <div id="user-menu" class="circular-login"></div>
         </md-button>
         <md-menu-content width="4" >

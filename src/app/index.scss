@@ -192,12 +192,13 @@ span.name {
 }
 
 // injector
+@import '../components/gradedonut/gradedonut.scss';
+@import '../components/navbar/navbar.scss';
+@import '../components/studentsoverview/students.grid.scss';
+@import '../components/scatterplot/scatterplot.scss';
 @import 'home/home.scss';
 @import 'login/login.scss';
 @import 'navinclude/navinclude.scss';
 @import 'student/student.scss';
 @import 'studentSectDrill/studentSectDrill.scss';
-@import '../components/gradedonut/gradedonut.scss';
-@import '../components/navbar/navbar.scss';
-@import '../components/studentsoverview/students.grid.scss';
 // endinjector
