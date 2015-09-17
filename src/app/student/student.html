@@ -45,6 +45,11 @@
 		</div>
 	</div>
 	<h1>Grades & Grade Formulas</h1>
+	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
+		<h3 flex="50">Loading...</h3>
+		<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
+	</div>
+
 	<div class="courses">
 		<div class="" ng-repeat="section in sections">
 			<h3>{{section.course.name}}</h3>
