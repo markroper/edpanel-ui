@@ -89,7 +89,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       .icon('phone'      , '/ui/assets/svg/phone.svg'       , 512);
 
       $mdThemingProvider.theme('default')
-          .primaryPalette('indigo'); //blue-gray
+          .primaryPalette('indigo');
   })
 .factory('authentication', [function() {
     var _identity,
