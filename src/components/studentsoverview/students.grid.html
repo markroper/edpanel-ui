@@ -1,15 +1,14 @@
 <div class="students-grid">
-	<div class="row" ng-show="studentsData.length > 1">
-		<div class="col-lg-4 searchbox">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Search for student" ng-model="search.name">
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
-				</span>
-			</div>
+	<div class="row" ng-show="showFilter">
+		<div layout="row" layout-align="center center">
+	        <md-input-container md-no-float>
+	          <input ng-model="search.name" placeholder="Search students by name" tabindex="1">
+	        </md-input-container>
 		</div>
 	</div>
-	<div class="table-container">
+
+	<md-progress-linear md-mode="indeterminate" ng-show="!studentsData"></md-progress-linear>
+	<div class="table-container" ng-show="studentsData">
 		<div class="row-header">
 			<div class="table-cell"></div>
 			<div class="table-cell"><b>Behavior</b></div>
