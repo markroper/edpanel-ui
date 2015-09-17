@@ -3,7 +3,8 @@ angular.module('teacherdashboard')
   .directive('studentGrid', ['$state', 'statebag', 'api', function($state, statebag, api) {
     return {
       scope: {
-        studentsData: '='
+        studentsData: '=',
+        showFilter: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/studentsoverview/students.grid.html',

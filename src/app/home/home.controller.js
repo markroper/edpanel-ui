@@ -3,6 +3,7 @@
 angular.module('teacherdashboard')
   .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', 
     function ($scope, api, statebag, $q, $stateParams) {
+      $scope.showFilter=true;
       //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old
       if(!statebag.school || !statebag.currentYear || !statebag.currentTerm || 
         !statebag.studentPerfData || !statebag.students || !statebag.lastFullRefresh || 
