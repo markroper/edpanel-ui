@@ -22,7 +22,6 @@
       -moz-border-radius: 27px;
       background: url(../../assets/images/markroper.png) no-repeat;
       background-size: 100%;
-      margin-left:20px;
       cursor:pointer;
       }
       
@@ -198,6 +197,7 @@ span.name {
 @import '../components/studentsoverview/students.grid.scss';
 @import 'home/home.scss';
 @import 'login/login.scss';
+@import 'navinclude/navinclude.scss';
 @import 'student/student.scss';
 @import 'studentSectDrill/studentSectDrill.scss';
 // endinjector

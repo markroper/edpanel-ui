@@ -19,5 +19,11 @@ function($scope, $state, $mdSidenav, api) {
           function(data){
             $state.go('login');
           });
-    }
+    };
+
+    var originatorEv;
+    $scope.openMenu = function($mdOpenMenu, ev) {
+      originatorEv = ev;
+      $mdOpenMenu(ev);
+    };
   }]);
