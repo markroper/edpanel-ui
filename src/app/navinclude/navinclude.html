@@ -1,7 +1,4 @@
 <md-toolbar layout="row">
-  <md-button class="menu" hide-gt-sm ng-click="toggleList()" aria-label="Show User List">
-    <md-icon md-svg-icon="menu" ></md-icon>
-  </md-button>
   <div class="md-toolbar-tools" tabindex="0">
     <span>Teacher Dashboard</span>
     <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
@@ -17,29 +14,6 @@
   </div>
 </md-toolbar>
 <div flex layout="row">
-    <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-z2" md-component-id="left">
-      <md-list>
-        <md-item>
-            <md-button ng-click="goToStudents()">
-            <div class="sidemenu-icon goals"></div>
-              <span>MY STUDENTS</span>
-            </md-button>
-        </md-item>
-        <md-item>
-            <md-button ng-click="goToReports()">
-            <div class="sidemenu-icon grades"></div>
-            <span>SCHOOL REPORTS</span>
-            </md-button>
-        </md-item>
-        <md-item>
-            <md-button ng-click="goToReportBuilder()">
-            <div class="sidemenu-icon attendance"></div>
-            <span>REPORT BUILDER</span>
-            </md-button>
-        </md-item>
-      </md-list>
-    </md-sidenav>
-
     <md-content flex id="content">
       <div ui-view class="main-container"></div>
     </md-content>
