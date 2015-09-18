@@ -15,6 +15,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         GUARDIAN = 'GUARDIAN',
         SUPER_ADMIN = 'SUPER_ADMIN';
 
+    //Configure the routes!
     $stateProvider
       .state('login', {
         url: rootUrl + '/login',

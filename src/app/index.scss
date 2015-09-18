@@ -192,8 +192,8 @@ span.name {
 }
 
 // injector
-@import '../components/directives/gradedonut/gradedonut.scss';
 @import '../components/directives/navbar/navbar.scss';
+@import '../components/directives/gradedonut/gradedonut.scss';
 @import '../components/directives/scatterplot/scatterplot.scss';
 @import '../components/directives/studentsoverview/students.grid.scss';
 @import '../components/routecontrollers/home/home.scss';
@@ -201,9 +201,4 @@ span.name {
 @import '../components/routecontrollers/navinclude/navinclude.scss';
 @import '../components/routecontrollers/student/student.scss';
 @import '../components/routecontrollers/studentSectDrill/studentSectDrill.scss';
-@import '../components/services/home/home.scss';
-@import '../components/services/login/login.scss';
-@import '../components/services/navinclude/navinclude.scss';
-@import '../components/services/student/student.scss';
-@import '../components/services/studentSectDrill/studentSectDrill.scss';
 // endinjector
