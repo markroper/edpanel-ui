@@ -7,7 +7,7 @@ angular.module('teacherdashboard')
         chartTitle: '@'
       },
       restrict: 'E',
-      templateUrl: api.basePrefix + '/components/scatterplot/scatterplot.html',
+      templateUrl: api.basePrefix + '/components/directives/scatterplot/scatterplot.html',
       replace: true,
       controllerAs: 'ctrl',
       link: function(scope, elem){

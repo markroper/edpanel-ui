@@ -22,3 +22,9 @@ Projects depends on Node (JS runtime), Bower (browser javascript dependency mana
 * Change directory to the root of the project and experiment with the gulp commands!
 
 In order to actually interact with the UI in a meaningful way, you'll need to have the server side API running, which means installing, building and deploying `ScholarScore` project.  Default admin credentials to use on the login page are `mroper/admin`.
+
+### What is the folder structure? ###
+
+Within `src/` is the client code, html, styles, etc.  The main entry point to the angular app is in `src/app/index.js`.  All the individual directives, route controllers, and static assets can be found within `src/app/components/` in their respective folders.  I've tried to create one JS file per angular directive, controller, factory, or service defined.  For controllers, I've colocated the controller js code in a folder with its realted html template and .scss style file.
+
+All top level folders other than `src` are either managed by NPM, bower, or gulp with the exception of the `/gulp` folder, which contains gulp config files that are maintained by us, the humans.

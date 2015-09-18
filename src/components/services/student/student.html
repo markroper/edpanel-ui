@@ -1,0 +1,59 @@
+<div class="student-detail">
+	<h1>{{students[0].name}}</h1>
+	<student-grid students-data="students" show-filter="showFilter"></student-grid>
+	<h1>Goals</h1>
+	<div class="goals-container">
+		<div class="student-goal">
+			<div class="row"><b>GPA goal:</b> <span class="goal-value">4.0</span></div>
+			<div class="row"><b>Current GPA:</b> <span class="goal-value">3.5</span></div>
+			<div class="row"><b>Class average:</b> <span class="goal-value">3.1</span></div>
+			<div class="goal-footer">
+				<div class="goal-chat"></div>
+				<div class="goal-edit"></div>
+				<div class="goal-delete"></div>
+			</div>
+		</div>
+		<div class="student-goal">
+			<div class="row"><b>Weekly demerit goal:</b> <span class="goal-value">10</span></div>
+			<div class="row"><b>Current demerits:</b> <span class="goal-value">8</span></div>
+			<div class="row"><b>Class average:</b> <span class="goal-value">12</span></div>
+			<div class="goal-footer">
+				<div class="goal-chat"></div>
+				<div class="goal-edit"></div>
+				<div class="goal-delete"></div>
+			</div>
+		</div>
+		<div class="student-goal">
+			<div class="row"><b>Quarterly absense goal:</b> <span class="goal-value">2</span></div>
+			<div class="row"><b>Current absenses:</b> <span class="goal-value">5</span></div>
+			<div class="row"><b>Class average:</b> <span class="goal-value">2</span></div>
+			<div class="goal-footer">
+				<div class="goal-chat"></div>
+				<div class="goal-edit"></div>
+				<div class="goal-delete"></div>
+			</div>
+		</div>
+		<div class="student-goal">
+			<div class="row"><b>Weekly HW goal:</b> <span class="goal-value">100%</span></div>
+			<div class="row"><b>Current HW completion:</b> <span class="goal-value">85%</span></div>
+			<div class="row"><b>Class average:</b> <span class="goal-value">90%</span></div>
+			<div class="goal-footer">
+				<div class="goal-chat"></div>
+				<div class="goal-edit"></div>
+				<div class="goal-delete"></div>
+			</div>
+		</div>
+	</div>
+	<h1>Grades & Grade Formulas</h1>
+	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
+		<h3 flex="50">Loading...</h3>
+		<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
+	</div>
+
+	<div class="courses">
+		<div class="" ng-repeat="section in sections">
+			<h3>{{section.course.name}}</h3>
+			<gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
+		</div>
+	<div class="courses">
+</div>

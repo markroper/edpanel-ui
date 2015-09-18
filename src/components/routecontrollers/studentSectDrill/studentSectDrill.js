@@ -36,12 +36,6 @@ controller('StudentSectDrillCtrl', ['$scope','statebag', 'api', '$q',
 	  				processedAssignments.push(p);
   				}
   			});
-  			//console.log(processedAssignments);
-  			processedAssignments.forEach(function(a){ 
-  				if(a.category != 'attendance' && a.category != 'homework'){
-  					console.log(a);
-  				} 
-  			});
   			$scope.chartData = processedAssignments;
   		}, 
   		function(error){

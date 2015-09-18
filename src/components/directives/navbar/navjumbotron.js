@@ -5,7 +5,7 @@ angular.module('teacherdashboard')
       scope: {
       },
       restrict: 'E',
-      templateUrl: api.basePrefix + '/components/navbar/navjumbotron.html',
+      templateUrl: api.basePrefix + '/components/directives/navbar/navjumbotron.html',
       replace: true,
       link: function(scope, elem){
           var jumbotronImages = [

@@ -8,7 +8,7 @@ angular.module('teacherdashboard')
         section: '='
       },
       restrict: 'E',
-      templateUrl: api.basePrefix + '/components/gradedonut/gradedonut.html',
+      templateUrl: api.basePrefix + '/components/directives/gradedonut/gradedonut.html',
       replace: true,
       link: function(scope, elem){
           scope.element = elem;
