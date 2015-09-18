@@ -29,7 +29,7 @@ angular.module('teacherdashboard')
       year: $resource(base + '/schools/:schoolId/years/:yearId'),
       term: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId'),
       //Sections
-      section: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId'),
+      section: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId'),
       studentSections: $resource(base + '/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId/sections', {}, { 'get': { isArray: true }}),
       course: $resource(base + '/schools/:schoolId/courses/:courseId'),
       assignment: $resource(base + '/schools/:schoolId/courses/:courseId/sections/:sectionId/assignments/:assignmentId'),

@@ -52,8 +52,8 @@ angular.module('teacherdashboard')
                           { 
                             schoolId: statebag.school.id,
                             studentId: statebag.currentStudent.id,
-                            sectionId: statebag.currentSection.id,
-                            assignmentTypes: 'assignments' });
+                            sectionId: statebag.currentSection.id 
+                          });
                       }, 
                       //Failure callback
                       function(error){

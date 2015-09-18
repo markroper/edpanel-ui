@@ -3,7 +3,7 @@ angular.module('teacherdashboard')
   .directive('scatterplot', [ '$window', '$compile', '$sanitize','statebag', 'api', function($window, $compile, $sanitize, statebag, api) {
     return {
       scope: {
-        chartData: '=',
+        chartDataPromise: '=',
         chartTitle: '@'
       },
       restrict: 'E',
@@ -40,7 +40,9 @@ angular.module('teacherdashboard')
           .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-          var data = scope.chartData;
+
+        scope.chartDataPromise.then(function(theData){
+          var data = theData;
           data.forEach(function(d) {
             categories[d.category] = true;
           });
@@ -112,6 +114,7 @@ angular.module('teacherdashboard')
               .style('text-anchor', 'end')
               .text(function(d) { return d; });
           $compile(elem)(scope);
+        });
       }
     };
   }]);

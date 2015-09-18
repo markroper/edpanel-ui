@@ -1,14 +1,62 @@
 'use strict';
 angular.module('teacherdashboard').
-controller('StudentSectDrillCtrl', ['$scope','statebag', 'api', '$q', 
-  function ($scope, statebag, api, $q) {
+controller('StudentSectDrillCtrl', ['$scope','statebag', 'api', '$q', 'statebagApiManager', '$state',
+  function ($scope, statebag, api, $q, statebagApiManager, $state) {
+  	$scope.assignments = [];
+  	var deferred = $q.defer();
+  	$scope.chartDataPromise = deferred.promise;
 
-  	transformAndDisplayAssignments();
+  	if(!statebag.school || !statebag.currentStudent) {
+      console.log(JSON.stringify(statebag));
+      //Resolve the school then resolve the student
+      statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
+        function() {
+          	//After those promises resolve, resolve the section data
+          	api.student.get( 
+	      	{ studentId: $state.params.studentId },
+	        //Success callback
+	        function(data){ 
+	          statebag.students = [data]; 
+	          statebag.currentStudent = statebag.students[0];
+	        });
+
+          	api.section.get(
+          	{ 
+          		schoolId: statebag.school.id,
+          		yearId: statebag.currentYear.id,
+          		termId: statebag.currentTerm.id,
+          		sectionId: $state.params.sectionId
+          	},
+          	//Success callback
+          	function(section){
+          		statebag.currentSection = section;
+          		statebag.currentStudentSectionAssignments = api.studentSectionAssignments.get(
+	      		{ 
+	                studentId: statebag.currentStudent.id,
+	                schoolId: statebag.school.id, 
+	                yearId: statebag.currentYear.id, 
+	                termId: statebag.currentTerm.id,
+	                sectionId: statebag.currentSection.id 
+	            }, 
+	            //success callback
+	            function(payload){
+	            	$scope.assignments = statebag.currentStudentSectionAssignments;
+	                transformAndDisplayAssignments();
+	            });
+          	});
+        },
+        function(error) {
+          alert('failed to resolve! ' + JSON.stringify(error));
+        });
+    } else {
+    	$scope.assignments = statebag.currentStudentSectionAssignments;
+    	transformAndDisplayAssignments();
+    }
 
   	function transformAndDisplayAssignments() {
-  		$scope.assignments = statebag.currentStudentSectionAssignments;
 	  	$scope.chartTitle = 'Assignments For ' + statebag.currentSection.course.name;
 	  	var processedAssignments = [];
+	  	//resolves when the data comes in
 	  	$scope.assignments.$promise.then(
 	  		function(payload){
 	  			payload.forEach(function(d){
@@ -40,7 +88,7 @@ controller('StudentSectDrillCtrl', ['$scope','statebag', 'api', '$q',
 		  				processedAssignments.push(p);
 	  				}
 	  			});
-	  			$scope.chartData = processedAssignments;
+	  			deferred.resolve(processedAssignments);
 	  		}, 
 	  		function(error){
 

@@ -53,7 +53,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         },
       })
       .state('app.studentSectDrill', {
-        url: 'schools/:schoolId/student/:studentId/sections/:sectionId/types/:assignmentTypes',
+        url: 'schools/:schoolId/student/:studentId/sections/:sectionId/assignments',
         templateUrl: rootUrl + '/components/routecontrollers/studentSectDrill/studentSectDrill.html',
         controller: 'StudentSectDrillCtrl',
         data: {
