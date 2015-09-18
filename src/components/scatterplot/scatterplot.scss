@@ -30,7 +30,7 @@
     -o-transition: fill 1s ease;
     transition: fill 1s ease;
   }
-  .Gym {
+  .Gym, .midterm {
     fill:rgb(255,204,0);
   }
   .Art, .test {
@@ -42,7 +42,7 @@
   .Geometry, .final {
     fill: rgb(255,127,14);
   }
-  .History, .midterm {
+  .History {
     fill:  rgb(44,160,44);
   }
   .Calculus, .quiz {

@@ -1,13 +1,13 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('scatterplot', [ '$window', '$compile', '$sanitize','statebag', function($window, $compile, $sanitize, statebag) {
+  .directive('scatterplot', [ '$window', '$compile', '$sanitize','statebag', 'api', function($window, $compile, $sanitize, statebag, api) {
     return {
       scope: {
         chartData: '=',
         chartTitle: '@'
       },
       restrict: 'E',
-      templateUrl: '/components/scatterplot/scatterplot.html',
+      templateUrl: api.basePrefix + '/components/scatterplot/scatterplot.html',
       replace: true,
       controllerAs: 'ctrl',
       link: function(scope, elem){
