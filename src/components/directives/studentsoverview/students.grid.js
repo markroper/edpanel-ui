@@ -7,7 +7,7 @@ angular.module('teacherdashboard')
         showFilter: '='
       },
       restrict: 'E',
-      templateUrl: api.basePrefix + '/components/studentsoverview/students.grid.html',
+      templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
       replace: true,
       controller: function($scope) {
         $scope.goToStudent = function(student) {

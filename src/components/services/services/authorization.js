@@ -1,0 +1,69 @@
+'use strict';
+angular.module('teacherdashboard')
+//Allow or disallow access to a UI route according to authentication & role status
+.factory('authorization', ['$rootScope', '$state', 'authentication', 'api',
+  function($rootScope, $state, authentication, api) {
+    return {
+      authorize: function(event) {
+        var context = this;
+        var isAuthenticated = authentication.isAuthenticated();
+        //Is the endpoint role limited?
+        if ($rootScope.toState.data.roles && $rootScope.toState.data.roles.length > 0) {
+          //Ok, there are roles on this endpoint, if the user is not authenticated
+          //from the client perspective, make a call to the server to double check.
+          if(!isAuthenticated) {
+            this.serverCookieAuthUpdate().then(
+              function(){
+                context.passthroughOrRedirect();
+              }, 
+              function(){
+                context.passthroughOrRedirect();
+              });
+          } else {
+            context.passthroughOrRedirect();
+          }
+        }
+      },
+      passthroughOrRedirect: function() {
+        var isAuthenticated = authentication.isAuthenticated();
+        //Having checked with the server, do a role check.  if the user can't
+          //access the page show an access denied if they're logged in, and redirect
+          //to the login page if they're not
+          if(!authentication.isInAnyRole($rootScope.toState.data.roles)) {
+            //Prevent the previous event from redirecting the URL
+            event.preventDefault();
+            if (isAuthenticated) { 
+              $state.go('accessdenied');
+            } else {
+              // user is not authenticated. stow the state they wanted before you
+              // send them to the signin state, so you can return them when you're done
+              $rootScope.returnToState = $rootScope.toState;
+              $rootScope.returnToStateParams = $rootScope.toStateParams;
+              // now, send them to the signin state so they can log in
+              $state.go('login');
+            }
+          }
+      },
+      //If the user is not authenticated, call to the server for a cookie check
+      //The user may be logged in but clicking a link or refreshing the browser
+      //In these cases, JS can't access teh valid cookie we need to ask the server 
+      //to interrogate the cookie for us and hand back a user, if there is a valid cookie
+      serverCookieAuthUpdate: function() {
+        return api.authCheck.get(
+          {}, 
+          function(data){
+            var identity = {
+              username: data.identity.name,
+              name: data.identity.name,
+              id: data.identity.id,
+              roles: [data.authorities[0].authority]
+            };
+          authentication.authenticate(identity);
+          }, 
+          function(error){
+            console.log('we are not authenticated ' + JSON.stringify(error));
+          }).$promise;
+      }
+    };
+  }
+]);
