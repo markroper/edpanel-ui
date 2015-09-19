@@ -52,7 +52,9 @@
 
 	<div class="courses">
 		<div class="" ng-repeat="section in sections">
-			<h3>{{section.course.name}}</h3>
+			<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+				<md-button class="md-raised" ng-click="sectionClick(section)">{{section.course.name}}</md-button>
+			</section>
 			<gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
 		</div>
 	<div class="courses">

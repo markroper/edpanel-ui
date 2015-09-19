@@ -34,6 +34,33 @@ angular.module('teacherdashboard')
       resolveStudentSectionData();
     }
 
+    $scope.sectionClick = function(section) {
+      var studentAssignmentsPromise = api.studentSectionAssignments.get({ 
+        studentId: statebag.currentStudent.id,
+        schoolId: statebag.school.id, 
+        yearId: statebag.currentYear.id, 
+        termId: statebag.currentTerm.id,
+        sectionId: section.id }).$promise;
+
+      studentAssignmentsPromise.then(
+          //Success callback
+          function(payload){
+            statebag.currentSection = section;
+            statebag.currentStudentSectionAssignments = payload;
+            $state.go(
+              'app.studentSectDrill', 
+              { 
+                schoolId: statebag.school.id,
+                studentId: statebag.currentStudent.id,
+                sectionId: statebag.currentSection.id 
+              });
+          }, 
+          //Failure callback
+          function(error){
+            console.log(JSON.stringify(error));
+          });
+    }
+
     function resolveStudentSectionData() {
       $scope.students.push(statebag.currentStudent);
       var studentSectionsPromise = api.studentSections.get({ 
