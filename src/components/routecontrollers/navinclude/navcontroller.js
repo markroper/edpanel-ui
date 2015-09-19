@@ -1,6 +1,24 @@
 'use strict';
-angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api',
-function($scope, $state, $mdSidenav, api) {
+angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag',
+function($scope, $state, $mdSidenav, api, statebag) {
+    //This base state should always redirect home...
+    if($state.current.name === 'app') {
+      //TODO: for now we just grab the first school in the district. Need a better way
+      if(statebag.school) {
+        $state.go('app.home', { schoolId: statebag.school.id });
+      } else {
+        api.schools.get(
+          {},
+          //Success callback
+          function(data){
+              statebag.school = data[0];
+              statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
+              statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
+              $state.go('app.home', { schoolId: statebag.school.id });
+          });
+      }
+
+    }
     $scope.toggleList =  function() {
       $mdSidenav('left').toggle();
     };
