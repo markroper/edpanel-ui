@@ -18,9 +18,13 @@
 			<div class="table-cell"><b>Attendance</b></div>
 			<div class="table-cell"><b>GPA</b></div>
 		</div>
-		<div class="table-row" ng-repeat="student in studentsData | filter:search:strict" ng-click="goToStudent(student)">
-			<div class="table-cell"><span class="student-link"><b>{{student.name}}</b></span></div>
-			<div class="table-cell"><div class="choropleth band-{{student.behaviorClass}}" tooltip-placement="bottom" tooltip="{{student.behavior}} demerits"></div></div>
+		<div class="table-row" ng-repeat="student in studentsData | filter:search:strict">
+			<div class="table-cell">
+				<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+					<md-button class="md-raised" ng-click="goToStudent(student)">{{student.name}}</md-button>
+				</section>
+			</div>
+			<div class="table-cell" ng-click="showBehaviorDialog($event)"><div class="choropleth band-{{student.behaviorClass}}" tooltip-placement="bottom" tooltip="{{student.behavior}} demerits"></div></div>
 			<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}" tooltip-placement="bottom"  tooltip="{{student.homework}}% completion"></div></div>
 			<div class="table-cell"><div class="choropleth band-{{student.attendanceClass}}" tooltip-placement="bottom" tooltip="{{student.attendance}} absenses"></div></div>
 			<div class="table-cell"><div class="choropleth band-{{student.gpaClass}}" tooltip-placement="bottom" tooltip="{{student.gpa}}"></div></div>

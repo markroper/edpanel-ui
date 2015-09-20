@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api', function($state, statebag, api) {
+  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog', function($state, statebag, api, $mdDialog) {
     return {
       scope: {
         studentsData: '=',
@@ -14,6 +14,32 @@ angular.module('teacherdashboard')
           statebag.currentStudent = student;
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
+        $scope.showBehaviorDialog = function(ev) {
+          $mdDialog.show({
+            controller: DialogController,
+            templateUrl: api.basePrefix + '/components/directives/studentsoverview/behavior-dialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true
+          })
+          .then(function(answer) {
+            $scope.status = 'You said the information was "' + answer + '".';
+          }, function() {
+            $scope.status = 'You cancelled the dialog.';
+          });
+        };
       }
     };
   }]);
+
+function DialogController($scope, $mdDialog) {
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+}
