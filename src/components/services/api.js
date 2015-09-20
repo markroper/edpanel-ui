@@ -19,11 +19,15 @@ angular.module('teacherdashboard')
       //students enpoints
       student: $resource(base + '/students/:studentId'),
       allStudents: $resource(base + '/students', {}, { 'get': { isArray: true }}),
-      termTeacherStudents: $resource(base + 
-        '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/students', 
+      termTeacherStudents: $resource(
+        base + '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/students', 
         {}, 
         { 'get': { isArray: true }}),
       studentGpa: $resource(base + '/students/:studentId/gpa/4'),
+      studentBehaviors: $resource(
+        base + '/students/:studentId/behaviors', 
+        {}, 
+        { 'get': { isArray: true }}),
       //Other endpoints
       teacher: $resource(base + '/teachers/:teacherId'),
       year: $resource(base + '/schools/:schoolId/years/:yearId'),

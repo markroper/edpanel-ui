@@ -14,12 +14,16 @@ angular.module('teacherdashboard')
           statebag.currentStudent = student;
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
-        $scope.showBehaviorDialog = function(ev) {
+        $scope.showBehaviorDialog = function(ev, student) {
+          $scope.student = student;
+          $scope.api = api;
           $mdDialog.show({
             controller: DialogController,
             templateUrl: api.basePrefix + '/components/directives/studentsoverview/behavior-dialog.html',
             parent: angular.element(document.body),
             targetEvent: ev,
+            student: student,
+            api: api,
             clickOutsideToClose:true
           })
           .then(function(answer) {
@@ -32,7 +36,10 @@ angular.module('teacherdashboard')
     };
   }]);
 
-function DialogController($scope, $mdDialog) {
+function DialogController($scope, $mdDialog, $q) {
+  $scope.$scope.api.studentBehaviors.get(
+    { studentId: $scope.student.id });
+
   $scope.hide = function() {
     $mdDialog.hide();
   };

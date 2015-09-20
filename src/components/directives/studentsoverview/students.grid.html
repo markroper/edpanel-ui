@@ -21,13 +21,29 @@
 		<div class="table-row" ng-repeat="student in studentsData | filter:search:strict">
 			<div class="table-cell">
 				<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-					<md-button class="md-raised" ng-click="goToStudent(student)">{{student.name}}</md-button>
+					<md-button class="md-raised" ng-click="goToStudent(student)">
+					{{student.name}}
+					<md-tooltip>
+			          Click for student summary
+			        </md-tooltip>
+				</md-button>
 				</section>
 			</div>
-			<div class="table-cell" ng-click="showBehaviorDialog($event)"><div class="choropleth band-{{student.behaviorClass}}" tooltip-placement="bottom" tooltip="{{student.behavior}} demerits"></div></div>
-			<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}" tooltip-placement="bottom"  tooltip="{{student.homework}}% completion"></div></div>
-			<div class="table-cell"><div class="choropleth band-{{student.attendanceClass}}" tooltip-placement="bottom" tooltip="{{student.attendance}} absenses"></div></div>
-			<div class="table-cell"><div class="choropleth band-{{student.gpaClass}}" tooltip-placement="bottom" tooltip="{{student.gpa}}"></div></div>
+			<div class="table-cell" ng-click="showBehaviorDialog($event, student)"><div class="choropleth band-{{student.behaviorClass}}">
+				<md-tooltip>
+				{{student.behavior}} demerits
+				click for details
+				</md-tooltip>
+			</div></div>
+			<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}">
+				<md-tooltip>{{student.homework}}% completion</md-tooltip>
+			</div></div>
+			<div class="table-cell"><div class="choropleth band-{{student.attendanceClass}}">
+				<md-tooltip>{{student.attendance}} absenses</md-tooltip>
+			</div></div>
+			<div class="table-cell"><div class="choropleth band-{{student.gpaClass}}">
+				<md-tooltip>{{student.gpa}}</md-tooltip>
+			</div></div>
 		</div>
 	</div>
 </div>
