@@ -1,29 +1,50 @@
 <div class="students-grid">
 	<div class="row" ng-show="showFilter">
 		<div layout="row" layout-align="center center">
-	        <md-input-container md-no-float>
-	          <input ng-model="search.name" placeholder="Search students by name" tabindex="1">
-	        </md-input-container>
+			<md-card>
+	        	<md-input-container md-no-float>
+	          		<input ng-model="search.name" placeholder="Search students by name" tabindex="1">
+	        	</md-input-container>
+	    	</md-card>
 		</div>
 	</div>
 	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!studentsData">
 		<h3 flex="50">Loading...</h3>
 		<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
 	</div>
-	<div class="table-container" ng-show="studentsData">
-		<div class="row-header">
-			<div class="table-cell"></div>
-			<div class="table-cell"><b>Behavior</b></div>
-			<div class="table-cell"><b>Homework</b></div>
-			<div class="table-cell"><b>Attendance</b></div>
-			<div class="table-cell"><b>GPA</b></div>
+	<section layout="row" layout-align="center center">
+		<div class="table-container" ng-show="studentsData">
+			<div class="row-header" style="font-size: 16px;">
+				<div class="table-cell"></div>
+				<div class="table-cell">Behavior</div>
+				<div class="table-cell">Homework</div>
+				<div class="table-cell">Attendance</div>
+				<div class="table-cell">GPA</div>
+			</div>
+			<div class="table-row" ng-repeat="student in studentsData | filter:search:strict">
+				<div class="table-cell">
+					<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+						<md-button class="md-raised" ng-click="goToStudent(student)">
+						{{student.name}}
+						<md-tooltip>
+				          Click for student summary
+				        </md-tooltip>
+					</md-button>
+					</section>
+				</div>
+				<div class="table-cell" ng-click="showBehaviorDialog($event, student)"><div class="choropleth band-{{student.behaviorClass}}">
+					<md-tooltip>{{student.behavior}} demerits</md-tooltip>
+				</div></div>
+				<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}">
+					<md-tooltip>{{student.homework}}% completion</md-tooltip>
+				</div></div>
+				<div class="table-cell"><div class="choropleth band-{{student.attendanceClass}}">
+					<md-tooltip>{{student.attendance}} absenses</md-tooltip>
+				</div></div>
+				<div class="table-cell"><div class="choropleth band-{{student.gpaClass}}">
+					<md-tooltip>{{student.gpa}}</md-tooltip>
+				</div></div>
+			</div>
 		</div>
-		<div class="table-row" ng-repeat="student in studentsData | filter:search:strict" ng-click="goToStudent(student)">
-			<div class="table-cell"><span class="student-link"><b>{{student.name}}</b></span></div>
-			<div class="table-cell"><div class="choropleth band-{{student.behaviorClass}}" tooltip-placement="bottom" tooltip="{{student.behavior}} demerits"></div></div>
-			<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}" tooltip-placement="bottom"  tooltip="{{student.homework}}% completion"></div></div>
-			<div class="table-cell"><div class="choropleth band-{{student.attendanceClass}}" tooltip-placement="bottom" tooltip="{{student.attendance}} absenses"></div></div>
-			<div class="table-cell"><div class="choropleth band-{{student.gpaClass}}" tooltip-placement="bottom" tooltip="{{student.gpa}}"></div></div>
-		</div>
-	</div>
+	</section>
 </div>
