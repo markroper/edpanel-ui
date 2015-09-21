@@ -36,9 +36,9 @@ angular.module('teacherdashboard')
     };
   }]);
 
-function DialogController($scope, $mdDialog, $q) {
-  $scope.$scope.api.studentBehaviors.get(
-    { studentId: $scope.student.id });
+function DialogController($scope, $mdDialog) {
+  // $scope.api.studentBehaviors.get(
+  //   { studentId: $scope.student.id });
 
   $scope.hide = function() {
     $mdDialog.hide();

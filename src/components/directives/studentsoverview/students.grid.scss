@@ -1,9 +1,16 @@
 .students-grid {
+	div {
+		outline:none;
+	}
+	md-card {
+		padding: 15px 20px 0px 20px;
+	}
 	button {
 		width: 100%;
 	}
 	button > span {
 		margin: 5px 20px 5px 20px;
+		font-size: 16px;
 	}
 	.md-36 { font-size: 36px; }
 	input { font-size: 18px; width:225px;}
@@ -11,6 +18,7 @@
 		display: table;
 		padding:0 1em 0 1em;
 		width:100%;
+		max-width:1200px;
 		text-align: center;
 		vertical-align: middle;
 		.table-row:hover {
@@ -31,7 +39,7 @@
 			display: table-row;
 			.table-cell {
 				display: table-cell;
-				padding: 4px;
+				padding: 1px 4px 1px 4px;
 				width:20%;
 				vertical-align: middle;
 				.student-link {
@@ -39,8 +47,8 @@
 				}
 				.choropleth {
 					vertical-align: inherit;
-					height:50px;
-					max-width: 300px;
+					height:44px;
+					max-width: 250px;
 					border-radius:5px;
 					cursor: pointer;
 				}
