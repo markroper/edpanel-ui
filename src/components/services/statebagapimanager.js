@@ -19,8 +19,12 @@ angular.module('teacherdashboard')
     }, 
     retrieveAndCacheStudentPerfData: function() {
       var deferred = $q.defer();
-      var attendanceAndHwQuery = getHwAndAttendanceQuery(statebag.currentYear.id, statebag.currentTerm.id);
-      var behaviorQuery = getBehaviorQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate);
+      var studentIds = [];
+      statebag.students.forEach(function(s){
+        studentIds.push(s.id);
+      });
+      var attendanceAndHwQuery = getHwAndAttendanceQuery(statebag.currentYear.id, statebag.currentTerm.id, studentIds);
+      var behaviorQuery = getBehaviorQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate, studentIds);
       var studentDataPromises = [];
       //Get attendance & HW completion
       studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceAndHwQuery).$promise);
@@ -67,7 +71,26 @@ angular.module('teacherdashboard')
     }
   };
   
-  function getBehaviorQuery(minDate, maxDate) {
+  function getStudentIdsExpression(studentIds) {
+    return {
+      'type': 'EXPRESSION',
+      'leftHandSide': {
+        'type': 'DIMENSION',
+        'value': {
+          'dimension': 'STUDENT',
+          'field': 'ID'
+        }
+      },
+      'operator': 'IN',
+      'rightHandSide': {
+        'type': 'LIST_NUMERIC',
+        'value': studentIds
+      }
+    };
+  }
+
+  function getBehaviorQuery(minDate, maxDate, studentIds) {
+    
     var behaviorQuery = {
         'aggregateMeasures': [
             {
@@ -83,42 +106,47 @@ angular.module('teacherdashboard')
         ],
         'filter': {
             'type': 'EXPRESSION',
-            'leftHandSide': {
-                'type': 'EXPRESSION',
-                'leftHandSide': {
-                    'type': 'MEASURE',
-                    'value': {
-                        'measure': 'DEMERIT',
-                        'field': 'Behavior Date'
-                    }
-                },
-                'operator': 'GREATER_THAN',
-                'rightHandSide': {
-                    'type': 'DATE',
-                    'value': minDate
-                }
-            },
+            'leftHandSide': getStudentIdsExpression(studentIds),
             'operator': 'AND',
             'rightHandSide': {
-                'type': 'EXPRESSION',
-                'leftHandSide': {
-                    'type': 'MEASURE',
-                    'value': {
-                        'measure': 'DEMERIT',
-                        'field': 'Behavior Date'
-                    }
-                },
-                'operator': 'LESS_THAN',
-                'rightHandSide': {
-                    'type': 'DATE',
-                    'value': maxDate
-                }
-            }
+              'type': 'EXPRESSION',
+              'leftHandSide': {
+                  'type': 'EXPRESSION',
+                  'leftHandSide': {
+                      'type': 'MEASURE',
+                      'value': {
+                          'measure': 'DEMERIT',
+                          'field': 'Behavior Date'
+                      }
+                  },
+                  'operator': 'GREATER_THAN',
+                  'rightHandSide': {
+                      'type': 'DATE',
+                      'value': minDate
+                  }
+              },
+              'operator': 'AND',
+              'rightHandSide': {
+                  'type': 'EXPRESSION',
+                  'leftHandSide': {
+                      'type': 'MEASURE',
+                      'value': {
+                          'measure': 'DEMERIT',
+                          'field': 'Behavior Date'
+                      }
+                  },
+                  'operator': 'LESS_THAN',
+                  'rightHandSide': {
+                      'type': 'DATE',
+                      'value': maxDate
+                  }
+              }
+          }
         }
     };
     return behaviorQuery;
   }
-  function getHwAndAttendanceQuery(schoolYearId, termId) {
+  function getHwAndAttendanceQuery(schoolYearId, termId, studentIds) {
     var attendanceAndHwQuery = {
       'aggregateMeasures': [
         {'measure':'HW_COMPLETION','aggregation':'AVG'},
@@ -129,40 +157,45 @@ angular.module('teacherdashboard')
         {'dimension':'STUDENT','field':'Name'}
       ],
       'filter': {
-        'type':'EXPRESSION',
-        'leftHandSide': { 
+        'type': 'EXPRESSION',
+        'leftHandSide': getStudentIdsExpression(studentIds),
+        'operator': 'AND',
+        'rightHandSide': {
           'type':'EXPRESSION',
-          'leftHandSide':{
+          'leftHandSide': { 
             'type':'EXPRESSION',
             'leftHandSide':{
-              'value':{'dimension':'TERM','field':'ID'},
-              'type':'DIMENSION'},
-              'operator':'EQUAL',
-              'rightHandSide':{'type':'NUMERIC','value': termId}
+              'type':'EXPRESSION',
+              'leftHandSide':{
+                'value':{'dimension':'TERM','field':'ID'},
+                'type':'DIMENSION'},
+                'operator':'EQUAL',
+                'rightHandSide':{'type':'NUMERIC','value': termId}
+              },
+              'operator':'AND',
+              'rightHandSide':{
+                'type':'EXPRESSION',
+                'leftHandSide':{
+                  'value':{'dimension':'YEAR','field':'ID'},
+                  'type':'DIMENSION'
+                },
+                'operator':'EQUAL',
+                'rightHandSide':{
+                  'type':'NUMERIC',
+                  'value': schoolYearId
+                }
+              }
             },
             'operator':'AND',
             'rightHandSide':{
               'type':'EXPRESSION',
               'leftHandSide':{
-                'value':{'dimension':'YEAR','field':'ID'},
-                'type':'DIMENSION'
+                'type':'DIMENSION',
+                'value':{'dimension':'SECTION','field':'ID'}
               },
-              'operator':'EQUAL',
-              'rightHandSide':{
-                'type':'NUMERIC',
-                'value': schoolYearId
-              }
+              'operator':'NOT_EQUAL',
+              'rightHandSide':{'type':'NUMERIC','value':0
             }
-          },
-          'operator':'AND',
-          'rightHandSide':{
-            'type':'EXPRESSION',
-            'leftHandSide':{
-              'type':'DIMENSION',
-              'value':{'dimension':'SECTION','field':'ID'}
-            },
-            'operator':'NOT_EQUAL',
-            'rightHandSide':{'type':'NUMERIC','value':0
           }
         }
       }

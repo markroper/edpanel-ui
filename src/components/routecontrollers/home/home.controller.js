@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager',
-    function ($scope, api, statebag, $q, $state, statebagApiManager) {
+  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication',
+    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication) {
       $scope.showFilter=true;
       //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old
       if(!statebag.studentPerfData || statebag.lastFullRefresh > (new Date().getTime() - 1000 * 60 * 5))
@@ -34,27 +34,42 @@ angular.module('teacherdashboard')
         */
         var promises = [];
         //Resolve the students!
-        promises.push(api.termTeacherStudents.get(
-          {
-            schoolId: statebag.school.id, 
-            yearId: statebag.currentYear.id, 
-            termId: statebag.currentTerm.id,
-            //TODO: make this dynamic after merging in Matt G's changes to return user identity in login
-            teacherId: 1
-          },
-          //Success callback
-          function(data){
-            statebag.students = data;
-          },
-          //Error callback
-          function(){
-            alert('failed to resolve the students!');
-          }).$promise);
-
+        promises.push(resolveStudents());
         //After the school and students are resolved, resolve the student performance data
         $q.all(promises).then(function() {
           statebagApiManager.retrieveAndCacheStudentPerfData()
             .then(function(){ $scope.students = statebag.studentPerfData; });
         });
+      }
+
+      function resolveStudents() {
+        var identity = authentication.identity();
+        if(identity.roles[0] === 'ADMIN') {
+          //retrieve all the students
+          return api.allStudents.get(
+            {},
+            function(data) {
+              statebag.students = data;
+            }).$promise;
+        } else if(identity.roles[0] === 'TEACHER') {
+          //retrieve the teachers current students
+          return api.termTeacherStudents.get(
+            {
+              schoolId: statebag.school.id, 
+              yearId: statebag.currentYear.id, 
+              termId: statebag.currentTerm.id,
+              teacherId: identity.id
+            },
+            //Success callback
+            function(data){
+              statebag.students = data;
+            },
+            //Error callback
+            function(){
+              console.log('failed to resolve the students!');
+            }).$promise;
+        } else if(identify.roles[0] === 'STUDENT') {
+          //TODO: Redirect to that student's individual page
+        }
       }
   }]);
