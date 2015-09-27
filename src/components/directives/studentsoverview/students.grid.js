@@ -22,8 +22,7 @@ angular.module('teacherdashboard')
             templateUrl: api.basePrefix + '/components/directives/studentsoverview/behavior-dialog.html',
             parent: angular.element(document.body),
             targetEvent: ev,
-            student: student,
-            api: api,
+            scope: $scope.$new(),
             clickOutsideToClose:true
           })
           .then(function(answer) {
@@ -37,8 +36,8 @@ angular.module('teacherdashboard')
   }]);
 
 function DialogController($scope, $mdDialog) {
-  // $scope.api.studentBehaviors.get(
-  //   { studentId: $scope.student.id });
+  $scope.behaviorDataPromise = 
+    $scope.api.studentBehaviors.get({ studentId: $scope.student.id }).$promise;
 
   $scope.hide = function() {
     $mdDialog.hide();

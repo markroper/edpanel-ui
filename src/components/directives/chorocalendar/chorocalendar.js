@@ -48,14 +48,7 @@ angular.module('teacherdashboard')
               return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
             })
           .enter().append('rect')
-            //TODO: remove me when we have non-mock data
-            .attr('class', function(d){
-              var num = 11;
-              if(d.getDay() !== 0 && d.getDay() !== 6) {
-                num = Math.floor(Math.random() * 10);
-              }
-              return 'day q' + num + '-11';
-            })
+            .attr('class', 'day')
             .attr('width', cellSize)
             .attr('height', cellSize)
             .attr('x', function(d) {
@@ -86,16 +79,43 @@ angular.module('teacherdashboard')
               .attr('class', 'month-title')
               .attr('d', monthTitle);
 
-        // scope.calendarDataPromise.then(function(resolvedData){
-        //   var data = d3.nest()
-        //     .key(function(d) { return d.Date; })
-        //     .rollup(function(d) { return (d[0].Close - d[0].Open) / d[0].Open; })
-        //     .map(resolvedData);
-        //   rect.filter(function(d) { return d in data; })
-        //       .attr('class', function(d) { return 'day ' + color(data[d]); })
-        //     .select('title')
-        //       .text(function(d) { return d + ': ' + percent(data[d]); });
-        // });
+        scope.calendarDataPromise.then(function(resolvedData){
+          console.log('inside the chorocalendar.js callback');
+          var behaviorByDate = {};
+          resolvedData.forEach(function(behavior){
+            var currDate = moment(behavior.behaviorDate);
+            var dateString = currDate.format('YYYY-MM-DD');
+            if(!behaviorByDate[dateString]) {
+              behaviorByDate[dateString] = [behavior];
+            } else {
+              behaviorByDate[dateString].push(behavior);
+            }
+          });
+          rect.attr('class', function(d) { 
+            var weekday = moment(d).weekday();
+            var colorVal = '11';
+            //Only evaluate wekdays
+            if(weekday !== 0 && weekday !== 6) {
+
+              if(behaviorByDate[d]) {
+                var size = behaviorByDate[d].length;
+                if(size === 1) {
+                  //One behavior event is orange
+                  colorVal = '3';
+                } else {
+                  //multiple behavior events in one day is red
+                  colorVal = '1';
+                }
+              } else {
+                //If there were no behavior events, thats green!
+                colorVal = '8';
+              }
+            }
+            return 'day q' + colorVal + '-11';
+          })
+          .select('title')
+            .text(function(d) { return d + ': ' + percent(data[d]); });
+        });
       }
     };
   }])
