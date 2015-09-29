@@ -14,5 +14,6 @@ angular.module('teacherdashboard')
       currentStudentBehaviorEvents = [],
       currentStudentGpa = null,
       studentsPerformanceSummary = [],
-      lastFullRefresh = null;
+      lastFullRefresh = null,
+      goals = [];
 }]);

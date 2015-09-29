@@ -20,13 +20,13 @@ angular.module('teacherdashboard')
       student: $resource(base + '/students/:studentId'),
       allStudents: $resource(base + '/students', {}, { 'get': { isArray: true }}),
       termTeacherStudents: $resource(
-        base + '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/students', 
-        {}, 
+        base + '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/students',
+        {},
         { 'get': { isArray: true }}),
       studentGpa: $resource(base + '/students/:studentId/gpa/4'),
       studentBehaviors: $resource(
-        base + '/students/:studentId/behaviors', 
-        {}, 
+        base + '/students/:studentId/behaviors',
+        {},
         { 'get': { isArray: true }}),
       //Other endpoints
       teacher: $resource(base + '/teachers/:teacherId'),
@@ -48,6 +48,10 @@ angular.module('teacherdashboard')
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
       //GPA
       gpa: $resource(base + '/schools/:schoolId/gpas/4'),
+      studentGoals: $resource(
+        base + '/students/:studentId/goals',
+        {},
+        { 'get': { isArray: true }}),
       basePrefix: '/ui'
     };
 });

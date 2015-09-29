@@ -4,6 +4,7 @@ angular.module('teacherdashboard')
     $scope.showFilter=false;
     $scope.students = [];
     $scope.sections = [];
+    $scope.goals = [];
 
     if(!statebag.school || !statebag.currentStudent) {
       console.log(JSON.stringify(statebag));
@@ -13,32 +14,41 @@ angular.module('teacherdashboard')
           //After those promises resolve, resolve the section data
           api.student.get( { studentId: $state.params.studentId },
             //Success callback
-            function(data){ 
-              statebag.students = [data]; 
+            function(data){
+              statebag.students = [data];
               statebag.currentStudent = statebag.students[0];
               statebagApiManager.retrieveAndCacheStudentPerfData()
-                .then( function(){ 
+                .then( function(){
                   statebag.studentPerfData.forEach(function(d){
                     if(d.id === data.id) {
                       statebag.currentStudent = d;
                     }
                   });
-                  resolveStudentSectionData(); 
+                  resolveStudentSectionData();
                 });
             });
         },
         function(error) {
           alert('failed to resolve! ' + JSON.stringify(error));
-        });    
+        });
     } else {
       resolveStudentSectionData();
+      resolveStudentGoals()
+        .then(function() {
+          console.log("TEST");
+          console.log(JSON.stringify(statebag.goals, null, 4))
+          console.log(statebag.goals[0].id);
+          $scope.goals = statebag.goals;
+
+        });
+
     }
 
     $scope.sectionClick = function(section) {
-      var studentAssignmentsPromise = api.studentSectionAssignments.get({ 
+      var studentAssignmentsPromise = api.studentSectionAssignments.get({
         studentId: statebag.currentStudent.id,
-        schoolId: statebag.school.id, 
-        yearId: statebag.currentYear.id, 
+        schoolId: statebag.school.id,
+        yearId: statebag.currentYear.id,
         termId: statebag.currentTerm.id,
         sectionId: section.id }).$promise;
 
@@ -48,23 +58,40 @@ angular.module('teacherdashboard')
             statebag.currentSection = section;
             statebag.currentStudentSectionAssignments = payload;
             $state.go(
-              'app.studentSectDrill', 
-              { 
+              'app.studentSectDrill',
+              {
                 schoolId: statebag.school.id,
                 studentId: statebag.currentStudent.id,
-                sectionId: statebag.currentSection.id 
+                sectionId: statebag.currentSection.id
               });
-          }, 
+          },
           //Failure callback
           function(error){
             console.log(JSON.stringify(error));
           });
     }
 
+
+      function resolveStudentGoals() {
+      var deferred = $q.defer();
+
+      var studentGoalsPromises = api.studentGoals.get( {
+        studentId: $state.params.studentId }).$promise;
+
+        studentGoalsPromises.then(function (response) {
+          console.log(JSON.stringify(response, null, 4));
+          statebag.goals = response;
+          deferred.resolve(statebag.goals);
+        });
+        return deferred.promise;
+    };
+
+
+
     function resolveStudentSectionData() {
       $scope.students.push(statebag.currentStudent);
-      var studentSectionsPromise = api.studentSections.get({ 
-        studentId: statebag.currentStudent.id, 
+      var studentSectionsPromise = api.studentSections.get({
+        studentId: statebag.currentStudent.id,
         schoolId: statebag.school.id,
         yearId: statebag.currentYear.id,
         termId: statebag.currentTerm.id,
@@ -93,7 +120,7 @@ angular.module('teacherdashboard')
             }
             section.gradeFormula.assignmentTypeWeights = arrayWeights;
           }
-          //When the sections are loaded and the student grades calculated, bind 
+          //When the sections are loaded and the student grades calculated, bind
           //The collection of sections to the scope variable bound to the DOM
           $q.all(sectionGradePromises).then(function(gradeResults){
             for(var i = 0; i < gradeResults.length; i++) {

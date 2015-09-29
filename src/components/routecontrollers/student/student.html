@@ -44,6 +44,13 @@
 			</div>
 		</div>
 	</div>
+  <div class="goals-container">
+    <div class="student-goal" ng-repeat="goal in goals">
+      <div class="row"><b>{{goal.name}} goal:</b> <span class="goal-value">{{goal.desiredValue}}</span></div>
+      <div class="row"><b>Current HW completion:</b> <span class="goal-value">85%</span></div>
+      <div class="row"><b>Class average:</b> <span class="goal-value">90%</span></div>
+      </div>
+    </div>
 	<h1>Grades & Grade Formulas</h1>
 	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
 		<h3 flex="50">Loading...</h3>
