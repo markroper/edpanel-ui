@@ -23,19 +23,15 @@ angular.module('teacherdashboard')
       statebag.students.forEach(function(s){
         studentIds.push(s.id);
       });
-      var attendanceAndHwQuery = getHwAndAttendanceQuery(statebag.currentYear.id, statebag.currentTerm.id, studentIds);
+      var hwQuery = getHwQuery(statebag.currentYear.id, statebag.currentTerm.id, studentIds);
       var behaviorQuery = getBehaviorQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate, studentIds);
+      var attendanceQuery = getAttendanceQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate, studentIds);
       var studentDataPromises = [];
       //Get attendance & HW completion
-      studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceAndHwQuery).$promise);
+      studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, hwQuery).$promise);
       studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise);
-      //Get the GPA results
-      var studentIds = [];
-      for(var i = 0; i < statebag.students.length; i++) {
-        studentIds.push(statebag.students[i].id);
-      }
+      studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceQuery).$promise);
       studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
-      
       //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
       $q.all(studentDataPromises).then(function(responses) {
         var resolvedStudents = [];
@@ -51,13 +47,20 @@ angular.module('teacherdashboard')
           pluckedStudent.behavior = studentDemerits[1];
           pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
         });
+        //Update the attendance data for each student
+        responses[2].records.forEach(function(student) {
+          var studentAttendance = student.values;
+          var pluckedStudent = studentMap[studentAttendance[0]];
+          pluckedStudent.attendance = studentAttendance[1];
+          pluckedStudent.attendanceClass = resolveAttendanceClass(pluckedStudent.attendance);
+        });
         //Update the GPA
-        for (var idKey in responses[2]) {
-          if (responses[2].hasOwnProperty(idKey) && 
+        for (var idKey in responses[3]) {
+          if (responses[3].hasOwnProperty(idKey) && 
               !isNaN(idKey)) {
             var pluckedStudent = studentMap[idKey];
             if(pluckedStudent) {
-              pluckedStudent.gpa = Math.round( responses[2][idKey] * 10 ) / 10;
+              pluckedStudent.gpa = Math.round( responses[3][idKey] * 10 ) / 10;
               pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
               resolvedStudents.unshift(pluckedStudent);
             }
@@ -146,11 +149,10 @@ angular.module('teacherdashboard')
     };
     return behaviorQuery;
   }
-  function getHwAndAttendanceQuery(schoolYearId, termId, studentIds) {
-    var attendanceAndHwQuery = {
+  function getHwQuery(schoolYearId, termId, studentIds) {
+    var hwQuery = {
       'aggregateMeasures': [
-        {'measure':'HW_COMPLETION','aggregation':'AVG'},
-        {'measure':'ATTENDANCE','aggregation':'SUM'}
+        {'measure':'HW_COMPLETION','aggregation':'AVG'}
       ],
       'fields':[
         {'dimension':'STUDENT','field':'ID'},
@@ -200,11 +202,68 @@ angular.module('teacherdashboard')
         }
       }
     };
-    return attendanceAndHwQuery;
+    return hwQuery;
+  }
+
+  function getAttendanceQuery(startDate, endDate, studentIds) {
+    var query = {
+      'aggregateMeasures': [
+          {
+              'measure': 'ATTENDANCE',
+              'aggregation': 'SUM'
+          }
+      ],
+      'fields': [
+          {
+              'dimension': 'STUDENT',
+              'field': 'ID'
+          }
+      ],
+      'filter': {
+          'type': 'EXPRESSION',
+          'leftHandSide': getStudentIdsExpression(studentIds),
+          'operator': 'AND',
+          'rightHandSide': {
+            'type': 'EXPRESSION',
+            'leftHandSide': {
+                'type': 'EXPRESSION',
+                'leftHandSide': {
+                    'type': 'MEASURE',
+                    'value': {
+                        'measure': 'ATTENDANCE',
+                        'field': 'Date'
+                    }
+                },
+                'operator': 'GREATER_THAN_OR_EQUAL',
+                'rightHandSide': {
+                    'type': 'DATE',
+                    'value': startDate
+                }
+            },
+            'operator': 'AND',
+            'rightHandSide': {
+                'type': 'EXPRESSION',
+                'leftHandSide': {
+                    'type': 'MEASURE',
+                    'value': {
+                        'measure': 'ATTENDANCE',
+                        'field': 'Date'
+                    }
+                },
+                'operator': 'LESS_THAN_OR_EQUAL',
+                'rightHandSide': {
+                    'type': 'DATE',
+                    'value': endDate
+                }
+            }
+          }
+        }
+      }
+    return query;
   }
   /*
    * Helper functions below
-  **/
+   */
   function resolveStudentScopeObject(inputStudent) {
     var student = {};
     student.id = inputStudent[0];
@@ -213,8 +272,6 @@ angular.module('teacherdashboard')
     student.behaviorClass = resolveBehaviorClass(student.behavior);
     student.homework = Math.round(inputStudent[2] * 100);
     student.homeworkClass = resolveHomeworkClass(inputStudent[2]);
-    student.attendance = inputStudent[3];
-    student.attendanceClass = resolveAttendanceClass(student.attendance);
     student.gpa = null;
     student.gpaClass = resolveGpaClass(student.gpa);
     return student;
@@ -250,15 +307,15 @@ angular.module('teacherdashboard')
     }
   }
   function resolveAttendanceClass(attendanceScore) {
-    if(attendanceScore < 43) {
+    if(attendanceScore < 2) {
       return '90-100';
-    } else if(attendanceScore < 46) {
+    } else if(attendanceScore < 3) {
       return '80-90';
-    } else if(attendanceScore < 49) {
+    } else if(attendanceScore < 4) {
       return '70-80';
-    } else if(attendanceScore < 52) {
+    } else if(attendanceScore < 5) {
       return '60-70';
-    } else if(attendanceScore < 55) {
+    } else if(attendanceScore < 7) {
       return '50-60';
     } else {
       return '40-50';

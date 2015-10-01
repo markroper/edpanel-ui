@@ -2,7 +2,7 @@
 angular.module('teacherdashboard').factory('authentication', [function() {
     var _identity,
       _authenticated = false,
-      _roles = Object.freeze(['ADMIN', 'TEACHER', 'STUDENT', 'GUARDIAN', 'SUDO']);
+      _roles = Object.freeze(['ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_STUDENT', 'ROLE_GUARDIAN', 'ROLE_SUDO']);
 
     return {
       getRoles: function() {
