@@ -35,11 +35,8 @@ angular.module('teacherdashboard')
       resolveStudentSectionData();
       resolveStudentGoals()
         .then(function() {
-          console.log("TEST");
-          console.log(JSON.stringify(statebag.goals, null, 4))
-          console.log(statebag.goals[0].id);
           $scope.goals = statebag.goals;
-
+          resolveGoalDisplay();
         });
 
     }
@@ -84,7 +81,53 @@ angular.module('teacherdashboard')
           deferred.resolve(statebag.goals);
         });
         return deferred.promise;
-    };
+    }
+
+    function resolveGoalDisplay() {
+      for (var i = 0; i < $scope.goals.length; i++) {
+        var goal = $scope.goals[i];
+        switch(goal.goalType) {
+          case "ASSIGNMENT":
+            goal.line1 = goal.name + ": ";
+            goal.line2 = "Assignment Score: ";
+            goal.line3 = "Class average: ";
+            goal.value1 = goal.desiredValue + "%";
+            if (goal.calculatedValue == -1) {
+              goal.value2 = "Not Graded"
+            } else {
+              goal.value2 = goal.calculatedValue + "%";
+            }
+            goal.value3 = "75%";
+                break;
+          case "BEHAVIOR":
+            switch(goal.behaviorCategory) {
+              case "DEMERIT":
+                goal.line2 = "Current Demerits: ";
+                break;
+            }
+            goal.line1 = goal.name + ":";
+            goal.line3 = "Class average: ";
+            goal.value1 = goal.desiredValue;
+            goal.value2 = goal.calculatedValue;
+            goal.value3 = "3";
+                break;
+          case "CUMULATIVE_GRADE":
+            goal.line1 = goal.name + ":";
+            goal.line2 = "Present Grade: ";
+            goal.line3 = "Class average: ";
+            goal.value1 = goal.desiredValue + "%";
+            goal.value2 = goal.calculatedValue + "%";
+            goal.value3 = "83%";
+                break;
+          case "ATTENDANCE":
+                break;
+        }
+
+
+
+        $scope.goals[i] = goal;
+      }
+    }
 
 
 
