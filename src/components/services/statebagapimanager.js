@@ -263,7 +263,7 @@ angular.module('teacherdashboard')
   }
   /*
    * Helper functions below
-  **/
+   */
   function resolveStudentScopeObject(inputStudent) {
     var student = {};
     student.id = inputStudent[0];
@@ -307,15 +307,15 @@ angular.module('teacherdashboard')
     }
   }
   function resolveAttendanceClass(attendanceScore) {
-    if(attendanceScore < 1) {
+    if(attendanceScore < 2) {
       return '90-100';
-    } else if(attendanceScore < 2) {
-      return '80-90';
     } else if(attendanceScore < 3) {
-      return '70-80';
+      return '80-90';
     } else if(attendanceScore < 4) {
-      return '60-70';
+      return '70-80';
     } else if(attendanceScore < 5) {
+      return '60-70';
+    } else if(attendanceScore < 7) {
       return '50-60';
     } else {
       return '40-50';

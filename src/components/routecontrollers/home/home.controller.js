@@ -44,14 +44,14 @@ angular.module('teacherdashboard')
 
       function resolveStudents() {
         var identity = authentication.identity();
-        if(identity.roles[0] === 'ADMIN') {
+        if(identity.roles[0] === 'ROLE_ADMIN') {
           //retrieve all the students
           return api.allStudents.get(
             {},
             function(data) {
               statebag.students = data;
             }).$promise;
-        } else if(identity.roles[0] === 'TEACHER') {
+        } else if(identity.roles[0] === 'ROLE_TEACHER') {
           //retrieve the teachers current students
           return api.termTeacherStudents.get(
             {
@@ -68,7 +68,7 @@ angular.module('teacherdashboard')
             function(){
               console.log('failed to resolve the students!');
             }).$promise;
-        } else if(identify.roles[0] === 'STUDENT') {
+        } else if(identity.roles[0] === 'ROLE_STUDENT') {
           //TODO: Redirect to that student's individual page
         }
       }

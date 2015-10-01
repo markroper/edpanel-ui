@@ -9,11 +9,11 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       requireBase: false
     });
     var rootUrl = '/ui';
-    var ADMIN = 'ADMIN',
-        TEACHER = 'TEACHER',
-        STUDENT = 'STUDENT',
-        GUARDIAN = 'GUARDIAN',
-        SUPER_ADMIN = 'SUPER_ADMIN';
+    var ADMIN = 'ROLE_ADMIN',
+        TEACHER = 'ROLE_TEACHER',
+        STUDENT = 'ROLE_STUDENT',
+        GUARDIAN = 'ROLE_GUARDIAN',
+        SUPER_ADMIN = 'ROLE_SUDO';
 
     //Configure the routes!
     $stateProvider
