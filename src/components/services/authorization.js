@@ -53,10 +53,10 @@ angular.module('teacherdashboard')
           {}, 
           function(data){
             var identity = {
-              username: data.identity.name,
-              name: data.identity.name,
-              id: data.identity.id,
-              roles: [data.authorities[0].authority]
+              username: data.username,
+              name: data.name,
+              id: data.id,
+              roles: [ data.type ]
             };
           authentication.authenticate(identity);
           }, 

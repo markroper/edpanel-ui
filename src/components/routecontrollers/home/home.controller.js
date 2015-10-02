@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication',
-    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication) {
+  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts',
+    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts) {
       $scope.showFilter=true;
+      var roles = consts.roles;
       //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old
       if(!statebag.studentPerfData || statebag.lastFullRefresh > (new Date().getTime() - 1000 * 60 * 5))
         {
@@ -44,14 +45,14 @@ angular.module('teacherdashboard')
 
       function resolveStudents() {
         var identity = authentication.identity();
-        if(identity.roles[0] === 'ROLE_ADMIN') {
+        if(identity.roles[0] === roles.ADMIN) {
           //retrieve all the students
           return api.allStudents.get(
             {},
             function(data) {
               statebag.students = data;
             }).$promise;
-        } else if(identity.roles[0] === 'ROLE_TEACHER') {
+        } else if(identity.roles[0] === roles.TEACHER) {
           //retrieve the teachers current students
           return api.termTeacherStudents.get(
             {
@@ -68,7 +69,7 @@ angular.module('teacherdashboard')
             function(){
               console.log('failed to resolve the students!');
             }).$promise;
-        } else if(identity.roles[0] === 'ROLE_STUDENT') {
+        } else if(identity.roles[0] === roles.STUDENT) {
           //TODO: Redirect to that student's individual page
         }
       }
