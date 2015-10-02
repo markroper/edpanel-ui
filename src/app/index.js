@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.bootstrap'])
-  .config(function ($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider, $httpProvider, $locationProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider, $httpProvider, $locationProvider, constsProvider) {
     //Forces angular to request that any CORS cookies be sent back by the server
     $httpProvider.defaults.withCredentials = true;
     // use the HTML5 History API
@@ -9,12 +9,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       requireBase: false
     });
     var rootUrl = '/ui';
-    var ADMIN = 'ROLE_ADMIN',
-        TEACHER = 'ROLE_TEACHER',
-        STUDENT = 'ROLE_STUDENT',
-        GUARDIAN = 'ROLE_GUARDIAN',
-        SUPER_ADMIN = 'ROLE_SUDO';
-
+    var roles = constsProvider.$get().roles;
     //Configure the routes!
     $stateProvider
       .state('login', {
@@ -33,7 +28,13 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         templateUrl: rootUrl + '/components/routecontrollers/navinclude/navinclude.html',
         controller: 'NavCtrl',
         data: {
-          roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
+          roles: [
+            roles.ADMIN, 
+            roles.TEACHER, 
+            roles.STUDENT, 
+            roles.GUARDIAN, 
+            roles.SUPER_ADMIN
+          ]
         },
       })
       .state('app.home', {
@@ -41,7 +42,13 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         templateUrl: rootUrl + '/components/routecontrollers/home/home.html',
         controller: 'HomeCtrl',
         data: {
-          roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
+          roles: [
+            roles.ADMIN, 
+            roles.TEACHER, 
+            roles.STUDENT, 
+            roles.GUARDIAN, 
+            roles.SUPER_ADMIN
+          ]
         },
       })
       .state('app.student', {
@@ -49,7 +56,13 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       	templateUrl: rootUrl + '/components/routecontrollers/student/student.html',
       	controller: 'StudentCtrl',
         data: {
-          roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
+          roles: [
+            roles.ADMIN, 
+            roles.TEACHER, 
+            roles.STUDENT, 
+            roles.GUARDIAN, 
+            roles.SUPER_ADMIN
+          ]
         },
       })
       .state('app.studentSectDrill', {
@@ -57,7 +70,13 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         templateUrl: rootUrl + '/components/routecontrollers/studentSectDrill/studentSectDrill.html',
         controller: 'StudentSectDrillCtrl',
         data: {
-          roles: [ADMIN, TEACHER, STUDENT, GUARDIAN, SUPER_ADMIN]
+          roles: [
+            roles.ADMIN, 
+            roles.TEACHER, 
+            roles.STUDENT, 
+            roles.GUARDIAN, 
+            roles.SUPER_ADMIN
+          ]
         },
       })
       .state('app.reports', {
@@ -65,7 +84,11 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         templateUrl: rootUrl + '/components/routecontrollers/reports/reports.html',
         //controller: 'ReportCtrl',
         data: {
-          roles: [ADMIN, TEACHER, SUPER_ADMIN]
+          roles: [
+            roles.ADMIN, 
+            roles.TEACHER,  
+            roles.SUPER_ADMIN
+          ]
         },
       })
       .state('app.reportbuilder', {
@@ -73,7 +96,11 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         templateUrl: rootUrl + '/components/routecontrollers/reportbuilder/reportbuilder.html',
         //controller: 'ReportBuilderCtrl',
         data: {
-          roles: [ADMIN, TEACHER, SUPER_ADMIN]
+          roles: [
+            roles.ADMIN, 
+            roles.TEACHER, 
+            roles.SUPER_ADMIN
+          ]
         }
       });
 
@@ -90,6 +117,21 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
 
       $mdThemingProvider.theme('default')
           .primaryPalette('indigo');
+  })
+  .provider('consts', function(){
+    return {
+      $get: function () {
+        return {
+          roles: { 
+                ADMIN:'ADMINISTRATOR', 
+                TEACHER: 'TEACHER',  
+                STUDENT: 'STUDENT',
+                GUARDIAN: 'GUARDIAN', 
+                SUPER_ADMIN: 'SUPER_ADMINISTRATOR'
+          }
+        };
+      }
+    }
   })
   .run(['$rootScope', '$state', '$stateParams', 'authorization',
       function($rootScope, $state, $stateParams, authorization) {
