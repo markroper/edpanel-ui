@@ -1,8 +1,8 @@
 'use strict';
 angular.module('teacherdashboard')
 //Allow or disallow access to a UI route according to authentication & role status
-.factory('authorization', ['$rootScope', '$state', 'authentication', 'api',
-  function($rootScope, $state, authentication, api) {
+.factory('authorization', ['$rootScope', '$state', 'authentication', 'api', 'statebag',
+  function($rootScope, $state, authentication, api, statebag) {
     return {
       authorize: function(event) {
         var context = this;
@@ -52,6 +52,8 @@ angular.module('teacherdashboard')
         return api.authCheck.get(
           {}, 
           function(data){
+            statebag.userRole = data.type.charAt(0) + data.type.toLowerCase().slice(1);
+            statebag.theme = statebag.resolveTheme(data.type);
             var identity = {
               username: data.username,
               name: data.name,
