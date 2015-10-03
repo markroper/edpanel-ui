@@ -1,6 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', function ($scope, statebag, api, $q, $state, statebagApiManager) {
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', 
+  function ($scope, statebag, api, $q, $state, statebagApiManager) {
     $scope.showFilter=false;
     $scope.students = [];
     $scope.sections = [];

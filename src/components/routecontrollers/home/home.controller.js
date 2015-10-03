@@ -70,7 +70,15 @@ angular.module('teacherdashboard')
               console.log('failed to resolve the students!');
             }).$promise;
         } else if(identity.roles[0] === roles.STUDENT) {
-          //TODO: Redirect to that student's individual page
+          //If the user is a student, no summary data is available, 
+          //Therefore redirect to the student page
+          statebag.students = [identity];
+          $state.go(
+            'app.student', 
+            { 
+              schoolId: statebag.school.id, 
+              studentId: identity.id 
+            });
         }
       }
   }]);
