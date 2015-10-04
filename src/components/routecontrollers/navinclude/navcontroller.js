@@ -1,6 +1,8 @@
 'use strict';
-angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag',
-function($scope, $state, $mdSidenav, api, statebag) {
+angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'consts',
+function($scope, $state, $mdSidenav, api, statebag, consts) {
+    $scope.userRole = statebag.userRole;
+    $scope.theme = statebag.theme;
     //This base state should always redirect home...
     if($state.current.name === 'app') {
       //TODO: for now we just grab the first school in the district. Need a better way
@@ -24,6 +26,9 @@ function($scope, $state, $mdSidenav, api, statebag) {
     };
     $scope.goToHome = function() {
       $state.go('app.home', { schoolId: $state.params.schoolId });
+    };
+    $scope.goToAdmin = function() {
+      $state.go('app.admin', { schoolId: $state.params.schoolId });
     };
     $scope.goToReports = function() {
       $state.go('app.reports', { schoolId: $state.params.schoolId });

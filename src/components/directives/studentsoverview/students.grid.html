@@ -14,36 +14,47 @@
 	</div>
 	<section layout="row" layout-align="center center">
 		<div class="table-container" ng-show="studentsData">
-			<div class="row-header" style="font-size: 16px;">
-				<div class="table-cell"></div>
-				<div class="table-cell">Behavior</div>
-				<div class="table-cell">Homework</div>
-				<div class="table-cell">Attendance</div>
-				<div class="table-cell">GPA</div>
+			<div hide-sm layout="row" style="font-size: 16px; width:100%;">
+				<div flex="20" class="table-cell"></div>
+				<div flex="20" class="table-cell">Behavior</div>
+				<div flex="20" class="table-cell">Homework</div>
+				<div flex="20" class="table-cell">Attendance</div>
+				<div flex="20" class="table-cell">GPA</div>
 			</div>
-			<div class="table-row" ng-repeat="student in studentsData | filter:search:strict">
-				<div class="table-cell">
+
+			<div class="table-row" layout="row" layout-sm="column" ng-repeat="student in studentsData | filter:search:strict">
+				<div class="table-cell" flex="20" flex-sm="100">
 					<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
 						<md-button class="md-raised" ng-click="goToStudent(student)">
 						{{student.name}}
-						<md-tooltip>
-				          Click for student summary
-				        </md-tooltip>
+						<md-tooltip>Click for student details</md-tooltip>
 					</md-button>
 					</section>
 				</div>
-				<div class="table-cell" ng-click="showBehaviorDialog($event, student)"><div class="choropleth band-{{student.behaviorClass}}">
-					<md-tooltip>{{student.behavior}} demerits</md-tooltip>
-				</div></div>
-				<div class="table-cell"><div class="choropleth band-{{student.homeworkClass}}">
-					<md-tooltip>{{student.homework}}% completion</md-tooltip>
-				</div></div>
-				<div class="table-cell"><div class="choropleth band-{{student.attendanceClass}}">
-					<md-tooltip>{{student.attendance}} absenses</md-tooltip>
-				</div></div>
-				<div class="table-cell"><div class="choropleth band-{{student.gpaClass}}">
-					<md-tooltip>{{student.gpa}}</md-tooltip>
-				</div></div>
+				<div class="table-cell" flex="20" flex-sm="100" ng-click="showBehaviorDialog($event, student)">
+					<div class="choropleth band-{{student.behaviorClass}}">
+						<span class="mobile-label" hide-gt-sm>Behavior</span>
+						<md-tooltip>{{student.behavior}} demerits this year</md-tooltip>
+					</div>
+				</div>
+				<div class="table-cell" flex="20" flex-sm="100">
+					<div class="choropleth band-{{student.homeworkClass}}">
+						<span class="mobile-label" hide-gt-sm>Homework Completion</span>
+						<md-tooltip>{{student.homework}}% this week</md-tooltip>
+					</div>
+				</div>
+				<div class="table-cell" flex="20" flex-sm="100">
+					<div class="choropleth band-{{student.attendanceClass}}">
+						<span class="mobile-label" hide-gt-sm>Attendance</span>
+						<md-tooltip>{{student.attendance}} absenses this year</md-tooltip>
+					</div>
+				</div>
+				<div class="table-cell" flex="20" flex-sm="100">
+					<div class="choropleth band-{{student.gpaClass}}">
+						<span class="mobile-label" hide-gt-sm>GPA</span>
+						<md-tooltip>Current GPA - {{student.gpa}}</md-tooltip>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>

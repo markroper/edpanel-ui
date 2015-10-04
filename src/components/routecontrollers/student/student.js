@@ -1,6 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', function ($scope, statebag, api, $q, $state, statebagApiManager) {
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', 
+  function ($scope, statebag, api, $q, $state, statebagApiManager) {
     $scope.showFilter=false;
     $scope.students = [];
     $scope.sections = [];
@@ -66,7 +67,7 @@ angular.module('teacherdashboard')
           function(error){
             console.log(JSON.stringify(error));
           });
-    }
+    };
 
 
       function resolveStudentGoals() {
@@ -222,7 +223,7 @@ angular.module('teacherdashboard')
         function(error){
           alert('failed to load the student sections and student grades');
         });
-    }
+    };
     /*
      * Maps a numeric grade to a letter grade for display
     */
