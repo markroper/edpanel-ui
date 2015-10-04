@@ -15,8 +15,8 @@
 	.md-36 { font-size: 36px; }
 	input { font-size: 18px; width:225px;}
 	.table-container{
-		display: table;
-		padding:0 1em 0 1em;
+		/*display: table;*/
+		/*padding:0 1em 0 1em;*/
 		width:100%;
 		max-width:1200px;
 		text-align: center;
@@ -24,33 +24,26 @@
 		.table-row:hover {
 			background-color: #F5F5F5;
 		}
-		.row-header {
-			display: table-row;
-			.table-cell {
-				display: table-cell;
-			}
-		}
 		.table-row {
 			-webkit-transition: background-color 250ms linear;
-		    -moz-transition: background-color 250ms linear;
-		    -o-transition: background-color 250ms linear;
-		    -ms-transition: background-color 250ms linear;
-		    transition: background-color 250ms linear;
-			display: table-row;
+	    -moz-transition: background-color 250ms linear;
+	    -o-transition: background-color 250ms linear;
+	    -ms-transition: background-color 250ms linear;
+	    transition: background-color 250ms linear;
 			.table-cell {
-				display: table-cell;
-				padding: 1px 4px 1px 4px;
-				width:20%;
-				vertical-align: middle;
 				.student-link {
 					cursor: pointer;
 				}
 				.choropleth {
 					vertical-align: inherit;
-					height:44px;
-					max-width: 250px;
-					border-radius:5px;
+					height:50px;
+					border: 1px solid white;
 					cursor: pointer;
+					.mobile-label {
+						position:relative;
+						top:30%;
+						font-size: 16px;
+					}
 				}
 			}
 		}
@@ -58,34 +51,39 @@
 	.band-0 {
 		background-color: #E6E6E6;
 	}
+	
 	.band-0-10 {
-		background-color: #ee271f;
+		background-color: #F44336;
 	}
 	.band-10-20 {
-		background-color: #ee271f;
+		background-color: #F44336;
 	}
 	.band-20-30 {
-		background-color: #ee271f;
+		background-color: #F44336;
 	}
 	.band-30-40 {
-		background-color: #ee271f;
+		background-color: #F44336;
 	}	
 	.band-40-50 {
-		background-color: #ee271f;
+		background-color: #F44336;
 	}
 	.band-50-60 {
-		background-color: #ee271f;
+		background-color: #F44336;
 	}
+
+
 	.band-60-70 {
-		background-color: #F9C802;
+		background-color: #FFEB3B;
 	}
 	.band-70-80 {
-		background-color: #F9C802;
+		background-color: #FFEB3B;
 	}
+
+
 	.band-80-90 {
-		background-color: #007f00;
+		background-color: #4CAF50;
 	}
 	.band-90-100 {
-		background-color: #007f00;
+		background-color: #4CAF50;
 	}
 }

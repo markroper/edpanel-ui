@@ -60,7 +60,7 @@ angular.module('teacherdashboard')
           function(error){
             console.log(JSON.stringify(error));
           });
-    }
+    };
 
     function resolveStudentSectionData() {
       $scope.students.push(statebag.currentStudent);
@@ -106,7 +106,7 @@ angular.module('teacherdashboard')
         function(error){
           alert('failed to load the student sections and student grades');
         });
-    }
+    };
     /*
      * Maps a numeric grade to a letter grade for display
     */
