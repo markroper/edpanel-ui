@@ -1,24 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-<<<<<<< HEAD
-.service('statebag',[ 'api', '$q', function(api, $q) {
-    var school = null,
-      currentYear = null,
-      currentTerm = null,
-      currentSection = null,
-      currentSections = [],
-      //Student caches
-      students = [],
-      studentPerfData = null,
-      currentStudent = null,
-      currentStudentSectionAssignments = null,
-      currentStudentBehaviorEvents = [],
-      currentStudentGpa = null,
-      studentsPerformanceSummary = [],
-      lastFullRefresh = null,
-      goals = [];
-}]);
-=======
+
 .service('statebag',[ 'api', '$q', 'consts', function(api, $q, consts) {
   return {
     school : null,
@@ -35,6 +17,7 @@ angular.module('teacherdashboard')
     currentStudentGpa : null,
     studentsPerformanceSummary : [],
     lastFullRefresh : null,
+    goals : [],
     //User UI related caches
     userRole : '',
     theme : 'indigo',
@@ -52,4 +35,3 @@ angular.module('teacherdashboard')
     }
   }
 }]);
->>>>>>> 96c9384d1f5ebbba1cc92c075295ed02b4ee642b
