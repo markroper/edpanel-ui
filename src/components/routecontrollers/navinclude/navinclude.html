@@ -1,6 +1,6 @@
-<md-toolbar layout="row">
+<md-toolbar layout="row" md-theme="{{theme}}">
   <div style="outline:none;" class="md-toolbar-tools" tabindex="0">
-    <span style="outline:none; cursor:pointer;" ng-click="goToHome()">Teacher Dashboard</span>
+    <span style="outline:none; cursor:pointer;" ng-click="goToHome()">{{userRole}} Dashboard</span>
     <span flex></span>
     <div class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
       <md-menu md-position-mode="target-right target" md-offset="0 78" >
@@ -11,12 +11,20 @@
           <md-menu-item>
             <md-button ng-click="ctrl.announceClick($index)">
                 <div layout="row">
-                  <p flex>Reports</p>
+                  <p flex>My Alerts</p>
                   <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
                 </div>
             </md-button>
           </md-menu-item>
-          <md-menu-item>
+          <md-menu-item ng-show="userRole != 'Student' && userRole != 'Guardian'">
+            <md-button ng-click="ctrl.announceClick($index)">
+                <div layout="row">
+                  <p flex>My Reports</p>
+                  <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
+                </div>
+            </md-button>
+          </md-menu-item>
+          <md-menu-item ng-show="userRole != 'Student' && userRole != 'Guardian'">
             <md-button ng-click="ctrl.announceClick($index)">
                 <div layout="row">
                   <p flex>Report Builder</p>
@@ -25,15 +33,15 @@
             </md-button>
           </md-menu-item>
           <md-menu-item>
-            <md-button ng-click="ctrl.announceClick($index)">
+            <hr/>
+          </md-menu-item>
+          <md-menu-item ng-show="userRole == 'Administrator'">
+            <md-button ng-click="goToAdmin()">
                 <div layout="row">
-                  <p flex>Account settings</p>
+                  <p flex>Administration</p>
                   <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
                 </div>
             </md-button>
-          </md-menu-item>
-          <md-menu-item>
-            <hr/>
           </md-menu-item>
           <md-menu-item>
             <md-button ng-click="logout()">
@@ -49,7 +57,7 @@
   </div>
 </md-toolbar>
 
-<div flex layout="row">
+<div flex layout="row" md-theme="{{theme}}">
     <md-content flex id="content">
       <div ui-view class="main-container"></div>
     </md-content>

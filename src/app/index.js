@@ -60,10 +60,20 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
             roles.ADMIN, 
             roles.TEACHER, 
             roles.STUDENT, 
-            roles.GUARDIAN, 
+            roles.GUARDIAN,   
             roles.SUPER_ADMIN
           ]
         },
+      })
+      .state('app.admin', {
+        url: 'schools/:schoolId/admin',
+        templateUrl: rootUrl + '/components/routecontrollers/administration/administration.html',
+        controller: 'AdministrationCtrl',
+        data: {
+          roles:[
+            roles.ADMIN
+          ]
+        }
       })
       .state('app.studentSectDrill', {
         url: 'schools/:schoolId/student/:studentId/sections/:sectionId/assignments',
@@ -115,8 +125,17 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       .icon('twitter'    , '/ui/assets/svg/twitter.svg'     , 512)
       .icon('phone'      , '/ui/assets/svg/phone.svg'       , 512);
 
-      $mdThemingProvider.theme('default')
-          .primaryPalette('indigo');
+    //The UI uses different color themes for different user types
+    $mdThemingProvider.theme('indigo')
+        .primaryPalette('indigo');
+    $mdThemingProvider.theme('blue-grey')
+        .primaryPalette('blue-grey');
+    $mdThemingProvider.theme('deep-purple')
+        .primaryPalette('deep-purple');
+    $mdThemingProvider.theme('red')
+        .primaryPalette('red');
+    $mdThemingProvider
+        .alwaysWatchTheme(true);
   })
   .provider('consts', function(){
     return {

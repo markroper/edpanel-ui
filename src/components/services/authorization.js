@@ -1,8 +1,8 @@
 'use strict';
 angular.module('teacherdashboard')
 //Allow or disallow access to a UI route according to authentication & role status
-.factory('authorization', ['$rootScope', '$state', 'authentication', 'api',
-  function($rootScope, $state, authentication, api) {
+.factory('authorization', ['$rootScope', '$state', 'authentication', 'api', 'statebag',
+  function($rootScope, $state, authentication, api, statebag) {
     return {
       authorize: function(event) {
         var context = this;
@@ -14,7 +14,7 @@ angular.module('teacherdashboard')
           if(!isAuthenticated) {
             this.serverCookieAuthUpdate().then(
               function(){
-                context.passthroughOrRedirect();
+                context.passthroughOrRedirect(true);
               }, 
               function(){
                 context.passthroughOrRedirect();
@@ -24,7 +24,7 @@ angular.module('teacherdashboard')
           }
         }
       },
-      passthroughOrRedirect: function() {
+      passthroughOrRedirect: function(fullRefresh) {
         var isAuthenticated = authentication.isAuthenticated();
         //Having checked with the server, do a role check.  if the user can't
           //access the page show an access denied if they're logged in, and redirect
@@ -42,6 +42,13 @@ angular.module('teacherdashboard')
               // now, send them to the signin state so they can log in
               $state.go('login');
             }
+          } 
+          //When a user clicks a link or does a full page refresh we need to force 
+          //a route reload after we've resolved the user to get everything in a consistent state.
+          //This is because our angular material themes which control colors and some other
+          //global state display are not scope variable bound and don't get updated :(
+          if(fullRefresh) {
+            $state.go($state.current, {}, {reload: true});
           }
       },
       //If the user is not authenticated, call to the server for a cookie check
@@ -52,6 +59,8 @@ angular.module('teacherdashboard')
         return api.authCheck.get(
           {}, 
           function(data){
+            statebag.userRole = data.type.charAt(0) + data.type.toLowerCase().slice(1);
+            statebag.theme = statebag.resolveTheme(data.type);
             var identity = {
               username: data.username,
               name: data.name,
