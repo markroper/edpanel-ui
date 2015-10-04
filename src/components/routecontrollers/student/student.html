@@ -45,12 +45,25 @@
 		</div>
 	</div>
   <div class="goals-container">
+
     <div class="student-goal" ng-repeat="goal in goals">
-      <div class="row"><b>{{goal.line1}}</b> <span class="goal-value">{{goal.value1}}</span></div>
-      <div class="row"><b>{{goal.line2}}</b> <span class="goal-value">{{goal.value2}}</span></div>
-      <div class="row"><b>{{goal.line3}}</b> <span class="goal-value">{{goal.value3}}</span></div>
+      <div class="row"><span class="goal-title"><b>{{goal.title}}</b></span></div>
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="70"
+           aria-valuemin={{goal.min}} aria-valuemax={{goal.max}} style="width:{{goal.width}}%;background-color:{{goal.color}}">
+        {{goal.progressText}}
       </div>
     </div>
+      <div class="row"><b>{{goal.aveText}}</b> <span class="goal-value">{{goal.aveValue}}</span></div>
+      <div class="goal-footer">
+        <div class="goal-chat"></div>
+        <div class="goal-edit"></div>
+        <div class="goal-delete"></div>
+      </div>
+    </div>
+
+      </div>
+
 	<h1>Grades & Grade Formulas</h1>
 	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
 		<h3 flex="50">Loading...</h3>

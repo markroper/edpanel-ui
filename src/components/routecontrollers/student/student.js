@@ -84,40 +84,49 @@ angular.module('teacherdashboard')
     }
 
     function resolveGoalDisplay() {
+      var SUCCESS = "progress-bar progress-bar-success";
+      var DANGER = "progress-bar progress-bar-danger";
+      var WARN = "progress-bar progress-bar-warning";
       for (var i = 0; i < $scope.goals.length; i++) {
         var goal = $scope.goals[i];
         switch(goal.goalType) {
           case "ASSIGNMENT":
-            goal.line1 = goal.name + ": ";
-            goal.line2 = "Assignment Score: ";
-            goal.line3 = "Class average: ";
-            goal.value1 = goal.desiredValue + "%";
+            goal.title = goal.name ;
+            goal.min = 0;
+            goal.max = goal.desiredValue;
+            goal.width = evaluateWidth(goal);
+            goal.color = evaluateColor(goal);
+            goal.aveText = "Class average: ";
+
+
+            goal.progressText = goal.calculatedValue + "%";
             if (goal.calculatedValue == -1) {
-              goal.value2 = "Not Graded"
-            } else {
-              goal.value2 = goal.calculatedValue + "%";
+              goal.progressText = "Not Graded"
             }
-            goal.value3 = "75%";
-                break;
+            goal.aveValue = "75%";
+            break;
           case "BEHAVIOR":
-            switch(goal.behaviorCategory) {
-              case "DEMERIT":
-                goal.line2 = "Current Demerits: ";
-                break;
-            }
-            goal.line1 = goal.name + ":";
-            goal.line3 = "Class average: ";
-            goal.value1 = goal.desiredValue;
-            goal.value2 = goal.calculatedValue;
-            goal.value3 = "3";
-                break;
+            goal.title = goal.name ;
+            goal.min = 0;
+            goal.max = goal.desiredValue;
+            goal.width = evaluateWidth(goal);
+            goal.color = evaluateColor(goal);
+            goal.aveText = "Class average: ";
+
+
+            goal.progressText = goal.calculatedValue;
+            goal.aveValue = "3";
+            break;
           case "CUMULATIVE_GRADE":
-            goal.line1 = goal.name + ":";
-            goal.line2 = "Present Grade: ";
-            goal.line3 = "Class average: ";
-            goal.value1 = goal.desiredValue + "%";
-            goal.value2 = goal.calculatedValue + "%";
-            goal.value3 = "83%";
+            goal.title = goal.name ;
+            goal.min = 0;
+            goal.max = goal.desiredValue;
+            goal.width = evaluateWidth(goal);
+            goal.color = evaluateColor(goal);
+            goal.aveText = "Class average: ";
+
+            goal.progressText = goal.calculatedValue + "%";
+            goal.aveValue = "83%";
                 break;
           case "ATTENDANCE":
                 break;
@@ -126,6 +135,44 @@ angular.module('teacherdashboard')
 
 
         $scope.goals[i] = goal;
+      }
+    }
+
+    function evaluateWidth(goal) {
+      if (goal.calculatedValue == -1) {
+        return "100";
+      } else {
+          var width = goal.calculatedValue / goal.max * 100;
+        if (width > 100) {
+          return 100;
+        } else {
+          return width;
+        }
+      }
+    }
+
+    function evaluateColor(goal) {
+      var red = "#ee271f";
+      var yellow = "#F9C802";
+      var green = "#007f00";
+      var grey = "#E6E6E6";
+      var performanceColors = [red,yellow,green];
+
+      //Extend this to work for all negative goal types
+      if (goal.behaviorCategory == "DEMERIT") {
+        performanceColors.reverse();
+      }
+
+      if (goal.calculatedValue == -1) {
+        return grey;
+      }
+
+      if (goal.width < 33) {
+        return performanceColors[0];
+      } else if (goal.width >= 33 && goal.width <= 67) {
+        return performanceColors[1];
+      } else {
+        return performanceColors[2];
       }
     }
 
