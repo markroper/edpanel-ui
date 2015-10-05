@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', 
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager',
   function ($scope, statebag, api, $q, $state, statebagApiManager) {
     $scope.showFilter=false;
     $scope.students = [];
@@ -95,6 +95,7 @@ angular.module('teacherdashboard')
             goal.title = goal.name ;
             goal.min = 0;
             goal.max = goal.desiredValue;
+            goal.maxDisplay = goal.desiredValue + "%";
             goal.width = evaluateWidth(goal);
             goal.color = evaluateColor(goal);
             goal.aveText = "Class average: ";
@@ -110,6 +111,7 @@ angular.module('teacherdashboard')
             goal.title = goal.name ;
             goal.min = 0;
             goal.max = goal.desiredValue;
+            goal.maxDisplay = goal.desiredValue;
             goal.width = evaluateWidth(goal);
             goal.color = evaluateColor(goal);
             goal.aveText = "Class average: ";
@@ -122,6 +124,7 @@ angular.module('teacherdashboard')
             goal.title = goal.name ;
             goal.min = 0;
             goal.max = goal.desiredValue;
+            goal.maxDisplay = goal.desiredValue + "%";
             goal.width = evaluateWidth(goal);
             goal.color = evaluateColor(goal);
             goal.aveText = "Class average: ";

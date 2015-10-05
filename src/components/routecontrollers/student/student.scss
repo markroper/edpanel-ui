@@ -23,19 +23,26 @@
 		    transition: background-color 250ms linear;
 		    padding:15px 20px 20px 20px;
 		    position: relative;
-			width:250px;
+			width:330px;
 			height:150px;
 			margin: 15px;
 			border-radius: 5px;
 			border: 1px solid #b9b9b9;
+      .goal-title {
+        text-align: center;
+      }
       .progress {
         background-color: #f5f5a5;
+      }
+      .progress-label {
+        float: right;
+        margin-left: 1em;
       }
 			.row {
 				margin: 15px 0px 15px 0px;
 				.goal-value {
 					float: right;
-					margin-right: 20px;
+					margin-left: 20px;
 				}
 			}
 			.goal-footer {
