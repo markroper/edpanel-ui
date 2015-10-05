@@ -26,6 +26,11 @@ angular.module('teacherdashboard')
                     }
                   });
                   resolveStudentSectionData();
+                  resolveStudentGoals()
+                    .then(function() {
+                      $scope.goals = statebag.goals;
+                      resolveGoalDisplay();
+                    });
                 });
             });
         },
@@ -86,45 +91,31 @@ angular.module('teacherdashboard')
     function resolveGoalDisplay() {
       for (var i = 0; i < $scope.goals.length; i++) {
         var goal = $scope.goals[i];
+
+        goal.title = goal.name ;
+        goal.min = 0;
+        goal.aveText = "Class average: ";
+        goal.max = goal.desiredValue;
+        goal.width = evaluateWidth(goal);
+        goal.color = evaluateColor(goal);
+
         switch(goal.goalType) {
           case "ASSIGNMENT":
-            goal.title = goal.name ;
-            goal.min = 0;
-            goal.max = goal.desiredValue;
             goal.maxDisplay = goal.desiredValue + "%";
-            goal.width = evaluateWidth(goal);
-            goal.color = evaluateColor(goal);
-            goal.aveText = "Class average: ";
-
-
             goal.progressText = goal.calculatedValue + "%";
             if (goal.calculatedValue == -1) {
               goal.progressText = "Not Graded"
             }
             goal.aveValue = "75%";
+
             break;
           case "BEHAVIOR":
-            goal.title = goal.name ;
-            goal.min = 0;
-            goal.max = goal.desiredValue;
             goal.maxDisplay = goal.desiredValue;
-            goal.width = evaluateWidth(goal);
-            goal.color = evaluateColor(goal);
-            goal.aveText = "Class average: ";
-
-
             goal.progressText = goal.calculatedValue;
             goal.aveValue = "3";
             break;
           case "CUMULATIVE_GRADE":
-            goal.title = goal.name ;
-            goal.min = 0;
-            goal.max = goal.desiredValue;
             goal.maxDisplay = goal.desiredValue + "%";
-            goal.width = evaluateWidth(goal);
-            goal.color = evaluateColor(goal);
-            goal.aveText = "Class average: ";
-
             goal.progressText = goal.calculatedValue + "%";
             goal.aveValue = "83%";
                 break;
