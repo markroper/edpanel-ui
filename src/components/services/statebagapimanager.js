@@ -16,7 +16,7 @@ angular.module('teacherdashboard')
         function(){
             alert('failed to resolve the school!');
       }).$promise;
-    }, 
+    },
     retrieveAndCacheStudentPerfData: function() {
       var deferred = $q.defer();
       var studentIds = [];
@@ -44,19 +44,25 @@ angular.module('teacherdashboard')
         responses[1].records.forEach(function(student) {
           var studentDemerits = student.values;
           var pluckedStudent = studentMap[studentDemerits[0]];
-          pluckedStudent.behavior = studentDemerits[1];
-          pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
+          if (pluckedStudent) {
+            pluckedStudent.behavior = studentDemerits[1];
+            pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
+          }
+
         });
         //Update the attendance data for each student
         responses[2].records.forEach(function(student) {
           var studentAttendance = student.values;
           var pluckedStudent = studentMap[studentAttendance[0]];
-          pluckedStudent.attendance = studentAttendance[1];
-          pluckedStudent.attendanceClass = resolveAttendanceClass(pluckedStudent.attendance);
+          if (pluckedStudent) {
+            pluckedStudent.attendance = studentAttendance[1];
+            pluckedStudent.attendanceClass = resolveAttendanceClass(pluckedStudent.attendance);
+          }
+
         });
         //Update the GPA
         for (var idKey in responses[3]) {
-          if (responses[3].hasOwnProperty(idKey) && 
+          if (responses[3].hasOwnProperty(idKey) &&
               !isNaN(idKey)) {
             var pluckedStudent = studentMap[idKey];
             if(pluckedStudent) {
@@ -73,7 +79,7 @@ angular.module('teacherdashboard')
       return deferred.promise;
     }
   };
-  
+
   function getStudentIdsExpression(studentIds) {
     return {
       'type': 'EXPRESSION',
@@ -93,7 +99,7 @@ angular.module('teacherdashboard')
   }
 
   function getBehaviorQuery(minDate, maxDate, studentIds) {
-    
+
     var behaviorQuery = {
         'aggregateMeasures': [
             {
@@ -164,7 +170,7 @@ angular.module('teacherdashboard')
         'operator': 'AND',
         'rightHandSide': {
           'type':'EXPRESSION',
-          'leftHandSide': { 
+          'leftHandSide': {
             'type':'EXPRESSION',
             'leftHandSide':{
               'type':'EXPRESSION',

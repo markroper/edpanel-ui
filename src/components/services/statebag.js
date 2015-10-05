@@ -1,5 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
+
 .service('statebag',[ 'api', '$q', 'consts', function(api, $q, consts) {
   return {
     school : null,
@@ -16,6 +17,7 @@ angular.module('teacherdashboard')
     currentStudentGpa : null,
     studentsPerformanceSummary : [],
     lastFullRefresh : null,
+    goals : [],
     //User UI related caches
     userRole : '',
     theme : 'indigo',
