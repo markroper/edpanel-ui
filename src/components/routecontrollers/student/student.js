@@ -26,11 +26,7 @@ angular.module('teacherdashboard')
                     }
                   });
                   resolveStudentSectionData();
-                  resolveStudentGoals()
-                    .then(function() {
-                      $scope.goals = statebag.goals;
-                      resolveGoalDisplay();
-                    });
+                  resolveGoalDataAndDisplay();
                 });
             });
         },
@@ -39,11 +35,7 @@ angular.module('teacherdashboard')
         });
     } else {
       resolveStudentSectionData();
-      resolveStudentGoals()
-        .then(function() {
-          $scope.goals = statebag.goals;
-          resolveGoalDisplay();
-        });
+      resolveGoalDataAndDisplay();
 
     }
 
@@ -167,7 +159,13 @@ angular.module('teacherdashboard')
       }
     }
 
-
+  function resolveGoalDataAndDisplay() {
+    resolveStudentGoals()
+      .then(function() {
+        $scope.goals = statebag.goals;
+        resolveGoalDisplay();
+      });
+  }
 
     function resolveStudentSectionData() {
       $scope.students.push(statebag.currentStudent);

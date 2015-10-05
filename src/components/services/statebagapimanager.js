@@ -276,9 +276,9 @@ angular.module('teacherdashboard')
     student.name = inputStudent[1];
     student.behavior = null;
     student.behaviorClass = resolveBehaviorClass(student.behavior);
-    //student.homework = Math.round(inputStudent[2] * 100);
+    student.homework = Math.round(inputStudent[2] * 100);
     student.homework = 0;
-    //student.homeworkClass = resolveHomeworkClass(inputStudent[2]);
+    student.homeworkClass = resolveHomeworkClass(inputStudent[2]);
     student.homeworkClass = 0;
     student.gpa = null;
     student.gpaClass = resolveGpaClass(student.gpa);
