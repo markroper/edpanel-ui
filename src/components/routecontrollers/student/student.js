@@ -85,11 +85,9 @@ angular.module('teacherdashboard')
         var goal = $scope.goals[i];
 
         goal.title = goal.name ;
-        goal.min = 0;
-        goal.aveText = "Class average: ";
         goal.max = goal.desiredValue;
         goal.width = evaluateWidth(goal);
-        goal.color = evaluateColor(goal);
+        goal.colorClass = evaluateColorClass(goal);
 
         switch(goal.goalType) {
           case "ASSIGNMENT":
@@ -134,28 +132,28 @@ angular.module('teacherdashboard')
       }
     }
 
-    function evaluateColor(goal) {
-      var red = "#ee271f";
-      var yellow = "#F9C802";
-      var green = "#007f00";
-      var grey = "#A6A6A6";
-      var performanceColors = [red,yellow,green];
+    function evaluateColorClass(goal) {
+      var danger = "goal-danger";
+      var warning = "goal-warning";
+      var success = "goal-success";
+      var unknown = "goal-unknown";
+      var performanceClasses = [danger, warning, success];
 
       //Extend this to work for all negative goal types
       if (goal.behaviorCategory == "DEMERIT") {
-        performanceColors.reverse();
+        performanceClasses.reverse();
       }
 
       if (goal.calculatedValue == -1) {
-        return grey;
+        return unknown;
       }
 
       if (goal.width < 33) {
-        return performanceColors[0];
+        return performanceClasses[0];
       } else if (goal.width >= 33 && goal.width <= 67) {
-        return performanceColors[1];
+        return performanceClasses[1];
       } else {
-        return performanceColors[2];
+        return performanceClasses[2];
       }
     }
 
