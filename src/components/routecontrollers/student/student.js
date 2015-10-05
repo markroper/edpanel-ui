@@ -77,7 +77,6 @@ angular.module('teacherdashboard')
         studentId: $state.params.studentId }).$promise;
 
         studentGoalsPromises.then(function (response) {
-          console.log(JSON.stringify(response, null, 4));
           statebag.goals = response;
           deferred.resolve(statebag.goals);
         });
