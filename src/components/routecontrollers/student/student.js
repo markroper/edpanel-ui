@@ -85,9 +85,6 @@ angular.module('teacherdashboard')
     }
 
     function resolveGoalDisplay() {
-      var SUCCESS = "progress-bar progress-bar-success";
-      var DANGER = "progress-bar progress-bar-danger";
-      var WARN = "progress-bar progress-bar-warning";
       for (var i = 0; i < $scope.goals.length; i++) {
         var goal = $scope.goals[i];
         switch(goal.goalType) {
@@ -159,7 +156,7 @@ angular.module('teacherdashboard')
       var red = "#ee271f";
       var yellow = "#F9C802";
       var green = "#007f00";
-      var grey = "#E6E6E6";
+      var grey = "#A6A6A6";
       var performanceColors = [red,yellow,green];
 
       //Extend this to work for all negative goal types
