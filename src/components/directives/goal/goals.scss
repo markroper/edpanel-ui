@@ -1,0 +1,44 @@
+.goals-container{
+  md-card-content {
+    position:relative;
+    md-fab-speed-dial {
+      position:absolute;
+      top:-5px;
+      right:-15px;
+    }
+  }
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  .student-goal{
+    .progress {
+      height: 30px;
+    }
+    min-width: 350px;
+    .goal-title {
+      font-size: 16px;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+    .goal-danger {
+      background-color: $red-color;
+    }
+    .goal-warning {
+      background-color: $yellow-color;
+    }
+    .goal-success {
+      background-color: $green-color;
+    }
+    .goal-unknown {
+      background-color: #A6A6A6;
+    }
+    .progress {
+      background-color: #f5f5a5;
+    }
+    .progress-label {
+      float: right;
+      margin-left: 1em;
+    }
+  }
+}

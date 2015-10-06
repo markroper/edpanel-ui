@@ -1,3 +1,7 @@
+$red-color: #F44336;
+$yellow-color: #FFEB3B;
+$green-color: #4CAF50;
+
 .sidemenu-icon {
   width:96px;
   height:96px;
@@ -193,6 +197,7 @@ span.name {
 
 // injector
 @import '../components/directives/chorocalendar/chorocalendar.scss';
+@import '../components/directives/goal/goals.scss';
 @import '../components/directives/gradedonut/gradedonut.scss';
 @import '../components/directives/navbar/navbar.scss';
 @import '../components/directives/scatterplot/scatterplot.scss';
