@@ -2,32 +2,7 @@
 	<h1>{{students[0].name}}</h1>
 	<student-grid students-data="students" show-filter="showFilter"></student-grid>
 	<h1>Goals</h1>
-  <div class="goals-container">
-
-    <div class="student-goal" ng-repeat="goal in goals">
-      <div class="row"><div class="goal-title"><b>{{goal.title}}</b></div></div>
-
-        <span class="progress-label">{{goal.maxDisplay}}</span>
-    <div class="progress">
-      <div class="progress-bar progress-bar-striped {{goal.colorClass}}" role="progressbar"
-           aria-valuemin=0 aria-valuemax={{goal.max}} style="width:{{goal.width}}%">
-        {{goal.progressText}}
-
-      </div>
-
-
-    </div>
-
-      <div class="row"><b>Class Average: </b> <span class="goal-value">{{goal.aveValue}}</span></div>
-      <div class="goal-footer">
-        <div class="goal-chat"></div>
-        <div class="goal-edit"></div>
-        <div class="goal-delete"></div>
-      </div>
-    </div>
-
-      </div>
-
+  <goals goals="goals"></goals>
 	<h1>Grades & Grade Formulas</h1>
 	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
 		<h3 flex="50">Loading...</h3>

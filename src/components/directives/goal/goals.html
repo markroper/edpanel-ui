@@ -1,0 +1,33 @@
+<div class="goals-container">
+  <md-card class="student-goal" ng-repeat="goal in goals">
+    <md-card-content>
+      <div class="row"><div class="goal-title">{{goal.title}}</div></div>
+      <div class="progress">
+        <md-tooltip>{{goal.progressText}} of {{goal.maxDisplay}}</md-tooltip>
+        <div class="progress-bar {{goal.colorClass}}" role="progressbar"
+             aria-valuemin=0 aria-valuemax={{goal.max}} style="width:{{goal.width}}%">
+        </div>
+      </div>
+      <div layout="row" layout-align="center center">
+        <span flex>Your score: <span>{{goal.progressText}}</span></span>
+        <span flex>Class average: <span class="goal-value">{{goal.aveValue}}</span></span>
+      </div>
+
+      <md-fab-speed-dial md-open="demo.isOpen" md-direction="left" class="md-scale">
+         <md-fab-trigger>
+          <md-button aria-label="menu" class="goal-menu md-icon-button">
+            <md-icon md-font-set="material-icons">more_vert</md-icon>
+          </md-button>
+        </md-fab-trigger>
+        <md-fab-actions> 
+          <md-button class="md-fab md-primary md-raised md-mini">
+            <md-icon md-font-set="material-icons"> mode_edit </md-icon>
+          </md-button>
+          <md-button class="md-fab md-warn md-raised md-mini">
+            <md-icon md-font-set="material-icons"> delete </md-icon>
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+    </md-card-content>
+  </md-card>
+</div>
