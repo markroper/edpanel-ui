@@ -4,7 +4,8 @@ angular.module('teacherdashboard')
     return {
       scope: {
         studentsData: '=',
-        showFilter: '='
+        showFilter: '=',
+        cellWidth: '@'
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
