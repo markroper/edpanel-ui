@@ -19,7 +19,12 @@ angular.module('teacherdashboard')
       //students enpoints
       student: $resource(base + '/students/:studentId'),
       allStudents: $resource(base + '/students', {}, { 'get': { isArray: true }}),
-      users: $resource(base + '/users', {}, { 'get': { isArray: true }}),
+      users: $resource(base + '/users', {}, {'get': { isArray: true }}),
+      user: $resource(base + '/users/:userId', {}, 
+        { 
+          'patch': { method:'PATCH', headers: {'Content-Type': 'application/json'} },
+          'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }
+        }),
       termTeacherStudents: $resource(
         base + '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/students',
         {},

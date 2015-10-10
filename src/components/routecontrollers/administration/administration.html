@@ -4,7 +4,7 @@
       <md-tab label="Users">
         <md-content class="md-padding">
           <h1 class="md-display-2">Unverified Users</h1>
-          <p>We do not have email addresses for the users below, which means we don't have a way to share an EdPanel user verification link with them. As an administrator using this page, you can choose to send email verification to a user by clicking the email button next to a name, and entering the user's email address. For users without email accounts, you can manually share the username and one time use passwords below.</p>
+          <p>We do not have email addresses for the users below, which means we don't have a way to share an EdPanel user verification link with them. As an administrator using this page, you can choose to add en email address for the users below and we'll automatically email an invite link to those users or for users without email accounts, you can manually share the username and one time use passwords listed below.</p>
           <p>After a user logs in for the first time, they will be asked to change their password and when they've done so, the user will no longer appear on this list of unverified users.</p>
           <br/>
           <md-card class="user-list">
@@ -21,12 +21,12 @@
                   <span>{{user.name}}</span>
                 </div>
                 <div flex="20" layout="row" layout-align="center center">
-                  <md-button aria-label="email" class="email-button md-icon-button">
+                  <md-button ng-click="saveUserEmailAndSendInvite(user)" aria-label="email" class="email-button md-fab md-mini md-primary">
                     <md-icon md-font-set="material-icons">save</md-icon>
-                    <md-tooltip>Send email verification</md-tooltip>
+                    <md-tooltip>save email, send invite</md-tooltip>
                   </md-button>
                   <md-input-container md-no-float>
-                    <input placeholder="email">
+                    <input type="email" placeholder="email" ng-model="user.email">
                   </md-input-container>
                 </div>
                 <div flex="15" layout="row" layout-align="center center"><span>{{user.type}}</span></div>
