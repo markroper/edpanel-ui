@@ -3,11 +3,16 @@
     max-width:1100px;
     margin:auto;
     .user-list-header {
+      text-align:center;
       font-size: $font-size-table-header;
     }
     .user-row {
+      text-align:center;
       border-bottom: 1px solid $light-gray-color;
       padding: 5px 0px;
+      md-input-container {
+        padding-bottom:5px;
+      }
       span {
         line-height: 48px;
         vertical-align: middle;

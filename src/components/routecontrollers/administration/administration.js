@@ -4,7 +4,7 @@ angular.module('teacherdashboard')
   function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts) {
     api.users.get(
       { schoolId: statebag.school.id,
-        enabled: true },
+        enabled: false },
       function(data) {
         $scope.firstTimeUsers = data;
       });
