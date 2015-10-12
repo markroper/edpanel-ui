@@ -25,6 +25,10 @@ angular.module('teacherdashboard')
           'patch': { method:'PATCH', headers: {'Content-Type': 'application/json'} },
           'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }
         }),
+      passwordReset: $resource(base + '/users/requestPasswordReset/:username', {},
+        {
+          'initiate': { method: 'POST', headers: {'Content-Type': 'application/json'}}
+        }),
       termTeacherStudents: $resource(
         base + '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/students',
         {},

@@ -1,4 +1,15 @@
 .administration {
+  .page-break { display: none; }
+
+  .save-settings {
+    display:block;
+    margin:auto;
+    text-align: center;
+    span {
+      margin:0px 20px;
+    }
+  }
+  /*USERS*/
   .user-list {
     max-width:1100px;
     margin:auto;
@@ -17,6 +28,36 @@
         line-height: 48px;
         vertical-align: middle;
       }
+    }
+  }
+
+  /*Settings*/
+  .settings {
+    .separator { 
+      padding: 0px 10px; 
+    }
+    .settings-card { 
+      width: 300px; 
+      position:relative;
+      h3 {
+        text-align: center;
+      }
+    }
+    .color {
+      width:50px;
+      height:40px;
+    }
+    .red {
+      background-color: $red-color;
+    }
+    .yellow {
+      background-color: $yellow-color;
+    }
+    .green {
+      background-color: $green-color;
+    }
+    input {
+      max-width: 100px;
     }
   }
 }
