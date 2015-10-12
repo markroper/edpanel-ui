@@ -30,34 +30,4 @@
       }
     }
   }
-
-  /*Settings*/
-  .settings {
-    .separator { 
-      padding: 0px 10px; 
-    }
-    .settings-card { 
-      width: 300px; 
-      position:relative;
-      h3 {
-        text-align: center;
-      }
-    }
-    .color {
-      width:50px;
-      height:40px;
-    }
-    .red {
-      background-color: $red-color;
-    }
-    .yellow {
-      background-color: $yellow-color;
-    }
-    .green {
-      background-color: $green-color;
-    }
-    input {
-      max-width: 100px;
-    }
-  }
 }

@@ -4,7 +4,7 @@ angular.module('teacherdashboard')
   .directive('edpanelEnterKeypress', function() {
     return function(scope, element, attrs) {
 
-        element.bind("keydown keypress", function(event) {
+        element.bind('keydown keypress', function(event) {
             var keyCode = event.which || event.keyCode;
 
             // If enter key is pressed

@@ -55,155 +55,23 @@
           <h2>Colors & Date Ranges</h2>
           <p>On dashboards values for attendance, homework completion, behavior and GPA values are expressed as the colors green, yellow, and red where colors indicate level of conern. Green means the score on the metric is positive, yellow is cautionary, and red warning. In the case of behavior, homework completion and attendance, these metrics can have customizable time-bounds. You may configure these default values below.</p>
           <div class="save-settings">
-            <md-button ng-click="saveSettings()" class="md-raised md-primary">
+            <md-button ng-click="saveSettingsChanges()" class="md-raised md-primary">
               save changes
             </md-button>
-            <md-button ng-click="revertChanges()" class="md-raised md-warn">
+            <md-button ng-click="revertSettingsChanges()" class="md-raised md-warn">
               undo changes
             </md-button>
           </div>
           <div layout="row" layout-wrap layout-align="center start">
-            <md-card class="settings-card">
-              <md-card-content>
-                <h3>Behavior</h3>
-                <h4>RGB</h4>
-                <div layout="row">
-                  <div layout="row">
-                    <div class="color green"></div>
-                    <div class="color yellow"></div>
-                  </div>
-                  <span class="separator"></span>
-                  <md-input-container md-no-float>
-                    <input type="number" placeholder="# threshold" ng-model="rgb.behavior.green">
-                  </md-input-container>
-                </div>
-                <div layout="row">
-                  <div layout="row">
-                    <div class="color yellow"></div>
-                    <div class="color red"></div>
-                  </div>
-                  <span class="separator"></span>
-                  <md-input-container md-no-float>
-                    <input type="number" placeholder="# threshold" ng-model="rgb.behavior.yellow">
-                  </md-input-container>
-                </div>
-                <h4>Time Period</h4>
-                <md-input-container style="margin-right: 10px; max-width:100px">
-                  <label>Period</label>
-                  <md-select ng-model="rgb.behavior.period">
-                    <md-option value="day">day</md-option>
-                    <md-option value="week">week</md-option>
-                    <md-option value="month">month</md-option>
-                    <md-option value="term">term</md-option>
-                    <md-option value="year">year</md-option>
-                  </md-select>
-                </md-input-container>
-              </md-card-content>
-            </md-card>
+            <settings-card name="Behavior" threshold-char="#" is-temporal="true" green="rgb.behavior.green"  yellow="rgb.behavior.green" period="rgb.behavior.period"></settings-card>
 
-            <md-card class="settings-card">
-              <md-card-content>
-                <h3>Homework Completion</h3>
-                <h4>RGB</h4>
-                <div layout="row">
-                  <div layout="row">
-                    <div class="color green"></div>
-                    <div class="color yellow"></div>
-                  </div>
-                  <span class="separator"></span>
-                  <md-input-container md-no-float>
-                    <input type="number" placeholder="% threshold" ng-model="rgb.homework.green">
-                  </md-input-container>
-                </div>
-                <div layout="row">
-                  <div layout="row">
-                    <div class="color yellow"></div>
-                    <div class="color red"></div>
-                  </div>
-                  <span class="separator"></span>
-                  <md-input-container md-no-float>
-                    <input type="number" placeholder="% threshold" ng-model="rgb.homework.yellow">
-                  </md-input-container>
-                </div>
-                <h4>Time Period</h4>
-                <md-input-container style="margin-right: 10px; max-width:100px">
-                  <label>Period</label>
-                  <md-select ng-model="rgb.homework.period">
-                    <md-option value="day">day</md-option>
-                    <md-option value="week">week</md-option>
-                    <md-option value="month">month</md-option>
-                    <md-option value="term">term</md-option>
-                    <md-option value="year">year</md-option>
-                  </md-select>
-                </md-input-container>
-              </md-card-content>
-            </md-card>
+            <settings-card name="Homework" threshold-char="%" is-temporal="true" green="rgb.homework.green"  yellow="rgb.homework.green" period="rgb.homework.period"></settings-card>
 
-            <md-card class="settings-card">
-              <md-card-content style="position:relative;">
-                <h3>Attendance</h3>
-                <h4>RGB</h4>
-                <div layout="row">
-                  <div layout="row">
-                    <div class="color green"></div>
-                    <div class="color yellow"></div>
-                  </div>
-                  <span class="separator"></span>
-                  <md-input-container md-no-float>
-                    <input type="number" placeholder="# threshold" ng-model="rgb.attedance.green">
-                  </md-input-container>
-                </div>
-                <div layout="row">
-                  <div layout="row">
-                    <div class="color yellow"></div>
-                    <div class="color red"></div>
-                  </div>
-                  <span class="separator"></span>
-                  <md-input-container md-no-float>
-                    <input type="number" placeholder="# threshold" ng-model="rgb.attendance.yellow">
-                  </md-input-container>
-                </div>
-                <h4>Time Period</h4>
-                <md-input-container style="margin-right: 10px; max-width:100px">
-                  <label>Period</label>
-                  <md-select ng-model="rgb.attendance.period">
-                    <md-option value="day">day</md-option>
-                    <md-option value="week">week</md-option>
-                    <md-option value="month">month</md-option>
-                    <md-option value="term">term</md-option>
-                    <md-option value="year">year</md-option>
-                  </md-select>
-                </md-input-container>
-            </md-card>
+            <settings-card name="Attendance" threshold-char="#" is-temporal="true" green="rgb.attendance.green" yellow="rgb.attendance.green" period="rgb.attendance.period"></settings-card>
 
-            <md-card class="settings-card">
-              <md-card-content>
-                <h3>GPA</h3>
-                <h4>RGB</h4>
-                <div layout="row">
-                  <div layout="row">
-                    <div class="color green"></div>
-                    <div class="color yellow"></div>
-                  </div>
-                  <span class="separator"></span>
-                  <md-input-container md-no-float>
-                    <input type="number" placeholder="1-4 threshold" ng-model="rgb.gpa.green">
-                  </md-input-container>
-                </div>
-                <div layout="row">
-                  <div layout="row">
-                    <div class="color yellow"></div>
-                    <div class="color red"></div>
-                  </div>
-                  <span class="separator"></span>
-                  <md-input-container md-no-float>
-                    <input type="number" placeholder="0-4 threshold" ng-model="rgb.gpa.yellow">
-                  </md-input-container>
-                </div>
-              </md-card-content>
-            </md-card>
-          </md-content>
-        </div>
+            <settings-card name="GPA" threshold-char="#" is-temporal="false" green="rgb.gpa.green" yellow="rgb.gpa.green"></settings-card>
+          </div>
+        </md-content>
       </md-tab>
       <md-tab label="Defaults">
         <md-content class="md-padding">

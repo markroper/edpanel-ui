@@ -31,9 +31,9 @@ angular.module('teacherdashboard')
             percent = d3.format('.1%'),
             format = d3.time.format('%Y-%m-%d');
 
-        var color = d3.scale.quantize()
-            .domain([-0.05, 0.05])
-            .range(d3.range(11).map(function(d) { return 'q' + d + '-11'; }));
+        // var color = d3.scale.quantize()
+        //     .domain([-0.05, 0.05])
+        //     .range(d3.range(11).map(function(d) { return 'q' + d + '-11'; }));
 
         var svg = d3.select(elem.find('.choropleth-container')[0]).selectAll('svg')
             .data(d3.range(2015, 2016))
@@ -114,7 +114,7 @@ angular.module('teacherdashboard')
             return 'day q' + colorVal + '-11';
           })
           .select('title')
-            .text(function(d) { return d + ': ' + percent(data[d]); });
+            .text(function(d) { return d + ': ' + percent(resolvedData[d]); });
         });
       }
     };

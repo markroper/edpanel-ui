@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard').
-controller('StudentSectDrillCtrl', ['$scope','statebag', 'api', '$q', 'statebagApiManager', '$state',
-  function ($scope, statebag, api, $q, statebagApiManager, $state) {
+controller('StudentSectDrillCtrl', ['$scope','statebag', 'api', '$q', 'statebagApiManager', '$state', '$mdToast',
+  function ($scope, statebag, api, $q, statebagApiManager, $state, $mdToast) {
   	$scope.assignments = [];
   	var deferred = $q.defer();
   	$scope.chartDataPromise = deferred.promise;
@@ -39,14 +39,19 @@ controller('StudentSectDrillCtrl', ['$scope','statebag', 'api', '$q', 'statebagA
 	                sectionId: statebag.currentSection.id 
 	            }, 
 	            //success callback
-	            function(payload){
+	            function(){
 	            	$scope.assignments = statebag.currentStudentSectionAssignments;
 	                transformAndDisplayAssignments();
 	            });
           	});
         },
-        function(error) {
-          alert('failed to resolve! ' + JSON.stringify(error));
+        function() {
+          $mdToast.show(
+            $mdToast.simple()
+              .content('Failed to load data')
+              .action('OK')
+              .hideDelay(2000)
+          );
         });
     } else {
     	$scope.assignments = statebag.currentStudentSectionAssignments;
@@ -89,9 +94,6 @@ controller('StudentSectDrillCtrl', ['$scope','statebag', 'api', '$q', 'statebagA
 	  				}
 	  			});
 	  			deferred.resolve(processedAssignments);
-	  		}, 
-	  		function(error){
-
 	  		});
   	}
   }]);

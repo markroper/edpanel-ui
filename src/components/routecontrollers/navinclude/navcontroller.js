@@ -1,6 +1,6 @@
 'use strict';
-angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'consts',
-function($scope, $state, $mdSidenav, api, statebag, consts) {
+angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag',
+function($scope, $state, $mdSidenav, api, statebag) {
     $scope.userRole = statebag.userRole;
     $scope.theme = statebag.theme;
     //This base state should always redirect home...
@@ -39,7 +39,7 @@ function($scope, $state, $mdSidenav, api, statebag, consts) {
     $scope.logout = function() {
         api.logout.save(
           {}, 
-          function(data){
+          function(){
             $state.go('login');
           });
     };

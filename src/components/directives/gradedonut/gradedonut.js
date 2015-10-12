@@ -34,7 +34,7 @@ angular.module('teacherdashboard')
               data: {
                 columns: scope.gradeWeights,
                 type : 'donut',
-                onclick: function(d, element) {
+                onclick: function() {
                   var studentAssignmentsPromise = api.studentSectionAssignments.get({ 
                     studentId: statebag.currentStudent.id,
                     schoolId: statebag.school.id, 
@@ -69,7 +69,7 @@ angular.module('teacherdashboard')
               },
               legend: {
                 item: {
-                  onclick: function(id) {
+                  onclick: function() {
                     //no op
                   }
                 }

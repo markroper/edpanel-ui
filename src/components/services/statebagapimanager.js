@@ -264,7 +264,7 @@ angular.module('teacherdashboard')
             }
           }
         }
-      }
+      };
     return query;
   }
   /*

@@ -23,7 +23,7 @@ angular.module('teacherdashboard')
         var categories = {};
         var sects = [];
 
-        var parseDate = d3.time.format('%x').parse;
+        // var parseDate = d3.time.format('%x').parse;
 
         var xAxis = d3.svg.axis()
             .scale(x)
