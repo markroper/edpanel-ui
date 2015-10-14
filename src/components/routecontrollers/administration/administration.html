@@ -3,7 +3,7 @@
     <md-tabs md-dynamic-height md-border-bottom>
       <md-tab label="Users">
         <md-content class="md-padding">
-          <h1 class="md-display-2">Unverified Users</h1>
+          <h2>Unverified Users</h2>
           <p>We do not have email addresses for the users below, which means we don't have a way to share an EdPanel user verification link with them. As an administrator using this page, you can choose to add en email address for the users below and we'll automatically email an invite link to those users or for users without email accounts, you can manually share the username and one time use passwords listed below.</p>
           <p>After a user logs in for the first time, they will be asked to change their password and when they've done so, the user will no longer appear on this list of unverified users.</p>
           <br/>
@@ -53,7 +53,7 @@
       <md-tab label="Settings">
         <md-content class="md-padding settings">  
           <h2>Colors & Date Ranges</h2>
-          <p>On dashboards values for attendance, homework completion, behavior and GPA values are expressed as the colors green, yellow, and red where colors indicate level of conern. Green means the score on the metric is positive, yellow is cautionary, and red warning. In the case of behavior, homework completion and attendance, these metrics can have customizable time-bounds. You may configure these default values below.</p>
+          <p>On dashboards, values for attendance, homework completion, behavior and GPA are expressed as the colors green, yellow, and red. The colors indicate level of conern. Green means the value on the metric is positive, yellow is cautionary, and red warning. In the case of behavior, homework completion and attendance, these metrics also have customizable time period. You may configure these default values below.</p>
           <div class="save-settings">
             <md-button ng-click="saveSettingsChanges()" class="md-raised md-primary">
               save changes
@@ -72,8 +72,8 @@
       </md-tab>
       <md-tab label="Defaults">
         <md-content class="md-padding">
-          <h1 class="md-display-2">Default Goals</h1>
-          <p>In EdPanel, students and teachers can define custom goals for every student.  However, you may want to start students off with a set of default goals. You can define default goals here and if a student has no goals defined, the defaults below will be defined for them.</p>
+          <h2>Default Goals</h2>
+          <p>In EdPanel, students and teachers can create custom goals.  However, you may want to start students off with some default goals. You can create default goals here!</p>
           <br/>
           <md-button aria-label="menu" class="md-fab md-warn">
             <md-icon>add</md-icon>
