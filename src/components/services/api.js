@@ -62,6 +62,12 @@ angular.module('teacherdashboard')
         base + '/students/:studentId/goals',
         {},
         { 'get': { isArray: true }}),
+      //UI Attributes
+      uiAttributes: $resource(base + '/schools/:schoolId/uiattributes', {},
+        {
+          'put': { method:'PUT', headers: {'Content-Type': 'application/json'} },
+          'post': { method:'POST', headers: {'Content-Type': 'application/json'} }
+        }),
       basePrefix: '/ui'
     };
 });

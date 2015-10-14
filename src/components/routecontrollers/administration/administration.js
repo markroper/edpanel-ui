@@ -9,7 +9,8 @@ angular.module('teacherdashboard')
       function(data) {
         $scope.firstTimeUsers = data;
       });
-    $scope.rgb = {
+
+    var defaultRgb = {
       'attendance': {
         'name':'Attendance',
         'isTemporal': true,
@@ -32,14 +33,72 @@ angular.module('teacherdashboard')
       }
     };
 
+    //Cache the defaults to the original state
+    $scope.originalRgb = {};
+    $scope.serverUiAttributes;
+    angular.copy(defaultRgb, $scope.originalRgb);
+
+    api.uiAttributes.get(
+      { schoolId: statebag.school.id }, 
+      function(data) {
+        if(data && data.attributes && data.attributes.jsonNode) {
+          $scope.rgb = data.attributes.jsonNode;
+          $scope.attributesId = data.id;
+          angular.copy(data.attributes.jsonNode, $scope.originalRgb);
+        } else {
+          //use defaults
+          $scope.rgb = defaultRgb;
+        }
+      },
+      function(error) {
+        console.log('No UI settings found: ' + error);
+        $scope.rgb = defaultRgb;
+      });
+
     $scope.saveSettingsChanges = function() {
-      //TODO: AJAX call to save the settings for color thresholds and time periods
-      console.log('TODO, implement save settings API call');
+      var updatedAttributes = {
+        'school': {
+          'id': statebag.school.id,
+          'name': statebag.school.name
+        },
+        'attributes': {
+          'jsonNode': $scope.rgb
+        }
+      }
+      if($scope.attributesId) {
+        updatedAttributes.id = $scope.attributesId;
+        //Use PUT
+        api.uiAttributes.put(
+          { schoolId: statebag.school.id }, 
+          updatedAttributes, 
+          function() {
+            showSimpleToast('UI attributes updated');
+            //repoint the originalRgb to the newly saved value
+            angular.copy($scope.rgb, $scope.originalRgb);
+          },
+          function(error) {
+            showSimpleToast('Failed to update UI attributes');
+          });
+
+      } else {
+        //USE POST
+        api.uiAttributes.post(
+          { schoolId: statebag.school.id }, 
+          updatedAttributes, 
+          function() {
+            showSimpleToast('UI attributes saved');
+            //repoint the originalRgb to the newly saved value
+            angular.copy($scope.rgb, $scope.originalRgb);
+          },
+          function(error) {
+            showSimpleToast('Failed to save UI attributes');
+          });
+      }
     };
 
     $scope.revertSettingsChanges = function() {
-      //TODO: AJAX call to save the settings for color thresholds and time periods
-      console.log('TODO, implement revert settings changes');
+      angular.copy($scope.originalRgb, $scope.rgb);
+      showSimpleToast('Local changes reverted');
     };
 
     //Saves a single user's email address & emals them an invitation
