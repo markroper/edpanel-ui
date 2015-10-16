@@ -35,13 +35,14 @@ angular.module('teacherdashboard')
 
     //Cache the defaults to the original state
     $scope.originalRgb = {};
-    $scope.serverUiAttributes;
+    $scope.serverUiAttributes = null;
     angular.copy(defaultRgb, $scope.originalRgb);
 
     api.uiAttributes.get(
       { schoolId: statebag.school.id }, 
       function(data) {
         if(data && data.attributes && data.attributes.jsonNode) {
+          statebag.uiAttributes = data;
           $scope.rgb = data.attributes.jsonNode;
           $scope.attributesId = data.id;
           angular.copy(data.attributes.jsonNode, $scope.originalRgb);
@@ -64,7 +65,7 @@ angular.module('teacherdashboard')
         'attributes': {
           'jsonNode': $scope.rgb
         }
-      }
+      };
       if($scope.attributesId) {
         updatedAttributes.id = $scope.attributesId;
         //Use PUT
@@ -75,6 +76,7 @@ angular.module('teacherdashboard')
             showSimpleToast('UI attributes updated');
             //repoint the originalRgb to the newly saved value
             angular.copy($scope.rgb, $scope.originalRgb);
+            statebag.uiAttribuets = updatedAttributes;
           },
           function(error) {
             showSimpleToast('Failed to update UI attributes');
@@ -89,6 +91,7 @@ angular.module('teacherdashboard')
             showSimpleToast('UI attributes saved');
             //repoint the originalRgb to the newly saved value
             angular.copy($scope.rgb, $scope.originalRgb);
+            statebag.uiAttributes = updatedAttributes;
           },
           function(error) {
             showSimpleToast('Failed to save UI attributes');

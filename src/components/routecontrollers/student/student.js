@@ -90,8 +90,8 @@ angular.module('teacherdashboard')
           case 'ASSIGNMENT':
             goal.maxDisplay = goal.desiredValue + '%';
             goal.progressText = 'Your score: ' + goal.calculatedValue + '%';
-            if (goal.calculatedValue == -1) {
-              goal.progressText = 'Your score: Not Graded'
+            if (goal.calculatedValue === -1) {
+              goal.progressText = 'Your score: Not Graded';
             }
             goal.aveValue = '75%';
 
@@ -127,7 +127,7 @@ angular.module('teacherdashboard')
         if (width > 100) {
           return 100;
         } else {
-          if (width == 0) {
+          if (width === 0) {
             return 2;
           }
           return width;
@@ -143,7 +143,7 @@ angular.module('teacherdashboard')
       var performanceClasses = [danger, warning, success];
 
       //Extend this to work for all negative goal types
-      if (goal.behaviorCategory == 'DEMERIT' || goal.goalType == 'ATTENDANCE') {
+      if (goal.behaviorCategory === 'DEMERIT' || goal.goalType === 'ATTENDANCE') {
         performanceClasses.reverse();
       }
 

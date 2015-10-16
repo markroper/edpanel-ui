@@ -32,10 +32,14 @@ angular.module('teacherdashboard')
       studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise);
       studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceQuery).$promise);
       studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
+      studentDataPromises.push(api.uiAttributes.get({ schoolId: statebag.school.id }).$promise);
       //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
       $q.all(studentDataPromises).then(function(responses) {
         var resolvedStudents = [];
         var studentMap = {};
+        //handle the UI settings
+        statebag.uiAttributes = responses[4];
+
         //Handle the HW completion & attendance values
         responses[0].records.forEach(function(student){
           studentMap[student.values[0]] = resolveStudentScopeObject(student.values);
@@ -283,60 +287,62 @@ angular.module('teacherdashboard')
     return student;
   }
   function resolveBehaviorClass(behaviorScore) {
-    if(behaviorScore < 35) {
+    var greenThreshold = 35;
+    var yellowThreshold = 55;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.green;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.yellow;
+    }
+    if(behaviorScore <= greenThreshold) {
       return '90-100';
-    } else if(behaviorScore < 45) {
-      return '80-90';
-    } else if(behaviorScore < 55) {
+    } else if(behaviorScore <= yellowThreshold) {
       return '70-80';
-    } else if(behaviorScore < 65) {
-      return '60-70';
-    } else if(behaviorScore < 75) {
-      return '50-60';
     } else {
       return '40-50';
     }
   }
   function resolveHomeworkClass(homeworkScore) {
-    if(homeworkScore < 0.88) {
+    var greenThreshold = 0.92;
+    var yellowThreshold = 0.89;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.homework.green/100;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.homework.yellow/100;
+    }
+    if(homeworkScore < yellowThreshold) {
       return '40-50';
-    } else if(homeworkScore < 0.89) {
-      return '50-60';
-    } else if(homeworkScore < 0.90) {
-      return '60-70';
-    } else if(homeworkScore < 0.91) {
+    } else if(homeworkScore < greenThreshold) {
       return '70-80';
-    } else if(homeworkScore < 0.92) {
-      return '80-90';
     } else {
       return '90-100';
     }
   }
   function resolveAttendanceClass(attendanceScore) {
-    if(attendanceScore < 2) {
+    var greenThreshold = 3;
+    var yellowThreshold = 6;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.attendance.green;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.attendance.yellow;
+    }
+    if(attendanceScore <= greenThreshold) {
       return '90-100';
-    } else if(attendanceScore < 3) {
-      return '80-90';
-    } else if(attendanceScore < 4) {
+    } else if(attendanceScore < yellowThreshold) {
       return '70-80';
-    } else if(attendanceScore < 5) {
-      return '60-70';
-    } else if(attendanceScore < 7) {
-      return '50-60';
     } else {
       return '40-50';
     }
   }
   function resolveGpaClass(gpa) {
-    if(gpa > 3.5) {
+    var greenThreshold = 3.3;
+    var yellowThreshold = 2.8;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.gpa.green;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.gpa.yellow;
+    }
+    if(gpa >= greenThreshold) {
       return '90-100';
-    } else if(gpa > 3.2) {
-      return '80-90';
-    } else if(gpa > 3.0) {
+    } else if(gpa > yellowThreshold) {
       return '70-80';
-    } else if(gpa > 2.8) {
-      return '60-70';
-    } else if (gpa > 0){
+    } else if(gpa) {
       return '50-60';
     } else {
       return '0';
