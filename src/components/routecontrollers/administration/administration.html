@@ -3,20 +3,81 @@
     <md-tabs md-dynamic-height md-border-bottom>
       <md-tab label="Users">
         <md-content class="md-padding">
-          <h1 class="md-display-2">Users</h1>
-          <p>TODO: IMPL THIS: The users below do not have email accounts to which we can email default passwords. You can add email addresses for students here and we'll email an account verification to the user. You can also manually share the one time use passwords with the following users and ask them to login using the password. New users will be promted to change their password the first time they login and when they do so, they will no longer appear on this list.</p>
+          <h2>Unverified Users</h2>
+          <p>We do not have email addresses for the users below, which means we don't have a way to share an EdPanel user verification link with them. As an administrator using this page, you can choose to add en email address for the users below and we'll automatically email an invite link to those users or for users without email accounts, you can manually share the username and one time use passwords listed below.</p>
+          <p>After a user logs in for the first time, they will be asked to change their password and when they've done so, the user will no longer appear on this list of unverified users.</p>
+          <br/>
+          <div class="save-settings">
+            <md-button ng-click="resendEmailInviteToAllUsersWithEmail()" class="md-raised md-primary">
+              email all
+              <md-tooltip>send invitation email to everyone with an email address</md-tooltip>
+            </md-button>
+            <md-button ng-click="printCredentials('user-list')" class="md-raised md-primary">
+              print all
+              <md-tooltip>print credentials, one user per page</md-tooltip>
+            </md-button>
+          </div>
+          <md-card class="user-list" id="user-list">
+            <md-card-content>
+              <div class="user-list-header user-row" layout="row">
+                <div flex="25">name</div>
+                <div flex="20">email</div>
+                <div flex="15">type</div>
+                <div flex="20">username</div>
+                <div flex="20">temp password</div>
+              </div>
+              <div class="user-row" layout="row" ng-repeat="user in firstTimeUsers">
+                <!-- The div below just makes the user list print one-per-page ;) -->
+                <div class="page-break" style="page-break-before: always;"></div>
+                <div flex="25" layout="row" layout-align="center center">
+                  <span>{{user.name}}</span>
+                </div>
+                <div flex="20" layout="row" layout-align="center center">
+                  <md-button ng-click="saveUserEmailAndSendInvite(user)" aria-label="email" class="email-button md-fab md-mini md-primary">
+                    <md-icon md-font-set="material-icons">save</md-icon>
+                    <md-tooltip>save & email invite</md-tooltip>
+                  </md-button>
+                  <md-input-container md-no-float>
+                    <input type="email" placeholder="email" ng-model="user.email">
+                  </md-input-container>
+                </div>
+                <div flex="15" layout="row" layout-align="center center"><span>{{user.type}}</span></div>
+                <div flex="20" layout="row" layout-align="center center"><span>{{user.username}}</span></div>
+                <div flex="20" layout="row" layout-align="center center"><span>{{user.oneTimePass}}</span></div>
+              </div>
+            </md-card-content>
+          </md-card>
+
         </md-content>
       </md-tab>
       <md-tab label="Settings">
-        <md-content class="md-padding">
-          <h1 class="md-display-2">Settings</h1>
-          <p>TODO: IMPL THIS: The color thresholds (green, yellow, red) and time bounds (week, term, year, all time) for behavior, attendance, homework completion  and GPA are configurable here. We've tried to start you off with sensible defaults, but you can change them to meet your needs. You can also configure your behavior formula here.</p>
+        <md-content class="md-padding settings">  
+          <h2>Colors & Date Ranges</h2>
+          <p>On dashboards, values for attendance, homework completion, behavior and GPA are expressed as the colors green, yellow, and red. The colors indicate level of conern. Green means the value on the metric is positive, yellow is cautionary, and red warning. In the case of behavior, homework completion and attendance, these metrics also have customizable time period. You may configure these default values below.</p>
+          <div class="save-settings">
+            <md-button ng-click="saveSettingsChanges()" class="md-raised md-primary">
+              save changes
+            </md-button>
+            <md-button ng-click="revertSettingsChanges()" class="md-raised md-warn">
+              undo changes
+            </md-button>
+          </div>
+          <div layout="row" layout-wrap layout-align="center start">
+            <settings-card name="Behavior" threshold-char="#" is-temporal="true" green="rgb.behavior.green"  yellow="rgb.behavior.yellow" period="rgb.behavior.period"></settings-card>
+            <settings-card name="Homework" threshold-char="%" is-temporal="true" green="rgb.homework.green"  yellow="rgb.homework.yellow" period="rgb.homework.period"></settings-card>
+            <settings-card name="Attendance" threshold-char="#" is-temporal="true" green="rgb.attendance.green" yellow="rgb.attendance.yellow" period="rgb.attendance.period"></settings-card>
+            <settings-card name="GPA" threshold-char="#" is-temporal="false" green="rgb.gpa.green" yellow="rgb.gpa.yellow"></settings-card>
+          </div>
         </md-content>
       </md-tab>
       <md-tab label="Defaults">
         <md-content class="md-padding">
-          <h1 class="md-display-2">Default Goals</h1>
-          <p>TODO: IMPL THIS: Students and teachers can set individual goals.  However, you may want to start with a set of default goals, which you can define here!</p>
+          <h2>Default Goals</h2>
+          <p>In EdPanel, students and teachers can create custom goals.  However, you may want to start students off with some default goals. You can create default goals here!</p>
+          <br/>
+          <md-button aria-label="menu" class="md-fab md-warn">
+            <md-icon>add</md-icon>
+          </md-button>
         </md-content>
       </md-tab>
     </md-tabs>

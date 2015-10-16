@@ -19,6 +19,16 @@ angular.module('teacherdashboard')
       //students enpoints
       student: $resource(base + '/students/:studentId'),
       allStudents: $resource(base + '/students', {}, { 'get': { isArray: true }}),
+      users: $resource(base + '/users', {}, {'get': { isArray: true }}),
+      user: $resource(base + '/users/:userId', {}, 
+        { 
+          'patch': { method:'PATCH', headers: {'Content-Type': 'application/json'} },
+          'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }
+        }),
+      passwordReset: $resource(base + '/users/requestPasswordReset/:username', {},
+        {
+          'initiate': { method: 'POST', headers: {'Content-Type': 'application/json'}}
+        }),
       termTeacherStudents: $resource(
         base + '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/students',
         {},
@@ -52,6 +62,12 @@ angular.module('teacherdashboard')
         base + '/students/:studentId/goals',
         {},
         { 'get': { isArray: true }}),
+      //UI Attributes
+      uiAttributes: $resource(base + '/schools/:schoolId/uiattributes', {},
+        {
+          'put': { method:'PUT', headers: {'Content-Type': 'application/json'} },
+          'post': { method:'POST', headers: {'Content-Type': 'application/json'} }
+        }),
       basePrefix: '/ui'
     };
 });

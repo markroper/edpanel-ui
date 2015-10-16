@@ -29,9 +29,6 @@ angular.module('teacherdashboard')
                   resolveGoalDataAndDisplay();
                 });
             });
-        },
-        function(error) {
-          alert('failed to resolve! ' + JSON.stringify(error));
         });
     } else {
       resolveStudentSectionData();
@@ -90,29 +87,29 @@ angular.module('teacherdashboard')
         goal.colorClass = evaluateColorClass(goal);
 
         switch(goal.goalType) {
-          case "ASSIGNMENT":
-            goal.maxDisplay = goal.desiredValue + "%";
-            goal.progressText = "Your score: " + goal.calculatedValue + "%";
+          case 'ASSIGNMENT':
+            goal.maxDisplay = goal.desiredValue + '%';
+            goal.progressText = 'Your score: ' + goal.calculatedValue + '%';
             if (goal.calculatedValue == -1) {
-              goal.progressText = "Your score: Not Graded"
+              goal.progressText = 'Your score: Not Graded'
             }
-            goal.aveValue = "75%";
+            goal.aveValue = '75%';
 
             break;
-          case "BEHAVIOR":
+          case 'BEHAVIOR':
             goal.maxDisplay = goal.desiredValue;
-            goal.progressText = "Incidents: " + goal.calculatedValue;
-            goal.aveValue = "3";
+            goal.progressText = 'Incidents: ' + goal.calculatedValue;
+            goal.aveValue = '3';
             break;
-          case "CUMULATIVE_GRADE":
-            goal.maxDisplay = goal.desiredValue + "%";
-            goal.progressText = "Your grade: " + goal.calculatedValue + "%";
-            goal.aveValue = "83%";
+          case 'CUMULATIVE_GRADE':
+            goal.maxDisplay = goal.desiredValue + '%';
+            goal.progressText = 'Your grade: ' + goal.calculatedValue + '%';
+            goal.aveValue = '83%';
                 break;
-          case "ATTENDANCE":
+          case 'ATTENDANCE':
                 goal.maxDisplay = goal.desiredValue;
-                goal.progressText = "Your absences: " + goal.calculatedValue;
-                goal.aveValue = "3";
+                goal.progressText = 'Your absences: ' + goal.calculatedValue;
+                goal.aveValue = '3';
                 break;
         }
 
@@ -123,8 +120,8 @@ angular.module('teacherdashboard')
     }
 
     function evaluateWidth(goal) {
-      if (goal.calculatedValue == -1) {
-        return "100";
+      if (goal.calculatedValue === -1) {
+        return '100';
       } else {
           var width = goal.calculatedValue / goal.max * 100;
         if (width > 100) {
@@ -139,18 +136,18 @@ angular.module('teacherdashboard')
     }
 
     function evaluateColorClass(goal) {
-      var danger = "goal-danger";
-      var warning = "goal-warning";
-      var success = "goal-success";
-      var unknown = "goal-unknown";
+      var danger = 'goal-danger';
+      var warning = 'goal-warning';
+      var success = 'goal-success';
+      var unknown = 'goal-unknown';
       var performanceClasses = [danger, warning, success];
 
       //Extend this to work for all negative goal types
-      if (goal.behaviorCategory == "DEMERIT" || goal.goalType == "ATTENDANCE") {
+      if (goal.behaviorCategory == 'DEMERIT' || goal.goalType == 'ATTENDANCE') {
         performanceClasses.reverse();
       }
 
-      if (goal.calculatedValue == -1) {
+      if (goal.calculatedValue === -1) {
         return unknown;
       }
 
@@ -213,9 +210,9 @@ angular.module('teacherdashboard')
           });
         },
         function(error){
-          alert('failed to load the student sections and student grades');
+          console.log('failed to load the student sections and student grades ' + error);
         });
-    };
+    }
     /*
      * Maps a numeric grade to a letter grade for display
     */

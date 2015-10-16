@@ -14,17 +14,17 @@ angular.module('teacherdashboard')
           if(!isAuthenticated) {
             this.serverCookieAuthUpdate().then(
               function(){
-                context.passthroughOrRedirect(true);
+                context.passthroughOrRedirect(event, true);
               }, 
               function(){
-                context.passthroughOrRedirect();
+                context.passthroughOrRedirect(event);
               });
           } else {
-            context.passthroughOrRedirect();
+            context.passthroughOrRedirect(event);
           }
         }
       },
-      passthroughOrRedirect: function(fullRefresh) {
+      passthroughOrRedirect: function(event, fullRefresh) {
         var isAuthenticated = authentication.isAuthenticated();
         //Having checked with the server, do a role check.  if the user can't
           //access the page show an access denied if they're logged in, and redirect

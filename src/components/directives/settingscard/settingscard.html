@@ -1,0 +1,39 @@
+<md-card class="settings-card">
+  <md-card-content>
+    <h3>{{name}}</h3>
+    <h4>RGB</h4>
+    <div layout="row">
+      <div layout="row">
+        <div class="color green"></div>
+        <div class="color yellow"></div>
+      </div>
+      <span class="separator"></span>
+      <md-input-container md-no-float>
+        <input type="number" placeholder="{{thresholdChar}} threshold" ng-model="green">
+      </md-input-container>
+    </div>
+    <div layout="row">
+      <div layout="row">
+        <div class="color yellow"></div>
+        <div class="color red"></div>
+      </div>
+      <span class="separator"></span>
+      <md-input-container md-no-float>
+        <input type="number" placeholder="{{thresholdChar}} threshold" ng-model="yellow">
+      </md-input-container>
+    </div>
+    <div ng-show="{{isTemporal}}">
+      <h4>Time Period</h4>
+      <md-input-container style="margin-right: 10px; max-width:100px">
+        <label>Period</label>
+        <md-select ng-model="period">
+          <md-option value="day">day</md-option>
+          <md-option value="week">week</md-option>
+          <md-option value="month">month</md-option>
+          <md-option value="term">term</md-option>
+          <md-option value="year">year</md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+  </md-card-content>
+</md-card>

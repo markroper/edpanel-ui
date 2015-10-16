@@ -9,10 +9,10 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/goal/goals.html',
       replace: true,
       controller: function($scope) {
-        $scope.deleteGoal = function(goal) {
+        $scope.deleteGoal = function() {
           //Call api to delete the goal
         };
-        $scope.editGoal = function(goal) {
+        $scope.editGoal = function() {
           //Call api to delete the goal
         };
       }

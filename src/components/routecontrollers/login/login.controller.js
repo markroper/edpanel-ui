@@ -4,7 +4,7 @@ angular.module('teacherdashboard')
   .directive('edpanelEnterKeypress', function() {
     return function(scope, element, attrs) {
 
-        element.bind("keydown keypress", function(event) {
+        element.bind('keydown keypress', function(event) {
             var keyCode = event.which || event.keyCode;
 
             // If enter key is pressed
@@ -48,7 +48,7 @@ angular.module('teacherdashboard')
               {},
               //Success callback
               function(data){
-                  statebag.school = data[0];
+                  statebag.school = data[1];
                   statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
                   statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
                   $state.go('app.home', { schoolId: statebag.school.id });

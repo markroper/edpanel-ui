@@ -22,16 +22,16 @@ angular.module('teacherdashboard')
     userRole : '',
     theme : 'indigo',
     resolveTheme: function(inputString) {
-      if(inputString == consts.roles.ADMIN) {
+      if(inputString === consts.roles.ADMIN) {
         return 'blue-grey';
       }
-      if(inputString == consts.roles.TEACHER) {
+      if(inputString === consts.roles.TEACHER) {
         return 'deep-purple';
       }
-      if(inputString == consts.roles.SUPER_ADMIN) {
+      if(inputString === consts.roles.SUPER_ADMIN) {
         return 'red';
       }
       return 'indigo';
     }
-  }
+  };
 }]);
