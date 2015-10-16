@@ -23,7 +23,6 @@ angular.module('teacherdashboard')
       },
       'homework': {
         'name':'Attendance',
-        'isTemporal': true,
         'thresholdChar': '%'
       },
       'gpa':{

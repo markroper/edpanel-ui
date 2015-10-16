@@ -1,5 +1,5 @@
 <div class="students-grid">
-	<div class="row" ng-show="showFilter">
+	<div ng-show="showFilter">
 		<div layout="row" layout-align="center center">
 			<md-card>
 	        	<md-input-container md-no-float>
@@ -10,6 +10,7 @@
 	</div>
 	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!studentsData">
 		<h3 flex="50">Loading...</h3>
+		<br/>
 		<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
 	</div>
 	<section layout="row" layout-align="center center">
@@ -34,25 +35,25 @@
 				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-click="showBehaviorDialog($event, student)">
 					<div class="choropleth band-{{student.behaviorClass}}">
 						<span class="mobile-label" hide-gt-sm>Behavior</span>
-						<md-tooltip>{{student.behavior}} demerits this year</md-tooltip>
+						<md-tooltip>{{student.behavior || 0}} demerits this {{student.behaviorPeriod || 'period'}}</md-tooltip>
 					</div>
 				</div>
 				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100">
 					<div class="choropleth band-{{student.homeworkClass}}">
 						<span class="mobile-label" hide-gt-sm>Homework Completion</span>
-						<md-tooltip>{{student.homework}}% this week</md-tooltip>
+						<md-tooltip>{{student.homework || 0}}% this term</md-tooltip>
 					</div>
 				</div>
 				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100">
 					<div class="choropleth band-{{student.attendanceClass}}">
 						<span class="mobile-label" hide-gt-sm>Attendance</span>
-						<md-tooltip>{{student.attendance}} absenses this year</md-tooltip>
+						<md-tooltip>{{student.attendance || 0}} absenses this {{student.attendancePeriod || 'period'}}</md-tooltip>
 					</div>
 				</div>
 				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100">
 					<div class="choropleth band-{{student.gpaClass}}">
 						<span class="mobile-label" hide-gt-sm>GPA</span>
-						<md-tooltip>Current GPA - {{student.gpa}}</md-tooltip>
+						<md-tooltip>Current GPA: {{student.gpa || '-'}}</md-tooltip>
 					</div>
 				</div>
 			</div>
