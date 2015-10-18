@@ -1,4 +1,23 @@
+@keyframes slideOpenVertical {
+	0% { height: 0px; }
+	100% { height: 310px; }
+}
+@keyframes slideClosedVertical {
+	0% { height:310px; }
+	100% { height: 0px; }
+}
+
 .students-grid {
+	.chorocontainer {
+    overflow: hidden;
+    animation: slideOpenVertical 200ms linear;
+	}
+	.oldchorocontainer {
+		overflow:hidden;
+		height:0;
+		animation: slideClosedVertical 200ms linear;
+	}
+
 	div {
 		outline:none;
 	}

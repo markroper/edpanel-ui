@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog', function($state, statebag, api, $mdDialog) {
+  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', function($state, statebag, api, $mdDialog, $compile, $timeout) {
     return {
       scope: {
         studentsData: '=',
@@ -10,7 +10,7 @@ angular.module('teacherdashboard')
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
       replace: true,
-      controller: function($scope) {
+      controller: function($scope, $element) {
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
@@ -18,19 +18,25 @@ angular.module('teacherdashboard')
         $scope.showBehaviorDialog = function(ev, student) {
           $scope.student = student;
           $scope.api = api;
-          $mdDialog.show({
-            controller: DialogController,
-            templateUrl: api.basePrefix + '/components/directives/studentsoverview/behavior-dialog.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            scope: $scope.$new(),
-            clickOutsideToClose:true
-          })
-          .then(function(answer) {
-            $scope.status = 'You said the information was "' + answer + '".';
-          }, function() {
-            $scope.status = 'You cancelled the dialog.';
-          });
+          if($scope.choroScope) {
+            $scope.choroScope.$destroy();
+            $scope.choroScope = null;
+            if($scope.choroCal) {
+              $scope.choroCal.removeClass('chorocontainer');
+              $scope.choroCal.addClass('oldchorocontainer');
+              var oldElem = $scope.choroCal;
+              $scope.choroCal = null;
+              //After we've animated the previous chorocal away, actually remove it
+              $timeout(function(){
+                oldElem.remove();
+              }, 250);
+            }
+          }
+          $scope.choroScope = $scope.$new(true);
+          $scope.choroScope.behaviorDataPromise = 
+            api.studentBehaviors.get({ studentId: student.id }).$promise;
+          $scope.choroCal = $compile('<div flex="100" class="chorocontainer"><chorocalendar calendar-data-promise="behaviorDataPromise"></chorocalendar></div>')($scope.choroScope);
+          $scope.choroCal.insertAfter(angular.element(ev.target).parent().parent());
         };
       }
     };
