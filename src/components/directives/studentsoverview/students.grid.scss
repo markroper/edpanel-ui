@@ -10,12 +10,12 @@
 .students-grid {
 	.chorocontainer {
     overflow: hidden;
-    animation: slideOpenVertical 200ms linear;
+    animation: slideOpenVertical 250ms linear;
 	}
 	.oldchorocontainer {
 		overflow:hidden;
 		height:0;
-		animation: slideClosedVertical 200ms linear;
+		animation: slideClosedVertical 250ms linear;
 	}
 
 	div {

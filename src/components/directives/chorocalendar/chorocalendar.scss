@@ -1,6 +1,13 @@
 .choropleth {
   font: 1.1em;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position:relative;
+  
+  .close-cal {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;*/
   .choropleth-container {
     overflow:auto;
   }
@@ -10,9 +17,9 @@
     background-position-y: 35%;
   }
   .choropleth-container {
-    background:white;
-    border-radius:5px;
-    padding-top:1em;
+    background: white;
+    border-radius: 5px;
+    padding-top: 1em;
   }
   #chart{
     width: 800px;

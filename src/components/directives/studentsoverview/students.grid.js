@@ -15,9 +15,10 @@ angular.module('teacherdashboard')
           statebag.currentStudent = student;
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
-        $scope.showBehaviorDialog = function(ev, student) {
-          $scope.student = student;
-          $scope.api = api;
+        $scope.hideBehaviorDialog = function() {
+          //Null out the active student
+          $scope.student = null;
+          //Bury the body, hide the evidence
           if($scope.choroScope) {
             $scope.choroScope.$destroy();
             $scope.choroScope = null;
@@ -29,14 +30,25 @@ angular.module('teacherdashboard')
               //After we've animated the previous chorocal away, actually remove it
               $timeout(function(){
                 oldElem.remove();
-              }, 250);
+              }, 300);
             }
           }
-          $scope.choroScope = $scope.$new(true);
-          $scope.choroScope.behaviorDataPromise = 
-            api.studentBehaviors.get({ studentId: student.id }).$promise;
-          $scope.choroCal = $compile('<div flex="100" class="chorocontainer"><chorocalendar calendar-data-promise="behaviorDataPromise"></chorocalendar></div>')($scope.choroScope);
-          $scope.choroCal.insertAfter(angular.element(ev.target).parent().parent());
+        };
+        $scope.showBehaviorDialog = function(ev, student) {
+          if(!$scope.student || $scope.student.id !== student.id) {
+            //Hide other dialog, if shown...
+            $scope.hideBehaviorDialog(ev, student);
+            $scope.student = student;
+            $scope.choroScope = $scope.$new(true);
+            //Cache the isolated scope variables needed for the chorocalendar directive
+            $scope.choroScope.behaviorDataPromise = 
+              api.studentBehaviors.get({ studentId: student.id }).$promise;
+            $scope.choroScope.hideBehaviorDialog = $scope.hideBehaviorDialog;
+            $scope.choroCal = $compile('<div flex="100" class="chorocontainer"><chorocalendar slide-closed="hideBehaviorDialog" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>')($scope.choroScope);
+            $scope.choroCal.insertAfter(angular.element(ev.target).parent().parent());
+          } else {
+            $scope.hideBehaviorDialog(ev, student);
+          }
         };
       }
     };
