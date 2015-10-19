@@ -199,12 +199,6 @@ span.name {
 }
 
 // injector
-@import '../components/routecontrollers/administration/administration.scss';
-@import '../components/routecontrollers/home/home.scss';
-@import '../components/routecontrollers/login/login.scss';
-@import '../components/routecontrollers/navinclude/navinclude.scss';
-@import '../components/routecontrollers/student/student.scss';
-@import '../components/routecontrollers/studentSectDrill/studentSectDrill.scss';
 @import '../components/directives/chorocalendar/chorocalendar.scss';
 @import '../components/directives/goal/goals.scss';
 @import '../components/directives/gradedonut/gradedonut.scss';
@@ -212,4 +206,10 @@ span.name {
 @import '../components/directives/scatterplot/scatterplot.scss';
 @import '../components/directives/settingscard/settingscard.scss';
 @import '../components/directives/studentsoverview/students.grid.scss';
+@import '../components/routecontrollers/administration/administration.scss';
+@import '../components/routecontrollers/home/home.scss';
+@import '../components/routecontrollers/login/login.scss';
+@import '../components/routecontrollers/navinclude/navinclude.scss';
+@import '../components/routecontrollers/student/student.scss';
+@import '../components/routecontrollers/studentSectDrill/studentSectDrill.scss';
 // endinjector
