@@ -14,7 +14,7 @@
           <label>Password</label>
           <input type="password" ng-model="password" edpanel-enter-keypress="authenticate();" tabindex="2">
     </md-input-container>
-
+    <md-progress-linear md-mode="{{mode}}"></md-progress-linear>
     <md-button id="sign-in" class="sign-in md-raised md-primary" ng-click="authenticate()">Sign in</md-button>
     <h3 ng-show="showErrorMsg" style="text-align:center;color:red;">Unable to authenticate</h3>
   </div>
