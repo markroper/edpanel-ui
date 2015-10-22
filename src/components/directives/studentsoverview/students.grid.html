@@ -2,10 +2,10 @@
 	<div ng-show="showFilter">
 		<div layout="row" layout-align="center center">
 			<md-card>
-	        	<md-input-container md-no-float>
-	          		<input ng-model="search.name" placeholder="Search students by name" tabindex="1">
-	        	</md-input-container>
-	    	</md-card>
+      	<md-input-container md-no-float>
+      		<input ng-model="search.name" placeholder="Search students by name" tabindex="1">
+      	</md-input-container>
+    	</md-card>
 		</div>
 	</div>
 	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!studentsData">
@@ -32,7 +32,7 @@
 					</md-button>
 					</section>
 				</div>
-				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-click="showBehaviorDialog($event, student)">
+				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-click="showBehaviorTray($event, student)">
 					<div class="choropleth band-{{student.behaviorClass}}">
 						<span class="mobile-label" hide-gt-sm>Behavior</span>
 						<md-tooltip>{{student.behavior || 0}} demerits this {{student.behaviorPeriod || 'period'}}</md-tooltip>

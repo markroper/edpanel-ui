@@ -23,12 +23,14 @@ angular.module('teacherdashboard')
 	    $scope.inputEmail = '';
       $scope.password = '';
       $scope.showErrorMsg = false;
+      $scope.mode = '';
       $scope.authenticate = function() {
       	var authBody = {
 			    username: $scope.inputEmail,
 			    password: $scope.password
       	};
         $scope.showErrorMsg = false;
+        $scope.mode = 'indeterminate';
         api.login.save(
         	authBody,
           //Success callback
@@ -56,11 +58,13 @@ angular.module('teacherdashboard')
               //Error callback
               function(){
                   $scope.showErrorMsg = true;
+                  $scope.mode = '';
             });
         	},
           //Error callback
           function() {
             $scope.showErrorMsg = true;
+            $scope.mode = '';
           }
         );
       };

@@ -3,7 +3,8 @@ angular.module('teacherdashboard')
   .directive('chorocalendar', [ '$window', 'api', function($window, api) {
     return {
       scope: {
-        calendarDataPromise: '='
+        calendarDataPromise: '=',
+        slideClosed: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/chorocalendar/chorocalendar.html',
@@ -15,6 +16,7 @@ angular.module('teacherdashboard')
         var width = 4000,
             height = 290,
             cellSize = 40; // cell size
+        var CHORO_CONTAINER_SELECTOR = '.choropleth-container';
 
         function monthTitle (t0) {
           return t0.toLocaleString('en-us', { month: 'long' }) + ', ' + t0.toString().split(' ')[3];
@@ -35,7 +37,7 @@ angular.module('teacherdashboard')
         //     .domain([-0.05, 0.05])
         //     .range(d3.range(11).map(function(d) { return 'q' + d + '-11'; }));
 
-        var svg = d3.select(elem.find('.choropleth-container')[0]).selectAll('svg')
+        var svg = d3.select(elem.find(CHORO_CONTAINER_SELECTOR)[0]).selectAll('svg')
             .data(d3.range(2015, 2016))
           .enter().append('svg')
             .attr('width', width)
@@ -78,6 +80,10 @@ angular.module('teacherdashboard')
               })
               .attr('class', 'month-title')
               .attr('d', monthTitle);
+
+        //Scroll the calendar view to the latest month
+        var svgWidth = elem.find('svg').width();
+        elem.find(CHORO_CONTAINER_SELECTOR).scrollLeft(svgWidth);
 
         scope.calendarDataPromise.then(function(resolvedData){
           console.log('inside the chorocalendar.js callback');
