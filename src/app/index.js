@@ -1,5 +1,5 @@
 'use strict';
-angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.bootstrap'])
+angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial'])
   .config(function ($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider, $httpProvider, $locationProvider, constsProvider) {
     //Forces angular to request that any CORS cookies be sent back by the server
     $httpProvider.defaults.withCredentials = true;
@@ -29,10 +29,10 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         controller: 'NavCtrl',
         data: {
           roles: [
-            roles.ADMIN, 
-            roles.TEACHER, 
-            roles.STUDENT, 
-            roles.GUARDIAN, 
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.STUDENT,
+            roles.GUARDIAN,
             roles.SUPER_ADMIN
           ]
         },
@@ -43,10 +43,10 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         controller: 'HomeCtrl',
         data: {
           roles: [
-            roles.ADMIN, 
-            roles.TEACHER, 
-            roles.STUDENT, 
-            roles.GUARDIAN, 
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.STUDENT,
+            roles.GUARDIAN,
             roles.SUPER_ADMIN
           ]
         },
@@ -57,10 +57,10 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       	controller: 'StudentCtrl',
         data: {
           roles: [
-            roles.ADMIN, 
-            roles.TEACHER, 
-            roles.STUDENT, 
-            roles.GUARDIAN,   
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.STUDENT,
+            roles.GUARDIAN,
             roles.SUPER_ADMIN
           ]
         },
@@ -81,10 +81,10 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         controller: 'StudentSectDrillCtrl',
         data: {
           roles: [
-            roles.ADMIN, 
-            roles.TEACHER, 
-            roles.STUDENT, 
-            roles.GUARDIAN, 
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.STUDENT,
+            roles.GUARDIAN,
             roles.SUPER_ADMIN
           ]
         },
@@ -95,8 +95,8 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         //controller: 'ReportCtrl',
         data: {
           roles: [
-            roles.ADMIN, 
-            roles.TEACHER,  
+            roles.ADMIN,
+            roles.TEACHER,
             roles.SUPER_ADMIN
           ]
         },
@@ -107,8 +107,8 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         //controller: 'ReportBuilderCtrl',
         data: {
           roles: [
-            roles.ADMIN, 
-            roles.TEACHER, 
+            roles.ADMIN,
+            roles.TEACHER,
             roles.SUPER_ADMIN
           ]
         }
@@ -141,11 +141,11 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
     return {
       $get: function () {
         return {
-          roles: { 
-                ADMIN:'ADMINISTRATOR', 
-                TEACHER: 'TEACHER',  
+          roles: {
+                ADMIN:'ADMINISTRATOR',
+                TEACHER: 'TEACHER',
                 STUDENT: 'STUDENT',
-                GUARDIAN: 'GUARDIAN', 
+                GUARDIAN: 'GUARDIAN',
                 SUPER_ADMIN: 'SUPER_ADMINISTRATOR'
           }
         };

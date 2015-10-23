@@ -20,24 +20,4 @@ angular.module('teacherdashboard')
         };
       }
     };
-  }])
-  .directive('testDragEnd', function() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        console.log("IT LOADED");
-        element.on('$md.dragend', function() {
-          console.info('Drag Ended');
-        });
-        element.on('$md.drag', function() {
-          console.info('Drag Start');
-        });
-        element.on('$md.dragstart', function() {
-          console.info('Drag Start');
-        });
-        element.on('$md.pressdown', function() {
-          console.info('Drag Start');
-        })
-      }
-    }
-  });
+  }]);

@@ -32,16 +32,19 @@
       <div ng-show="goal.editActive" class="editSlider">
         <md-content style="margin: 16px; padding:16px">
         <div layout>
-
-          <md-slider test-drag-end ng-model="goal.blah" flex="" min="0" max="255" aria-label="red" id="red-slider" class="">
-          </md-slider>
+            <md-slider test-drag-end ng-model="goal.blah" flex= min="0" max="255" aria-label="red" id="red-slider" class="">
+            </md-slider>
           <div flex="20" layout layout-align="center center">
-            <input flex type="number" ng-model="goal.blah" aria-label="red" aria-controls="red-slider">
+            <input type="number" ng-model="goal.blah" aria-label="red" aria-controls="red-slider">
           </div>
-        </div>
-
-      </div>
+          </div>
+          <div layout>
+            <md-button aria-label="menu" class="md-fab md-primary md-raised md-mini">
+              <md-icon md-font-set="material-icons">check</md-icon>
+            </md-button>
+          </div>
       </md-content>
+      </div>
 
     </md-card-content>
   </md-card>
