@@ -85,6 +85,8 @@ angular.module('teacherdashboard')
         goal.max = goal.desiredValue;
         goal.width = evaluateWidth(goal);
         goal.colorClass = evaluateColorClass(goal);
+        goal.proposedValue = goal.desiredValue;
+        console.log(goal);
 
         switch(goal.goalType) {
           case 'ASSIGNMENT':
@@ -93,6 +95,7 @@ angular.module('teacherdashboard')
             if (goal.calculatedValue === -1) {
               goal.progressText = 'Your score: Not Graded';
             }
+            goal.maxPossible = '100' ;
             goal.aveValue = '75%';
 
             break;
@@ -100,16 +103,21 @@ angular.module('teacherdashboard')
             goal.maxDisplay = goal.desiredValue;
             goal.progressText = 'Incidents: ' + goal.calculatedValue;
             goal.aveValue = '3';
+            //TODO Set the maxPossible for a goal to be a school property (GPA)
+            goal.maxPossible = '50' ;
             break;
           case 'CUMULATIVE_GRADE':
             goal.maxDisplay = goal.desiredValue + '%';
             goal.progressText = 'Your grade: ' + goal.calculatedValue + '%';
             goal.aveValue = '83%';
+            goal.maxPossible = '100' ;
                 break;
           case 'ATTENDANCE':
                 goal.maxDisplay = goal.desiredValue;
                 goal.progressText = 'Your absences: ' + goal.calculatedValue;
                 goal.aveValue = '3';
+                goal.maxPossible = '50' ;
+                //TODO this needs to be some function of number of days of school in that goal period
                 break;
         }
 

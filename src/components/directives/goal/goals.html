@@ -23,7 +23,7 @@
           <md-button ng-click="editGoal(goal)" class="md-fab md-primary md-raised md-mini">
             <md-icon md-font-set="material-icons"> mode_edit </md-icon>
           </md-button>
-          <md-button class="md-fab md-warn md-raised md-mini">
+          <md-button ng-click="deleteGoal(goal)" class="md-fab md-warn md-raised md-mini">
             <md-icon md-font-set="material-icons"> delete </md-icon>
           </md-button>
         </md-fab-actions>
@@ -32,14 +32,14 @@
       <div ng-show="goal.editActive" class="editSlider">
         <md-content style="margin: 16px; padding:16px">
         <div layout>
-            <md-slider test-drag-end ng-model="goal.blah" flex= min="0" max="255" aria-label="red" id="red-slider" class="">
+            <md-slider test-drag-end ng-model="goal.proposedValue" flex= min="0" max="{{goal.maxPossible}}" aria-label="red" id="red-slider" class="">
             </md-slider>
           <div flex="20" layout layout-align="center center">
-            <input type="number" ng-model="goal.blah" aria-label="red" aria-controls="red-slider">
+            <input type="number" ng-model="goal.proposedValue" aria-label="red" aria-controls="red-slider">
           </div>
           </div>
           <div layout>
-            <md-button aria-label="menu" class="md-fab md-primary md-raised md-mini">
+            <md-button ng-click="proposeEdit(goal)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
               <md-icon md-font-set="material-icons">check</md-icon>
             </md-button>
           </div>
