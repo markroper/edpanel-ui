@@ -86,7 +86,6 @@ angular.module('teacherdashboard')
         goal.width = evaluateWidth(goal);
         goal.colorClass = evaluateColorClass(goal);
         goal.proposedValue = goal.desiredValue;
-        console.log(goal);
 
         switch(goal.goalType) {
           case 'ASSIGNMENT':
