@@ -56,7 +56,6 @@ angular.module('teacherdashboard')
           }
           goal.desiredValue = goal.proposedValue;
           var apiGoal = datifyGoal(goal);
-          console.log(goal);
           api.editStudentGoal.patch(
             { studentId: goal.student.id,
               goalId: goal.id},
