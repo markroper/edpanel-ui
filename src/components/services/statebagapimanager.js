@@ -19,71 +19,146 @@ angular.module('teacherdashboard')
     },
     retrieveAndCacheStudentPerfData: function() {
       var deferred = $q.defer();
-      var studentIds = [];
-      statebag.students.forEach(function(s){
-        studentIds.push(s.id);
-      });
-      var hwQuery = getHwQuery(statebag.currentYear.id, statebag.currentTerm.id, studentIds);
-      var behaviorQuery = getBehaviorQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate, studentIds);
-      var attendanceQuery = getAttendanceQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate, studentIds);
-      var studentDataPromises = [];
-      //Get attendance & HW completion
-      studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, hwQuery).$promise);
-      studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise);
-      studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceQuery).$promise);
-      studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
-      studentDataPromises.push(api.uiAttributes.get({ schoolId: statebag.school.id }).$promise);
-      //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
-      $q.all(studentDataPromises).then(function(responses) {
-        var resolvedStudents = [];
-        var studentMap = {};
-        //handle the UI settings
-        statebag.uiAttributes = responses[4];
 
-        //Handle the HW completion & attendance values
-        responses[0].records.forEach(function(student){
-          studentMap[student.values[0]] = resolveStudentScopeObject(student.values);
+      //First, make sure we have UI attributes
+      var uiAttrsDeferred = $q.defer();
+      if(!statebag.uiAttributes) {
+        api.uiAttributes.get(
+          { schoolId: statebag.school.id }, 
+          function(data) {
+            statebag.uiAttributes = data;
+            uiAttrsDeferred.resolve();
+          },
+          function(error) {
+            console.log('Failed to resolve UI attrs ' + JSON.stringify(error));
+            uiAttrsDeferred.reject(error);
+          });
+      } else {
+        uiAttrsDeferred.resolve();
+      }
+      //Once we have UI attributes, resolve the data for the home page
+      uiAttrsDeferred.promise.then(function(){
+        var studentIds = [];
+        statebag.students.forEach(function(s){
+          studentIds.push(s.id);
         });
-        //Update the behavior demerit counts
-        responses[1].records.forEach(function(student) {
-          var studentDemerits = student.values;
-          var pluckedStudent = studentMap[studentDemerits[0]];
-          if (pluckedStudent) {
-            pluckedStudent.behavior = studentDemerits[1];
-            pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
-          }
 
-        });
-        //Update the attendance data for each student
-        responses[2].records.forEach(function(student) {
-          var studentAttendance = student.values;
-          var pluckedStudent = studentMap[studentAttendance[0]];
-          if (pluckedStudent) {
-            pluckedStudent.attendance = studentAttendance[1];
-            pluckedStudent.attendanceClass = resolveAttendanceClass(pluckedStudent.attendance);
-          }
+        var behaviorDates = returnStartAndEndDate('behavior');
+        var attendanceDates = returnStartAndEndDate('attendance');
+        //TODO: currently HW completion is term, driven and not customizable, change this?
+        // var homeworkDates = returnStartAndEndDate('homework');
+        var hwQuery = getHwQuery(statebag.currentYear.id, statebag.currentTerm.id, studentIds);
+        var behaviorQuery = getBehaviorQuery(behaviorDates.min, behaviorDates.max, studentIds);
+        var attendanceQuery = getAttendanceQuery(attendanceDates.min, attendanceDates.max, studentIds);
+        var studentDataPromises = [];
 
-        });
-        //Update the GPA
-        for (var idKey in responses[3]) {
-          if (responses[3].hasOwnProperty(idKey) &&
-              !isNaN(idKey)) {
-            var pluckedStudent = studentMap[idKey];
-            if(pluckedStudent) {
-              pluckedStudent.gpa = Math.round( responses[3][idKey] * 10 ) / 10;
-              pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
-              resolvedStudents.unshift(pluckedStudent);
+        //Get attendance & HW completion
+        studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, hwQuery).$promise);
+        studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise);
+        studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceQuery).$promise);
+        studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
+        //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
+        $q.all(studentDataPromises).then(function(responses) {
+          var resolvedStudents = [];
+          var studentMap = {};
+
+          //Handle the HW completion & attendance values
+          responses[0].records.forEach(function(student){
+            studentMap[student.values[0]] = resolveStudentScopeObject(student.values);
+          });
+          //Update the behavior demerit counts
+          responses[1].records.forEach(function(student) {
+            var studentDemerits = student.values;
+            var pluckedStudent = studentMap[studentDemerits[0]];
+            if (pluckedStudent) {
+              pluckedStudent.behavior = studentDemerits[1];
+              pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
+              pluckedStudent.behaviorPeriod = returnComponentPeriod('behavior');
+            }
+
+          });
+          //Update the attendance data for each student
+          responses[2].records.forEach(function(student) {
+            var studentAttendance = student.values;
+            var pluckedStudent = studentMap[studentAttendance[0]];
+            if (pluckedStudent) {
+              pluckedStudent.attendance = studentAttendance[1];
+              pluckedStudent.attendanceClass = resolveAttendanceClass(pluckedStudent.attendance);
+              pluckedStudent.attendancePeriod = returnComponentPeriod('attendance');
+            }
+
+          });
+          //Update the GPA
+          for (var idKey in responses[3]) {
+            if (responses[3].hasOwnProperty(idKey) &&
+                !isNaN(idKey)) {
+              var pluckedStudent = studentMap[idKey];
+              if(pluckedStudent) {
+                pluckedStudent.gpa = Math.round( responses[3][idKey] * 10 ) / 10;
+                pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
+                resolvedStudents.unshift(pluckedStudent);
+              }
             }
           }
-        }
-        statebag.lastFullRefresh = new Date().getTime();
-        statebag.studentPerfData = resolvedStudents;
-        deferred.resolve(statebag.studentPerfData);
+          statebag.lastFullRefresh = new Date().getTime();
+          statebag.studentPerfData = resolvedStudents;
+          deferred.resolve(statebag.studentPerfData);
+        });
       });
       return deferred.promise;
     }
   };
 
+  /*
+   * Supported component types: 'attendance', 'behavior'
+   * Given a component type, return the UI settings' time period for that type
+   *
+  */
+  function returnComponentPeriod(componentType) {
+    var period = 'day';
+    if(statebag.uiAttributes) {
+      var component = statebag.uiAttributes.attributes.jsonNode[componentType];
+      if(component) {
+        period = component.period;
+      }
+    }
+    return period;
+  }
+  /*
+  * Supported component types: 'attendance', 'homework', 'gpa', 'behavior'.
+  * Resolves the time period for the component type provided and returns an object
+  * containing the minDate and maxDate for that component type as millis since the epoch
+  */
+  function returnStartAndEndDate(componentType) {
+    //Given the component type, resolve the date range from the UI attrs
+    var period = returnComponentPeriod(componentType);
+    //Default date min/max will be the current day
+    var dates = {};
+    dates.min = new Date().getTime(),
+    dates.max = new Date().getTime();
+    //Resolve the date range
+    switch(period) {
+      case 'day':
+        break;
+      case 'week':
+        dates.min = moment().day(0).valueOf();
+        dates.max = moment().valueOf();
+        break;
+      case 'month':
+        dates.min = moment().date(1).valueOf();
+        dates.max = moment().valueOf();
+        break;
+      case 'term':
+        dates.min = statebag.currentTerm.startDate;
+        dates.max = statebag.currentTerm.endDate;
+        break;
+      case 'year':
+        dates.min = statebag.currentYear.startDate;
+        dates.max = statebag.currentYear.endDate;
+        break;
+    }
+    return dates;
+  }
   function getStudentIdsExpression(studentIds) {
     return {
       'type': 'EXPRESSION',
@@ -132,7 +207,7 @@ angular.module('teacherdashboard')
                           'field': 'Behavior Date'
                       }
                   },
-                  'operator': 'GREATER_THAN',
+                  'operator': 'GREATER_THAN_OR_EQUAL',
                   'rightHandSide': {
                       'type': 'DATE',
                       'value': minDate
@@ -148,7 +223,7 @@ angular.module('teacherdashboard')
                           'field': 'Behavior Date'
                       }
                   },
-                  'operator': 'LESS_THAN',
+                  'operator': 'LESS_THAN_OR_EQUAL',
                   'rightHandSide': {
                       'type': 'DATE',
                       'value': maxDate
