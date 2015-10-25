@@ -7,8 +7,6 @@
     "angular-aria": "v1.4.x",
     "angular-cookies": "v1.4.x",
     "angular-material": "0.11.0",
-    "angular-messages":"v1.4.x",
-    "angular-route":"v1.4.x",
     "angular-resource": "v1.4.x",
     "angular-sanitize": "v1.4.x",
     "angular-ui-router": "~0.2.13",
