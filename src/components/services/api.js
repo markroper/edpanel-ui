@@ -65,8 +65,11 @@ angular.module('teacherdashboard')
       editStudentGoal: $resource(
         base + '/students/:studentId/goals/:goalId',
         {},
-        {'delete': {method: 'DELETE', headers: {'Content-Type': 'application/json'}}},
-        { 'patch': { method:'PATCH', headers: {'Content-Type': 'application/json'}}}),
+        {
+          'delete': {method: 'DELETE', headers: {'Content-Type': 'application/json'}},
+          'patch': { method:'PATCH', headers: {'Content-Type': 'application/json'}}
+        },
+        { }),
       //UI Attributes
       uiAttributes: $resource(base + '/schools/:schoolId/uiattributes', {},
         {

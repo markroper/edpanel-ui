@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goals', ['$state', 'statebag', 'api', function($state, statebag, api) {
+  .directive('goals', ['$state', 'statebag', 'api', '$mdToast', function($state, statebag, api, mdToast) {
     return {
       scope: {
         goals: '='
@@ -9,6 +9,14 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/goal/goals.html',
       replace: true,
       controller: function($scope) {
+        var showSimpleToast = function(msg) {
+          mdToast.show(
+            mdToast.simple()
+              .content(msg)
+              .action('OK')
+              .hideDelay(2000)
+          );
+        };
         $scope.deleteGoal = function(goal) {
           api.editStudentGoal.delete(
             { studentId: goal.student.id,
@@ -17,11 +25,10 @@ angular.module('teacherdashboard')
               console.log("SUCCESS");
               var index = $scope.goals.indexOf(goal);
               $scope.goals.splice(index,1);
-              //TODO should show a toast
             },
             function(error) {
               console.log("FAILURE");
-              //TODO should show a toast
+              showSimpleToast("Goal could not be deleted");
             });
           //Call api to delete the goal
         };
@@ -56,11 +63,11 @@ angular.module('teacherdashboard')
            apiGoal,
             function() {
               console.log("SUCCESS");
-              //TODO should show a toast
+              showSimpleToast("Goal changed successfully");
             },
             function(error) {
+              showSimpleToast("There was a problem modifying the goal");
               console.log("FAILURE");
-              //TODO should show a toast
             });
 
 
