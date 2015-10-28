@@ -22,12 +22,11 @@ angular.module('teacherdashboard')
             { studentId: goal.student.id,
               goalId: goal.id},
             function() {
-              console.log("SUCCESS");
               var index = $scope.goals.indexOf(goal);
               $scope.goals.splice(index,1);
             },
             function(error) {
-              console.log("FAILURE");
+              console.log("Failed to delete goal");
               showSimpleToast("Goal could not be deleted");
             });
           //Call api to delete the goal
@@ -40,7 +39,7 @@ angular.module('teacherdashboard')
         $scope.proposeEdit = function(goal) {
           goal.editActive = false;
           var datifyGoal = function(goal) {
-            var apiGoal = jQuery.extend(true, {}, goal);
+            var apiGoal = angular.extend({}, goal);
             delete apiGoal.colorClass;
             delete apiGoal.maxDisplay;
             delete apiGoal.maxPossible;
@@ -61,12 +60,10 @@ angular.module('teacherdashboard')
               goalId: goal.id},
            apiGoal,
             function() {
-              console.log("SUCCESS");
               showSimpleToast("Goal changed successfully");
             },
             function(error) {
               showSimpleToast("There was a problem modifying the goal");
-              console.log("FAILURE");
             });
 
 
