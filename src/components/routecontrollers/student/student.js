@@ -171,7 +171,8 @@ angular.module('teacherdashboard')
     resolveStudentGoals()
       .then(function() {
         $scope.goals = statebag.goals;
-        resolveGoalDisplay();
+        console.log(statebag.goals);
+        //$scope.resolveGoalDisplay();
       });
   }
 
