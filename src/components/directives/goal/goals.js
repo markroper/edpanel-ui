@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goals', ['$state', 'statebag', 'api','$q', '$mdToast', function($state, statebag, api, $q, mdToast) {
+  .directive('goals', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', function($state, statebag, api, $q, mdToast, $mdDialog) {
     return {
       scope: {
         goals: '='
@@ -9,6 +9,48 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/goal/goals.html',
       replace: true,
       controller: function($scope) {
+
+
+        $scope.constructGoal = function() {
+          console.log("CHECKING STATE");
+          console.log(statebag);
+          $scope.goalToCreate = {};
+          $scope.goalToCreate.goalType = "BEHAVIOR";
+          $scope.goalToCreate.startDate = "2015-05-12";
+          $scope.goalToCreate.endDate = "2015-05-18";
+          $scope.goalToCreate.behaviorCategory = "DEMERIT";
+          $scope.goalToCreate.name = "TEST CREATION";
+          $scope.goalToCreate.student = {"id": statebag.currentStudent.id,
+            "type": "STUDENT"};
+          $scope.goalToCreate.teacher = {"id":'4',
+            "type": "TEACHER"};
+          $scope.goalToCreate.approved = "false";
+          $scope.goalToCreate.desiredValue = "50";
+          console.log("RUN");
+          console.log($scope.goalToCreate);
+          api.studentGoals.post(
+            { studentId: statebag.currentStudent.id},
+            $scope.goalToCreate,
+            function() {
+              $scope.resolveGoalDisplay();
+              showSimpleToast("Goal changed successfully");
+            },
+            function(error) {
+              showSimpleToast("There was a problem modifying the goal");
+
+            });
+        }
+
+        $scope.createGoal = function(ev)  {
+          $mdDialog.show({
+            scope: $scope.$new(),
+            student: statebag.currentStudent,
+            templateUrl: api.basePrefix + '/components/directives/goal/dialog1.tmpl.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true
+          })
+        }
 
 
         var showSimpleToast = function(msg) {
@@ -97,6 +139,8 @@ angular.module('teacherdashboard')
         $scope.resolveGoalDisplay = function() {
           for (var i = 0; i < $scope.goals.length; i++) {
             var goal = $scope.goals[i];
+
+            console.log(goal);
 
             goal.title = goal.name ;
             goal.max = goal.desiredValue;
