@@ -20,8 +20,8 @@ angular.module('teacherdashboard')
       student: $resource(base + '/students/:studentId'),
       allStudents: $resource(base + '/students', {}, { 'get': { isArray: true }}),
       users: $resource(base + '/users', {}, {'get': { isArray: true }}),
-      user: $resource(base + '/users/:userId', {}, 
-        { 
+      user: $resource(base + '/users/:userId', {},
+        {
           'patch': { method:'PATCH', headers: {'Content-Type': 'application/json'} },
           'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }
         }),
@@ -62,6 +62,14 @@ angular.module('teacherdashboard')
         base + '/students/:studentId/goals',
         {},
         { 'get': { isArray: true }}),
+      editStudentGoal: $resource(
+        base + '/students/:studentId/goals/:goalId',
+        {},
+        {
+          'delete': {method: 'DELETE', headers: {'Content-Type': 'application/json'}},
+          'patch': { method:'PATCH', headers: {'Content-Type': 'application/json'}}
+        },
+        { }),
       //UI Attributes
       uiAttributes: $resource(base + '/schools/:schoolId/uiattributes', {},
         {

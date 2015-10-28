@@ -26,13 +26,11 @@ angular.module('teacherdashboard')
                     }
                   });
                   resolveStudentSectionData();
-                  resolveGoalDataAndDisplay();
                 });
             });
         });
     } else {
       resolveStudentSectionData();
-      resolveGoalDataAndDisplay();
 
     }
 
@@ -63,110 +61,6 @@ angular.module('teacherdashboard')
           });
     };
 
-
-      function resolveStudentGoals() {
-      var deferred = $q.defer();
-
-      var studentGoalsPromises = api.studentGoals.get( {
-        studentId: $state.params.studentId }).$promise;
-
-        studentGoalsPromises.then(function (response) {
-          statebag.goals = response;
-          deferred.resolve(statebag.goals);
-        });
-        return deferred.promise;
-    }
-
-    function resolveGoalDisplay() {
-      for (var i = 0; i < $scope.goals.length; i++) {
-        var goal = $scope.goals[i];
-
-        goal.title = goal.name ;
-        goal.max = goal.desiredValue;
-        goal.width = evaluateWidth(goal);
-        goal.colorClass = evaluateColorClass(goal);
-
-        switch(goal.goalType) {
-          case 'ASSIGNMENT':
-            goal.maxDisplay = goal.desiredValue + '%';
-            goal.progressText = 'Your score: ' + goal.calculatedValue + '%';
-            if (goal.calculatedValue === -1) {
-              goal.progressText = 'Your score: Not Graded';
-            }
-            goal.aveValue = '75%';
-
-            break;
-          case 'BEHAVIOR':
-            goal.maxDisplay = goal.desiredValue;
-            goal.progressText = 'Incidents: ' + goal.calculatedValue;
-            goal.aveValue = '3';
-            break;
-          case 'CUMULATIVE_GRADE':
-            goal.maxDisplay = goal.desiredValue + '%';
-            goal.progressText = 'Your grade: ' + goal.calculatedValue + '%';
-            goal.aveValue = '83%';
-                break;
-          case 'ATTENDANCE':
-                goal.maxDisplay = goal.desiredValue;
-                goal.progressText = 'Your absences: ' + goal.calculatedValue;
-                goal.aveValue = '3';
-                break;
-        }
-
-
-
-        $scope.goals[i] = goal;
-      }
-    }
-
-    function evaluateWidth(goal) {
-      if (goal.calculatedValue === -1) {
-        return '100';
-      } else {
-          var width = goal.calculatedValue / goal.max * 100;
-        if (width > 100) {
-          return 100;
-        } else {
-          if (width === 0) {
-            return 2;
-          }
-          return width;
-        }
-      }
-    }
-
-    function evaluateColorClass(goal) {
-      var danger = 'goal-danger';
-      var warning = 'goal-warning';
-      var success = 'goal-success';
-      var unknown = 'goal-unknown';
-      var performanceClasses = [danger, warning, success];
-
-      //Extend this to work for all negative goal types
-      if (goal.behaviorCategory === 'DEMERIT' || goal.goalType === 'ATTENDANCE') {
-        performanceClasses.reverse();
-      }
-
-      if (goal.calculatedValue === -1) {
-        return unknown;
-      }
-
-      if (goal.width < 33) {
-        return performanceClasses[0];
-      } else if (goal.width >= 33 && goal.width <= 67) {
-        return performanceClasses[1];
-      } else {
-        return performanceClasses[2];
-      }
-    }
-
-  function resolveGoalDataAndDisplay() {
-    resolveStudentGoals()
-      .then(function() {
-        $scope.goals = statebag.goals;
-        resolveGoalDisplay();
-      });
-  }
 
     function resolveStudentSectionData() {
       $scope.students.push(statebag.currentStudent);
