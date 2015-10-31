@@ -51,12 +51,12 @@
 
     </md-card-content>
   </md-card>
-  <md-card>
+  <md-card ng-show="sectionsResolved">
     <md-card-content class="student-goal">
       <div class="row"><div class="goal-title">
         Create Goal
       </div></div>
-      <md-button ng-click="createGoal($event)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
+      <md-button ng-click="handleCreateGoalClick($event)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
         <md-icon md-font-set="material-icons">check</md-icon>
       </md-button>
     </md-card-content>
