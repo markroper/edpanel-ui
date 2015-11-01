@@ -13,7 +13,7 @@ angular.module('teacherdashboard')
         $scope.tempGoal = {
           name: "",
           behaviorType: "",
-          desiredValue: "",
+          desiredValue: "100",
           goalType: "",
           startDate: "",
           endDate: "",
