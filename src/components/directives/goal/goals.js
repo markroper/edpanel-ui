@@ -54,7 +54,7 @@ angular.module('teacherdashboard')
           $mdDialog.show({
             scope: $scope.$new(),
             student: statebag.currentStudent,
-            templateUrl: api.basePrefix + '/components/directives/goal/dialog1.tmpl.html',
+            templateUrl: api.basePrefix + '/components/directives/goal/goalCreate.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose:true
@@ -63,7 +63,6 @@ angular.module('teacherdashboard')
         }
 
         $scope.setGoalType = function(goalType) {
-          console.log(statebag.sections);
           $scope.tempGoal = angular.extend({},$scope.clearGoal);
           $scope.tempGoal.goalType = goalType;
         }
@@ -100,16 +99,13 @@ angular.module('teacherdashboard')
           switch ($scope.tempGoal.goalType) {
             case ("BEHAVIOR") :
               $scope.goalToCreate.startDate = $scope.tempGoal.startDate;
-              console.log($scope.tempGoal.startDate);
               $scope.goalToCreate.endDate = $scope.tempGoal.endDate;
               $scope.goalToCreate.behaviorCategory = $scope.tempGoal.behaviorType;
               break;
             case ("CUMULATIVE_GRADE") :
-              console.log($scope.tempGoal.section);
               $scope.goalToCreate.parentId = $scope.sectionNameMap[$scope.tempGoal.sectionName];
               break;
           }
-          console.log($scope.goalToCreate);
           api.studentGoals.post(
             { studentId: statebag.currentStudent.id},
             $scope.goalToCreate,
@@ -182,7 +178,6 @@ angular.module('teacherdashboard')
           return deferred.promise;
         }
         $scope.resolveGoalDisplay = function() {
-          console.log(statebag);
           for (var i = 0; i < $scope.goals.length; i++) {
             var goal = $scope.goals[i];
 
