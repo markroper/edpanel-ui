@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goals', ['$state', 'statebag', 'api','$q', '$mdToast', function($state, statebag, api, $q, mdToast) {
+  .directive('goals', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', function($state, statebag, api, $q, mdToast, $mdDialog) {
     return {
       scope: {
         goals: '='
@@ -10,6 +10,30 @@ angular.module('teacherdashboard')
       replace: true,
       controller: function($scope) {
 
+        $scope.tempGoal = {
+          name: "",
+          behaviorType: "",
+          desiredValue: "100",
+          goalType: "",
+          startDate: "",
+          endDate: "",
+          sectionName: ""
+        };
+        $scope.sectionsResolved = false;
+        $scope.clearGoal = angular.extend({},$scope.tempGoal);
+        $scope.behaviorTypes = ["DEMERIT","MERIT"];
+
+
+        statebag.studentSectionsPromise.then(function() {
+          $q.all(statebag.sectionGradePromises).then(function(){
+            $scope.sectionNameMap = {};
+            $scope.sections = statebag.sections;
+            $scope.sections.forEach(function (section) {
+              $scope.sectionNameMap[section.course.name] = section.id;
+            });
+            $scope.sectionsResolved = true;
+          });
+        });
 
         var showSimpleToast = function(msg) {
           mdToast.show(
@@ -19,6 +43,30 @@ angular.module('teacherdashboard')
               .hideDelay(2000)
           );
         };
+
+        $scope.clearDialog = function() {
+          $mdDialog.hide();
+          $scope.tempGoal = angular.extend({},$scope.clearGoal);
+        }
+
+        $scope.handleCreateGoalClick = function(ev)  {
+          $scope.sections = statebag.sections;
+          $mdDialog.show({
+            scope: $scope.$new(),
+            student: statebag.currentStudent,
+            templateUrl: api.basePrefix + '/components/directives/goal/goalCreate.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true
+          })
+
+        }
+
+        $scope.setGoalType = function(goalType) {
+          $scope.tempGoal = angular.extend({},$scope.clearGoal);
+          $scope.tempGoal.goalType = goalType;
+        }
+
         $scope.deleteGoal = function(goal) {
           api.editStudentGoal.delete(
             { studentId: goal.student.id,
@@ -37,10 +85,46 @@ angular.module('teacherdashboard')
           goal.editActive = true;
 
         };
+        $scope.createGoal = function() {
+          $scope.goalToCreate = {};
+          $scope.goalToCreate.goalType = $scope.tempGoal.goalType;
+          $scope.goalToCreate.name = $scope.tempGoal.name;
+          $scope.goalToCreate.student = {"id": statebag.currentStudent.id,
+            "type": "STUDENT"};
+          //TODO This needs to be not hardcoded in
+          $scope.goalToCreate.teacher = {"id":'4',
+            "type": "TEACHER"};
+          $scope.goalToCreate.approved = "false";
+          $scope.goalToCreate.desiredValue = $scope.tempGoal.desiredValue;
+          switch ($scope.tempGoal.goalType) {
+            case ("BEHAVIOR") :
+              $scope.goalToCreate.startDate = $scope.tempGoal.startDate;
+              $scope.goalToCreate.endDate = $scope.tempGoal.endDate;
+              $scope.goalToCreate.behaviorCategory = $scope.tempGoal.behaviorType;
+              break;
+            case ("CUMULATIVE_GRADE") :
+              $scope.goalToCreate.parentId = $scope.sectionNameMap[$scope.tempGoal.sectionName];
+              break;
+          }
+          api.studentGoals.post(
+            { studentId: statebag.currentStudent.id},
+            $scope.goalToCreate,
+            function() {
+              $scope.resolveGoalDataAndDisplay();
+              showSimpleToast("Goal created successfully");
+            },
+            function(error) {
+              showSimpleToast("There was a problem creating the goal");
+
+            });
+          $scope.clearDialog();
+        };
+
         $scope.proposeEdit = function(goal) {
           goal.editActive = false;
           var datifyGoal = function(goal) {
-            var apiGoal = angular.extend( {}, goal);
+            var apiGoal = angular.extend({}, goal);
+
             delete apiGoal.colorClass;
             delete apiGoal.maxDisplay;
             delete apiGoal.maxPossible;
@@ -65,14 +149,15 @@ angular.module('teacherdashboard')
               showSimpleToast("Goal changed successfully");
             },
             function(error) {
-              console.log("FAILURE");
+              showSimpleToast("There was a problem modifying the goal");
+
             });
 
 
         }
       },
       link: function($scope) {
-        function resolveGoalDataAndDisplay() {
+        $scope.resolveGoalDataAndDisplay = function() {
           resolveStudentGoals()
             .then(function() {
               $scope.goals = statebag.goals;
@@ -95,6 +180,8 @@ angular.module('teacherdashboard')
         $scope.resolveGoalDisplay = function() {
           for (var i = 0; i < $scope.goals.length; i++) {
             var goal = $scope.goals[i];
+
+
 
             goal.title = goal.name ;
             goal.max = goal.desiredValue;
@@ -182,7 +269,7 @@ angular.module('teacherdashboard')
           }
         }
 
-        resolveGoalDataAndDisplay();
+        $scope.resolveGoalDataAndDisplay();
       }
     };
   }]);

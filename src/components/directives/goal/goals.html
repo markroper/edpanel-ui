@@ -1,4 +1,15 @@
-<div class="goals-container">
+
+<div>
+<div layout="row" layout-align="center center">
+  <h1>Goals</h1>
+  <div class="create-wrapper">
+    <md-button ng-show="sectionsResolved" ng-click="handleCreateGoalClick($event)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
+      <md-icon md-font-set="material-icons">add</md-icon>
+    </md-button>
+  </div>
+
+</div>
+  <div layout="row" class="goals-container">
   <md-card class="student-goal" ng-repeat="goal in goals">
     <md-card-content>
       <div class="row"><div class="goal-title">{{goal.title}}</div></div>
@@ -51,4 +62,5 @@
 
     </md-card-content>
   </md-card>
+</div>
 </div>

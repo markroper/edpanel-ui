@@ -61,7 +61,10 @@ angular.module('teacherdashboard')
       studentGoals: $resource(
         base + '/students/:studentId/goals',
         {},
-        { 'get': { isArray: true }}),
+        {
+          'get': {isArray: true},
+          'post': {method: 'POST', headers: {'Content-Type': 'application/json'}}
+        }),
       editStudentGoal: $resource(
         base + '/students/:studentId/goals/:goalId',
         {},

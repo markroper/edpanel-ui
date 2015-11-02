@@ -1,0 +1,71 @@
+<md-dialog aria-label="Create Goal" style="max-width:1800px;max-height:1010px;min-width:700px;min-height:410px;" >
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Create a goal</h2>
+        <span flex></span>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="max-width:1600px;max-height:810px;min-width:700px;min-height:410px; ">
+      <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab md-on-select="setGoalType('BEHAVIOR')" label="Behavior Goal">
+          <md-content class="md-padding">
+            <h1  class="md-display-2">Behavior Goal</h1>
+
+            <md-input-container>
+              <label>Name</label>
+              <input ng-model="tempGoal.name">
+            </md-input-container>
+            <md-datepicker ng-model="tempGoal.startDate" md-placeholder="Enter start date"></md-datepicker>
+            <md-datepicker ng-model="tempGoal.endDate" md-placeholder="Enter end date"></md-datepicker>
+
+            <md-input-container flex>
+              <label>Behavior Category</label>
+            <md-select ng-model="tempGoal.behaviorType">
+              <md-option ng-repeat="behavior in behaviorTypes" value="{{behavior}}">
+                {{behavior}}
+              </md-option>
+            </md-select>
+              </md-input-container>
+
+            <md-input-container>
+              <label>Goal value</label>
+              <input type="number" ng-model="tempGoal.desiredValue">
+            </md-input-container>
+
+          </md-content>
+        </md-tab>
+        <md-tab md-on-select="setGoalType('CUMULATIVE_GRADE')" label="Section Grade Goal">
+          <md-content class="md-padding">
+            <md-input-container flex>
+              <label>Section</label>
+              <md-select ng-model="tempGoal.sectionName">
+                <md-option ng-repeat="section in sections" value="{{section.course.name}}">
+                  {{section.course.name}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+            <md-input-container>
+              <label>Name</label>
+              <input ng-model="tempGoal.name">
+            </md-input-container>
+            <md-input-container>
+              <label>Goal value</label>
+              <input type="number" ng-model="tempGoal.desiredValue">
+            </md-input-container>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+      <span flex></span>
+      <md-button ng-click="clearDialog()" style="margin-right:20px;" >
+        Cancel
+      </md-button>
+      <md-button ng-click="createGoal()" >
+        Create Goal
+      </md-button>
+
+    </div>
+  </form>
+</md-dialog>

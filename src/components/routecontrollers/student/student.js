@@ -7,6 +7,7 @@ angular.module('teacherdashboard')
     $scope.sections = [];
     $scope.goals = [];
 
+
     if(!statebag.school || !statebag.currentStudent) {
       console.log(JSON.stringify(statebag));
       //Resolve the school then resolve the student
@@ -64,19 +65,19 @@ angular.module('teacherdashboard')
 
     function resolveStudentSectionData() {
       $scope.students.push(statebag.currentStudent);
-      var studentSectionsPromise = api.studentSections.get({
+      statebag.studentSectionsPromise = api.studentSections.get({
         studentId: statebag.currentStudent.id,
         schoolId: statebag.school.id,
         yearId: statebag.currentYear.id,
         termId: statebag.currentTerm.id,
       }).$promise;
-      studentSectionsPromise.then(
+      statebag.studentSectionsPromise.then(
         function(sections){
-          var sectionGradePromises = [];
+          statebag.sectionGradePromises = [];
           for(var i = 0; i < sections.length; i++) { //var sect in sections) {
             var section = sections[i];
             //Resolve the current student's grade in the course
-            sectionGradePromises.push(api.studentSectionGrade.get({
+            statebag.sectionGradePromises.push(api.studentSectionGrade.get({
               studentId: statebag.currentStudent.id,
               schoolId: statebag.school.id,
               yearId: statebag.currentYear.id,
@@ -96,11 +97,13 @@ angular.module('teacherdashboard')
           }
           //When the sections are loaded and the student grades calculated, bind
           //The collection of sections to the scope variable bound to the DOM
-          $q.all(sectionGradePromises).then(function(gradeResults){
+          $q.all(statebag.sectionGradePromises).then(function(gradeResults){
             for(var i = 0; i < gradeResults.length; i++) {
               sections[i].grade = resolveGrade(gradeResults[i].grade);
             }
             $scope.sections = sections;
+            statebag.sections = $scope.sections;
+            console.log(statebag.sections);
           });
         },
         function(error){

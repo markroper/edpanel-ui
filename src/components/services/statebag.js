@@ -18,6 +18,7 @@ angular.module('teacherdashboard')
     studentsPerformanceSummary : [],
     lastFullRefresh : null,
     goals : [],
+    sections : [],
     //User UI related caches
     userRole : '',
     theme : 'indigo',
