@@ -7,7 +7,6 @@ angular.module('teacherdashboard')
     $scope.sections = [];
     $scope.goals = [];
 
-
     if(!statebag.school || !statebag.currentStudent) {
       console.log(JSON.stringify(statebag));
       //Resolve the school then resolve the student
@@ -64,6 +63,7 @@ angular.module('teacherdashboard')
 
 
     function resolveStudentSectionData() {
+      statebag.currentPage.name = statebag.currentStudent.name;
       $scope.students.push(statebag.currentStudent);
       statebag.studentSectionsPromise = api.studentSections.get({
         studentId: statebag.currentStudent.id,

@@ -2,6 +2,7 @@
 angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag',
 function($scope, $state, $mdSidenav, api, statebag) {
     $scope.userRole = statebag.userRole;
+    $scope.currentPage = statebag.currentPage;
     $scope.theme = statebag.theme;
     //This base state should always redirect home...
     if($state.current.name === 'app') {

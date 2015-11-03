@@ -3,6 +3,7 @@
 angular.module('teacherdashboard')
   .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts',
     function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts) {
+      statebag.currentPage.name = "";
       $scope.showFilter=true;
       var roles = consts.roles;
       //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old

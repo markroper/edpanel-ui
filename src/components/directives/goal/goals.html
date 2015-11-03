@@ -1,66 +1,62 @@
 
-<div>
-<div layout="row" layout-align="center center">
-  <h1>Goals</h1>
-  <div class="create-wrapper">
+<div class="goals">
+  <div layout="row" class="goals-container">
+    <md-card class="student-goal" ng-repeat="goal in goals">
+      <md-card-content>
+        <div class="row"><div class="goal-title">{{goal.title}}</div></div>
+        <div class="progress">
+          <md-tooltip>{{goal.progressText}} of {{goal.maxDisplay}}</md-tooltip>
+          <div class="progress-bar {{goal.colorClass}}" role="progressbar"
+               aria-valuemin=0 aria-valuemax={{goal.max}} style="width:{{goal.width}}%">
+          </div>
+        </div>
+        <div layout="row" layout-align="center center">
+          <span flex><span>{{goal.progressText}}</span></span>
+          <span flex>Class average: <span class="goal-value">{{goal.aveValue}}</span></span>
+        </div>
+
+        <md-fab-speed-dial md-open="demo.isOpen" md-direction="left" class="md-scale ">
+           <md-fab-trigger>
+            <md-button aria-label="menu" class="goal-menu md-icon-button">
+              <md-icon md-font-set="material-icons">more_vert</md-icon>
+            </md-button>
+          </md-fab-trigger>
+          <md-fab-actions>
+            <md-button ng-click="editGoal(goal)" class="md-fab md-primary md-raised md-mini">
+              <md-icon md-font-set="material-icons"> mode_edit </md-icon>
+            </md-button>
+            <md-button ng-click="deleteGoal(goal)" class="md-fab md-warn md-raised md-mini">
+              <md-icon md-font-set="material-icons"> delete </md-icon>
+            </md-button>
+          </md-fab-actions>
+        </md-fab-speed-dial>
+
+        <div ng-show="goal.editActive" class="editSlider">
+          <md-content style="margin: 16px; padding:16px">
+          <div layout>
+              <md-slider test-drag-end ng-model="goal.proposedValue" flex= min="0" max="{{goal.maxPossible}}" aria-label="red" id="red-slider" class="">
+              </md-slider>
+            <div flex="20" layout layout-align="center center">
+              <input type="number" ng-model="goal.proposedValue" aria-label="red" aria-controls="red-slider">
+            </div>
+            </div>
+            <div layout>
+              <md-button ng-click="proposeEdit(goal)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
+                <md-icon md-font-set="material-icons">check</md-icon>
+              </md-button>
+              <md-button ng-click="goal.editActive = false" aria-label="menu" class="md-fab md-warn md-raised md-mini">
+                <md-icon md-font-set="material-icons">close</md-icon>
+              </md-button>
+            </div>
+        </md-content>
+        </div>
+
+      </md-card-content>
+    </md-card>
+  </div>
+  <div layout="row" layout-align="center center">
     <md-button ng-show="sectionsResolved" ng-click="handleCreateGoalClick($event)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
       <md-icon md-font-set="material-icons">add</md-icon>
     </md-button>
   </div>
-
-</div>
-  <div layout="row" class="goals-container">
-  <md-card class="student-goal" ng-repeat="goal in goals">
-    <md-card-content>
-      <div class="row"><div class="goal-title">{{goal.title}}</div></div>
-      <div class="progress">
-        <md-tooltip>{{goal.progressText}} of {{goal.maxDisplay}}</md-tooltip>
-        <div class="progress-bar {{goal.colorClass}}" role="progressbar"
-             aria-valuemin=0 aria-valuemax={{goal.max}} style="width:{{goal.width}}%">
-        </div>
-      </div>
-      <div layout="row" layout-align="center center">
-        <span flex><span>{{goal.progressText}}</span></span>
-        <span flex>Class average: <span class="goal-value">{{goal.aveValue}}</span></span>
-      </div>
-
-      <md-fab-speed-dial md-open="demo.isOpen" md-direction="left" class="md-scale ">
-         <md-fab-trigger>
-          <md-button aria-label="menu" class="goal-menu md-icon-button">
-            <md-icon md-font-set="material-icons">more_vert</md-icon>
-          </md-button>
-        </md-fab-trigger>
-        <md-fab-actions>
-          <md-button ng-click="editGoal(goal)" class="md-fab md-primary md-raised md-mini">
-            <md-icon md-font-set="material-icons"> mode_edit </md-icon>
-          </md-button>
-          <md-button ng-click="deleteGoal(goal)" class="md-fab md-warn md-raised md-mini">
-            <md-icon md-font-set="material-icons"> delete </md-icon>
-          </md-button>
-        </md-fab-actions>
-      </md-fab-speed-dial>
-
-      <div ng-show="goal.editActive" class="editSlider">
-        <md-content style="margin: 16px; padding:16px">
-        <div layout>
-            <md-slider test-drag-end ng-model="goal.proposedValue" flex= min="0" max="{{goal.maxPossible}}" aria-label="red" id="red-slider" class="">
-            </md-slider>
-          <div flex="20" layout layout-align="center center">
-            <input type="number" ng-model="goal.proposedValue" aria-label="red" aria-controls="red-slider">
-          </div>
-          </div>
-          <div layout>
-            <md-button ng-click="proposeEdit(goal)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
-              <md-icon md-font-set="material-icons">check</md-icon>
-            </md-button>
-            <md-button ng-click="goal.editActive = false" aria-label="menu" class="md-fab md-warn md-raised md-mini">
-              <md-icon md-font-set="material-icons">close</md-icon>
-            </md-button>
-          </div>
-      </md-content>
-      </div>
-
-    </md-card-content>
-  </md-card>
-</div>
 </div>

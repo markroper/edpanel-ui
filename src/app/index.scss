@@ -98,15 +98,6 @@ md-list .md-button {
     padding: 0px 0px 8px 0px;
   }
 
-
-/* Primary content area */
-
-#content  {
-  padding-right: 5px;
-  padding-top: 5px;
-  height:100vh;
-}
-
 #content .md-button.share {
   background-color: transparent;
   border: none;
@@ -189,15 +180,16 @@ span.name {
 
 // injector
 @import '../components/directives/chorocalendar/chorocalendar.scss';
+@import '../components/directives/datelinechart/datelinechart.scss';
 @import '../components/directives/goal/goals.scss';
 @import '../components/directives/gradedonut/gradedonut.scss';
 @import '../components/directives/scatterplot/scatterplot.scss';
 @import '../components/directives/settingscard/settingscard.scss';
 @import '../components/directives/studentsoverview/students.grid.scss';
-@import '../components/routecontrollers/administration/administration.scss';
 @import '../components/routecontrollers/home/home.scss';
 @import '../components/routecontrollers/login/login.scss';
 @import '../components/routecontrollers/navinclude/navinclude.scss';
 @import '../components/routecontrollers/student/student.scss';
 @import '../components/routecontrollers/studentSectDrill/studentSectDrill.scss';
+@import '../components/routecontrollers/administration/administration.scss';
 // endinjector

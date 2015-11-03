@@ -8,11 +8,11 @@
 }
 
 .students-grid {
-	.chorocontainer {
+	.slidercontainer {
     overflow: hidden;
     animation: slideOpenVertical 250ms linear;
 	}
-	.oldchorocontainer {
+	.oldslidercontainer {
 		overflow:hidden;
 		height:0;
 		animation: slideClosedVertical 250ms linear;
@@ -22,7 +22,7 @@
 		outline:none;
 	}
 	md-card {
-		padding: 15px 20px 0px 20px;
+		padding: 0px 20px 0px 20px;
 	}
 	button {
 		width: 100%;
