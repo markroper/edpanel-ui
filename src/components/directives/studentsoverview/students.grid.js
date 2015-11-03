@@ -11,20 +11,24 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
       replace: true,
       controller: function($scope, $element) {
+        var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
+        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" data-promise="hwDataPromise"></datetimechart></div>';
+        
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
-        $scope.hideBehaviorTray = function() {
+        $scope.hideTray = function() {
           //Null out the active student
           $scope.student = null;
+          $scope.currTemplate = null;
           //Bury the body, hide the evidence
           if($scope.choroScope) {
             $scope.choroScope.$destroy();
             $scope.choroScope = null;
             if($scope.choroCal) {
-              $scope.choroCal.removeClass('chorocontainer');
-              $scope.choroCal.addClass('oldchorocontainer');
+              $scope.choroCal.removeClass('slidercontainer');
+              $scope.choroCal.addClass('oldslidercontainer');
               var oldElem = $scope.choroCal;
               $scope.choroCal = null;
               //After we've animated the previous chorocal away, actually remove it
@@ -34,22 +38,29 @@ angular.module('teacherdashboard')
             }
           }
         };
-        $scope.showBehaviorTray = function(ev, student) {
-          if(!$scope.student || $scope.student.id !== student.id) {
+        $scope.showTray = function(ev, student, template) {
+          if(!$scope.student || $scope.student.id !== student.id || $scope.currTemplate !== template) {
             //Hide other dialog, if shown...
-            $scope.hideBehaviorTray(ev, student);
+            $scope.hideTray(ev, student);
             $scope.student = student;
+            $scope.currTemplate = template;
             $scope.choroScope = $scope.$new(true);
             //Cache the isolated scope variables needed for the chorocalendar directive
             $scope.choroScope.behaviorDataPromise = 
               api.studentBehaviors.get({ studentId: student.id }).$promise;
-            $scope.choroScope.hideBehaviorTray = $scope.hideBehaviorTray;
-            $scope.choroCal = $compile('<div flex="100" class="chorocontainer"><chorocalendar slide-closed="hideBehaviorTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>')($scope.choroScope);
+            $scope.choroScope.hideTray = $scope.hideTray;
+            $scope.choroCal = $compile(template)($scope.choroScope);
             angular.element(ev.target).parent().parent().after($scope.choroCal);
           } else {
-            $scope.hideBehaviorTray(ev, student);
+            $scope.hideTray(ev, student);
           }
+        }
+        $scope.showBehaviorTray = function(ev, student) {
+          $scope.showTray(ev, student, behaviorCalendarHtml);
         };
+        $scope.showHomeworkTray = function(ev, student) {
+          $scope.showTray(ev, student, hwCompletionChartHtml);
+        }
       }
     };
   }]);
