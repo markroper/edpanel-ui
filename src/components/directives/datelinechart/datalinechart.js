@@ -24,9 +24,10 @@ angular.module('teacherdashboard')
           },
           axis: {
             y2: {
-              show: true
+              show: true // ADD
             }
           }
-      });
+        });
+      }
     };
   }]);
