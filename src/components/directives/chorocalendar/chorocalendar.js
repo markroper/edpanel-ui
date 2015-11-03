@@ -85,8 +85,7 @@ angular.module('teacherdashboard')
         var svgWidth = elem.find('svg').width();
         elem.find(CHORO_CONTAINER_SELECTOR).scrollLeft(svgWidth);
 
-        scope.calendarDataPromise.then(function(resolvedData){
-          console.log('inside the chorocalendar.js callback');
+        scope.calendarDataPromise.then(function(resolvedData) {
           var behaviorByDate = {};
           resolvedData.forEach(function(behavior){
             var currDate = moment(behavior.behaviorDate);

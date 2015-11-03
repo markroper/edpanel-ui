@@ -38,7 +38,7 @@
 						<md-tooltip>{{student.behavior || 90}} prep score this {{student.behaviorPeriod || 'period'}}</md-tooltip>
 					</div>
 				</div>
-				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100">
+				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-click="showHomeworkTray($event, student)">
 					<div class="choropleth band-{{student.homeworkClass}}">
 						<span class="mobile-label" hide-gt-sm>Homework Completion</span>
 						<md-tooltip>{{student.homework || 0}}% this term</md-tooltip>
