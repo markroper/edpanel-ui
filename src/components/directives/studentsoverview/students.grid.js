@@ -45,7 +45,7 @@ angular.module('teacherdashboard')
               api.studentBehaviors.get({ studentId: student.id }).$promise;
             $scope.choroScope.hideBehaviorTray = $scope.hideBehaviorTray;
             $scope.choroCal = $compile('<div flex="100" class="chorocontainer"><chorocalendar slide-closed="hideBehaviorTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>')($scope.choroScope);
-            $scope.choroCal.insertAfter(angular.element(ev.target).parent().parent());
+            angular.element(ev.target).parent().parent().after($scope.choroCal);
           } else {
             $scope.hideBehaviorTray(ev, student);
           }

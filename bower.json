@@ -2,6 +2,7 @@
   "name": "teacherdashboard",
   "version": "0.0.0",
   "dependencies": {
+    "jquery":"2.1.x",
     "angular": "v1.4.x",
     "angular-animate": "v1.4.x",
     "angular-aria": "v1.4.x",

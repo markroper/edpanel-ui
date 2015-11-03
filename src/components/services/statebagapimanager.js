@@ -1,6 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
 .service('statebagApiManager', ['statebag', '$q', 'api', function(statebag, $q, api){
+  var DATE_FORMAT = 'YYYY-MM-DD';
   //Returns a promise
   return {
     retrieveAndCacheSchool: function(schoolId) {
@@ -42,21 +43,24 @@ angular.module('teacherdashboard')
         statebag.students.forEach(function(s){
           studentIds.push(s.id);
         });
-
-        var behaviorDates = returnStartAndEndDate('behavior');
         var attendanceDates = returnStartAndEndDate('attendance');
         //TODO: currently HW completion is term, driven and not customizable, change this?
         // var homeworkDates = returnStartAndEndDate('homework');
         var hwQuery = getHwQuery(statebag.currentYear.id, statebag.currentTerm.id, studentIds);
-        var behaviorQuery = getBehaviorQuery(behaviorDates.min, behaviorDates.max, studentIds);
         var attendanceQuery = getAttendanceQuery(attendanceDates.min, attendanceDates.max, studentIds);
         var studentDataPromises = [];
 
         //Get attendance & HW completion
         studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, hwQuery).$promise);
-        studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise);
         studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceQuery).$promise);
         studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
+
+        studentDataPromises.push(api.studentsPrepScores.get({
+          studentId: studentIds,
+          startDate: moment(statebag.currentYear.startDate).format(DATE_FORMAT),
+          endDate: moment().format(DATE_FORMAT)
+        }).$promise);
+
         //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
         $q.all(studentDataPromises).then(function(responses) {
           var resolvedStudents = [];
@@ -66,19 +70,9 @@ angular.module('teacherdashboard')
           responses[0].records.forEach(function(student){
             studentMap[student.values[0]] = resolveStudentScopeObject(student.values);
           });
-          //Update the behavior demerit counts
-          responses[1].records.forEach(function(student) {
-            var studentDemerits = student.values;
-            var pluckedStudent = studentMap[studentDemerits[0]];
-            if (pluckedStudent) {
-              pluckedStudent.behavior = studentDemerits[1];
-              pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
-              pluckedStudent.behaviorPeriod = returnComponentPeriod('behavior');
-            }
 
-          });
           //Update the attendance data for each student
-          responses[2].records.forEach(function(student) {
+          responses[1].records.forEach(function(student) {
             var studentAttendance = student.values;
             var pluckedStudent = studentMap[studentAttendance[0]];
             if (pluckedStudent) {
@@ -89,15 +83,27 @@ angular.module('teacherdashboard')
 
           });
           //Update the GPA
-          for (var idKey in responses[3]) {
-            if (responses[3].hasOwnProperty(idKey) &&
+          for (var idKey in responses[2]) {
+            if (responses[2].hasOwnProperty(idKey) &&
                 !isNaN(idKey)) {
               var pluckedStudent = studentMap[idKey];
               if(pluckedStudent) {
-                pluckedStudent.gpa = Math.round( responses[3][idKey] * 10 ) / 10;
+                pluckedStudent.gpa = Math.round( responses[2][idKey] * 10 ) / 10;
                 pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
                 resolvedStudents.unshift(pluckedStudent);
               }
+            }
+          }
+          var maxEndDate = null;
+          for (var student in responses[3]) {
+            var score = responses[3][student];
+            var pluckedStudent = studentMap[score.studentId];
+            if(pluckedStudent && score.endDate && 
+                ( !maxEndDate || maxEndDate <= score.endDate)) {
+              maxEndDate = score.endDate;
+              pluckedStudent.behavior = score.score;
+              pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
+              pluckedStudent.behaviorPeriod = returnComponentPeriod('behavior');
             }
           }
           statebag.lastFullRefresh = new Date().getTime();
@@ -156,6 +162,10 @@ angular.module('teacherdashboard')
         dates.min = statebag.currentYear.startDate;
         dates.max = statebag.currentYear.endDate;
         break;
+    }
+    //Never let a max date be greater than the current date, duh
+    if(dates.max > moment().valueOf()) {
+      dates.max = moment().valueOf();
     }
     return dates;
   }
@@ -368,12 +378,12 @@ angular.module('teacherdashboard')
       greenThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.green;
       yellowThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.yellow;
     }
-    if(behaviorScore <= greenThreshold) {
-      return '90-100';
-    } else if(behaviorScore <= yellowThreshold) {
+    if(behaviorScore < yellowThreshold) {
+      return '40-50';
+    } else if(behaviorScore < greenThreshold) {
       return '70-80';
     } else {
-      return '40-50';
+      return '90-100';
     }
   }
   function resolveHomeworkClass(homeworkScore) {
