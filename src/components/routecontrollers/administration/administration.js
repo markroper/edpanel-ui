@@ -2,6 +2,7 @@
 angular.module('teacherdashboard')
 .controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast',
   function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast) {
+    statebag.currentPage.name = "Administration";
     //Resolve the invalidated users
     api.users.get(
       { schoolId: statebag.school.id,

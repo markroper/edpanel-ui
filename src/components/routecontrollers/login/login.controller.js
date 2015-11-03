@@ -20,6 +20,7 @@ angular.module('teacherdashboard')
   })
   .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag',
     function ($scope, api, $state, authentication, statebag) {
+      statebag.currentPage.name = "Login";
 	    $scope.inputEmail = '';
       $scope.password = '';
       $scope.showErrorMsg = false;

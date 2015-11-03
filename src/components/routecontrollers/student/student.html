@@ -1,20 +1,40 @@
 <div class="student-detail">
-	<h1>{{students[0].name}}</h1>
-	<student-grid students-data="students" show-filter="showFilter" cellWidth="25"></student-grid>
-
-  <goals goals="goals"></goals>
-	<h1>Grades & Grade Formulas</h1>
-	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
-		<h3 flex="50">Loading...</h3>
-		<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
-	</div>
-
-	<div class="courses">
-		<div class="" ng-repeat="section in sections">
-			<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-				<md-button class="md-raised" ng-click="sectionClick(section)">{{section.course.name}}</md-button>
-			</section>
-			<gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
+	<md-tabs md-center-tabs md-dynamic-height md-border-bottom class="tabs-header">
+		<md-tab label="Overview">
+			<div class="tab-contents">
+				<student-grid students-data="students" show-filter="showFilter" cellWidth="25"></student-grid>
+			</div>
+		</md-tab>
+		<md-tab label="Goals">
+			<div class="tab-contents">
+		  	<goals goals="goals"></goals>
+		  </div>
+		</md-tab>
+		<md-tab label="Grades">
+			<div class="tab-contents">
+				<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
+					<h3 flex="50">Loading...</h3>
+					<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
+				</div>
+				<div class="courses">
+					<div class="" ng-repeat="section in sections">
+						<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+							<md-button class="md-raised" ng-click="sectionClick(section)">{{section.course.name}}</md-button>
+						</section>
+						<gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
+					</div>
+				</div>
 		</div>
-	<div class="courses">
+		</md-tab>
+		<md-tab label="State Exams">
+			<div class="tab-contents">
+				<span>Under construction</span>
+			</div>
+		</md-tab>
+		<md-tab label="Graduation">
+			<div class="tab-contents">
+				<span>Under construction</span>
+			</div>
+		</md-tab>
+	</md-tabs>
 </div>
