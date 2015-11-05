@@ -1,15 +1,5 @@
 <div class="student-detail">
 	<md-tabs md-center-tabs md-dynamic-height md-border-bottom class="tabs-header">
-		<md-tab label="Overview">
-			<div class="tab-contents">
-				<student-grid students-data="students" show-filter="showFilter" cellWidth="25"></student-grid>
-			</div>
-		</md-tab>
-		<md-tab label="Goals">
-			<div class="tab-contents">
-		  	<goals goals="goals"></goals>
-		  </div>
-		</md-tab>
 		<md-tab label="Grades">
 			<div class="tab-contents">
 				<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
@@ -24,7 +14,17 @@
 						<gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
 					</div>
 				</div>
-		</div>
+			</div>
+		</md-tab>
+		<md-tab label="Goals">
+			<div class="tab-contents">
+		  	<goals goals="goals"></goals>
+		  </div>
+		</md-tab>
+		<md-tab label="behavior">
+			<div class="tab-contents">
+				<span>under construction</span>
+			</div>
 		</md-tab>
 		<md-tab label="State Exams">
 			<div class="tab-contents">

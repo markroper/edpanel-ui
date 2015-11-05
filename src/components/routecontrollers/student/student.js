@@ -8,7 +8,6 @@ angular.module('teacherdashboard')
     $scope.goals = [];
 
     if(!statebag.school || !statebag.currentStudent) {
-      console.log(JSON.stringify(statebag));
       //Resolve the school then resolve the student
       statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
         function() {
@@ -65,6 +64,7 @@ angular.module('teacherdashboard')
     function resolveStudentSectionData() {
       statebag.currentPage.name = statebag.currentStudent.name;
       $scope.students.push(statebag.currentStudent);
+      //GET THE SECTIONS
       statebag.studentSectionsPromise = api.studentSections.get({
         studentId: statebag.currentStudent.id,
         schoolId: statebag.school.id,
@@ -84,6 +84,9 @@ angular.module('teacherdashboard')
               termId: statebag.currentTerm.id,
               sectionId: section.id
             }).$promise);
+            //TODO: resolve the individual assignments
+
+            
             //Transform the grade formula weights into a form that can be used by visualization lib
             var weights = section.gradeFormula.assignmentTypeWeights;
             var arrayWeights = [];
