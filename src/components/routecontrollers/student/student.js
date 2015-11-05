@@ -76,6 +76,13 @@ angular.module('teacherdashboard')
           statebag.sectionGradePromises = [];
           for(var i = 0; i < sections.length; i++) { //var sect in sections) {
             var section = sections[i];
+            section.assignmentsPromise = api.studentSectionAssignments.get({
+              studentId: statebag.currentStudent.id,
+              schoolId: statebag.school.id,
+              yearId: statebag.currentYear.id,
+              termId: statebag.currentTerm.id,
+              sectionId: section.id }).$promise;
+
             //Resolve the current student's grade in the course
             statebag.sectionGradePromises.push(api.studentSectionGrade.get({
               studentId: statebag.currentStudent.id,
@@ -84,9 +91,6 @@ angular.module('teacherdashboard')
               termId: statebag.currentTerm.id,
               sectionId: section.id
             }).$promise);
-            //TODO: resolve the individual assignments
-
-            
             //Transform the grade formula weights into a form that can be used by visualization lib
             var weights = section.gradeFormula.assignmentTypeWeights;
             var arrayWeights = [];

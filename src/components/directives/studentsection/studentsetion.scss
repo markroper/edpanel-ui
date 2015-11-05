@@ -1,0 +1,21 @@
+.student-section {
+  text-align: center;
+
+  .grade-item {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .section-grade {
+    font-size: 75px;
+  }
+  .grade-container {
+    text-align: center;
+  }
+  .grade-component-grid {
+    width:250px;
+    height:175px;
+    border-left:none;
+    border-right:none;
+    border-bottom: none;
+  }
+}

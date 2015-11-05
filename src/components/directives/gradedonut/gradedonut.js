@@ -33,39 +33,11 @@ angular.module('teacherdashboard')
               bindto: elem[0],
               data: {
                 columns: scope.gradeWeights,
-                type : 'donut',
-                onclick: function() {
-                  var studentAssignmentsPromise = api.studentSectionAssignments.get({ 
-                    studentId: statebag.currentStudent.id,
-                    schoolId: statebag.school.id, 
-                    yearId: statebag.currentYear.id, 
-                    termId: statebag.currentTerm.id,
-                    sectionId: scope.section.id }).$promise;
-
-                  studentAssignmentsPromise.then(
-                      //Success callback
-                      function(payload){
-                        statebag.currentSection = scope.section;
-                        statebag.currentStudentSectionAssignments = payload;
-                        $state.go(
-                          'app.studentSectDrill', 
-                          { 
-                            schoolId: statebag.school.id,
-                            studentId: statebag.currentStudent.id,
-                            sectionId: statebag.currentSection.id 
-                          });
-                      }, 
-                      //Failure callback
-                      function(error){
-                        console.log(JSON.stringify(error));
-                      });
-                }
+                type : 'pie'
               },
-              donut: {
-                label: {
-                  show: false
-                },
-                title: scope.courseTitle
+              size: {
+                height: 175,
+                width: 225
               },
               legend: {
                 item: {

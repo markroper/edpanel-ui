@@ -4,7 +4,7 @@ angular.module('teacherdashboard')
     return {
       scope: {
         chartDataPromise: '=',
-        chartTitle: '@'
+        section: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/scatterplot/scatterplot.html',
@@ -40,9 +40,42 @@ angular.module('teacherdashboard')
           .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
+        var processRawAssignments = function(inputData) {
+          var processedAssignments = [];
+          inputData.forEach(function(d){
+            if(d.assignment) {
+              var p = {};
+              //Resolve grade
+              if(typeof d.awardedPoints !== 'undefined') {
+                p.grade = Math.round(d.awardedPoints / d.assignment.availablePoints * 100);
+              } else {
+                if(d.completed) {
+                  p.grade = 100;
+                } else {
+                  p.grade = 0;
+                }
+              }
+              //Due date
+              p.dueDate = new Date(d.assignment.dueDate);
+              //Completion date
+              if(d.completionDate) {
+                p.completionDate = new Date(d.completionDate);
+              } else {
+                p.completionDate = p.dueDate;
+              }
+              //Section name
+              p.category = d.assignment.type.toLowerCase();
+              //Teacher name
+              p.teacher = scope.section.teachers[0].name;
+              p.assignment = d;
+              processedAssignments.push(p);
+            }
+          });
+          return processedAssignments;
+        }
 
         scope.chartDataPromise.then(function(theData){
-          var data = theData;
+          var data = processRawAssignments(theData);
           data.forEach(function(d) {
             categories[d.category] = true;
           });

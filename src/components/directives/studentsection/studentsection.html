@@ -1,11 +1,24 @@
 <div class="student-section">
-  <h3>{{section.name}}</h3>
-  <div class="current-grade">
-    <h3>{{sectionGrade.currentGrade || '--'}}</h3>
-    <span>Current Grade</span>
-  </div>
-  <div class="component-grades">
-    <div >
+  <h2 class="md-display-1">{{section.course.name}}</h2>
+  
+  <div layout="row" layout-sm="column" layout-align="center start" class="grade-container">
+    <div flex="none" class="current-grade grade-item">
+      <h3 class="md-title ">Current Grade</h3>
+      <h1 class="md-display-4">{{sectionGrade.currentGrade || '--'}}</h1>
+    </div>
 
+    <div flex="none" class="grade-item">
+      <h3 class="md-title">Component Grades</h3>
+      <div ui-grid="{ data: myData, enableColumnMenus: false }" class="grade-component-grid"></div>
+    </div>
+
+    <div flex="none" class="component-grades grade-item">
+      <h3 class="md-title">Grade Formula</h3>
+      <gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
+    </div>
+  </div>
+  <div class="assignment-scores">
+    <h3 class="md-title">Assignments</h3>
+    <scatterplot chart-data-promise="section.assignmentsPromise" section="section"></scatterplot>
   </div>
 </div>

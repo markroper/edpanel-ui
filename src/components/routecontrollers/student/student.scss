@@ -1,15 +1,10 @@
 .student-detail {
-  md-tab-item {
-    border-radius: 0px 10px 0px 0px;
-    border-right: 1px solid #b9b9b9;
-  }
   md-tabs-canvas {
     background-color: #F7F7F7;
   }
   md-tab-item.md-active {
     background-color: white;
   }
-
   .tab-contents {
     padding-top: 10px;
   }
