@@ -35,6 +35,11 @@ angular.module('teacherdashboard')
                 columns: scope.gradeWeights,
                 type : 'pie'
               },
+              pie: {
+                label: {
+                  show: false
+                }
+              },
               size: {
                 height: 175,
                 width: 225
