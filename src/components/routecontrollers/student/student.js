@@ -65,6 +65,7 @@ angular.module('teacherdashboard')
       statebag.currentPage.name = statebag.currentStudent.name;
       $scope.students.push(statebag.currentStudent);
       //GET THE SECTIONS
+      var start = new Date().getTime();
       statebag.studentSectionsPromise = api.studentSections.get({
         studentId: statebag.currentStudent.id,
         schoolId: statebag.school.id,
@@ -73,7 +74,13 @@ angular.module('teacherdashboard')
       }).$promise;
       statebag.studentSectionsPromise.then(
         function(sections){
-          statebag.sectionGradePromises = [];
+          var end = new Date().getTime();
+          var time = end - start;
+          console.log('Section retriveal took: ' + time);
+
+          var sectionGradeResolution = new Date().getTime();
+
+          var sectionGradePromises = [];
           for(var i = 0; i < sections.length; i++) { //var sect in sections) {
             var section = sections[i];
             section.assignmentsPromise = api.studentSectionAssignments.get({
@@ -84,7 +91,7 @@ angular.module('teacherdashboard')
               sectionId: section.id }).$promise;
 
             //Resolve the current student's grade in the course
-            statebag.sectionGradePromises.push(api.studentSectionGrade.get({
+            sectionGradePromises.push(api.studentSectionGrade.get({
               studentId: statebag.currentStudent.id,
               schoolId: statebag.school.id,
               yearId: statebag.currentYear.id,
@@ -104,13 +111,15 @@ angular.module('teacherdashboard')
           }
           //When the sections are loaded and the student grades calculated, bind
           //The collection of sections to the scope variable bound to the DOM
-          $q.all(statebag.sectionGradePromises).then(function(gradeResults){
+          $q.all(sectionGradePromises).then(function(gradeResults){
+            var sectionGradeResolutionEnd = new Date().getTime();
+            var gradeResTime = sectionGradeResolutionEnd - sectionGradeResolution;
+            console.log('Resolution of grades for all sections took took: ' + gradeResTime);
             for(var i = 0; i < gradeResults.length; i++) {
               sections[i].grade = resolveGrade(gradeResults[i].grade);
             }
             $scope.sections = sections;
             statebag.sections = $scope.sections;
-            console.log(statebag.sections);
           });
         },
         function(error){
