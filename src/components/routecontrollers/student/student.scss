@@ -1,10 +1,12 @@
 .student-detail {
+  md-tabs-canvas {
+    background-color: #F7F7F7;
+  }
+  md-tab-item.md-active {
+    background-color: white;
+  }
   .tab-contents {
     padding-top: 10px;
-  }
-  .md-center-tabs {
-    /*background-color: #FCFCFC;  
-    border-top: solid 1px rgba(0, 0, 0, 0.117647);*/
   }
   >h2 {
     margin-top:5px;

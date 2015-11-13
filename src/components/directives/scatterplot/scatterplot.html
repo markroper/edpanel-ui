@@ -1,6 +1,12 @@
 <div class="scatterplot">
-    <h2>{{chartTitle}}</h2>
-    <div class="svg-container">
-		<svg></svg>
-	</div>
+  <div layout="column">
+    <div layout="row">
+      <div flex="100" class="svg-container" ng-show="assignmentView=='graph'">
+    	</div>
+    </div>
+  </div>
+  <md-radio-group ng-model="assignmentView" class="md-primary radio-buttons" layout="row" layout-align="center center">
+    <md-radio-button value="graph" class="">Graph</md-radio-button>
+    <md-radio-button value="table" ng-click="injectTableView()" class="">Table</md-radio-button>
+  </md-radio-group>
 </div>

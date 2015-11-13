@@ -4,116 +4,104 @@ angular.module('teacherdashboard')
     return {
       scope: {
         chartDataPromise: '=',
-        chartTitle: '@'
+        section: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/scatterplot/scatterplot.html',
       replace: true,
       controllerAs: 'ctrl',
       link: function(scope, elem){
-        var d3 = $window.d3;
-        var rawSvg = elem.find('svg')[0];
-        var margin = {top: 20, right: 20, bottom: 30, left: 40};
-        var width = elem.find('.svg-container').width() - margin.left - margin.right;
-        var height = 350 - margin.top - margin.bottom;
-        var x = d3.time.scale()
-            .range([0, width]);
-        var y = d3.scale.linear()
-            .range([height, 0]);
+        var start = new Date().getTime();
+        var tableViewHtml = 
+          '<div class="table-view-container" flex="100" ng-if="assignmentView==\'table\'">' +
+          '<div ui-grid="{ data: assignments, enableColumnMenus: false }" class=""></div></div>';
+        var $assignmentsContainer = angular.element(elem).find('.assignment-scores');
+        var $graphContainer = angular.element(elem).find('.svg-container');
+        var $tableContainer;
+
+        scope.assignmentView = 'graph';
+
+        scope.injectTableView = function() {
+          if(!$tableContainer) {
+            $tableContainer = $compile(tableViewHtml)(scope);
+            $graphContainer.after($tableContainer);
+            $($window).trigger('resize');
+            angular.apply();
+          }
+        }
+        var processRawAssignments = function(inputData) {
+          var processedAssignments = [];
+          inputData.forEach(function(d){
+            if(d.assignment) {
+              var p = {};
+              //Resolve grade
+              if(typeof d.awardedPoints !== 'undefined') {
+                p.grade = Math.round(d.awardedPoints / d.assignment.availablePoints * 100);
+              } else {
+                if(d.completed) {
+                  p.grade = 100;
+                } else {
+                  p.grade = 0;
+                }
+              }
+              //Due date
+              p.date = new Date(d.assignment.dueDate);
+              
+              //Section name
+              p.category = d.assignment.type.toLowerCase();
+              //Teacher name
+              p.teacher = scope.section.teachers[0].name;
+              p.name = d.assignment.name;
+              p.comment = d.comment;
+              processedAssignments.push(p);
+            }
+          });
+          return processedAssignments;
+        }
+
+        //{ 'homework': [  ] }
         var categories = {};
         var sects = [];
-
-        // var parseDate = d3.time.format('%x').parse;
-
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient('bottom')
-            .ticks(width/300);
-
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient('left').ticks(2);
-
-        var svg = d3.select(rawSvg)
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-          .append('g')
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-
         scope.chartDataPromise.then(function(theData){
-          var data = theData;
+          var data = processRawAssignments(theData);
+          var end = new Date().getTime();
+          var time = end - start;
+          console.log('scatterplot data transform took: ' + time);
+          scope.assignments = data;
+          var exs = {};
+          var categorizedData = {};
+          var chartData = [];
           data.forEach(function(d) {
-            categories[d.category] = true;
+            if(!exs[d.category]) {
+              exs[d.category] = d.category + '_x';
+              categorizedData[d.category] = [
+                [ d.category, d.grade ],
+                [ d.category + '_x', d.date ]
+              ];
+            }
+            categorizedData[d.category][0].push(d.grade);
+            categorizedData[d.category][1].push(d.date);
           });
-          for (var property in categories) {
-              if (categories.hasOwnProperty(property)) {
-                  sects.push(property);
+          angular.forEach(categorizedData, function(value, key){
+              chartData.push(value[0]);
+              chartData.push(value[1]);
+          });
+          var chart = $window.c3.generate({
+            bindto: elem.find('.svg-container')[0],
+            point: {
+              r: 5
+            },
+            data: {
+              columns: chartData,
+              xs: exs,
+              type: 'scatter'
+            },
+            axis: {
+              x: {
+                type: 'timeseries'
               }
-          }
-          x.domain(d3.extent(data, function(d) { return d.dueDate; })).nice();
-          y.domain(d3.extent(data, function(d) { return d.grade; })).nice();
-
-          svg.append('g')
-              .attr('class', 'x axis')
-              .attr('transform', 'translate(0,' + height + ')')
-              .call(xAxis)
-            .append('text')
-              .attr('x', width)
-              .attr('y', -6)
-              .style('text-anchor', 'end')
-              .text('Due date');
-
-          svg.append('g')
-              .attr('class', 'y axis')
-              .call(yAxis)
-            .append('text')
-              .attr('transform', 'rotate(-90)')
-              .attr('y', 6)
-              .attr('dy', '.71em')
-              .style('text-anchor', 'end')
-              .text('Grade');
-
-          svg.selectAll('.dot')
-              .data(data)
-            .enter().append('circle')
-              .attr('class', function(d){ return 'dot ' + d.category; })
-              .attr('tooltip-append-to-body', true)
-              .attr('tooltip-html-unsafe', function(d){
-                return $sanitize('<strong>Teacher:</strong><span> ' + 
-                  d.teacher + '</span><br/><strong>Grade:</strong><span> ' + 
-                  d.grade + '%</span><br/><strong>Type:</strong><span> ' +
-                  d.category + '</span>');
-              })
-              .attr('r', 6)
-              .attr('cx', function(d) { return x(d.dueDate); })
-              .attr('cy', function(d) { return y(d.grade); });
-
-          var legend = svg.selectAll('.legend')
-              .data(sects)
-            .enter().append('g')
-              .attr('class', 'legend')
-              .attr('transform', function(d, i) { return 'translate(0,' + i * 40 + ')'; });
-
-          legend.append('rect')
-              .attr('x', width - 25)
-              .attr('width', 40)
-              .attr('height', 28)
-              .attr('rx', 10)
-              .attr('ry', 10)
-              .attr('class', function(d){ return d; })
-              .on('click', function(d){ 
-                elem.toggleClass('Disable' + d);
-                console.log(d);
-              });
-
-          legend.append('text')
-              .attr('x', width - 35)
-              .attr('y', 15)
-              .attr('dy', '.35em')
-              .style('text-anchor', 'end')
-              .text(function(d) { return d; });
-          $compile(elem)(scope);
+            }
+          });
         });
       }
     };

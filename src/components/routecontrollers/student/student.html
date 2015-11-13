@@ -1,8 +1,14 @@
 <div class="student-detail">
 	<md-tabs md-center-tabs md-dynamic-height md-border-bottom class="tabs-header">
-		<md-tab label="Overview">
+		<md-tab label="Grades">
 			<div class="tab-contents">
-				<student-grid students-data="students" show-filter="showFilter" cellWidth="25"></student-grid>
+				<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
+					<h3 flex="50">Loading...</h3>
+					<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
+				</div>
+				<div class="" ng-repeat="section in sections" layout="row" layout-align="center center">
+					<studentsection section="section"></sectionsection>
+				</div>
 			</div>
 		</md-tab>
 		<md-tab label="Goals">
@@ -10,21 +16,10 @@
 		  	<goals goals="goals"></goals>
 		  </div>
 		</md-tab>
-		<md-tab label="Grades">
+		<md-tab label="behavior">
 			<div class="tab-contents">
-				<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
-					<h3 flex="50">Loading...</h3>
-					<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
-				</div>
-				<div class="courses">
-					<div class="" ng-repeat="section in sections">
-						<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-							<md-button class="md-raised" ng-click="sectionClick(section)">{{section.course.name}}</md-button>
-						</section>
-						<gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
-					</div>
-				</div>
-		</div>
+				<span>under construction</span>
+			</div>
 		</md-tab>
 		<md-tab label="State Exams">
 			<div class="tab-contents">

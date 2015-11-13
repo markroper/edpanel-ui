@@ -1,0 +1,63 @@
+@keyframes slideOpenAssignments {
+  0% { height: 0px; }
+  100% { height: $scatterplot-height; }
+}
+@keyframes slideClosedAssignments {
+  0% { height: $scatterplot-height; }
+  100% { height: 0px; }
+}
+.student-section {
+  text-align: center;
+  margin:20px;
+  max-width: 1300px;
+
+  .grade-item {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .section-grade {
+    font-size: 75px;
+  }
+  .grade-container {
+    text-align: center;
+  }
+  .grade-component-grid {
+    width:250px;
+    height:175px;
+    border-left:none;
+    border-right:none;
+    border-bottom: none;
+  }
+  .assignment-toggler {
+    margin: 0px 0px 0px 0px;
+    border-radius:0px;
+  }
+
+  button .rotate {
+    transform: rotate(180deg);  
+  }
+  button .rotateCounterwise {
+    transform: rotate(0deg);
+  }
+  button .rotate, 
+  button .rotateCounterwise {
+      -webkit-transition: 250ms ease all;
+      -moz-transition: 250ms ease all;
+      -o-transition: 250ms ease all;
+      transition: 250ms ease all;
+  }
+
+  .assignment-scores {
+    width: 100%;
+  }
+  .slide-open-assignments {
+    overflow: hidden;
+    height:$scatterplot-height;
+    animation: slideOpenAssignments 250ms linear;
+  }
+  .slide-closed-assignments {
+    overflow:hidden;
+    height:0px;
+    animation: slideClosedAssignments 250ms linear;
+  }
+}
