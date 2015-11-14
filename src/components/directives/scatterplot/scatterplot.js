@@ -12,9 +12,20 @@ angular.module('teacherdashboard')
       controllerAs: 'ctrl',
       link: function(scope, elem){
         var start = new Date().getTime();
+        scope.tableConfig = {
+          data: 'assignments',
+          enableColumnMenus: false,
+          columnDefs: [
+            { field: 'date', type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
+            { field: 'category' },
+            { field: 'grade' },
+            { field: 'teacher' },
+            { field: 'comment' }
+          ]
+        };
         var tableViewHtml = 
           '<div class="table-view-container" flex="100" ng-if="assignmentView==\'table\'">' +
-          '<div ui-grid="{ data: assignments, enableColumnMenus: false }" class=""></div></div>';
+          '<div ui-grid="tableConfig" class=""></div></div>';
         var $assignmentsContainer = angular.element(elem).find('.assignment-scores');
         var $graphContainer = angular.element(elem).find('.svg-container');
         var $tableContainer;
@@ -25,8 +36,6 @@ angular.module('teacherdashboard')
           if(!$tableContainer) {
             $tableContainer = $compile(tableViewHtml)(scope);
             $graphContainer.after($tableContainer);
-            $($window).trigger('resize');
-            angular.apply();
           }
         }
         var processRawAssignments = function(inputData) {
