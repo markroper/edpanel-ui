@@ -18,14 +18,14 @@ angular.module('teacherdashboard')
         var ROTATE_COUNTERWISE = 'rotateCounterwise';
         var SLIDE_OPEN_CLASS = 'slide-open-assignments';
         var SLIDE_CLOSED_CLASS = 'slide-closed-assignments';
+        //Set grade and component scores
+        var componentGrades = [];
+        angular.forEach(scope.section.currentCategoryGrades, function(value, key) {
+          this.push({ 'type': key.toLowerCase(), 'score': value });
+        }, componentGrades);
         scope.sectionGrade = {
-          currentGrade: "B+",
-          components: [
-            { type: "Homework", grade: "B+" },
-            { type: "Quizes", grade: "A+" },
-            { type: "Tests", grade: "C+" },
-            { type: "Final", grade: "B" }
-          ]
+          currentGrade: scope.section.grade,
+          components: componentGrades
         };
 
         scope.showAssignments = function() {

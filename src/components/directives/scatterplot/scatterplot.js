@@ -78,10 +78,19 @@ angular.module('teacherdashboard')
           console.log('scatterplot data transform took: ' + time);
           scope.assignments = data;
           var exs = {};
+          var categories = [];
           var categorizedData = {};
           var chartData = [];
+          var WEEKSCORE = 'grade';
+          exs[WEEKSCORE] = WEEKSCORE + '_x';
+          categorizedData.weekscore = [[WEEKSCORE], [WEEKSCORE + '_x']];
+          scope.section.gradeProgression.forEach(function(d){
+            categorizedData.weekscore[0].push(Math.round(d.score * 100));
+            categorizedData.weekscore[1].push(new Date(d.weekEnding));
+          });
           data.forEach(function(d) {
             if(!exs[d.category]) {
+              categories.push(d.category);
               exs[d.category] = d.category + '_x';
               categorizedData[d.category] = [
                 [ d.category, d.grade ],
@@ -103,7 +112,10 @@ angular.module('teacherdashboard')
             data: {
               columns: chartData,
               xs: exs,
-              type: 'scatter'
+              type: 'scatter',
+              types: { 
+                grade: 'line'
+              }
             },
             axis: {
               x: {
@@ -111,6 +123,7 @@ angular.module('teacherdashboard')
               }
             }
           });
+          chart.hide(categories);
         });
       }
     };

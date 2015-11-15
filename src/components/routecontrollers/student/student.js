@@ -91,7 +91,7 @@ angular.module('teacherdashboard')
               sectionId: section.id }).$promise;
 
             //Resolve the current student's grade in the course
-            sectionGradePromises.push(api.studentSectionGrade.get({
+            sectionGradePromises.push(api.studentSectionGradeProgression.get({
               studentId: statebag.currentStudent.id,
               schoolId: statebag.school.id,
               yearId: statebag.currentYear.id,
@@ -116,7 +116,9 @@ angular.module('teacherdashboard')
             var gradeResTime = sectionGradeResolutionEnd - sectionGradeResolution;
             console.log('Resolution of grades for all sections took took: ' + gradeResTime);
             for(var i = 0; i < gradeResults.length; i++) {
-              sections[i].grade = resolveGrade(gradeResults[i].grade);
+              sections[i].grade = resolveGrade(gradeResults[i].currentOverallGrade);
+              sections[i].gradeProgression = gradeResults[i].weeklyGradeProgression;
+              sections[i].currentCategoryGrades = gradeResults[i].currentCategoryGrades;
             }
             $scope.sections = sections;
             statebag.sections = $scope.sections;
