@@ -117,6 +117,13 @@ angular.module('teacherdashboard')
                 grade: 'line'
               }
             },
+            grid: {
+              x: {
+                lines: [
+                  { value: new Date(), text: 'today' }
+                ]
+              }
+            },
             axis: {
               x: {
                 type: 'timeseries'
