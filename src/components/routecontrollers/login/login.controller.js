@@ -18,8 +18,8 @@ angular.module('teacherdashboard')
         });
     };
   })
-  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag',
-    function ($scope, api, $state, authentication, statebag) {
+  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager',
+    function ($scope, api, $state, authentication, statebag, statebagapimanager) {
       statebag.currentPage.name = "Login";
 	    $scope.inputEmail = '';
       $scope.password = '';
@@ -53,7 +53,7 @@ angular.module('teacherdashboard')
               function(data){
                   statebag.school = data[1];
                   statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
-                  statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
+                  statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
                   $state.go('app.home', { schoolId: statebag.school.id });
               },
               //Error callback

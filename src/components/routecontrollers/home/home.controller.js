@@ -37,7 +37,9 @@ angular.module('teacherdashboard')
         //After the school and students are resolved, resolve the student performance data
         $q.all(promises).then(function() {
           statebagApiManager.retrieveAndCacheStudentPerfData()
-            .then(function(){ $scope.students = statebag.studentPerfData; });
+            .then(function(){ 
+              $scope.students = statebag.studentPerfData; 
+            });
         });
       }
 

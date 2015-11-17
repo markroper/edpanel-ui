@@ -1,6 +1,6 @@
 'use strict';
-angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag',
-function($scope, $state, $mdSidenav, api, statebag) {
+angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager',
+function($scope, $state, $mdSidenav, api, statebag, statebagapimanager) {
     $scope.userRole = statebag.userRole;
     $scope.currentPage = statebag.currentPage;
     $scope.theme = statebag.theme;
@@ -16,7 +16,7 @@ function($scope, $state, $mdSidenav, api, statebag) {
           function(data) {
               statebag.school = data[1];
               statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
-              statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
+              statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
               $state.go('app.home', { schoolId: statebag.school.id });
           });
       }

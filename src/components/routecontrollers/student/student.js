@@ -77,12 +77,19 @@ angular.module('teacherdashboard')
           var end = new Date().getTime();
           var time = end - start;
           console.log('Section retriveal took: ' + time);
-
           var sectionGradeResolution = new Date().getTime();
 
+          //Remove sections without assignments to filter out things like lunch & pullout
+          var filteredSections = [];
+          for(var i = 0; i < sections.length; i++) {
+            if(sections[i].assignments && sections[i].assignments.length > 0) {
+              filteredSections.push(sections[i]);
+            }
+          }
+
           var sectionGradePromises = [];
-          for(var i = 0; i < sections.length; i++) { //var sect in sections) {
-            var section = sections[i];
+          for(var i = 0; i < filteredSections.length; i++) { //var sect in sections) {
+            var section = filteredSections[i];
             section.assignmentsPromise = api.studentSectionAssignments.get({
               studentId: statebag.currentStudent.id,
               schoolId: statebag.school.id,
@@ -99,8 +106,9 @@ angular.module('teacherdashboard')
               sectionId: section.id
             }).$promise);
             //Transform the grade formula weights into a form that can be used by visualization lib
-            var weights = section.gradeFormula.assignmentTypeWeights;
+            var weights = {};
             var arrayWeights = [];
+            weights = section.gradeFormula.assignmentTypeWeights;
             for(var key in weights) {
               var tempArr = [];
               tempArr.push(key.toLowerCase());
@@ -116,11 +124,11 @@ angular.module('teacherdashboard')
             var gradeResTime = sectionGradeResolutionEnd - sectionGradeResolution;
             console.log('Resolution of grades for all sections took took: ' + gradeResTime);
             for(var i = 0; i < gradeResults.length; i++) {
-              sections[i].grade = resolveGrade(gradeResults[i].currentOverallGrade);
-              sections[i].gradeProgression = gradeResults[i].weeklyGradeProgression;
-              sections[i].currentCategoryGrades = gradeResults[i].currentCategoryGrades;
+              filteredSections[i].grade = resolveGrade(gradeResults[i].currentOverallGrade);
+              filteredSections[i].gradeProgression = gradeResults[i].weeklyGradeProgression;
+              filteredSections[i].currentCategoryGrades = gradeResults[i].currentCategoryGrades;
             }
-            $scope.sections = sections;
+            $scope.sections = filteredSections;
             statebag.sections = $scope.sections;
           });
         },
