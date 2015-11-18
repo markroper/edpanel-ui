@@ -60,6 +60,55 @@ angular.module('teacherdashboard')
           });
     };
 
+    /*
+    * Given a section grade formula, recurse to find the leaf node formulas.
+    * Calls resolveReportingTermGrades().
+    */
+    function resolveLeafChildrenFormulas(gradeFormula) {
+      var leafChildren = [];
+      if(gradeFormula.children && gradeFormula.children.length > 0) {
+        for(var i = 0; i < gradeFormula.children.length; i++) {
+          leafChildren = leafChildren.concat(resolveLeafChildrenFormulas( gradeFormula.children[i]));
+        }
+      } else {
+        leafChildren.push(gradeFormula);
+      }
+      return leafChildren;
+    };
+
+    /*
+    *  Warning, recurisive algorithm that walks to the leaf nodes of
+    *  a grade formula graph and returns those leaf nodes as an unsorted array.
+    *  This matters for displaying things like quarterly grades where quarters 
+    *  Are the children of semesters, semesters the children of years, for example.
+    */
+    function resolveReportingTermGrades(studentSectionDashData) {
+      var returnGrades = [];
+      if(!studentSectionDashData.section || 
+          !studentSectionDashData.section.gradeFormula) {
+        return returnGrades;
+      }
+      var gradeFormula = studentSectionDashData.section.gradeFormula;
+      var termGrades = studentSectionDashData.gradeProgression.termGrades;
+      if(gradeFormula) {
+        var leafChildren = resolveLeafChildrenFormulas(gradeFormula);
+        for(var i = 0; i < leafChildren.length; i++) {
+          var termGrade = {};
+          termGrade.name = leafChildren[i].name;
+          termGrade.id = leafChildren[i].id;
+          termGrade.endDate = leafChildren[i].endDate;
+          termGrade.startDate = leafChildren[i].startDate;
+          var termScore = termGrades[termGrade.id];
+          if(termScore) {
+            termGrade.letterGrade = termScore.letterGrade;
+            termGrade.score = termScore.score;
+            termGrade.comment = termScore.comment;
+          }
+          returnGrades.unshift(termGrade);
+        }
+      }
+      return returnGrades;
+    }
 
     function resolveStudentSectionData() {
       statebag.currentPage.name = statebag.currentStudent.name;
@@ -78,12 +127,23 @@ angular.module('teacherdashboard')
         }, function(studentSectionDashData) {
           var sections = [];
           for(var i = 0; i < studentSectionDashData.length; i++) {
-
             if(!studentSectionDashData[i].studentAssignments || 
               studentSectionDashData[i].studentAssignments.length === 0) {
               continue;
             }
             var section = studentSectionDashData[i].section;
+            //Get the term-level grades
+            section.termGrades = 
+              resolveReportingTermGrades(studentSectionDashData[i]);
+            section.termGrades.sort(function (a, b) {
+              if (a.startDate > b.startDate) {
+                return 1;
+              }
+              if (a.startDate < b.startDate) {
+                return -1;
+              }
+              return 0;
+            });
             //Set up the assignments promise
             var deferred = $q.defer();
             section.assignmentsPromise = deferred.promise;
