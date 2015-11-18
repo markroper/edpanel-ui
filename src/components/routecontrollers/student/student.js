@@ -66,74 +66,56 @@ angular.module('teacherdashboard')
       $scope.students.push(statebag.currentStudent);
       //GET THE SECTIONS
       var start = new Date().getTime();
-      statebag.studentSectionsPromise = api.studentSections.get({
-        studentId: statebag.currentStudent.id,
-        schoolId: statebag.school.id,
-        yearId: statebag.currentYear.id,
-        termId: statebag.currentTerm.id,
-      }).$promise;
-      statebag.studentSectionsPromise.then(
-        function(sections){
-          var end = new Date().getTime();
-          var time = end - start;
-          console.log('Section retriveal took: ' + time);
-          var sectionGradeResolution = new Date().getTime();
 
-          //Remove sections without assignments to filter out things like lunch & pullout
-          var filteredSections = [];
-          for(var i = 0; i < sections.length; i++) {
-            if(sections[i].assignments && sections[i].assignments.length > 0) {
-              filteredSections.push(sections[i]);
+      var sectionDataDeferred = $q.defer();
+      statebag.studentSectionsPromise = sectionDataDeferred.promise;
+      api.studentSectionsData.get(
+        {
+          studentId: statebag.currentStudent.id,
+          schoolId: statebag.school.id,
+          yearId: statebag.currentYear.id,
+          termId: statebag.currentTerm.id,
+        }, function(studentSectionDashData) {
+          var sections = [];
+          for(var i = 0; i < studentSectionDashData.length; i++) {
+
+            if(!studentSectionDashData[i].studentAssignments || 
+              studentSectionDashData[i].studentAssignments.length === 0) {
+              continue;
             }
-          }
-
-          var sectionGradePromises = [];
-          for(var i = 0; i < filteredSections.length; i++) { //var sect in sections) {
-            var section = filteredSections[i];
-            section.assignmentsPromise = api.studentSectionAssignments.get({
-              studentId: statebag.currentStudent.id,
-              schoolId: statebag.school.id,
-              yearId: statebag.currentYear.id,
-              termId: statebag.currentTerm.id,
-              sectionId: section.id }).$promise;
-
-            //Resolve the current student's grade in the course
-            sectionGradePromises.push(api.studentSectionGradeProgression.get({
-              studentId: statebag.currentStudent.id,
-              schoolId: statebag.school.id,
-              yearId: statebag.currentYear.id,
-              termId: statebag.currentTerm.id,
-              sectionId: section.id
-            }).$promise);
-            //Transform the grade formula weights into a form that can be used by visualization lib
+            var section = studentSectionDashData[i].section;
+            //Set up the assignments promise
+            var deferred = $q.defer();
+            section.assignmentsPromise = deferred.promise;
+            deferred.resolve(studentSectionDashData[i].studentAssignments);
+            //Transform the grade weights:
             var weights = {};
             var arrayWeights = [];
-            weights = section.gradeFormula.assignmentTypeWeights;
-            for(var key in weights) {
-              var tempArr = [];
-              tempArr.push(key.toLowerCase());
-              tempArr.push(Math.round(weights[key]));
-              arrayWeights.push(tempArr);
+            if(section.gradeFormula) {
+              weights = section.gradeFormula.assignmentTypeWeights;
+              for(var key in weights) {
+                var tempArr = [];
+                tempArr.push(key.toLowerCase());
+                tempArr.push(Math.round(weights[key]));
+                arrayWeights.push(tempArr);
+              }
+            } else {
+              section.gradeFormula = {};
+            }
+            if(arrayWeights.length === 0) {
+              arrayWeights.push(["Total points", 100]);
             }
             section.gradeFormula.assignmentTypeWeights = arrayWeights;
+            //Weekly grade progression:
+            var gradeResults = studentSectionDashData[i].gradeProgression;
+            section.grade = resolveGrade(gradeResults.currentOverallGrade);
+            section.gradeProgression = gradeResults.weeklyGradeProgression;
+            section.currentCategoryGrades = gradeResults.currentCategoryGrades;
+            sections.push(section);
           }
-          //When the sections are loaded and the student grades calculated, bind
-          //The collection of sections to the scope variable bound to the DOM
-          $q.all(sectionGradePromises).then(function(gradeResults){
-            var sectionGradeResolutionEnd = new Date().getTime();
-            var gradeResTime = sectionGradeResolutionEnd - sectionGradeResolution;
-            console.log('Resolution of grades for all sections took took: ' + gradeResTime);
-            for(var i = 0; i < gradeResults.length; i++) {
-              filteredSections[i].grade = resolveGrade(gradeResults[i].currentOverallGrade);
-              filteredSections[i].gradeProgression = gradeResults[i].weeklyGradeProgression;
-              filteredSections[i].currentCategoryGrades = gradeResults[i].currentCategoryGrades;
-            }
-            $scope.sections = filteredSections;
-            statebag.sections = $scope.sections;
-          });
-        },
-        function(error){
-          console.log('failed to load the student sections and student grades ' + error);
+          $scope.sections = sections;
+          statebag.sections = $scope.sections;
+          sectionDataDeferred.resolve(sections);
         });
     }
     /*

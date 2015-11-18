@@ -58,6 +58,9 @@ angular.module('teacherdashboard')
               
               //Section name
               p.category = d.assignment.type.toLowerCase();
+              if(d.assignment.userDefinedType) {
+                p.category = d.assignment.userDefinedType.toLowerCase();
+              }
               //Teacher name
               p.teacher = "";
               if(scope.section.teachers[0]) {
@@ -70,8 +73,6 @@ angular.module('teacherdashboard')
           });
           return processedAssignments;
         }
-
-        //{ 'homework': [  ] }
         var categories = {};
         var sects = [];
         scope.chartDataPromise.then(function(theData){

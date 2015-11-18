@@ -15,7 +15,7 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager) {
           //Success callback
           function(data) {
               statebag.school = data[1];
-              statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
+              statebag.currentYear = statebagapimanager.resolveCurrentYear();
               statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
               $state.go('app.home', { schoolId: statebag.school.id });
           });

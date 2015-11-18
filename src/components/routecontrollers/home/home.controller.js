@@ -48,7 +48,7 @@ angular.module('teacherdashboard')
         if(identity.roles[0] === roles.ADMIN) {
           //retrieve all the students
           return api.allStudents.get(
-            {},
+            { schoolId: statebag.school.id },
             function(data) {
               statebag.students = data;
             }).$promise;

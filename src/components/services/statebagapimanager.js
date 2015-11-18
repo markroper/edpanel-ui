@@ -4,6 +4,16 @@ angular.module('teacherdashboard')
   var DATE_FORMAT = 'YYYY-MM-DD';
   //Returns a promise
   return {
+    resolveCurrentYear: function() {
+      var currentTime = new Date().getTime();
+      for(var i = 0; i < statebag.school.years.length; i++) {
+        if(statebag.school.years[i].startDate <= currentTime || 
+          statebag.school.years[i].endDate >= curentTime) {
+          return statebag.school.years[i];
+        }
+        return statebag.school.years[statebag.school.years.length - 1];
+      }
+    },
     resolveCurrentTerm: function() {
       var fullYearTerms = [];
       var currentTime = new Date().getTime();
@@ -69,10 +79,7 @@ angular.module('teacherdashboard')
       //Once we have UI attributes, resolve the data for the home page
       uiAttrsDeferred.promise.then(function(){
         var studentIds = [];
-        for(var i = 0; i < 30; i++) {
-          if(i >= statebag.students.length) {
-            break;
-          }
+        for(var i = 0; i < statebag.students.length; i++) {
           studentIds.push(statebag.students[i].id);
         }
         var attendanceDates = returnStartAndEndDate('attendance');
