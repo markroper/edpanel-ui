@@ -7,6 +7,12 @@
           <div flex="none" class="current-grade grade-item">
             <h3 class="md-title ">Current Grade</h3>
             <h1 class="md-display-4">{{sectionGrade.currentGrade || '--'}}</h1>
+            <div class="subgrades" layout="row">
+              <div ng-repeat="termGrade in section.termGrades" flex layout="column">
+                <div class="md-subhead">{{termGrade.name}}</div>
+                <div class="md-headline">{{termGrade.letterGrade || '--'}}</div>
+              </div>
+            </div>
           </div>
 
           <div flex="none" class="grade-item">
