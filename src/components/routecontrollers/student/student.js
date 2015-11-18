@@ -90,7 +90,7 @@ angular.module('teacherdashboard')
       }
       var gradeFormula = studentSectionDashData.section.gradeFormula;
       var termGrades = studentSectionDashData.gradeProgression.termGrades;
-      if(gradeFormula) {
+      if(gradeFormula && termGrades) {
         var leafChildren = resolveLeafChildrenFormulas(gradeFormula);
         for(var i = 0; i < leafChildren.length; i++) {
           var termGrade = {};
