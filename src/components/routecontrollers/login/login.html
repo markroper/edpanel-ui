@@ -4,15 +4,13 @@
   </div>
 </md-toolbar>
 <form name="login" class="row login">
-  <div class="col-md-3 col-md-offset-4">
+  <div class="col-md-3 col-md-offset-4" layout="column">
     <h2 class="form-signin-heading" style="text-align:center;">Please sign in</h2>
-    <md-input-container flex>
-          <label>Email address</label>
-          <input required autofocus name="email" ng-model="inputEmail" edpanel-enter-keypress="authenticate();" tabindex="1">
+    <md-input-container md-no-float>
+          <input required autofocus placeholder="Username" name="email" ng-model="inputEmail" edpanel-enter-keypress="authenticate();" tabindex="1">
     </md-input-container>
-    <md-input-container flex>
-          <label>Password</label>
-          <input type="password" ng-model="password" edpanel-enter-keypress="authenticate();" tabindex="2">
+    <md-input-container md-no-float>
+          <input type="password" placeholder="Password" ng-model="password" edpanel-enter-keypress="authenticate();" tabindex="2">
     </md-input-container>
     <md-progress-linear md-mode="{{mode}}"></md-progress-linear>
     <md-button id="sign-in" class="sign-in md-raised md-primary" ng-click="authenticate()">Sign in</md-button>
