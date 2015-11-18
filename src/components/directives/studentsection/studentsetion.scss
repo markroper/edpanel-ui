@@ -14,10 +14,15 @@
   h2 {
     margin: 0px 0px 0px 0px;
   }
+
   .grade-item {
     padding-left: 40px;
     padding-right: 40px;
   }
+  .goal-gauge svg {
+    margin-top: -40px
+  }
+
   .section-grade {
     font-size: 75px;
   }
@@ -37,12 +42,12 @@
   }
 
   button .rotate {
-    transform: rotate(180deg);  
+    transform: rotate(180deg);
   }
   button .rotateCounterwise {
     transform: rotate(0deg);
   }
-  button .rotate, 
+  button .rotate,
   button .rotateCounterwise {
       -webkit-transition: 250ms ease all;
       -moz-transition: 250ms ease all;

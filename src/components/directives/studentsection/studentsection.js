@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentsection', [ '$window', 'api', '$compile', function($window, api, $compile) {
+  .directive('studentsection', [ '$window', 'api', '$compile','$timeout', function($window, api, $compile, $timeout) {
     return {
       scope: {
         section: '=',
@@ -27,6 +27,11 @@ angular.module('teacherdashboard')
             { type: "Final", grade: "B" }
           ]
         };
+        scope.editGoal = function(section) {
+          //Call api to edit the goal
+          section.goal.editActive = true;
+
+        };
 
         scope.showAssignments = function() {
           if($assignmentsContainer.children().length === 0) {
@@ -45,6 +50,22 @@ angular.module('teacherdashboard')
         }
 
         scope.myData = scope.sectionGrade.components;
+
+        function gradeEval(val) {
+          return "B+";
+        }
+
+        $timeout(function() {
+          var g = new JustGage({
+            id: "gauge-"+ scope.section.nameId,
+            value: "87",
+            min: 0,
+            max: 100,
+            textRenderer: gradeEval,
+            valueMinFontSize: 80,
+            gaugeWidthScale: 0.5
+          });
+        });
       }
     };
   }]);

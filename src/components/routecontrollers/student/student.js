@@ -117,6 +117,9 @@ angular.module('teacherdashboard')
             console.log('Resolution of grades for all sections took took: ' + gradeResTime);
             for(var i = 0; i < gradeResults.length; i++) {
               sections[i].grade = resolveGrade(gradeResults[i].grade);
+              sections[i]['nameId'] = sections[i].course.name.replace(/\s+/g, "-");
+              sections[i]['goal'] = {};
+              sections[i]['goal']['editActive'] = false;
             }
             $scope.sections = sections;
             statebag.sections = $scope.sections;
