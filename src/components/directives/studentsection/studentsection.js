@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentsection', [ '$window', 'api', '$compile','$timeout', function($window, api, $compile, $timeout) {
+  .directive('studentsection', [ '$window','statebagApiManager' , 'api', '$compile','$timeout', '$mdToast', function($window, statebagApiManager, api, $compile, $timeout, mdToast) {
     return {
       scope: {
         section: '=',
@@ -18,20 +18,56 @@ angular.module('teacherdashboard')
         var ROTATE_COUNTERWISE = 'rotateCounterwise';
         var SLIDE_OPEN_CLASS = 'slide-open-assignments';
         var SLIDE_CLOSED_CLASS = 'slide-closed-assignments';
+        //Set grade and component scores
+        var componentGrades = [];
+        angular.forEach(scope.section.currentCategoryGrades, function(value, key) {
+          this.push({ 'type': key.toLowerCase(), 'score': value });
+        }, componentGrades);
         scope.sectionGrade = {
-          currentGrade: "B+",
-          components: [
-            { type: "Homework", grade: "B+" },
-            { type: "Quizes", grade: "A+" },
-            { type: "Tests", grade: "C+" },
-            { type: "Final", grade: "B" }
-          ]
+          currentGrade: scope.section.grade,
+          components: componentGrades
         };
         scope.editGoal = function(section) {
           //Call api to edit the goal
-          section.goal.editActive = true;
+          section.editActive = true;
 
         };
+
+        scope.proposeEdit = function(section) {
+          var datifyGoal = function(goal) {
+            var apiGoal = angular.extend({}, goal);
+
+            delete apiGoal.nameId;
+            return apiGoal;
+
+          }
+          var showSimpleToast = function(msg) {
+            mdToast.show(
+              mdToast.simple()
+                .content(msg)
+                .action('OK')
+                .hideDelay(2000)
+            );
+          };
+
+          var goal = datifyGoal(section.goal);
+          section.editActive = false;
+          goal.desiredValue = section.proposedValue;
+          api.editStudentGoal.patch(
+            { studentId: goal.student.id,
+              goalId: goal.id},
+            goal,
+            function() {
+              //TODO FIX DISPLAY ONCE THIS CHANGES?
+              showSimpleToast("Goal changed successfully");
+            },
+            function(error) {
+              showSimpleToast("There was a problem modifying the goal");
+
+            });
+
+
+        }
 
         scope.showAssignments = function() {
           if($assignmentsContainer.children().length === 0) {
@@ -51,17 +87,13 @@ angular.module('teacherdashboard')
 
         scope.myData = scope.sectionGrade.components;
 
-        function gradeEval(val) {
-          return "B+";
-        }
-
         $timeout(function() {
           var g = new JustGage({
-            id: "gauge-"+ scope.section.nameId,
+            id: "gauge-"+ scope.section.goal.nameId,
             value: "87",
             min: 0,
-            max: 100,
-            textRenderer: gradeEval,
+            max: scope.section.goal.desiredValue,
+            textRenderer: statebagApiManager.resolveGrade,
             valueMinFontSize: 80,
             gaugeWidthScale: 0.5
           });

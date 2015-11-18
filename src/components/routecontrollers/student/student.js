@@ -66,99 +66,71 @@ angular.module('teacherdashboard')
       $scope.students.push(statebag.currentStudent);
       //GET THE SECTIONS
       var start = new Date().getTime();
-      statebag.studentSectionsPromise = api.studentSections.get({
-        studentId: statebag.currentStudent.id,
-        schoolId: statebag.school.id,
-        yearId: statebag.currentYear.id,
-        termId: statebag.currentTerm.id,
-      }).$promise;
-      statebag.studentSectionsPromise.then(
-        function(sections){
-          var end = new Date().getTime();
-          var time = end - start;
-          console.log('Section retriveal took: ' + time);
 
-          var sectionGradeResolution = new Date().getTime();
+      var sectionDataDeferred = $q.defer();
+      statebag.studentSectionsPromise = sectionDataDeferred.promise;
+      api.studentSectionsData.get(
+        {
+          studentId: statebag.currentStudent.id,
+          schoolId: statebag.school.id,
+          yearId: statebag.currentYear.id,
+          termId: statebag.currentTerm.id,
+        }, function(studentSectionDashData) {
+          var sections = [];
+          for(var i = 0; i < studentSectionDashData.length; i++) {
 
-          var sectionGradePromises = [];
-          for(var i = 0; i < sections.length; i++) { //var sect in sections) {
-            var section = sections[i];
-            section.assignmentsPromise = api.studentSectionAssignments.get({
-              studentId: statebag.currentStudent.id,
-              schoolId: statebag.school.id,
-              yearId: statebag.currentYear.id,
-              termId: statebag.currentTerm.id,
-              sectionId: section.id }).$promise;
-
-            //Resolve the current student's grade in the course
-            sectionGradePromises.push(api.studentSectionGrade.get({
-              studentId: statebag.currentStudent.id,
-              schoolId: statebag.school.id,
-              yearId: statebag.currentYear.id,
-              termId: statebag.currentTerm.id,
-              sectionId: section.id
-            }).$promise);
-            //Transform the grade formula weights into a form that can be used by visualization lib
-            var weights = section.gradeFormula.assignmentTypeWeights;
+            if(!studentSectionDashData[i].studentAssignments ||
+              studentSectionDashData[i].studentAssignments.length === 0) {
+              continue;
+            }
+            var section = studentSectionDashData[i].section;
+            //Set up the assignments promise
+            var deferred = $q.defer();
+            section.assignmentsPromise = deferred.promise;
+            deferred.resolve(studentSectionDashData[i].studentAssignments);
+            //Transform the grade weights:
+            var weights = {};
             var arrayWeights = [];
-            for(var key in weights) {
-              var tempArr = [];
-              tempArr.push(key.toLowerCase());
-              tempArr.push(Math.round(weights[key]));
-              arrayWeights.push(tempArr);
+            if(section.gradeFormula) {
+              weights = section.gradeFormula.assignmentTypeWeights;
+              for(var key in weights) {
+                var tempArr = [];
+                tempArr.push(key.toLowerCase());
+                tempArr.push(Math.round(weights[key]));
+                arrayWeights.push(tempArr);
+              }
+            } else {
+              section.gradeFormula = {};
+            }
+            if(arrayWeights.length === 0) {
+              arrayWeights.push(["Total points", 100]);
             }
             section.gradeFormula.assignmentTypeWeights = arrayWeights;
+            //Weekly grade progression:
+            console.log(studentSectionDashData);
+            var gradeResults = studentSectionDashData[i].gradeProgression;
+            section.grade = statebagApiManager.resolveGrade(gradeResults.currentOverallGrade);
+
+            section.gradeProgression = gradeResults.weeklyGradeProgression;
+            section.currentCategoryGrades = gradeResults.currentCategoryGrades;
+            section["goal"] = studentSectionDashData[i].gradeGoal;
+            section.proposedValue = section.goal.desiredValue;
+            console.log(studentSectionDashData[i].gradeGoal);
+            console.log("STUFF");
+            console.log(section.goal);
+            console.log(section.course.name);
+            section.goal["nameId"] = section.course.name.replace(/\s/g, "-");
+            console.log(section.goal.nameId);
+            sections.push(section);
           }
-          //When the sections are loaded and the student grades calculated, bind
-          //The collection of sections to the scope variable bound to the DOM
-          $q.all(sectionGradePromises).then(function(gradeResults){
-            var sectionGradeResolutionEnd = new Date().getTime();
-            var gradeResTime = sectionGradeResolutionEnd - sectionGradeResolution;
-            console.log('Resolution of grades for all sections took took: ' + gradeResTime);
-            for(var i = 0; i < gradeResults.length; i++) {
-              sections[i].grade = resolveGrade(gradeResults[i].grade);
-              sections[i]['nameId'] = sections[i].course.name.replace(/\s+/g, "-");
-              sections[i]['goal'] = {};
-              sections[i]['goal']['editActive'] = false;
-            }
-            $scope.sections = sections;
-            statebag.sections = $scope.sections;
-          });
-        },
-        function(error){
-          console.log('failed to load the student sections and student grades ' + error);
+
+          $scope.sections = sections;
+          statebag.sections = $scope.sections;
+          sectionDataDeferred.resolve(sections);
         });
     }
     /*
      * Maps a numeric grade to a letter grade for display
     */
-    function resolveGrade(input) {
-      if(isNaN(input)) {
-        return '--';
-      }
-      if(input > 94) {
-        return 'A';
-      } else if(input > 89) {
-        return 'A-';
-      } else if(input > 86) {
-        return 'B+';
-      } else if(input > 83) {
-        return 'B';
-      } else if(input > 79) {
-        return 'B-';
-      } else if(input > 76) {
-        return 'C+';
-      } else if(input > 73) {
-        return 'C';
-      } else if(input > 69) {
-        return 'C-';
-      } else if(input > 66) {
-        return 'D+';
-      } else if(input > 63) {
-        return 'D';
-      } else if(input > 59) {
-        return 'D-';
-      }
-      return 'F';
-    }
+
   }]);

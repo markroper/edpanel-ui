@@ -1,6 +1,8 @@
 .student-detail {
+  background-color: $off-white;
+  
   md-tabs-canvas {
-    background-color: #F7F7F7;
+    background-color: $off-white;
   }
   md-tab-item.md-active {
     background-color: white;

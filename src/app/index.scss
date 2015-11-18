@@ -4,6 +4,11 @@ $green-color: #4CAF50;
 $light-gray-color: rgba(0, 0, 0, 0.117647);
 $scatterplot-height: 355px;
 $font-size-table-header: 18px;
+$off-white:#FCFCFC;
+
+body, md-content, .main-container {
+  background-color: $off-white;
+}
 
 md-radio-button{
   outline:none;

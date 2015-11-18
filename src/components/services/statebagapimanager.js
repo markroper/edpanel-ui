@@ -4,14 +4,82 @@ angular.module('teacherdashboard')
   var DATE_FORMAT = 'YYYY-MM-DD';
   //Returns a promise
   return {
+    resolveCurrentYear: function() {
+      var currentTime = new Date().getTime();
+      for(var i = 0; i < statebag.school.years.length; i++) {
+        if(statebag.school.years[i].startDate <= currentTime ||
+          statebag.school.years[i].endDate >= curentTime) {
+          return statebag.school.years[i];
+        }
+        return statebag.school.years[statebag.school.years.length - 1];
+      }
+    },
+    resolveGrade: function(input) {
+      if(isNaN(input)) {
+        return '--';
+      }
+      if(input > 94) {
+        return 'A';
+      } else if(input > 89) {
+        return 'A-';
+      } else if(input > 86) {
+        return 'B+';
+      } else if(input > 83) {
+        return 'B';
+      } else if(input > 79) {
+        return 'B-';
+      } else if(input > 76) {
+        return 'C+';
+      } else if(input > 73) {
+        return 'C';
+      } else if(input > 69) {
+        return 'C-';
+      } else if(input > 66) {
+        return 'D+';
+      } else if(input > 63) {
+        return 'D';
+      } else if(input > 59) {
+        return 'D-';
+      }
+      return 'F';
+    },
+    resolveCurrentTerm: function() {
+      var fullYearTerms = [];
+      var currentTime = new Date().getTime();
+      //Find a full year term whose date range encloses the current date
+      for(var i = 0; i < statebag.currentYear.terms.length; i++) {
+        var portion = statebag.currentYear.terms[i].portion;
+        var termStart = statebag.currentYear.terms[i].startDate;
+        var termEnd = statebag.currentYear.terms[i].endDate;
+        if(portion && portion === 1) {
+          fullYearTerms.push(statebag.currentYear.terms[i]);
+          if(termStart <= currentTime && termEnd >= currentTime) {
+            return statebag.currentYear.terms[i];
+          }
+        }
+      }
+      //Find any term whose date range encloses the current date
+      for(var i = 0; i < statebag.currentYear.terms.length; i++) {
+        var termStart = statebag.currentYear.terms[i].startDate;
+        var termEnd = statebag.currentYear.terms[i].endDate;
+        if(termStart <= currentTime && termEnd >= currentTime) {
+          return statebag.currentYear.terms[i]
+        }
+      }
+      //Fail, so return the last term in the array
+      if(fullYearTerms.length === 0) {
+        return statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
+      }
+    },
     retrieveAndCacheSchool: function(schoolId) {
+      var that = this;
       return api.school.get(
         { schoolId: schoolId },
         //Success callback
         function(data){
             statebag.school = data;
             statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
-            statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
+            statebag.currentTerm = that.resolveCurrentTerm();
         },
         //Error callback
         function(){
@@ -25,7 +93,7 @@ angular.module('teacherdashboard')
       var uiAttrsDeferred = $q.defer();
       if(!statebag.uiAttributes) {
         api.uiAttributes.get(
-          { schoolId: statebag.school.id }, 
+          { schoolId: statebag.school.id },
           function(data) {
             statebag.uiAttributes = data;
             uiAttrsDeferred.resolve();
@@ -40,13 +108,13 @@ angular.module('teacherdashboard')
       //Once we have UI attributes, resolve the data for the home page
       uiAttrsDeferred.promise.then(function(){
         var studentIds = [];
-        statebag.students.forEach(function(s){
-          studentIds.push(s.id);
-        });
+        for(var i = 0; i < statebag.students.length; i++) {
+          studentIds.push(statebag.students[i].id);
+        }
         var attendanceDates = returnStartAndEndDate('attendance');
         //TODO: currently HW completion is term, driven and not customizable, change this?
         // var homeworkDates = returnStartAndEndDate('homework');
-        var hwQuery = getHwQuery(statebag.currentYear.id, statebag.currentTerm.id, studentIds);
+        var hwQuery = getHwQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate, studentIds);
         var attendanceQuery = getAttendanceQuery(attendanceDates.min, attendanceDates.max, studentIds);
         var studentDataPromises = [];
 
@@ -98,7 +166,7 @@ angular.module('teacherdashboard')
           for (var student in responses[3]) {
             var score = responses[3][student];
             var pluckedStudent = studentMap[score.studentId];
-            if(pluckedStudent && score.endDate && 
+            if(pluckedStudent && score.endDate &&
                 ( !maxEndDate || maxEndDate <= score.endDate)) {
               maxEndDate = score.endDate;
               pluckedStudent.behavior = score.score;
@@ -244,7 +312,7 @@ angular.module('teacherdashboard')
     };
     return behaviorQuery;
   }
-  function getHwQuery(schoolYearId, termId, studentIds) {
+  function getHwQuery(startDate, endDate, studentIds) {
     var hwQuery = {
       'aggregateMeasures': [
         {'measure':'HW_COMPLETION','aggregation':'AVG'}
@@ -258,41 +326,37 @@ angular.module('teacherdashboard')
         'leftHandSide': getStudentIdsExpression(studentIds),
         'operator': 'AND',
         'rightHandSide': {
-          'type':'EXPRESSION',
+          'type': 'EXPRESSION',
           'leftHandSide': {
-            'type':'EXPRESSION',
-            'leftHandSide':{
-              'type':'EXPRESSION',
-              'leftHandSide':{
-                'value':{'dimension':'TERM','field':'ID'},
-                'type':'DIMENSION'},
-                'operator':'EQUAL',
-                'rightHandSide':{'type':'NUMERIC','value': termId}
+              'type': 'EXPRESSION',
+              'leftHandSide': {
+                  'type': 'MEASURE',
+                  'value': {
+                      'measure': 'HW_COMPLETION',
+                      'field': 'Due Date'
+                  }
               },
-              'operator':'AND',
-              'rightHandSide':{
-                'type':'EXPRESSION',
-                'leftHandSide':{
-                  'value':{'dimension':'YEAR','field':'ID'},
-                  'type':'DIMENSION'
-                },
-                'operator':'EQUAL',
-                'rightHandSide':{
-                  'type':'NUMERIC',
-                  'value': schoolYearId
-                }
+              'operator': 'GREATER_THAN_OR_EQUAL',
+              'rightHandSide': {
+                  'type': 'DATE',
+                  'value': startDate
               }
-            },
-            'operator':'AND',
-            'rightHandSide':{
-              'type':'EXPRESSION',
-              'leftHandSide':{
-                'type':'DIMENSION',
-                'value':{'dimension':'SECTION','field':'ID'}
+          },
+          'operator': 'AND',
+          'rightHandSide': {
+              'type': 'EXPRESSION',
+              'leftHandSide': {
+                  'type': 'MEASURE',
+                  'value': {
+                      'measure': 'HW_COMPLETION',
+                      'field': 'Due Date'
+                  }
               },
-              'operator':'NOT_EQUAL',
-              'rightHandSide':{'type':'NUMERIC','value':0
-            }
+              'operator': 'LESS_THAN_OR_EQUAL',
+              'rightHandSide': {
+                  'type': 'DATE',
+                  'value': endDate
+              }
           }
         }
       }
@@ -359,6 +423,8 @@ angular.module('teacherdashboard')
   /*
    * Helper functions below
    */
+
+
   function resolveStudentScopeObject(inputStudent) {
     var student = {};
     student.id = inputStudent[0];

@@ -18,15 +18,15 @@
                 </md-fab-actions>
               </md-fab-speed-dial>
 
-            <div id="gauge-{{section.nameId}}" class="goal-gauge" style="height: 210px"></div>
+            <div id="gauge-{{section.goal.nameId}}" class="goal-gauge" style="height: 210px"></div>
 
-            <div ng-show="section.goal.editActive" class="editSlider">
+            <div ng-show="section.editActive" class="editSlider">
               <md-content style="margin: 16px; padding:16px">
                 <div layout>
-                  <md-slider test-drag-end ng-model="goal.proposedValue" flex= min="0" max="{{goal.maxPossible}}" aria-label="red" id="red-slider" class="">
+                  <md-slider test-drag-end ng-model="section.proposedValue" flex= min="0" max="100" aria-label="red" id="red-slider" class="">
                   </md-slider>
                   <div flex="20" layout layout-align="center center">
-                    <input type="number" ng-model="goal.proposedValue" aria-label="red" aria-controls="red-slider">
+                    <input type="number" ng-model="section.proposedValue" aria-label="red" aria-controls="red-slider">
                   </div>
                 </div>
                 <div layout>
@@ -46,12 +46,12 @@
 
 
           <div flex="none" class="grade-item">
-            <h3 class="md-title">Component Grades</h3>
+            <h3 class="md-title">Component Scores</h3>
             <div ui-grid="{ data: myData, enableColumnMenus: false }" class="grade-component-grid"></div>
           </div>
 
           <div flex="none" class="component-grades grade-item">
-            <h3 class="md-title">Grade Formula</h3>
+            <h3 class="md-title">Grading Formula</h3>
             <gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
           </div>
         </div>

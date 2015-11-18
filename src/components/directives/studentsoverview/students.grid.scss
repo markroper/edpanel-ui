@@ -26,10 +26,12 @@
 	}
 	button {
 		width: 100%;
+		text-overflow: ellipsis;
 	}
 	button > span {
-		margin: 5px 20px 5px 20px;
+		margin: 0px 0px 0px 0px;
 		font-size: 16px;
+		text-overflow: ellipsis;
 	}
 	.md-36 { font-size: 36px; }
 	input { font-size: 18px; width:225px;}
@@ -38,15 +40,7 @@
 		max-width:1200px;
 		text-align: center;
 		vertical-align: middle;
-		.table-row:hover {
-			background-color: #F5F5F5;
-		}
 		.table-row {
-			-webkit-transition: background-color 250ms linear;
-	    -moz-transition: background-color 250ms linear;
-	    -o-transition: background-color 250ms linear;
-	    -ms-transition: background-color 250ms linear;
-	    transition: background-color 250ms linear;
 			.table-cell {
 				.student-link {
 					cursor: pointer;

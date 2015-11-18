@@ -58,8 +58,14 @@ angular.module('teacherdashboard')
               
               //Section name
               p.category = d.assignment.type.toLowerCase();
+              if(d.assignment.userDefinedType) {
+                p.category = d.assignment.userDefinedType.toLowerCase();
+              }
               //Teacher name
-              p.teacher = scope.section.teachers[0].name;
+              p.teacher = "";
+              if(scope.section.teachers[0]) {
+                p.teacher = scope.section.teachers[0].name;
+              }
               p.name = d.assignment.name;
               p.comment = d.comment;
               processedAssignments.push(p);
@@ -67,8 +73,6 @@ angular.module('teacherdashboard')
           });
           return processedAssignments;
         }
-
-        //{ 'homework': [  ] }
         var categories = {};
         var sects = [];
         scope.chartDataPromise.then(function(theData){
@@ -78,10 +82,19 @@ angular.module('teacherdashboard')
           console.log('scatterplot data transform took: ' + time);
           scope.assignments = data;
           var exs = {};
+          var categories = [];
           var categorizedData = {};
           var chartData = [];
+          var WEEKSCORE = 'grade';
+          exs[WEEKSCORE] = WEEKSCORE + '_x';
+          categorizedData.weekscore = [[WEEKSCORE], [WEEKSCORE + '_x']];
+          scope.section.gradeProgression.forEach(function(d){
+            categorizedData.weekscore[0].push(Math.round(d.score * 100));
+            categorizedData.weekscore[1].push(new Date(d.weekEnding));
+          });
           data.forEach(function(d) {
             if(!exs[d.category]) {
+              categories.push(d.category);
               exs[d.category] = d.category + '_x';
               categorizedData[d.category] = [
                 [ d.category, d.grade ],
@@ -103,7 +116,17 @@ angular.module('teacherdashboard')
             data: {
               columns: chartData,
               xs: exs,
-              type: 'scatter'
+              type: 'scatter',
+              types: { 
+                grade: 'line'
+              }
+            },
+            grid: {
+              x: {
+                lines: [
+                  { value: new Date(), text: 'today' }
+                ]
+              }
             },
             axis: {
               x: {
@@ -111,6 +134,7 @@ angular.module('teacherdashboard')
               }
             }
           });
+          chart.hide(categories);
         });
       }
     };

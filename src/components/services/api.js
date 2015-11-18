@@ -40,6 +40,7 @@ angular.module('teacherdashboard')
         { 'get': { isArray: true }}),
       studentPrepScores: $resource(base + '/students/:studentId/prepscores', {}, {'get': {isArray: true }}),
       studentsPrepScores: $resource(base + '/students/prepscores', {}, { 'get': { isArray: true }}),
+      studentSectionsData: $resource(base + '/ui/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId', {}, { 'get': { isArray: true }}),
       //Other endpoints
       teacher: $resource(base + '/teachers/:teacherId'),
       year: $resource(base + '/schools/:schoolId/years/:yearId'),
@@ -55,6 +56,7 @@ angular.module('teacherdashboard')
         {},
         { 'get': { isArray: true }}),
       studentSectionGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId'),
+      studentSectionGradeProgression: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId/weeks'),
       //Query execution
       savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
       query: $resource(base + '/schools/:schoolId/queries/results', {}),

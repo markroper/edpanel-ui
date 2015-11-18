@@ -40,6 +40,16 @@
     margin: 0px 0px 0px 0px;
     border-radius:0px;
   }
+  md-icon {
+    transition: color 200ms ease;
+  }
+  .assignment-toggler:hover {
+    background-color: #DBDBDB !important;
+    md-icon{ 
+      color:rgb(255,64,129); 
+    }
+
+  }
 
   button .rotate {
     transform: rotate(180deg);

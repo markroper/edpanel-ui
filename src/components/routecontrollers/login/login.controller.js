@@ -18,8 +18,8 @@ angular.module('teacherdashboard')
         });
     };
   })
-  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag',
-    function ($scope, api, $state, authentication, statebag) {
+  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager',
+    function ($scope, api, $state, authentication, statebag, statebagapimanager) {
       statebag.currentPage.name = "Login";
 	    $scope.inputEmail = '';
       $scope.password = '';
@@ -47,13 +47,13 @@ angular.module('teacherdashboard')
         		authentication.authenticate(identity);
             //Resolve the school
             //TODO: for now we just grab the first school in the district. Need a better way
-            api.schools.get(
-              {},
+            api.school.get(
+              { schoolId: data.currentSchoolId },
               //Success callback
-              function(data){
-                  statebag.school = data[1];
-                  statebag.currentYear = statebag.school.years[statebag.school.years.length - 1];
-                  statebag.currentTerm = statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
+              function(schoolData){
+                  statebag.school = schoolData;
+                  statebag.currentYear = statebagapimanager.resolveCurrentYear();
+                  statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
                   $state.go('app.home', { schoolId: statebag.school.id });
               },
               //Error callback
