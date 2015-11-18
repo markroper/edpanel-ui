@@ -130,7 +130,12 @@ angular.module('teacherdashboard')
             },
             axis: {
               x: {
-                type: 'timeseries'
+                type: 'timeseries',
+                tick: {
+                  centered: true,
+                  format: '%m-%d',
+                  fit: true
+                }
               }
             }
           });
