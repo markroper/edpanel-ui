@@ -58,8 +58,14 @@ angular.module('teacherdashboard')
               
               //Section name
               p.category = d.assignment.type.toLowerCase();
+              if(d.assignment.userDefinedType) {
+                p.category = d.assignment.userDefinedType.toLowerCase();
+              }
               //Teacher name
-              p.teacher = scope.section.teachers[0].name;
+              p.teacher = "";
+              if(scope.section.teachers[0]) {
+                p.teacher = scope.section.teachers[0].name;
+              }
               p.name = d.assignment.name;
               p.comment = d.comment;
               processedAssignments.push(p);
@@ -67,8 +73,6 @@ angular.module('teacherdashboard')
           });
           return processedAssignments;
         }
-
-        //{ 'homework': [  ] }
         var categories = {};
         var sects = [];
         scope.chartDataPromise.then(function(theData){

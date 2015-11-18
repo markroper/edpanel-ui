@@ -40,6 +40,7 @@ angular.module('teacherdashboard')
         { 'get': { isArray: true }}),
       studentPrepScores: $resource(base + '/students/:studentId/prepscores', {}, {'get': {isArray: true }}),
       studentsPrepScores: $resource(base + '/students/prepscores', {}, { 'get': { isArray: true }}),
+      studentSectionsData: $resource(base + '/ui/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId', {}, { 'get': { isArray: true }}),
       //Other endpoints
       teacher: $resource(base + '/teachers/:teacherId'),
       year: $resource(base + '/schools/:schoolId/years/:yearId'),

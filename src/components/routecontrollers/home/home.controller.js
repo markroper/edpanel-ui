@@ -37,7 +37,9 @@ angular.module('teacherdashboard')
         //After the school and students are resolved, resolve the student performance data
         $q.all(promises).then(function() {
           statebagApiManager.retrieveAndCacheStudentPerfData()
-            .then(function(){ $scope.students = statebag.studentPerfData; });
+            .then(function(){ 
+              $scope.students = statebag.studentPerfData; 
+            });
         });
       }
 
@@ -46,7 +48,7 @@ angular.module('teacherdashboard')
         if(identity.roles[0] === roles.ADMIN) {
           //retrieve all the students
           return api.allStudents.get(
-            {},
+            { schoolId: statebag.school.id },
             function(data) {
               statebag.students = data;
             }).$promise;
