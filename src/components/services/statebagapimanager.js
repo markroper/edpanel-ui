@@ -31,8 +31,8 @@ angular.module('teacherdashboard')
       }
       //Find any term whose date range encloses the current date
       for(var i = 0; i < statebag.currentYear.terms.length; i++) {
-        var termStart = fullYearTerms[i].startDate;
-        var termEnd = fullYearTerms[i].endDate;
+        var termStart = statebag.currentYear.terms[i].startDate;
+        var termEnd = statebag.currentYear.terms[i].endDate;
         if(termStart <= currentTime && termEnd >= currentTime) {
           return statebag.currentYear.terms[i]
         }
