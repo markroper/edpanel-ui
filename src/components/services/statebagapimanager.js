@@ -7,7 +7,7 @@ angular.module('teacherdashboard')
     resolveCurrentYear: function() {
       var currentTime = new Date().getTime();
       for(var i = 0; i < statebag.school.years.length; i++) {
-        if(statebag.school.years[i].startDate <= currentTime || 
+        if(statebag.school.years[i].startDate <= currentTime ||
           statebag.school.years[i].endDate >= curentTime) {
           return statebag.school.years[i];
         }
@@ -64,7 +64,7 @@ angular.module('teacherdashboard')
       var uiAttrsDeferred = $q.defer();
       if(!statebag.uiAttributes) {
         api.uiAttributes.get(
-          { schoolId: statebag.school.id }, 
+          { schoolId: statebag.school.id },
           function(data) {
             statebag.uiAttributes = data;
             uiAttrsDeferred.resolve();
@@ -137,7 +137,7 @@ angular.module('teacherdashboard')
           for (var student in responses[3]) {
             var score = responses[3][student];
             var pluckedStudent = studentMap[score.studentId];
-            if(pluckedStudent && score.endDate && 
+            if(pluckedStudent && score.endDate &&
                 ( !maxEndDate || maxEndDate <= score.endDate)) {
               maxEndDate = score.endDate;
               pluckedStudent.behavior = score.score;
@@ -356,35 +356,54 @@ angular.module('teacherdashboard')
           'rightHandSide': {
             'type': 'EXPRESSION',
             'leftHandSide': {
-                'type': 'EXPRESSION',
-                'leftHandSide': {
-                    'type': 'MEASURE',
-                    'value': {
-                        'measure': 'ATTENDANCE',
-                        'field': 'Date'
-                    }
-                },
-                'operator': 'GREATER_THAN_OR_EQUAL',
-                'rightHandSide': {
-                    'type': 'DATE',
-                    'value': startDate
+              'type': 'EXPRESSION',
+              'leftHandSide': {
+                'type': 'MEASURE',
+                'value': {
+                  'measure': 'ATTENDANCE',
+                  'field': 'Type'
                 }
+              },
+              'operator': 'EQUALS',
+              'rightHandSide': {
+                'type': 'STRING',
+                'value': 'DAILY'
+              }
             },
             'operator': 'AND',
             'rightHandSide': {
+              'type': 'EXPRESSION',
+              'leftHandSide': {
                 'type': 'EXPRESSION',
                 'leftHandSide': {
-                    'type': 'MEASURE',
-                    'value': {
-                        'measure': 'ATTENDANCE',
-                        'field': 'Date'
-                    }
+                  'type': 'MEASURE',
+                  'value': {
+                    'measure': 'ATTENDANCE',
+                    'field': 'Date'
+                  }
+                },
+                'operator': 'GREATER_THAN_OR_EQUAL',
+                'rightHandSide': {
+                  'type': 'DATE',
+                  'value': startDate
+                }
+              },
+              'operator': 'AND',
+              'rightHandSide': {
+                'type': 'EXPRESSION',
+                'leftHandSide': {
+                  'type': 'MEASURE',
+                  'value': {
+                    'measure': 'ATTENDANCE',
+                    'field': 'Date'
+                  }
                 },
                 'operator': 'LESS_THAN_OR_EQUAL',
                 'rightHandSide': {
-                    'type': 'DATE',
-                    'value': endDate
+                  'type': 'DATE',
+                  'value': endDate
                 }
+              }
             }
           }
         }
