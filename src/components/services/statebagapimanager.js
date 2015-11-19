@@ -7,7 +7,7 @@ angular.module('teacherdashboard')
     resolveCurrentYear: function() {
       var currentTime = new Date().getTime();
       for(var i = 0; i < statebag.school.years.length; i++) {
-        if(statebag.school.years[i].startDate <= currentTime || 
+        if(statebag.school.years[i].startDate <= currentTime ||
           statebag.school.years[i].endDate >= curentTime) {
           return statebag.school.years[i];
         }
@@ -64,7 +64,7 @@ angular.module('teacherdashboard')
       var uiAttrsDeferred = $q.defer();
       if(!statebag.uiAttributes) {
         api.uiAttributes.get(
-          { schoolId: statebag.school.id }, 
+          { schoolId: statebag.school.id },
           function(data) {
             statebag.uiAttributes = data;
             uiAttrsDeferred.resolve();
@@ -79,8 +79,10 @@ angular.module('teacherdashboard')
       //Once we have UI attributes, resolve the data for the home page
       uiAttrsDeferred.promise.then(function(){
         var studentIds = [];
+        var studentMap = {};
         for(var i = 0; i < statebag.students.length; i++) {
           studentIds.push(statebag.students[i].id);
+          studentMap[statebag.students[i].id] = { name: statebag.students[i].name, id: statebag.students[i].id };
         }
         var attendanceDates = returnStartAndEndDate('attendance');
         //TODO: currently HW completion is term, driven and not customizable, change this?
@@ -103,8 +105,6 @@ angular.module('teacherdashboard')
         //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
         $q.all(studentDataPromises).then(function(responses) {
           var resolvedStudents = [];
-          var studentMap = {};
-
           //Handle the HW completion & attendance values
           responses[0].records.forEach(function(student){
             studentMap[student.values[0]] = resolveStudentScopeObject(student.values);
@@ -137,7 +137,7 @@ angular.module('teacherdashboard')
           for (var student in responses[3]) {
             var score = responses[3][student];
             var pluckedStudent = studentMap[score.studentId];
-            if(pluckedStudent && score.endDate && 
+            if(pluckedStudent && score.endDate &&
                 ( !maxEndDate || maxEndDate <= score.endDate)) {
               maxEndDate = score.endDate;
               pluckedStudent.behavior = score.score;
@@ -356,35 +356,54 @@ angular.module('teacherdashboard')
           'rightHandSide': {
             'type': 'EXPRESSION',
             'leftHandSide': {
-                'type': 'EXPRESSION',
-                'leftHandSide': {
-                    'type': 'MEASURE',
-                    'value': {
-                        'measure': 'ATTENDANCE',
-                        'field': 'Date'
-                    }
-                },
-                'operator': 'GREATER_THAN_OR_EQUAL',
-                'rightHandSide': {
-                    'type': 'DATE',
-                    'value': startDate
+              'type': 'EXPRESSION',
+              'leftHandSide': {
+                'type': 'MEASURE',
+                'value': {
+                  'measure': 'ATTENDANCE',
+                  'field': 'Type'
                 }
+              },
+              'operator': 'EQUAL',
+              'rightHandSide': {
+                'type': 'STRING',
+                'value': 'DAILY'
+              }
             },
             'operator': 'AND',
             'rightHandSide': {
+              'type': 'EXPRESSION',
+              'leftHandSide': {
                 'type': 'EXPRESSION',
                 'leftHandSide': {
-                    'type': 'MEASURE',
-                    'value': {
-                        'measure': 'ATTENDANCE',
-                        'field': 'Date'
-                    }
+                  'type': 'MEASURE',
+                  'value': {
+                    'measure': 'ATTENDANCE',
+                    'field': 'Date'
+                  }
+                },
+                'operator': 'GREATER_THAN_OR_EQUAL',
+                'rightHandSide': {
+                  'type': 'DATE',
+                  'value': startDate
+                }
+              },
+              'operator': 'AND',
+              'rightHandSide': {
+                'type': 'EXPRESSION',
+                'leftHandSide': {
+                  'type': 'MEASURE',
+                  'value': {
+                    'measure': 'ATTENDANCE',
+                    'field': 'Date'
+                  }
                 },
                 'operator': 'LESS_THAN_OR_EQUAL',
                 'rightHandSide': {
-                    'type': 'DATE',
-                    'value': endDate
+                  'type': 'DATE',
+                  'value': endDate
                 }
+              }
             }
           }
         }
@@ -402,6 +421,7 @@ angular.module('teacherdashboard')
     student.behaviorClass = resolveBehaviorClass(student.behavior);
     student.homework = Math.round(inputStudent[2] * 100);
     student.homeworkClass = resolveHomeworkClass(inputStudent[2]);
+    student.attendanceClass = '90-100';
     student.gpa = null;
     student.gpaClass = resolveGpaClass(student.gpa);
     return student;
