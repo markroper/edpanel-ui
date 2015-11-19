@@ -96,7 +96,12 @@ angular.module('teacherdashboard')
             max: scope.section.goal.desiredValue,
             textRenderer: statebagApiManager.resolveGrade,
             valueMinFontSize: 80,
-            gaugeWidthScale: 0.5
+            gaugeWidthScale: 0.5,
+            levelColors: [
+              "#F44366",
+              "#FFEB3B",
+              "#4CAF50"
+            ]
           });
         });
       }
