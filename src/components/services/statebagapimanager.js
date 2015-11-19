@@ -79,8 +79,10 @@ angular.module('teacherdashboard')
       //Once we have UI attributes, resolve the data for the home page
       uiAttrsDeferred.promise.then(function(){
         var studentIds = [];
+        var studentMap = {};
         for(var i = 0; i < statebag.students.length; i++) {
           studentIds.push(statebag.students[i].id);
+          studentMap[statebag.students[i].id] = { name: statebag.students[i].name, id: statebag.students[i].id };
         }
         var attendanceDates = returnStartAndEndDate('attendance');
         //TODO: currently HW completion is term, driven and not customizable, change this?
@@ -103,8 +105,6 @@ angular.module('teacherdashboard')
         //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
         $q.all(studentDataPromises).then(function(responses) {
           var resolvedStudents = [];
-          var studentMap = {};
-
           //Handle the HW completion & attendance values
           responses[0].records.forEach(function(student){
             studentMap[student.values[0]] = resolveStudentScopeObject(student.values);
@@ -364,7 +364,7 @@ angular.module('teacherdashboard')
                   'field': 'Type'
                 }
               },
-              'operator': 'EQUALS',
+              'operator': 'EQUAL',
               'rightHandSide': {
                 'type': 'STRING',
                 'value': 'DAILY'
@@ -421,6 +421,7 @@ angular.module('teacherdashboard')
     student.behaviorClass = resolveBehaviorClass(student.behavior);
     student.homework = Math.round(inputStudent[2] * 100);
     student.homeworkClass = resolveHomeworkClass(inputStudent[2]);
+    student.attendanceClass = '90-100';
     student.gpa = null;
     student.gpaClass = resolveGpaClass(student.gpa);
     return student;
