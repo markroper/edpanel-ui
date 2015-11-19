@@ -5,18 +5,20 @@
         <div layout="row" layout-wrap layout-align="center start" class="grade-container">
           <div flex="none" class="grade-goal" style="position: relative">
               <h3 class="md-title">Current Grade</h3>
-              <md-fab-speed-dial class="md-fab-top-right" md-open="demo.isOpen" md-direction="left" class="md-scale ">
-                <md-fab-trigger>
-                  <md-button aria-label="menu" class="goal-menu md-icon-button">
-                    <md-icon md-font-set="material-icons">more_vert</md-icon>
-                  </md-button>
+
+            <md-fab-speed-dial class="md-fab-top-right"  md-open="section.isClosed" md-direction="left" class="md-scale ">
+              <md-fab-trigger>
+                <md-button aria-label="menu" class="goal-menu md-icon-button">
+                  <md-icon md-font-set="material-icons">more_vert</md-icon>
+                </md-button>
                 </md-fab-trigger>
-                <md-fab-actions>
-                  <md-button ng-click="editGoal(section)" class="md-fab md-primary md-raised md-mini">
-                    <md-icon md-font-set="material-icons"> mode_edit </md-icon>
-                  </md-button>
-                </md-fab-actions>
-              </md-fab-speed-dial>
+              </md-fab-trigger>
+              <md-fab-actions>
+                <md-button  ng-click="editGoal(section)" class="md-fab md-primary md-raised md-mini">
+                  <md-icon md-font-set="material-icons"> mode_edit </md-icon>
+                </md-button>
+              </md-fab-actions>
+            </md-fab-speed-dial>
 
             <div id="gauge-{{section.goal.nameId}}" class="goal-gauge" style="height: 210px"></div>
 
@@ -33,7 +35,7 @@
                   <md-button ng-click="proposeEdit(section)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
                     <md-icon md-font-set="material-icons">check</md-icon>
                   </md-button>
-                  <md-button ng-click="goal.editActive = false" aria-label="menu" class="md-fab md-warn md-raised md-mini">
+                  <md-button ng-click="section.editActive = false" aria-label="menu" class="md-fab md-warn md-raised md-mini">
                     <md-icon md-font-set="material-icons">close</md-icon>
                   </md-button>
                 </div>

@@ -29,6 +29,7 @@ angular.module('teacherdashboard')
         };
         scope.editGoal = function(section) {
           //Call api to edit the goal
+          console.log(section.editActive);
           section.editActive = true;
 
         };
