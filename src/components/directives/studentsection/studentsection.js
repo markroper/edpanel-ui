@@ -91,7 +91,7 @@ angular.module('teacherdashboard')
         $timeout(function() {
           var g = new JustGage({
             id: "gauge-"+ scope.section.goal.nameId,
-            value: "87",
+            value: scope.section.goal.calculatedValue,
             min: 0,
             max: scope.section.goal.desiredValue,
             textRenderer: statebagApiManager.resolveGrade,
