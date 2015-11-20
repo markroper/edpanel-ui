@@ -25,11 +25,13 @@ angular.module('teacherdashboard')
                     }
                   });
                   resolveStudentSectionData();
+                  resolveBehaviorData();
                 });
             });
         });
     } else {
       resolveStudentSectionData();
+      resolveBehaviorData();
 
     }
 
@@ -60,6 +62,21 @@ angular.module('teacherdashboard')
           });
     };
 
+    /**
+     * Resolve the current student's behavior data and add a promise to the scope behaviorDataPromise
+     * that resolves with that behavior data when it is returned from the server.
+     */
+    function resolveBehaviorData() {
+      //Cache the isolated scope variables needed for the chorocalendar directive
+      $scope.behaviorDataPromise =
+        api.studentBehaviors.get({ studentId: statebag.currentStudent.id }).$promise;
+      $scope.prepScorePromise =
+        api.studentsPrepScores.get({
+          studentId: [ statebag.currentStudent.id ],
+          startDate: moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
+          endDate: moment().format('YYYY-MM-DD')
+        }).$promise;
+    }
     /*
     * Given a section grade formula, recurse to find the leaf node formulas.
     * Calls resolveReportingTermGrades().
@@ -129,7 +146,6 @@ angular.module('teacherdashboard')
           for(var i = 0; i < studentSectionDashData.length; i++) {
 
             if(!studentSectionDashData[i].studentAssignments ||
-
               studentSectionDashData[i].studentAssignments.length === 0) {
               continue;
             }

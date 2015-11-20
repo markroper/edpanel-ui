@@ -15,6 +15,9 @@ angular.module('teacherdashboard')
         scope.tableConfig = {
           data: 'assignments',
           enableColumnMenus: false,
+          paginationPageSize: 8,
+          paginationPageSizes: [8, 20, 50, 100],
+          enablePaginationControls: true,
           columnDefs: [
             { field: 'date', type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
             { field: 'category' },
@@ -25,7 +28,7 @@ angular.module('teacherdashboard')
         };
         var tableViewHtml =
           '<div class="table-view-container" flex="100" ng-if="assignmentView==\'table\'">' +
-          '<div ui-grid="tableConfig" class=""></div></div>';
+          '<div ui-grid="tableConfig" ui-grid-pagination class=""></div></div>';
         var $assignmentsContainer = angular.element(elem).find('.assignment-scores');
         var $graphContainer = angular.element(elem).find('.svg-container');
         var $tableContainer;

@@ -8,7 +8,6 @@
 }
 .student-section {
   text-align: center;
-  margin:5px;
   max-width: 1100px;
 
   .subgrades {
@@ -48,8 +47,8 @@
   }
   .assignment-toggler:hover {
     background-color: #DBDBDB !important;
-    md-icon{ 
-      color:rgb(255,64,129); 
+    md-icon{
+      color:rgb(255,64,129);
     }
 
   }

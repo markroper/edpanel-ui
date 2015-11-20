@@ -1,7 +1,8 @@
 <div class="student-section" flex="auto">
   <md-card>
       <md-card-content>
-        <h2 class="md-display-1">{{section.course.name}}</h2>
+
+        <h2 class="md-headline">{{section.course.name}}</h2>
         <div layout="row" layout-wrap layout-align="center start" class="grade-container">
 
           <div flex="none" class="current-grade grade-item">
@@ -54,21 +55,19 @@
 
           </div>
 
-
           <div flex="none" class="grade-item">
-            <h3 class="md-title">Component Scores</h3>
+            <h3 class="md-subhead">Component Scores</h3>
             <div ui-grid="{ data: myData, enableColumnMenus: false }" class="grade-component-grid"></div>
           </div>
-
           <div flex="none" class="component-grades grade-item">
-            <h3 class="md-title">Grading Formula</h3>
+            <h3 class="md-subhead">Grading Formula</h3>
             <gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
           </div>
         </div>
     </md-card-content>
     <md-button class="md-raised md-button-toggle md-ink-ripple assignment-toggler" ng-click="showAssignments()">
       <div layout="row" layout-align="center center">
-        <div class="assignment-label md-title">Assignment Details</div>
+        <div class="assignment-label md-subhead">Assignment Details</div>
         <div style="width:40px;"></div>
         <div class="toggle-icon-wrapper">
           <md-icon md-font-set="material-icons" class="material-icons md-36 arrow-icon"> keyboard_arrow_down </md-icon>
