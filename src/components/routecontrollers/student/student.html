@@ -2,7 +2,6 @@
 	<md-tabs md-center-tabs md-dynamic-height md-border-bottom class="tabs-header">
 		<md-tab label="Grades">
 			<div class="tab-contents">
-
 				<div class="summary-row" layout="row" layout-align="center center" ng-cloak>
 					<md-whiteframe class="gpa-summary grade-summary md-whiteframe-1dp" layout="column" layout-align="center center">
 						<h3 class="grade-summary-title md-subhead">GPA</h3>
@@ -33,14 +32,13 @@
 				</div>
 			</div>
 		</md-tab>
-		<md-tab label="Goals">
-			<div class="tab-contents">
-		  	<goals goals="goals"></goals>
-		  </div>
-		</md-tab>
 		<md-tab label="behavior">
 			<div class="tab-contents">
-				<span>under construction</span>
+        <div flex="100" class="chorocontainer">
+          <h3 class="grade-summary-title md-subhead">Weekly Behavior Score</h3>
+          <behaviorgraph weekly-behavior-promise="prepScorePromise"></behaviorgraph>
+          <chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar>
+        </div>
 			</div>
 		</md-tab>
 		<md-tab label="State Exams">

@@ -25,11 +25,13 @@ angular.module('teacherdashboard')
                     }
                   });
                   resolveStudentSectionData();
+                  resolveBehaviorData();
                 });
             });
         });
     } else {
       resolveStudentSectionData();
+      resolveBehaviorData();
 
     }
 
@@ -60,6 +62,21 @@ angular.module('teacherdashboard')
           });
     };
 
+    /**
+     * Resolve the current student's behavior data and add a promise to the scope behaviorDataPromise
+     * that resolves with that behavior data when it is returned from the server.
+     */
+    function resolveBehaviorData() {
+      //Cache the isolated scope variables needed for the chorocalendar directive
+      $scope.behaviorDataPromise =
+        api.studentBehaviors.get({ studentId: statebag.currentStudent.id }).$promise;
+      $scope.prepScorePromise =
+        api.studentsPrepScores.get({
+          studentId: [ statebag.currentStudent.id ],
+          startDate: moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
+          endDate: moment().format('YYYY-MM-DD')
+        }).$promise;
+    }
     /*
     * Given a section grade formula, recurse to find the leaf node formulas.
     * Calls resolveReportingTermGrades().
@@ -79,12 +96,12 @@ angular.module('teacherdashboard')
     /*
     *  Warning, recurisive algorithm that walks to the leaf nodes of
     *  a grade formula graph and returns those leaf nodes as an unsorted array.
-    *  This matters for displaying things like quarterly grades where quarters 
+    *  This matters for displaying things like quarterly grades where quarters
     *  Are the children of semesters, semesters the children of years, for example.
     */
     function resolveReportingTermGrades(studentSectionDashData) {
       var returnGrades = [];
-      if(!studentSectionDashData.section || 
+      if(!studentSectionDashData.section ||
           !studentSectionDashData.section.gradeFormula) {
         return returnGrades;
       }
@@ -127,13 +144,13 @@ angular.module('teacherdashboard')
         }, function(studentSectionDashData) {
           var sections = [];
           for(var i = 0; i < studentSectionDashData.length; i++) {
-            if(!studentSectionDashData[i].studentAssignments || 
+            if(!studentSectionDashData[i].studentAssignments ||
               studentSectionDashData[i].studentAssignments.length === 0) {
               continue;
             }
             var section = studentSectionDashData[i].section;
             //Get the term-level grades
-            section.termGrades = 
+            section.termGrades =
               resolveReportingTermGrades(studentSectionDashData[i]);
             section.termGrades.sort(function (a, b) {
               if (a.startDate > b.startDate) {
