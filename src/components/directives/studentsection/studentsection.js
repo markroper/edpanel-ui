@@ -35,9 +35,10 @@ angular.module('teacherdashboard')
         };
 
         scope.proposeEdit = function(section) {
+          section.goal.desiredValue = section.goal.proposedValue
           var datifyGoal = function(goal) {
             var apiGoal = angular.extend({}, goal);
-
+            delete apiGoal.proposedValue;
             delete apiGoal.nameId;
             return apiGoal;
 
@@ -53,13 +54,14 @@ angular.module('teacherdashboard')
 
           var goal = datifyGoal(section.goal);
           section.editActive = false;
-          goal.desiredValue = section.proposedValue;
+          goal.desiredValue = section.goal.proposedValue;
           api.editStudentGoal.patch(
             { studentId: goal.student.id,
               goalId: goal.id},
             goal,
             function() {
               //TODO FIX DISPLAY ONCE THIS CHANGES?
+              scope.gage.refresh(goal.calculatedValue, goal.desiredValue);
               showSimpleToast("Goal changed successfully");
             },
             function(error) {
@@ -89,7 +91,7 @@ angular.module('teacherdashboard')
         scope.myData = scope.sectionGrade.components;
 
         $timeout(function() {
-          var g = new JustGage({
+          scope.gage = new JustGage({
             id: "gauge-"+ scope.section.goal.nameId,
             value: scope.section.goal.calculatedValue,
             min: 0,

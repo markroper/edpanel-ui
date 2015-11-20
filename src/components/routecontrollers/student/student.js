@@ -176,7 +176,7 @@ angular.module('teacherdashboard')
             section.gradeProgression = gradeResults.weeklyGradeProgression;
             section.currentCategoryGrades = gradeResults.currentCategoryGrades;
             section["goal"] = studentSectionDashData[i].gradeGoal;
-            section.proposedValue = section.goal.desiredValue;
+            section.goal["proposedValue"] = section.goal.desiredValue;
             console.log(studentSectionDashData[i].gradeGoal);
             console.log("STUFF");
             console.log(section.goal);
