@@ -23,7 +23,7 @@ angular.module('teacherdashboard')
             { field: 'comment' }
           ]
         };
-        var tableViewHtml = 
+        var tableViewHtml =
           '<div class="table-view-container" flex="100" ng-if="assignmentView==\'table\'">' +
           '<div ui-grid="tableConfig" class=""></div></div>';
         var $assignmentsContainer = angular.element(elem).find('.assignment-scores');
@@ -55,7 +55,7 @@ angular.module('teacherdashboard')
               }
               //Due date
               p.date = new Date(d.assignment.dueDate);
-              
+
               //Section name
               p.category = d.assignment.type.toLowerCase();
               if(d.assignment.userDefinedType) {
@@ -117,7 +117,7 @@ angular.module('teacherdashboard')
               columns: chartData,
               xs: exs,
               type: 'scatter',
-              types: { 
+              types: {
                 grade: 'line'
               }
             },
@@ -129,8 +129,18 @@ angular.module('teacherdashboard')
               }
             },
             axis: {
+              y : {
+                tick: {
+                  format: function (d) { return Math.round(d); }
+                }
+              },
               x: {
-                type: 'timeseries'
+                type: 'timeseries',
+                tick: {
+                  centered: true,
+                  format: '%m-%d',
+                  fit: true
+                }
               }
             }
           });

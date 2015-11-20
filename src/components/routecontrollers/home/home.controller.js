@@ -7,13 +7,10 @@ angular.module('teacherdashboard')
       $scope.showFilter=true;
       var roles = consts.roles;
       //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old
-      if(!statebag.studentPerfData || statebag.lastFullRefresh > (new Date().getTime() - 1000 * 60 * 5)) {
+      if(!statebag.studentPerfData || statebag.lastFullRefresh < (new Date().getTime() - 1000 * 60 * 5)) {
         if(!statebag.school) {
           //Resolve the school
           statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
-            function() {
-              retrieveHomePageData();
-            },
             function() {
               retrieveHomePageData();
             });
@@ -28,7 +25,7 @@ angular.module('teacherdashboard')
         /* This code block makes 1 api call, followed by 2 more api calls if the first one succeeds.
          * The first call resolve the students.  The second two calls
          * resolve different data about each of the students for use on the home page dashboard.
-         * When the API calls resolve, the data is formatted a bit and then bound to the controller 
+         * When the API calls resolve, the data is formatted a bit and then bound to the controller
          * scope variables that are bound to DOM elements
         */
         var promises = [];
@@ -37,8 +34,8 @@ angular.module('teacherdashboard')
         //After the school and students are resolved, resolve the student performance data
         $q.all(promises).then(function() {
           statebagApiManager.retrieveAndCacheStudentPerfData()
-            .then(function(){ 
-              $scope.students = statebag.studentPerfData; 
+            .then(function(){
+              $scope.students = statebag.studentPerfData;
             });
         });
       }
@@ -56,8 +53,8 @@ angular.module('teacherdashboard')
           //retrieve the teachers current students
           return api.termTeacherStudents.get(
             {
-              schoolId: statebag.school.id, 
-              yearId: statebag.currentYear.id, 
+              schoolId: statebag.school.id,
+              yearId: statebag.currentYear.id,
               termId: statebag.currentTerm.id,
               teacherId: identity.id
             },
@@ -70,14 +67,14 @@ angular.module('teacherdashboard')
               console.log('failed to resolve the students!');
             }).$promise;
         } else if(identity.roles[0] === roles.STUDENT) {
-          //If the user is a student, no summary data is available, 
+          //If the user is a student, no summary data is available,
           //Therefore redirect to the student page
           statebag.students = [identity];
           $state.go(
-            'app.student', 
-            { 
-              schoolId: statebag.school.id, 
-              studentId: identity.id 
+            'app.student',
+            {
+              schoolId: statebag.school.id,
+              studentId: identity.id
             });
         }
       }

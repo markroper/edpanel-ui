@@ -2,10 +2,32 @@
 	<md-tabs md-center-tabs md-dynamic-height md-border-bottom class="tabs-header">
 		<md-tab label="Grades">
 			<div class="tab-contents">
+
+				<div class="summary-row" layout="row" layout-align="center center" ng-cloak>
+					<md-whiteframe class="gpa-summary grade-summary md-whiteframe-1dp" layout="column" layout-align="center center">
+						<h3 class="grade-summary-title md-subhead">GPA</h3>
+				    <h2 class="grade-summary-grade md-headline">--</h2>
+					</md-whiteframe>
+					<md-whiteframe class="gpa-summary grade-summary md-whiteframe-1dp" layout="column" layout-align="center center">
+						<h3 class="grade-summary-title md-subhead">Quarter GPA</h3>
+				    <h2 class="grade-summary-grade md-headline">--</h2>
+					</md-whiteframe>
+				</div>
+
 				<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
 					<h3 flex="50">Loading...</h3>
 					<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
 				</div>
+
+				<div class="summary-row" layout="row" layout-align="center center" layout-wrap ng-cloak>
+				  <md-whiteframe ng-repeat="section in sections" class="grade-summary md-whiteframe-1dp" layout="column" layout-align="center center">
+				  	<h3 class="grade-summary-title md-subhead">{{section.name}}
+							<md-tooltip>{{section.name}}</md-tooltip>
+				  	</h3>
+				    <h2 class="grade-summary-grade md-headline">{{section.grade}}</h2>
+				  </md-whiteframe>
+				</div>
+
 				<div class="" ng-repeat="section in sections" layout="row" layout-align="center center">
 					<studentsection section="section"></sectionsection>
 				</div>
