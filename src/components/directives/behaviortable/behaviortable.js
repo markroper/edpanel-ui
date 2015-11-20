@@ -15,12 +15,12 @@ angular.module('teacherdashboard')
           data: 'behaviorData',
           enableColumnMenus: false,
           paginationPageSize: 7,
-          paginationPageSizes: [7, 15, 30],
+          paginationPageSizes: [7, 15, 30, 100],
           enablePaginationControls: true,
           columnDefs: [
-            { field: 'behaviorCategory' },
-            { field: 'behaviorDate', type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
-            { field: 'name' }
+            { field: 'behaviorCategory', name:'Category' },
+            { field: 'behaviorDate', name:'Date', type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
+            { field: 'name', name: 'Description' }
           ]
         };
         scope.behaviorPromise.then(function(theData){
