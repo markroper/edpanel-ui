@@ -1,27 +1,26 @@
 .student-detail {
+  .table-and-choro-wrapper {
+    background-color: white;
+    button {
+      display: none;
+    }
+  }
   .gpa-summary {
     width: 125px;
   }
-  .summary-row {
-    margin-bottom: 8px;
-  }
   .grade-summary {
-    background-color: white;
-    width: 175px;
-    padding: 8px;
-    h2, h3 {
+    width: 125px;
+    padding: 4px;
+    div, h2 {
       cursor:default;
       margin: 0px 0px 0px 0px;
-      white-space: nowrap; 
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    h2 {
-      margin-top:3px;
-    }
   }
   background-color: $off-white;
-  
+
   md-tabs-canvas {
     background-color: $off-white;
   }

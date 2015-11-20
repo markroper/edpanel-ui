@@ -3,44 +3,57 @@
 		<md-tab label="Grades">
 			<div class="tab-contents">
 
-				<div class="summary-row" layout="row" layout-align="center center" ng-cloak>
-					<md-whiteframe class="gpa-summary grade-summary md-whiteframe-1dp" layout="column" layout-align="center center">
-						<h3 class="grade-summary-title md-subhead">GPA</h3>
-				    <h2 class="grade-summary-grade md-headline">--</h2>
-					</md-whiteframe>
-					<md-whiteframe class="gpa-summary grade-summary md-whiteframe-1dp" layout="column" layout-align="center center">
-						<h3 class="grade-summary-title md-subhead">Quarter GPA</h3>
-				    <h2 class="grade-summary-grade md-headline">--</h2>
-					</md-whiteframe>
-				</div>
-
-				<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
-					<h3 flex="50">Loading...</h3>
-					<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
-				</div>
-
 				<div class="summary-row" layout="row" layout-align="center center" layout-wrap ng-cloak>
-				  <md-whiteframe ng-repeat="section in sections" class="grade-summary md-whiteframe-1dp" layout="column" layout-align="center center">
-				  	<h3 class="grade-summary-title md-subhead">{{section.name}}
+          <div class="gpa-summary grade-summary" layout="column" layout-align="center center">
+            <div class="grade-summary-title md-body-1">GPA</div>
+            <h2 class="grade-summary-grade md-headline">--</h2>
+          </div>
+          <div class="gpa-summary grade-summary" layout="column" layout-align="center center">
+            <div class="grade-summary-title md-body-1">Quarter GPA</div>
+            <h2 class="grade-summary-grade md-headline">--</h2>
+          </div>
+				  <div ng-repeat="section in sections" class="grade-summary" layout="column" layout-align="center center">
+				  	<div class="grade-summary-title md-body-1">{{section.name}}
 							<md-tooltip>{{section.name}}</md-tooltip>
-				  	</h3>
+				  	</div>
 				    <h2 class="grade-summary-grade md-headline">{{section.grade}}</h2>
-				  </md-whiteframe>
+				  </div>
 				</div>
+
+        <div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="sections.length < 1">
+          <h3 flex="50">Loading...</h3>
+          <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
+        </div>
 
 				<div class="" ng-repeat="section in sections" layout="row" layout-align="center center">
 					<studentsection section="section"></sectionsection>
 				</div>
 			</div>
 		</md-tab>
-		<md-tab label="Goals">
-			<div class="tab-contents">
-		  	<goals goals="goals"></goals>
-		  </div>
-		</md-tab>
 		<md-tab label="behavior">
 			<div class="tab-contents">
-				<span>under construction</span>
+        <md-card>
+          <md-card-content>
+            <div flex="100" class="chorocontainer">
+              <h3 class="grade-summary-title md-subhead" style="margin:0px;">Behavior Score by Week</h3>
+              <behaviorgraph weekly-behavior-promise="prepScorePromise"></behaviorgraph>
+            </div>
+          </md-card-content>
+        </md-card>
+        <md-card>
+          <md-card-content>
+            <div class="table-and-choro-wrapper" layout="row" layout-wrap layout-align="center start">
+              <div flex-gt-md="50" flex="100">
+                <h3 class="grade-summary-title md-subhead">Behavior Table</h3>
+                <behaviortable behavior-promise="behaviorDataPromise"></behaviortable>
+              </div>
+              <div flex-gt-md="50" flex="100">
+                <h3 class="grade-summary-title md-subhead">Behavior Calendar</h3>
+                <chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar>
+              </div>
+            </div>
+          </md-card-content>
+        </md-card>
 			</div>
 		</md-tab>
 		<md-tab label="State Exams">
