@@ -15,7 +15,7 @@ angular.module('teacherdashboard')
           var exs = {};
           var categorizedData = {};
           var chartData = [];
-          var WEEKSCORE = 'grade';
+          var WEEKSCORE = 'score';
           exs[WEEKSCORE] = WEEKSCORE + '_x';
           categorizedData.weekscore = [[WEEKSCORE], [WEEKSCORE + '_x']];
           theData.forEach(function(d){
