@@ -1,0 +1,11 @@
+.attendancetable {
+  height:320px;
+  position:relative;
+  .attendance-ui-grid {
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+  }
+}

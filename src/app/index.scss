@@ -14,15 +14,20 @@ md-radio-button{
   outline:none;
 }
 .material-icons.md-18 {
-    font-size: 18px; 
+    font-size: 18px;
 }
 .material-icons.md-24 {
-    font-size: 24px; 
+    font-size: 24px;
 }
 .material-icons.md-36 {
-    font-size: 36px; 
+    font-size: 36px;
     width:36px;
     height:36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+  width:48px;
+  height:48px;
 }
 
 .sidemenu-icon {
@@ -51,7 +56,7 @@ md-radio-button{
       background-size: 100%;
       cursor:pointer;
       }
-      
+
 .md-button > span {
   margin-left:20px;
 }
@@ -199,11 +204,13 @@ span.name {
 }
 
 // injector
+@import '../components/directives/attendancetable/attendancetable.scss';
 @import '../components/directives/behaviorgraph/behaviorgraph.scss';
-@import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/chorocalendar/chorocalendar.scss';
+@import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/datelinechart/datelinechart.scss';
 @import '../components/directives/goal/goals.scss';
+@import '../components/directives/gradedonut/gradedonut.scss';
 @import '../components/directives/scatterplot/scatterplot.scss';
 @import '../components/directives/settingscard/settingscard.scss';
 @import '../components/directives/studentsection/studentsetion.scss';
@@ -212,6 +219,5 @@ span.name {
 @import '../components/routecontrollers/home/home.scss';
 @import '../components/routecontrollers/login/login.scss';
 @import '../components/routecontrollers/navinclude/navinclude.scss';
-@import '../components/directives/gradedonut/gradedonut.scss';
 @import '../components/routecontrollers/student/student.scss';
 // endinjector

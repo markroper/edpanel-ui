@@ -13,7 +13,9 @@ angular.module('teacherdashboard')
       controller: function($scope, $element) {
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" data-promise="hwDataPromise"></datetimechart></div>';
-        
+        var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
+
+        var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
@@ -26,6 +28,9 @@ angular.module('teacherdashboard')
           if($scope.choroScope) {
             $scope.choroScope.$destroy();
             $scope.choroScope = null;
+            if(cell) {
+              cell.removeClass('deployed');
+            }
             if($scope.choroCal) {
               $scope.choroCal.removeClass('slidercontainer');
               $scope.choroCal.addClass('oldslidercontainer');
@@ -45,12 +50,19 @@ angular.module('teacherdashboard')
             $scope.student = student;
             $scope.currTemplate = template;
             $scope.choroScope = $scope.$new(true);
-            //Cache the isolated scope variables needed for the chorocalendar directive
-            $scope.choroScope.behaviorDataPromise = 
-              api.studentBehaviors.get({ studentId: student.id }).$promise;
+            if(template === behaviorCalendarHtml) {
+              //Cache the isolated scope variables needed for the chorocalendar directive
+              $scope.choroScope.behaviorDataPromise =
+                api.studentBehaviors.get({ studentId: student.id }).$promise;
+            } else if(template === attendanceTableHtml) {
+              $scope.choroScope.attendanceDataPromise =
+                api.studentAttendance.get({ schoolId: statebag.school.id, studentId: student.id }).$promise;
+            }
             $scope.choroScope.hideTray = $scope.hideTray;
             $scope.choroCal = $compile(template)($scope.choroScope);
-            angular.element(ev.target).parent().parent().after($scope.choroCal);
+            cell = angular.element(ev.target).closest('.table-cell');
+            cell.addClass('deployed');
+            angular.element(ev.target).closest('.table-row').after($scope.choroCal);
           } else {
             $scope.hideTray(ev, student);
           }
@@ -61,12 +73,18 @@ angular.module('teacherdashboard')
         $scope.showHomeworkTray = function(ev, student) {
           $scope.showTray(ev, student, hwCompletionChartHtml);
         }
+        $scope.showGpaTray = function(ev, student) {
+          $scope.showTray(ev, student, hwCompletionChartHtml);
+        }
+        $scope.showAttendanceTray = function(ev, student) {
+          $scope.showTray(ev, student, attendanceTableHtml);
+        }
       }
     };
   }]);
 
 function DialogController($scope, $mdDialog) {
-  $scope.behaviorDataPromise = 
+  $scope.behaviorDataPromise =
     $scope.api.studentBehaviors.get({ studentId: $scope.student.id }).$promise;
 
   $scope.hide = function() {
