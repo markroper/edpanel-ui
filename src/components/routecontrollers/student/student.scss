@@ -1,4 +1,7 @@
 .student-detail {
+  .table-and-choro-wrapper {
+    background-color: white;
+  }
   .gpa-summary {
     width: 125px;
   }
@@ -12,7 +15,7 @@
     h2, h3 {
       cursor:default;
       margin: 0px 0px 0px 0px;
-      white-space: nowrap; 
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -21,7 +24,7 @@
     }
   }
   background-color: $off-white;
-  
+
   md-tabs-canvas {
     background-color: $off-white;
   }

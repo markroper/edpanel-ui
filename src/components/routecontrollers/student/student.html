@@ -35,9 +35,18 @@
 		<md-tab label="behavior">
 			<div class="tab-contents">
         <div flex="100" class="chorocontainer">
-          <h3 class="grade-summary-title md-subhead">Weekly Behavior Score</h3>
+          <h3 class="grade-summary-title md-subhead" style="margin-top:0px;">Behavior Score by Week</h3>
           <behaviorgraph weekly-behavior-promise="prepScorePromise"></behaviorgraph>
-          <chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar>
+          <div class="table-and-choro-wrapper" layout="row" layout-wrap layout-align="center start">
+            <div flex-gt-md="50" flex="100">
+              <h3 class="grade-summary-title md-subhead">Behavior Table</h3>
+              <behaviortable behavior-promise="behaviorDataPromise"></behaviortable>
+            </div>
+            <div flex-gt-md="50" flex="100">
+              <h3 class="grade-summary-title md-subhead">Behavior Calendar</h3>
+              <chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar>
+            </div>
+          </div>
         </div>
 			</div>
 		</md-tab>
