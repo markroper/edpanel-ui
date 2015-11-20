@@ -35,24 +35,36 @@
 				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-click="showBehaviorTray($event, student)">
 					<div class="choropleth band-{{student.behaviorClass}}">
 						<span class="mobile-label" hide-gt-sm>Behavior</span>
+            <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
+              <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
+            </div>
 						<md-tooltip>{{student.behaviorPeriod || 'period'}}'s prep score: {{student.behavior || 90}}</md-tooltip>
 					</div>
 				</div>
 				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-click="showHomeworkTray($event, student)">
 					<div class="choropleth band-{{student.homeworkClass}}">
 						<span class="mobile-label" hide-gt-sm>Homework Completion</span>
+            <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
+              <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
+            </div>
 						<md-tooltip>{{student.homework || 0}}% this term</md-tooltip>
 					</div>
 				</div>
-				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100">
+				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-click="showAttendanceTray($event, student)">
 					<div class="choropleth band-{{student.attendanceClass}}">
 						<span class="mobile-label" hide-gt-sm>Attendance</span>
+            <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
+              <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
+            </div>
 						<md-tooltip>{{student.attendance || 0}} absenses this {{student.attendancePeriod || 'period'}}</md-tooltip>
 					</div>
 				</div>
-				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100">
+				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-click="showGpaTray($event, student)">
 					<div class="choropleth band-{{student.gpaClass}}">
 						<span class="mobile-label" hide-gt-sm>GPA</span>
+            <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
+              <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
+            </div>
 						<md-tooltip>Current GPA: {{student.gpa || '-'}}</md-tooltip>
 					</div>
 				</div>

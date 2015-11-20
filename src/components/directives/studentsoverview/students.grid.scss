@@ -8,6 +8,31 @@
 }
 
 .students-grid {
+  .toggle-icon-wrapper {
+    height:100%;
+    md-icon {
+      transform: rotate(0deg);
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.5s linear;
+      -webkit-transition: 250ms ease all;
+      -moz-transition: 250ms ease all;
+      -o-transition: 250ms ease all;
+      transition: 250ms ease all;
+    }
+  }
+  .toggle-icon-wrapper:hover {
+    md-icon {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+  .deployed .toggle-icon-wrapper md-icon {
+    transform: rotate(180deg);
+    visibility: visible;
+    opacity: 1;
+  }
+
 	.slidercontainer {
     overflow: hidden;
     animation: slideOpenVertical 250ms linear;
@@ -24,8 +49,9 @@
 	md-card {
 		padding: 0px 20px 0px 20px;
 	}
-	button {
+	button.md-raised {
 		width: 100%;
+    margin: 0px;
 		text-overflow: ellipsis;
 	}
 	button > span {
@@ -34,7 +60,7 @@
 		text-overflow: ellipsis;
 	}
 	.md-36 { font-size: 36px; }
-	input { font-size: 18px; width:225px;}
+	input.md-input { font-size: 18px; width:225px;}
 	.table-container{
 		width:100%;
 		max-width:1200px;
@@ -47,7 +73,7 @@
 				}
 				.choropleth {
 					vertical-align: inherit;
-					height:50px;
+					height:40px;
 					border: 1px solid white;
 					cursor: pointer;
 					.mobile-label {
@@ -62,7 +88,7 @@
 	.band-0 {
 		background-color: #E6E6E6;
 	}
-	
+
 	.band-0-10 {
 		background-color: $red-color;
 	}
@@ -74,7 +100,7 @@
 	}
 	.band-30-40 {
 		background-color: $red-color;
-	}	
+	}
 	.band-40-50 {
 		background-color: $red-color;
 	}
