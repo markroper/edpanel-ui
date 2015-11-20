@@ -82,7 +82,10 @@ angular.module('teacherdashboard')
         var studentMap = {};
         for(var i = 0; i < statebag.students.length; i++) {
           studentIds.push(statebag.students[i].id);
-          studentMap[statebag.students[i].id] = { name: statebag.students[i].name, id: statebag.students[i].id };
+          studentMap[statebag.students[i].id] = {
+            name: statebag.students[i].name,
+            id: statebag.students[i].id
+          };
         }
         var attendanceDates = returnStartAndEndDate('attendance');
         //TODO: currently HW completion is term, driven and not customizable, change this?
@@ -421,7 +424,7 @@ angular.module('teacherdashboard')
     student.behaviorClass = resolveBehaviorClass(student.behavior);
     student.homework = Math.round(inputStudent[2] * 100);
     student.homeworkClass = resolveHomeworkClass(inputStudent[2]);
-    student.attendanceClass = '90-100';
+    student.attendanceClass= '90-100';
     student.gpa = null;
     student.gpaClass = resolveGpaClass(student.gpa);
     return student;

@@ -51,6 +51,7 @@
 	}
 	button.md-raised {
 		width: 100%;
+    margin: 0px;
 		text-overflow: ellipsis;
 	}
 	button > span {
@@ -72,7 +73,7 @@
 				}
 				.choropleth {
 					vertical-align: inherit;
-					height:50px;
+					height:40px;
 					border: 1px solid white;
 					cursor: pointer;
 					.mobile-label {
