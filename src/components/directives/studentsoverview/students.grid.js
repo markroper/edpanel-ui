@@ -12,7 +12,7 @@ angular.module('teacherdashboard')
       replace: true,
       controller: function($scope, $element) {
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
-        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" data-promise="hwDataPromise"></datetimechart></div>';
+        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
 
         var cell;
@@ -57,6 +57,12 @@ angular.module('teacherdashboard')
             } else if(template === attendanceTableHtml) {
               $scope.choroScope.attendanceDataPromise =
                 api.studentAttendance.get({ schoolId: statebag.school.id, studentId: student.id }).$promise;
+            } else if(template === hwCompletionChartHtml) {
+              $scope.choroScope.dateTimeDataPromise = api.studentHwRates.get({
+                  studentId: student.id,
+                  startDate: moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
+                  endDate: moment(statebag.currentYear.endDate).format('YYYY-MM-DD')
+                }).$promise;
             }
             $scope.choroScope.hideTray = $scope.hideTray;
             $scope.choroCal = $compile(template)($scope.choroScope);
@@ -74,7 +80,7 @@ angular.module('teacherdashboard')
           $scope.showTray(ev, student, hwCompletionChartHtml);
         }
         $scope.showGpaTray = function(ev, student) {
-          $scope.showTray(ev, student, hwCompletionChartHtml);
+          //TODO: implement me
         }
         $scope.showAttendanceTray = function(ev, student) {
           $scope.showTray(ev, student, attendanceTableHtml);
