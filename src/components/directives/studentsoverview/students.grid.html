@@ -23,8 +23,8 @@
 				<div flex="{{cellWidth}}" class="table-cell">GPA</div>
 			</div>
 
-			<div class="table-row" layout="row" ng-repeat="student in studentsData | filter:search:strict">
-				<div class="table-cell" flex="{{cellWidth}}" ng-show="showFilter">
+			<div class="table-row" layout="row" layout-wrap ng-repeat="student in studentsData | filter:search:strict">
+				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-show="showFilter">
 					<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
 						<md-button md-no-ink class="md-primary" ng-click="goToStudent(student)">
 						{{student.name}}
@@ -32,7 +32,7 @@
 					</md-button>
 					</section>
 				</div>
-				<div class="table-cell" flex="{{cellWidth}}"  ng-click="showBehaviorTray($event, student)">
+				<div class="table-cell" flex="{{cellWidth}}" flex-sm="50" ng-click="showBehaviorTray($event, student)">
 					<div class="choropleth band-{{student.behaviorClass}}">
 						<span class="mobile-label" hide-gt-sm>Behavior</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
@@ -41,7 +41,7 @@
 						<md-tooltip>{{student.behaviorPeriod || 'period'}}'s prep score: {{student.behavior || 90}}</md-tooltip>
 					</div>
 				</div>
-				<div class="table-cell" flex="{{cellWidth}}"  ng-click="showHomeworkTray($event, student)">
+				<div class="table-cell" flex="{{cellWidth}}" flex-sm="50" ng-click="showHomeworkTray($event, student)">
 					<div class="choropleth band-{{student.homeworkClass}}">
 						<span class="mobile-label" hide-gt-sm>Homework Completion</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
@@ -50,7 +50,7 @@
 						<md-tooltip>{{student.homework || 0}}% this term</md-tooltip>
 					</div>
 				</div>
-				<div class="table-cell" flex="{{cellWidth}}"  ng-click="showAttendanceTray($event, student)">
+				<div class="table-cell" flex="{{cellWidth}}" flex-sm="50" ng-click="showAttendanceTray($event, student)">
 					<div class="choropleth band-{{student.attendanceClass}}">
 						<span class="mobile-label" hide-gt-sm>Attendance</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
@@ -59,7 +59,7 @@
 						<md-tooltip>{{student.attendance || 0}} absenses this {{student.attendancePeriod || 'period'}}</md-tooltip>
 					</div>
 				</div>
-				<div class="table-cell" flex="{{cellWidth}}"  ng-click="showGpaTray($event, student)">
+				<div class="table-cell" flex="{{cellWidth}}" flex-sm="50" ng-click="showGpaTray($event, student)">
 					<div class="choropleth band-{{student.gpaClass}}">
 						<span class="mobile-label" hide-gt-sm>GPA</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
