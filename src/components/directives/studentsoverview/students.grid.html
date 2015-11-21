@@ -26,7 +26,7 @@
 			<div class="table-row" layout="row" layout-sm="column" ng-repeat="student in studentsData | filter:search:strict">
 				<div class="table-cell" flex="{{cellWidth}}" flex-sm="100" ng-show="showFilter">
 					<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-						<md-button class="md-raised" ng-click="goToStudent(student)">
+						<md-button md-no-ink class="md-primary" ng-click="goToStudent(student)">
 						{{student.name}}
 						<md-tooltip>Click for student details</md-tooltip>
 					</md-button>
