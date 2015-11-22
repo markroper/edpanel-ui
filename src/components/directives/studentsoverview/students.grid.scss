@@ -8,6 +8,9 @@
 }
 
 .students-grid {
+  md-input-container {
+    margin:10px 0px;
+  }
   .toggle-icon-wrapper {
     height:100%;
     md-icon {
@@ -74,11 +77,10 @@
 				.choropleth {
 					vertical-align: inherit;
 					height:40px;
-					border: 1px solid white;
+					border: 1px solid $off-white;
 					cursor: pointer;
 					.mobile-label {
-						position:relative;
-						top:30%;
+            color: $off-white;
 						font-size: 16px;
 					}
 				}
