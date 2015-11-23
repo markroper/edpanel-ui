@@ -99,8 +99,8 @@ angular.module('teacherdashboard')
             min: 0,
             max: scope.section.goal.desiredValue,
             textRenderer: statebagApiManager.resolveGrade,
-            valueMinFontSize: 80,
-            gaugeWidthScale: 0.5,
+            valueMinFontSize: 65,
+            gaugeWidthScale: 0.75,
             levelColors: [
               "#F44366",
               "#FFEB3B",
