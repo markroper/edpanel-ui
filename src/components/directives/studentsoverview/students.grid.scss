@@ -24,7 +24,7 @@
       transition: 250ms ease all;
     }
   }
-  .toggle-icon-wrapper:hover {
+  .choropleth:hover {
     md-icon {
       visibility: visible;
       opacity: 1;
@@ -76,7 +76,7 @@
 				}
 				.choropleth {
 					vertical-align: inherit;
-					height:40px;
+					height:38px;
 					border: 1px solid $off-white;
 					cursor: pointer;
 					.mobile-label {
