@@ -14,6 +14,35 @@ angular.module('teacherdashboard')
         return statebag.school.years[statebag.school.years.length - 1];
       }
     },
+    resolveGrade: function(input) {
+      if(isNaN(input)) {
+        return '--';
+      }
+      if(input > 94) {
+        return 'A';
+      } else if(input > 89) {
+        return 'A-';
+      } else if(input > 86) {
+        return 'B+';
+      } else if(input > 83) {
+        return 'B';
+      } else if(input > 79) {
+        return 'B-';
+      } else if(input > 76) {
+        return 'C+';
+      } else if(input > 73) {
+        return 'C';
+      } else if(input > 69) {
+        return 'C-';
+      } else if(input > 66) {
+        return 'D+';
+      } else if(input > 63) {
+        return 'D';
+      } else if(input > 59) {
+        return 'D-';
+      }
+      return 'F';
+    },
     resolveCurrentTerm: function() {
       var fullYearTerms = [];
       var currentTime = new Date().getTime();
@@ -416,6 +445,8 @@ angular.module('teacherdashboard')
   /*
    * Helper functions below
    */
+
+
   function resolveStudentScopeObject(inputStudent) {
     var student = {};
     student.id = inputStudent[0];
