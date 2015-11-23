@@ -23,6 +23,8 @@ angular.module('teacherdashboard')
         angular.forEach(scope.section.currentCategoryGrades, function(value, key) {
           this.push({ 'type': key.toLowerCase(), 'score': value });
         }, componentGrades);
+        //The action button always shows if this is set on the data
+        scope.toolbarAnimation = 'md-scale';
         scope.sectionGrade = {
           currentGrade: scope.section.grade,
           components: componentGrades

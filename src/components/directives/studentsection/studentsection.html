@@ -15,12 +15,11 @@
           <div flex="none" class="grade-goal" style="position: relative">
               <h3 class="md-title">Current Grade</h3>
 
-            <md-fab-speed-dial class="md-fab-top-right"  md-open="section.isClosed" md-direction="left" class="md-scale ">
+            <md-fab-speed-dial class="md-fab-top-right"  md-open="section.isClosed" md-direction="left" ng-class="toolbarAnimation">
               <md-fab-trigger>
-                <md-button aria-label="menu" class="goal-menu md-icon-button">
+                <md-button aria-label="menu" class="md-icon-button">
                   <md-icon md-font-set="material-icons">more_vert</md-icon>
                 </md-button>
-                </md-fab-trigger>
               </md-fab-trigger>
               <md-fab-actions>
                 <md-button  ng-click="editGoal(section)" class="md-fab md-primary md-raised md-mini">

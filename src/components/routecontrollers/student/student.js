@@ -185,7 +185,6 @@ angular.module('teacherdashboard')
             }
             section.gradeFormula.assignmentTypeWeights = arrayWeights;
             //Weekly grade progression:
-            console.log(studentSectionDashData);
             var gradeResults = studentSectionDashData[i].gradeProgression;
             section.grade = statebagApiManager.resolveGrade(gradeResults.currentOverallGrade);
 
@@ -193,12 +192,7 @@ angular.module('teacherdashboard')
             section.currentCategoryGrades = gradeResults.currentCategoryGrades;
             section["goal"] = studentSectionDashData[i].gradeGoal;
             section.goal["proposedValue"] = section.goal.desiredValue;
-            console.log(studentSectionDashData[i].gradeGoal);
-            console.log("STUFF");
-            console.log(section.goal);
-            console.log(section.course.name);
             section.goal["nameId"] = section.course.name.replace(/\s/g, "-");
-            console.log(section.goal.nameId);
             sections.push(section);
           }
 

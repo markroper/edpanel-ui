@@ -2,7 +2,7 @@
   "name": "teacherdashboard",
   "version": "0.0.0",
   "dependencies": {
-    "jquery":"2.1.x",
+    "jquery":"2.x.x",
     "angular": "v1.4.x",
     "angular-animate": "v1.4.x",
     "angular-aria": "v1.4.x",
@@ -10,7 +10,7 @@
     "angular-material": "1.x.x",
     "angular-resource": "v1.4.x",
     "angular-sanitize": "v1.4.x",
-    "angular-ui-router": "~0.2.13",
+    "angular-ui-router": "0.2.x",
     "angular-ui-grid":"3.0.x",
     "c3": "~0.4.10",
     "d3": "~3.5.x",
