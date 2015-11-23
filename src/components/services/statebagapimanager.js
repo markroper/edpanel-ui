@@ -7,8 +7,8 @@ angular.module('teacherdashboard')
     resolveCurrentYear: function() {
       var currentTime = new Date().getTime();
       for(var i = 0; i < statebag.school.years.length; i++) {
-        if(statebag.school.years[i].startDate <= currentTime ||
-          statebag.school.years[i].endDate >= curentTime) {
+        if(moment(statebag.school.years[i].startDate).valueOf() <= currentTime ||
+          moment(statebag.school.years[i].endDate).valueOf() >= curentTime) {
           return statebag.school.years[i];
         }
         return statebag.school.years[statebag.school.years.length - 1];
@@ -20,8 +20,8 @@ angular.module('teacherdashboard')
       //Find a full year term whose date range encloses the current date
       for(var i = 0; i < statebag.currentYear.terms.length; i++) {
         var portion = statebag.currentYear.terms[i].portion;
-        var termStart = statebag.currentYear.terms[i].startDate;
-        var termEnd = statebag.currentYear.terms[i].endDate;
+        var termStart = moment(statebag.currentYear.terms[i].startDate).valueOf();
+        var termEnd = moment(statebag.currentYear.terms[i].endDate).valueOf();
         if(portion && portion === 1) {
           fullYearTerms.push(statebag.currentYear.terms[i]);
           if(termStart <= currentTime && termEnd >= currentTime) {
@@ -31,8 +31,8 @@ angular.module('teacherdashboard')
       }
       //Find any term whose date range encloses the current date
       for(var i = 0; i < statebag.currentYear.terms.length; i++) {
-        var termStart = statebag.currentYear.terms[i].startDate;
-        var termEnd = statebag.currentYear.terms[i].endDate;
+        var termStart = moment(statebag.currentYear.terms[i].startDate).valueOf();
+        var termEnd = moment(statebag.currentYear.terms[i].endDate).valueOf();
         if(termStart <= currentTime && termEnd >= currentTime) {
           return statebag.currentYear.terms[i]
         }
@@ -141,8 +141,8 @@ angular.module('teacherdashboard')
             var score = responses[3][student];
             var pluckedStudent = studentMap[score.studentId];
             if(pluckedStudent && score.endDate &&
-                ( !maxEndDate || maxEndDate <= score.endDate)) {
-              maxEndDate = score.endDate;
+                ( !maxEndDate || maxEndDate <= moment(score.endDate).valueOf())) {
+              maxEndDate = moment(score.endDate).valueOf();
               pluckedStudent.behavior = score.score;
               pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
               pluckedStudent.behaviorPeriod = returnComponentPeriod('behavior');
@@ -197,12 +197,12 @@ angular.module('teacherdashboard')
         dates.max = moment().valueOf();
         break;
       case 'term':
-        dates.min = statebag.currentTerm.startDate;
-        dates.max = statebag.currentTerm.endDate;
+        dates.min = moment(statebag.currentTerm.startDate).valueOf();
+        dates.max = moment(statebag.currentTerm.endDate).valueOf();
         break;
       case 'year':
-        dates.min = statebag.currentYear.startDate;
-        dates.max = statebag.currentYear.endDate;
+        dates.min = moment(statebag.currentYear.startDate).valueOf();
+        dates.max = moment(statebag.currentYear.endDate).valueOf();
         break;
     }
     //Never let a max date be greater than the current date, duh
