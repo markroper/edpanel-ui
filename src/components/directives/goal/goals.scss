@@ -7,10 +7,9 @@
 .goals-container{
   md-card-content {
     position:relative;
-    md-fab-speed-dial {
+    md-fab-speed-dial.md-fab-top-right {
       position:absolute;
-      top:-5px;
-      right:-15px;
+      top:0px;
     }
   }
   display: flex;
