@@ -24,6 +24,11 @@ md-radio-button{
     width:36px;
     height:36px;
 }
+.material-icons.md-48 {
+  font-size: 48px;
+  width:48px;
+  height:48px;
+}
 
 .sidemenu-icon {
   width:96px;
@@ -199,6 +204,7 @@ span.name {
 }
 
 // injector
+@import '../components/directives/attendancetable/attendancetable.scss';
 @import '../components/directives/behaviorgraph/behaviorgraph.scss';
 @import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/chorocalendar/chorocalendar.scss';

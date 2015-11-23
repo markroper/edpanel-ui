@@ -7,7 +7,7 @@
     "angular-animate": "v1.4.x",
     "angular-aria": "v1.4.x",
     "angular-cookies": "v1.4.x",
-    "angular-material": "1.x.x",
+    "angular-material": "1.0.0-rc4",
     "angular-resource": "v1.4.x",
     "angular-sanitize": "v1.4.x",
     "angular-ui-router": "0.2.x",
