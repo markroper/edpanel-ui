@@ -173,8 +173,6 @@ angular.module('teacherdashboard')
 
           studentGoalsPromises.then(function (response) {
             statebag.goals = response;
-            console.log("OUR STUFF HERE");
-            console.log(statebag.goals);
             deferred.resolve(statebag.goals);
           });
           return deferred.promise;

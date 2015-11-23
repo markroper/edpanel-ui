@@ -64,7 +64,7 @@ angular.module('teacherdashboard')
             function() {
               //TODO FIX DISPLAY ONCE THIS CHANGES?
               scope.gage.refresh(goal.calculatedValue, goal.desiredValue);
-              showSimpleToast("Goal changed successfully");
+              showSimpleToast("Goal updated");
             },
             function(error) {
               showSimpleToast("There was a problem modifying the goal");
