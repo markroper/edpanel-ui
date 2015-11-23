@@ -16,10 +16,15 @@
   h2 {
     margin: 0px 0px 0px 0px;
   }
+
   .grade-item {
     padding-left: 40px;
     padding-right: 40px;
   }
+  .goal-gauge svg {
+    margin-top: -40px
+  }
+
   .section-grade {
     font-size: 75px;
   }

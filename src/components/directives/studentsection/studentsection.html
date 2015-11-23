@@ -1,18 +1,59 @@
 <div class="student-section" flex="auto">
   <md-card>
       <md-card-content>
+
         <h2 class="md-headline">{{section.course.name}}</h2>
         <div layout="row" layout-wrap layout-align="center start" class="grade-container">
+
           <div flex="none" class="current-grade grade-item">
-            <h3 class="md-subhead ">Current Grade</h3>
-            <h1 class="md-display-4">{{sectionGrade.currentGrade || '--'}}</h1>
-            <div class="subgrades" layout="row">
-              <div ng-repeat="termGrade in section.termGrades" flex layout="column">
-                <div class="md-subhead">{{termGrade.name}}</div>
-                <div class="md-headline">{{termGrade.letterGrade || '--'}}</div>
-              </div>
+            <div ng-repeat="termGrade in section.termGrades" flex layout="column">
+              <div class="md-subhead">{{termGrade.name}}</div>
+              <div class="md-headline">{{termGrade.letterGrade || '--'}}</div>
             </div>
           </div>
+
+          <div flex="none" class="grade-goal" style="position: relative">
+              <h3 class="md-title">Current Grade</h3>
+
+            <md-fab-speed-dial class="md-fab-top-right"  md-open="section.isClosed" md-direction="left" ng-class="toolbarAnimation">
+              <md-fab-trigger>
+                <md-button aria-label="menu" class="md-icon-button">
+                  <md-icon md-font-set="material-icons">more_vert</md-icon>
+                </md-button>
+              </md-fab-trigger>
+              <md-fab-actions>
+                <md-button  ng-click="editGoal(section)" class="md-fab md-primary md-raised md-mini">
+                  <md-icon md-font-set="material-icons"> mode_edit </md-icon>
+                </md-button>
+              </md-fab-actions>
+            </md-fab-speed-dial>
+
+            <div id="gauge-{{section.goal.nameId}}" class="goal-gauge" style="height: 210px"></div>
+
+            <div ng-show="section.editActive" class="editSlider">
+              <md-content style="margin: 16px; padding:16px">
+                <div layout>
+                  <md-slider test-drag-end ng-model="section.goal.proposedValue" flex= min="0" max="100" aria-label="red" id="red-slider" class="">
+                  </md-slider>
+                  <div flex="20" layout layout-align="center center">
+                    <input type="number" ng-model="section.goal.proposedValue" aria-label="red" aria-controls="red-slider">
+                  </div>
+                </div>
+                <div layout>
+                  <md-button ng-click="proposeEdit(section)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
+                    <md-icon md-font-set="material-icons">check</md-icon>
+                  </md-button>
+                  <md-button ng-click="section.editActive = false" aria-label="menu" class="md-fab md-warn md-raised md-mini">
+                    <md-icon md-font-set="material-icons">close</md-icon>
+                  </md-button>
+                </div>
+              </md-content>
+            </div>
+
+
+
+          </div>
+
           <div flex="none" class="grade-item">
             <h3 class="md-subhead">Component Scores</h3>
             <div ui-grid="{ data: myData, enableColumnMenus: false }" class="grade-component-grid"></div>

@@ -144,6 +144,7 @@ angular.module('teacherdashboard')
         }, function(studentSectionDashData) {
           var sections = [];
           for(var i = 0; i < studentSectionDashData.length; i++) {
+
             if(!studentSectionDashData[i].studentAssignments ||
               studentSectionDashData[i].studentAssignments.length === 0) {
               continue;
@@ -185,11 +186,16 @@ angular.module('teacherdashboard')
             section.gradeFormula.assignmentTypeWeights = arrayWeights;
             //Weekly grade progression:
             var gradeResults = studentSectionDashData[i].gradeProgression;
-            section.grade = resolveGrade(gradeResults.currentOverallGrade);
+            section.grade = statebagApiManager.resolveGrade(gradeResults.currentOverallGrade);
+
             section.gradeProgression = gradeResults.weeklyGradeProgression;
             section.currentCategoryGrades = gradeResults.currentCategoryGrades;
+            section["goal"] = studentSectionDashData[i].gradeGoal;
+            section.goal["proposedValue"] = section.goal.desiredValue;
+            section.goal["nameId"] = section.course.name.replace(/\s/g, "-");
             sections.push(section);
           }
+
           $scope.sections = sections;
           statebag.sections = $scope.sections;
           sectionDataDeferred.resolve(sections);
@@ -198,33 +204,5 @@ angular.module('teacherdashboard')
     /*
      * Maps a numeric grade to a letter grade for display
     */
-    function resolveGrade(input) {
-      if(isNaN(input)) {
-        return '--';
-      }
-      if(input > 94) {
-        return 'A';
-      } else if(input > 89) {
-        return 'A-';
-      } else if(input > 86) {
-        return 'B+';
-      } else if(input > 83) {
-        return 'B';
-      } else if(input > 79) {
-        return 'B-';
-      } else if(input > 76) {
-        return 'C+';
-      } else if(input > 73) {
-        return 'C';
-      } else if(input > 69) {
-        return 'C-';
-      } else if(input > 66) {
-        return 'D+';
-      } else if(input > 63) {
-        return 'D';
-      } else if(input > 59) {
-        return 'D-';
-      }
-      return 'F';
-    }
+
   }]);
