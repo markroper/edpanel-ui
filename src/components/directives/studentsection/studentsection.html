@@ -4,14 +4,6 @@
 
         <h2 class="md-headline">{{section.course.name}}</h2>
         <div layout="row" layout-wrap layout-align="center start" class="grade-container">
-
-          <div flex="none" class="current-grade grade-item">
-            <div ng-repeat="termGrade in section.termGrades" flex layout="column">
-              <div class="md-subhead">{{termGrade.name}}</div>
-              <div class="md-headline">{{termGrade.letterGrade || '--'}}</div>
-            </div>
-          </div>
-
           <div flex="none" class="grade-goal" style="position: relative">
               <h3 class="md-title">Current Grade</h3>
 
@@ -28,7 +20,7 @@
               </md-fab-actions>
             </md-fab-speed-dial>
 
-            <div id="gauge-{{section.goal.nameId}}" class="goal-gauge" style="height: 180px"></div>
+            <div id="gauge-{{section.goal.nameId}}" class="goal-gauge" style="height: 175px"></div>
 
             <div ng-show="section.editActive" class="editSlider">
               <md-content>
@@ -49,8 +41,13 @@
                 </div>
               </md-content>
             </div>
+            <div layout="row" flex="none" class="current-grade grade-item">
+              <div ng-repeat="termGrade in section.termGrades" flex layout="column">
+                <div class="md-subhead">{{termGrade.name}}</div>
+                <div class="md-headline">{{termGrade.letterGrade || '--'}}</div>
+              </div>
+            </div>
           </div>
-
           <div flex="none" class="grade-item">
             <h3 class="md-subhead">Component Scores</h3>
             <div ui-grid="{ data: myData, enableColumnMenus: false }" class="grade-component-grid"></div>
