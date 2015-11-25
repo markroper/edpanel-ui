@@ -1,4 +1,8 @@
 .behaviortable {
+  input {
+    height: 14px;
+    line-height:1;
+  }
   height: 300px;
   position:relative;
   .behavior-ui-grid {
