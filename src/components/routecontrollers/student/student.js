@@ -93,6 +93,19 @@ angular.module('teacherdashboard')
       return leafChildren;
     };
 
+    function resolveCurrentTermFormula(gradeFormula) {
+      var leafChildren = resolveLeafChildrenFormulas(gradeFormula);
+      var currDate = moment().valueOf();
+      for(var i = 0; i < leafChildren.length; i++){
+        var start = moment(leafChildren[i].startDate).valueOf();
+        var end = moment(leafChildren[i].endDate).valueOf();
+        if(start <= currDate && end >= currDate) {
+          return leafChildren[i];
+        }
+      }
+      return gradeFormula;
+    }
+
     /*
     *  Warning, recurisive algorithm that walks to the leaf nodes of
     *  a grade formula graph and returns those leaf nodes as an unsorted array.
@@ -145,7 +158,7 @@ angular.module('teacherdashboard')
           var sections = [];
           for(var i = 0; i < studentSectionDashData.length; i++) {
 
-            if(!studentSectionDashData[i].studentAssignments ||
+            if (!studentSectionDashData[i].studentAssignments ||
               studentSectionDashData[i].studentAssignments.length === 0) {
               continue;
             }
@@ -169,9 +182,9 @@ angular.module('teacherdashboard')
             //Transform the grade weights:
             var weights = {};
             var arrayWeights = [];
-            if(section.gradeFormula) {
-              weights = section.gradeFormula.assignmentTypeWeights;
-              for(var key in weights) {
+            if (section.gradeFormula) {
+              weights = resolveCurrentTermFormula(section.gradeFormula).assignmentTypeWeights;
+              for (var key in weights) {
                 var tempArr = [];
                 tempArr.push(key.toLowerCase());
                 tempArr.push(Math.round(weights[key]));
@@ -180,7 +193,7 @@ angular.module('teacherdashboard')
             } else {
               section.gradeFormula = {};
             }
-            if(arrayWeights.length === 0) {
+            if (arrayWeights.length === 0) {
               arrayWeights.push(["Total points", 100]);
             }
             section.gradeFormula.assignmentTypeWeights = arrayWeights;
@@ -192,7 +205,7 @@ angular.module('teacherdashboard')
             section.currentCategoryGrades = gradeResults.currentCategoryGrades;
             section["goal"] = studentSectionDashData[i].gradeGoal;
             section.goal["proposedValue"] = section.goal.desiredValue;
-            section.goal["nameId"] = section.course.name.replace(/\s/g, "-");
+            section.goal["nameId"] = section.course.name.replace(/\s/g, "-") + '-' + section.id;
             sections.push(section);
           }
 

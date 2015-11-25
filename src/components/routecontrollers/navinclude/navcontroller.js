@@ -22,6 +22,9 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager) {
       }
 
     }
+    $scope.toggleSideNav = function() {
+      $mdSidenav('left').toggle();
+    }
     $scope.toggleList =  function() {
       $mdSidenav('left').toggle();
     };
@@ -39,7 +42,7 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager) {
     };
     $scope.logout = function() {
         api.logout.save(
-          {}, 
+          {},
           function(){
             $state.go('login');
           });
