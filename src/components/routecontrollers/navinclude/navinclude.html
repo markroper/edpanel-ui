@@ -1,4 +1,5 @@
 <md-toolbar layout="row" md-theme="{{theme}}">
+  <md-icon md-ink-ripple md-font-set="material-icons" ng-click="toggleSideNav()" class="material-icons md-36 arrow-icon"> menu </md-icon>
   <div style="outline:none;" class="md-toolbar-tools" tabindex="0">
     <span flex="none" style="outline:none; cursor:pointer;" ng-click="goToHome()">{{userRole}} Dashboard</span>
     <span flex layout="row"><span ng-show="currentPage.name">&nbsp; > &nbsp;</span><span class="page-title">{{currentPage.name}}</span></span>
@@ -52,13 +53,22 @@
             </md-button>
           </md-menu-item>
         </md-menu-content>
+
       </md-menu>
     </div>
   </div>
 </md-toolbar>
-
-<div flex layout="row" md-theme="{{theme}}">
-    <md-content flex id="content">
-      <div ui-view class="main-container"></div>
-    </md-content>
-</div>
+<md-content layout="row" flex>
+  <div layout="column">
+    <md-sidenav layout="column" flex class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-lg')">
+      <md-content layout-padding>
+        some garbage content
+      </md-content>
+    </md-sidenav>
+  </div>
+  <div layout="column" flex md-theme="{{theme}}">
+      <md-content flex layout="column" id="content">
+        <div ui-view class="main-container"></div>
+      </md-content>
+  </div>
+</md-content>
