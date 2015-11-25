@@ -15,6 +15,16 @@ angular.module('teacherdashboard')
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
 
+        $scope.showMoreStudents = true;
+        $scope.limit = 30;
+        $scope.increaseLimit = function() {
+          if ($scope.studentsData && $scope.limit < $scope.studentsData.length) {
+            $scope.limit += 30;
+          } else {
+            $scope.showMoreStudents = false;
+          }
+        };
+
         var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
