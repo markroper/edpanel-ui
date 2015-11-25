@@ -13,8 +13,8 @@
             <h2 class="grade-summary-grade md-headline">--</h2>
           </div>
 				  <div ng-repeat="section in sections" class="grade-summary" layout="column" layout-align="center center">
-				  	<div class="grade-summary-title md-body-1">{{section.name}}
-							<md-tooltip>{{section.name}}</md-tooltip>
+				  	<div class="grade-summary-title md-body-1">{{::section.course.name}}
+							<md-tooltip>{{::section.name}}</md-tooltip>
 				  	</div>
 				    <h2 class="grade-summary-grade md-headline">{{section.grade}}</h2>
 				  </div>

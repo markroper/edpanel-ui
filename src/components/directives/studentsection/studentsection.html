@@ -2,7 +2,10 @@
   <md-card>
       <md-card-content>
 
-        <h2 class="md-headline">{{section.course.name}}</h2>
+        <h2 class="md-headline">
+          {{::section.course.name}}
+          <md-tooltip>{{::section.name}}</md-tooltip>
+        </h2>
         <div layout="row" layout-wrap layout-align="center start" class="grade-container">
           <div flex="none" class="grade-goal" style="position: relative">
               <h3 class="md-subhead">Current Grade</h3>
@@ -20,7 +23,7 @@
               </md-fab-actions>
             </md-fab-speed-dial>
 
-            <div id="gauge-{{section.goal.nameId}}" class="goal-gauge" style="height: 175px"></div>
+            <div id="gauge-{{::section.goal.nameId}}" class="goal-gauge" style="height: 175px"></div>
 
             <div ng-show="section.editActive" class="editSlider">
               <md-content>
@@ -43,8 +46,8 @@
             </div>
             <div layout="row" flex="none" class="current-grade grade-item">
               <div ng-repeat="termGrade in section.termGrades" flex layout="column">
-                <div class="md-subhead">{{termGrade.name}}</div>
-                <div class="md-headline">{{termGrade.letterGrade || '--'}}</div>
+                <div class="md-subhead">{{::termGrade.name}}</div>
+                <div class="md-headline">{{::termGrade.letterGrade || '--'}}</div>
               </div>
             </div>
           </div>
@@ -54,7 +57,7 @@
           </div>
           <div flex="none" class="component-grades grade-item">
             <h3 class="md-subhead">Grading Formula</h3>
-            <gradedonut section="section" course-title="{{section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
+            <gradedonut section="section" course-title="{{::section.grade}}" grade-weights="section.gradeFormula.assignmentTypeWeights"></gradedonut>
           </div>
         </div>
     </md-card-content>
