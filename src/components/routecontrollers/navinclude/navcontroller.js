@@ -24,7 +24,7 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager) {
     }
     $scope.toggleSideNav = function() {
       $mdSidenav('left').toggle();
-    }
+    };
     $scope.toggleList =  function() {
       $mdSidenav('left').toggle();
     };

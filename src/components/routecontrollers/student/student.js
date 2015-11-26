@@ -91,7 +91,7 @@ angular.module('teacherdashboard')
         leafChildren.push(gradeFormula);
       }
       return leafChildren;
-    };
+    }
 
     function resolveCurrentTermFormula(gradeFormula) {
       var leafChildren = resolveLeafChildrenFormulas(gradeFormula);
@@ -143,9 +143,6 @@ angular.module('teacherdashboard')
     function resolveStudentSectionData() {
       statebag.currentPage.name = statebag.currentStudent.name;
       $scope.students.push(statebag.currentStudent);
-      //GET THE SECTIONS
-      var start = new Date().getTime();
-
       var sectionDataDeferred = $q.defer();
       statebag.studentSectionsPromise = sectionDataDeferred.promise;
       api.studentSectionsData.get(
@@ -194,7 +191,7 @@ angular.module('teacherdashboard')
               section.gradeFormula = {};
             }
             if (arrayWeights.length === 0) {
-              arrayWeights.push(["Total points", 100]);
+              arrayWeights.push(['Total points', 100]);
             }
             section.gradeFormula.assignmentTypeWeights = arrayWeights;
             //Weekly grade progression:
@@ -203,9 +200,9 @@ angular.module('teacherdashboard')
 
             section.gradeProgression = gradeResults.weeklyGradeProgression;
             section.currentCategoryGrades = gradeResults.currentCategoryGrades;
-            section["goal"] = studentSectionDashData[i].gradeGoal;
-            section.goal["proposedValue"] = section.goal.desiredValue;
-            section.goal["nameId"] = section.course.name.replace(/\s/g, "-") + '-' + section.id;
+            section.goal = studentSectionDashData[i].gradeGoal;
+            section.goal.proposedValue = section.goal.desiredValue;
+            section.goal.nameId = section.course.name.replace(/\s/g, '-') + '-' + section.id;
             sections.push(section);
           }
 
@@ -214,8 +211,5 @@ angular.module('teacherdashboard')
           sectionDataDeferred.resolve(sections);
         });
     }
-    /*
-     * Maps a numeric grade to a letter grade for display
-    */
 
   }]);

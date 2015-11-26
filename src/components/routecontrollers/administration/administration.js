@@ -1,8 +1,8 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast',
-  function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast) {
-    statebag.currentPage.name = "Administration";
+.controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast', '$document',
+  function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document) {
+    statebag.currentPage.name = 'Administration';
     //Resolve the invalidated users
     api.users.get(
       { schoolId: statebag.school.id,
@@ -18,16 +18,16 @@ angular.module('teacherdashboard')
         'thresholdChar': '#'
       },
       'behavior': {
-        'name':'Attendance',
+        'name':'Behavior',
         'isTemporal': true,
         'thresholdChar': '#'
       },
       'homework': {
-        'name':'Attendance',
+        'name':'Homework',
         'thresholdChar': '%'
       },
       'gpa':{
-        'name':'Attendance',
+        'name':'GPA',
         'isTemporal': false,
         'thresholdChar': '#'
       }
@@ -39,7 +39,7 @@ angular.module('teacherdashboard')
     angular.copy(defaultRgb, $scope.originalRgb);
 
     api.uiAttributes.get(
-      { schoolId: statebag.school.id }, 
+      { schoolId: statebag.school.id },
       function(data) {
         if(data && data.attributes && data.attributes.jsonNode) {
           statebag.uiAttributes = data;
@@ -70,30 +70,30 @@ angular.module('teacherdashboard')
         updatedAttributes.id = $scope.attributesId;
         //Use PUT
         api.uiAttributes.put(
-          { schoolId: statebag.school.id }, 
-          updatedAttributes, 
+          { schoolId: statebag.school.id },
+          updatedAttributes,
           function() {
             showSimpleToast('UI attributes updated');
             //repoint the originalRgb to the newly saved value
             angular.copy($scope.rgb, $scope.originalRgb);
             statebag.uiAttribuets = updatedAttributes;
           },
-          function(error) {
+          function() {
             showSimpleToast('Failed to update UI attributes');
           });
 
       } else {
         //USE POST
         api.uiAttributes.post(
-          { schoolId: statebag.school.id }, 
-          updatedAttributes, 
+          { schoolId: statebag.school.id },
+          updatedAttributes,
           function() {
             showSimpleToast('UI attributes saved');
             //repoint the originalRgb to the newly saved value
             angular.copy($scope.rgb, $scope.originalRgb);
             statebag.uiAttributes = updatedAttributes;
           },
-          function(error) {
+          function() {
             showSimpleToast('Failed to save UI attributes');
           });
       }
@@ -139,15 +139,15 @@ angular.module('teacherdashboard')
 
     //Supports printing of one-time-use credentials for the eventuality where there are users without email addresses
     $scope.printCredentials = function (divName) {
-      var printContents = document.getElementById(divName).innerHTML; 
-      var popupWin;   
+      var printContents = $document[0].getElementById(divName).innerHTML;
+      var popupWin;
       if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
         popupWin = window.open('', '_blank', 'width=600,height=600,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
         popupWin.window.focus();
         popupWin.document.write('<!DOCTYPE html><html><head>' +
           '<link rel="stylesheet" type="text/css" href="style.css" />' +
-          '</head><body onload="window.print()"><div class="reward-body">' + 
-          printContents + 
+          '</head><body onload="window.print()"><div class="reward-body">' +
+          printContents +
           '</div></html>');
         popupWin.onbeforeunload = function () {
           popupWin.close();

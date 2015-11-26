@@ -10,7 +10,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/attendancetable/attendancetable.html',
       replace: true,
       controllerAs: 'ctrl',
-      link: function(scope, elem){
+      link: function(scope){
         scope.attendanceData = [];
         scope.tableConfig = {
           data: 'attendanceData',

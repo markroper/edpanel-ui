@@ -29,7 +29,6 @@ angular.module('teacherdashboard')
         var tableViewHtml =
           '<div class="table-view-container" flex="100" ng-if="assignmentView==\'table\'">' +
           '<div ui-grid="tableConfig" ui-grid-pagination class=""></div></div>';
-        var $assignmentsContainer = angular.element(elem).find('.assignment-scores');
         var $graphContainer = angular.element(elem).find('.svg-container');
         var $tableContainer;
 
@@ -40,7 +39,7 @@ angular.module('teacherdashboard')
             $tableContainer = $compile(tableViewHtml)(scope);
             $graphContainer.after($tableContainer);
           }
-        }
+        };
         var processRawAssignments = function(inputData) {
           var processedAssignments = [];
           inputData.forEach(function(d){
@@ -65,7 +64,7 @@ angular.module('teacherdashboard')
                 p.category = d.assignment.userDefinedType.toLowerCase();
               }
               //Teacher name
-              p.teacher = "";
+              p.teacher = '';
               if(scope.section.teachers[0]) {
                 p.teacher = scope.section.teachers[0].name;
               }
@@ -75,9 +74,7 @@ angular.module('teacherdashboard')
             }
           });
           return processedAssignments;
-        }
-        var categories = {};
-        var sects = [];
+        };
         scope.chartDataPromise.then(function(theData){
           var data = processRawAssignments(theData);
           var end = new Date().getTime();
@@ -107,7 +104,7 @@ angular.module('teacherdashboard')
             categorizedData[d.category][0].push(d.grade);
             categorizedData[d.category][1].push(d.date);
           });
-          angular.forEach(categorizedData, function(value, key){
+          angular.forEach(categorizedData, function(value){
               chartData.push(value[0]);
               chartData.push(value[1]);
           });

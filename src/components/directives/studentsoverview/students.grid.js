@@ -10,7 +10,7 @@ angular.module('teacherdashboard')
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
       replace: true,
-      controller: function($scope, $element) {
+      controller: function($scope) {
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
@@ -82,34 +82,19 @@ angular.module('teacherdashboard')
           } else {
             $scope.hideTray(ev, student);
           }
-        }
+        };
         $scope.showBehaviorTray = function(ev, student) {
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
         $scope.showHomeworkTray = function(ev, student) {
           $scope.showTray(ev, student, hwCompletionChartHtml);
-        }
-        $scope.showGpaTray = function(ev, student) {
+        };
+        $scope.showGpaTray = function() {
           //TODO: implement me
-        }
+        };
         $scope.showAttendanceTray = function(ev, student) {
           $scope.showTray(ev, student, attendanceTableHtml);
-        }
+        };
       }
     };
   }]);
-
-function DialogController($scope, $mdDialog) {
-  $scope.behaviorDataPromise =
-    $scope.api.studentBehaviors.get({ studentId: $scope.student.id }).$promise;
-
-  $scope.hide = function() {
-    $mdDialog.hide();
-  };
-  $scope.cancel = function() {
-    $mdDialog.cancel();
-  };
-  $scope.answer = function(answer) {
-    $mdDialog.hide(answer);
-  };
-}

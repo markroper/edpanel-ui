@@ -35,16 +35,14 @@ angular.module('teacherdashboard')
           section.editActive = true;
 
         };
-
         scope.proposeEdit = function(section) {
-          section.goal.desiredValue = section.goal.proposedValue
+          section.goal.desiredValue = section.goal.proposedValue;
           var datifyGoal = function(goal) {
             var apiGoal = angular.extend({}, goal);
             delete apiGoal.proposedValue;
             delete apiGoal.nameId;
             return apiGoal;
-
-          }
+          };
           var showSimpleToast = function(msg) {
             mdToast.show(
               mdToast.simple()
@@ -53,7 +51,6 @@ angular.module('teacherdashboard')
                 .hideDelay(2000)
             );
           };
-
           var goal = datifyGoal(section.goal);
           section.editActive = false;
           goal.desiredValue = section.goal.proposedValue;
@@ -64,15 +61,12 @@ angular.module('teacherdashboard')
             function() {
               //TODO FIX DISPLAY ONCE THIS CHANGES?
               scope.gage.refresh(goal.calculatedValue, goal.desiredValue);
-              showSimpleToast("Goal updated");
+              showSimpleToast('Goal updated');
             },
-            function(error) {
-              showSimpleToast("There was a problem modifying the goal");
-
+            function() {
+              showSimpleToast('There was a problem modifying the goal');
             });
-
-
-        }
+        };
 
         scope.showAssignments = function() {
           if($assignmentsContainer.children().length === 0) {
@@ -87,14 +81,13 @@ angular.module('teacherdashboard')
             $assignmentArrowIcon.removeClass(ROTATE_COUNTERWISE);
             $assignmentArrowIcon.addClass(ROTATE);
           }
-
-        }
+        };
 
         scope.myData = scope.sectionGrade.components;
 
         $timeout(function() {
           scope.gage = new JustGage({
-            id: "gauge-"+ scope.section.goal.nameId,
+            id: 'gauge-'+ scope.section.goal.nameId,
             value: scope.section.goal.calculatedValue,
             min: 0,
             max: scope.section.goal.desiredValue,
@@ -102,9 +95,9 @@ angular.module('teacherdashboard')
             valueMinFontSize: 50,
             hideMinMax: true,
             levelColors: [
-              "#F44366",
-              "#FFEB3B",
-              "#4CAF50"
+              '#F44366',
+              '#FFEB3B',
+              '#4CAF50'
             ]
           });
         });

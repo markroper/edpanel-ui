@@ -8,7 +8,7 @@ angular.module('teacherdashboard')
       var currentTime = new Date().getTime();
       for(var i = 0; i < statebag.school.years.length; i++) {
         if(moment(statebag.school.years[i].startDate).valueOf() <= currentTime ||
-          moment(statebag.school.years[i].endDate).valueOf() >= curentTime) {
+          moment(statebag.school.years[i].endDate).valueOf() >= currentTime) {
           return statebag.school.years[i];
         }
         return statebag.school.years[statebag.school.years.length - 1];
@@ -46,11 +46,12 @@ angular.module('teacherdashboard')
     resolveCurrentTerm: function() {
       var fullYearTerms = [];
       var currentTime = new Date().getTime();
+      var termStart, termEnd;
       //Find a full year term whose date range encloses the current date
       for(var i = 0; i < statebag.currentYear.terms.length; i++) {
         var portion = statebag.currentYear.terms[i].portion;
-        var termStart = moment(statebag.currentYear.terms[i].startDate).valueOf();
-        var termEnd = moment(statebag.currentYear.terms[i].endDate).valueOf();
+        termStart = moment(statebag.currentYear.terms[i].startDate).valueOf();
+        termEnd = moment(statebag.currentYear.terms[i].endDate).valueOf();
         if(portion && portion === 1) {
           fullYearTerms.push(statebag.currentYear.terms[i]);
           if(termStart <= currentTime && termEnd >= currentTime) {
@@ -59,11 +60,11 @@ angular.module('teacherdashboard')
         }
       }
       //Find any term whose date range encloses the current date
-      for(var i = 0; i < statebag.currentYear.terms.length; i++) {
-        var termStart = moment(statebag.currentYear.terms[i].startDate).valueOf();
-        var termEnd = moment(statebag.currentYear.terms[i].endDate).valueOf();
+      for(var j = 0; j < statebag.currentYear.terms.length; j++) {
+        termStart = moment(statebag.currentYear.terms[j].startDate).valueOf();
+        termEnd = moment(statebag.currentYear.terms[j].endDate).valueOf();
         if(termStart <= currentTime && termEnd >= currentTime) {
-          return statebag.currentYear.terms[i]
+          return statebag.currentYear.terms[j];
         }
       }
       //Fail, so return the last term in the array
@@ -83,7 +84,7 @@ angular.module('teacherdashboard')
         },
         //Error callback
         function(){
-            alert('failed to resolve the school!');
+            console.log('failed to resolve the school!');
       }).$promise;
     },
     retrieveAndCacheStudentPerfData: function() {
@@ -211,7 +212,7 @@ angular.module('teacherdashboard')
     var period = returnComponentPeriod(componentType);
     //Default date min/max will be the current day
     var dates = {};
-    dates.min = new Date().getTime(),
+    dates.min = new Date().getTime();
     dates.max = new Date().getTime();
     //Resolve the date range
     switch(period) {
@@ -256,64 +257,6 @@ angular.module('teacherdashboard')
         'value': studentIds
       }
     };
-  }
-
-  function getBehaviorQuery(minDate, maxDate, studentIds) {
-
-    var behaviorQuery = {
-        'aggregateMeasures': [
-            {
-                'measure': 'DEMERIT',
-                'aggregation': 'SUM'
-            }
-        ],
-        'fields': [
-            {
-                'dimension': 'STUDENT',
-                'field': 'ID'
-            }
-        ],
-        'filter': {
-            'type': 'EXPRESSION',
-            'leftHandSide': getStudentIdsExpression(studentIds),
-            'operator': 'AND',
-            'rightHandSide': {
-              'type': 'EXPRESSION',
-              'leftHandSide': {
-                  'type': 'EXPRESSION',
-                  'leftHandSide': {
-                      'type': 'MEASURE',
-                      'value': {
-                          'measure': 'DEMERIT',
-                          'field': 'Behavior Date'
-                      }
-                  },
-                  'operator': 'GREATER_THAN_OR_EQUAL',
-                  'rightHandSide': {
-                      'type': 'DATE',
-                      'value': minDate
-                  }
-              },
-              'operator': 'AND',
-              'rightHandSide': {
-                  'type': 'EXPRESSION',
-                  'leftHandSide': {
-                      'type': 'MEASURE',
-                      'value': {
-                          'measure': 'DEMERIT',
-                          'field': 'Behavior Date'
-                      }
-                  },
-                  'operator': 'LESS_THAN_OR_EQUAL',
-                  'rightHandSide': {
-                      'type': 'DATE',
-                      'value': maxDate
-                  }
-              }
-          }
-        }
-    };
-    return behaviorQuery;
   }
   function getHwQuery(startDate, endDate, studentIds) {
     var hwQuery = {

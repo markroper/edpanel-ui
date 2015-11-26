@@ -22,11 +22,11 @@ angular.module('teacherdashboard')
             categorizedData.weekscore[0].push(Math.round(d.score));
             categorizedData.weekscore[1].push(new Date(d.endDate));
           });
-          angular.forEach(categorizedData, function(value, key){
+          angular.forEach(categorizedData, function(value){
             chartData.push(value[0]);
             chartData.push(value[1]);
           });
-          var chart = $window.c3.generate({
+          $window.c3.generate({
             bindto: elem.find('.svg-container')[0],
             point: {
               r: 5

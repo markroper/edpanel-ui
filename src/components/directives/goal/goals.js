@@ -1,6 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goals', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', function($state, statebag, api, $q, mdToast, $mdDialog) {
+  .directive('goals', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document',
+    function($state, statebag, api, $q, mdToast, $mdDialog, $document) {
     return {
       scope: {
         goals: '='
@@ -11,17 +12,17 @@ angular.module('teacherdashboard')
       controller: function($scope) {
 
         $scope.tempGoal = {
-          name: "",
-          behaviorType: "",
-          desiredValue: "100",
-          goalType: "",
-          startDate: "",
-          endDate: "",
-          sectionName: ""
+          name: '',
+          behaviorType: '',
+          desiredValue: '100',
+          goalType: '',
+          startDate: '',
+          endDate: '',
+          sectionName: ''
         };
         $scope.sectionsResolved = false;
         $scope.clearGoal = angular.extend({},$scope.tempGoal);
-        $scope.behaviorTypes = ["DEMERIT","MERIT"];
+        $scope.behaviorTypes = ['DEMERIT','MERIT'];
 
 
         statebag.studentSectionsPromise.then(function() {
@@ -47,7 +48,7 @@ angular.module('teacherdashboard')
         $scope.clearDialog = function() {
           $mdDialog.hide();
           $scope.tempGoal = angular.extend({},$scope.clearGoal);
-        }
+        };
 
         $scope.handleCreateGoalClick = function(ev)  {
           $scope.sections = statebag.sections;
@@ -55,17 +56,16 @@ angular.module('teacherdashboard')
             scope: $scope.$new(),
             student: statebag.currentStudent,
             templateUrl: api.basePrefix + '/components/directives/goal/goalCreate.html',
-            parent: angular.element(document.body),
+            parent: angular.element($document.prop( 'body' )),
             targetEvent: ev,
             clickOutsideToClose:true
-          })
-
-        }
+          });
+        };
 
         $scope.setGoalType = function(goalType) {
           $scope.tempGoal = angular.extend({},$scope.clearGoal);
           $scope.tempGoal.goalType = goalType;
-        }
+        };
 
         $scope.deleteGoal = function(goal) {
           api.editStudentGoal.delete(
@@ -75,8 +75,8 @@ angular.module('teacherdashboard')
               var index = $scope.goals.indexOf(goal);
               $scope.goals.splice(index,1);
             },
-            function(error) {
-              showSimpleToast("Goal could not be deleted");
+            function() {
+              showSimpleToast('Goal could not be deleted');
             });
           //Call api to delete the goal
         };
@@ -89,20 +89,20 @@ angular.module('teacherdashboard')
           $scope.goalToCreate = {};
           $scope.goalToCreate.goalType = $scope.tempGoal.goalType;
           $scope.goalToCreate.name = $scope.tempGoal.name;
-          $scope.goalToCreate.student = {"id": statebag.currentStudent.id,
-            "type": "STUDENT"};
+          $scope.goalToCreate.student = {'id': statebag.currentStudent.id,
+            'type': 'STUDENT'};
           //TODO This needs to be not hardcoded in
-          $scope.goalToCreate.teacher = {"id":'4',
-            "type": "TEACHER"};
-          $scope.goalToCreate.approved = "false";
+          $scope.goalToCreate.teacher = {'id':'4',
+            'type': 'TEACHER'};
+          $scope.goalToCreate.approved = 'false';
           $scope.goalToCreate.desiredValue = $scope.tempGoal.desiredValue;
           switch ($scope.tempGoal.goalType) {
-            case ("BEHAVIOR") :
+            case ('BEHAVIOR') :
               $scope.goalToCreate.startDate = $scope.tempGoal.startDate;
               $scope.goalToCreate.endDate = $scope.tempGoal.endDate;
               $scope.goalToCreate.behaviorCategory = $scope.tempGoal.behaviorType;
               break;
-            case ("CUMULATIVE_GRADE") :
+            case ('CUMULATIVE_GRADE') :
               $scope.goalToCreate.parentId = $scope.sectionNameMap[$scope.tempGoal.sectionName];
               break;
           }
@@ -111,10 +111,10 @@ angular.module('teacherdashboard')
             $scope.goalToCreate,
             function() {
               $scope.resolveGoalDataAndDisplay();
-              showSimpleToast("Goal created successfully");
+              showSimpleToast('Goal created successfully');
             },
-            function(error) {
-              showSimpleToast("There was a problem creating the goal");
+            function() {
+              showSimpleToast('There was a problem creating the goal');
 
             });
           $scope.clearDialog();
@@ -136,8 +136,7 @@ angular.module('teacherdashboard')
             delete apiGoal.aveValue;
             delete apiGoal.editActive;
             return apiGoal;
-
-          }
+          };
           goal.desiredValue = goal.proposedValue;
           var apiGoal = datifyGoal(goal);
           api.editStudentGoal.patch(
@@ -146,15 +145,13 @@ angular.module('teacherdashboard')
            apiGoal,
             function() {
               $scope.resolveGoalDisplay();
-              showSimpleToast("Goal changed successfully");
+              showSimpleToast('Goal changed successfully');
             },
-            function(error) {
-              showSimpleToast("There was a problem modifying the goal");
+            function() {
+              showSimpleToast('There was a problem modifying the goal');
 
             });
-
-
-        }
+        };
       },
       link: function($scope) {
         $scope.resolveGoalDataAndDisplay = function() {
@@ -163,7 +160,7 @@ angular.module('teacherdashboard')
               $scope.goals = statebag.goals;
               $scope.resolveGoalDisplay();
             });
-        }
+        };
 
         function resolveStudentGoals() {
           var deferred = $q.defer();
@@ -221,12 +218,9 @@ angular.module('teacherdashboard')
                 //TODO this needs to be some function of number of days of school in that goal period
                 break;
             }
-
-
-
             $scope.goals[i] = goal;
           }
-        }
+        };
 
         function evaluateWidth(goal) {
           if (goal.calculatedValue === -1) {

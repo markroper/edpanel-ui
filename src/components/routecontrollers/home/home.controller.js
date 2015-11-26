@@ -3,31 +3,15 @@
 angular.module('teacherdashboard')
   .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts',
     function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts) {
-      statebag.currentPage.name = "";
+      statebag.currentPage.name = '';
       $scope.showFilter=true;
-      var roles = consts.roles;
-      //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old
-      if(!statebag.studentPerfData || statebag.lastFullRefresh < (new Date().getTime() - 1000 * 60 * 5)) {
-        if(!statebag.school) {
-          //Resolve the school
-          statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
-            function() {
-              retrieveHomePageData();
-            });
-        } else {
-          retrieveHomePageData();
-        }
-      } else {
-        $scope.students = statebag.studentPerfData;
-      }
-
       function retrieveHomePageData() {
         /* This code block makes 1 api call, followed by 2 more api calls if the first one succeeds.
          * The first call resolve the students.  The second two calls
          * resolve different data about each of the students for use on the home page dashboard.
          * When the API calls resolve, the data is formatted a bit and then bound to the controller
          * scope variables that are bound to DOM elements
-        */
+         */
         var promises = [];
         //Resolve the students!
         promises.push(resolveStudents());
@@ -77,5 +61,20 @@ angular.module('teacherdashboard')
               studentId: identity.id
             });
         }
+      }
+      var roles = consts.roles;
+      //We need to reload the statebag if any relevant values are null or the data is more than 5 minutes old
+      if(!statebag.studentPerfData || statebag.lastFullRefresh < (new Date().getTime() - 1000 * 60 * 5)) {
+        if(!statebag.school) {
+          //Resolve the school
+          statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
+            function() {
+              retrieveHomePageData();
+            });
+        } else {
+          retrieveHomePageData();
+        }
+      } else {
+        $scope.students = statebag.studentPerfData;
       }
   }]);

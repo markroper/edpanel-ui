@@ -9,7 +9,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/behaviortable/behaviortable.html',
       replace: true,
       controllerAs: 'ctrl',
-      link: function(scope, elem){
+      link: function(scope){
         scope.behaviorData = [];
         scope.tableConfig = {
           data: 'behaviorData',
@@ -27,6 +27,6 @@ angular.module('teacherdashboard')
           scope.behaviorData = theData;
         });
       }
-    }
+    };
   }
 ]);
