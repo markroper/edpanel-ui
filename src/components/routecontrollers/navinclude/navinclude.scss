@@ -24,3 +24,17 @@ md-toolbar {
     cursor: pointer;
   }
 }
+md-sidenav {
+  h2 {
+    color: #b9b9b9;
+  }
+  text-align: center;
+  .nav-item {
+    width: 100%;
+    margin:0px 0px 0px;
+    padding: 10px;
+    > span {
+      margin-left:0px;
+    }
+  }
+}

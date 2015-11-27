@@ -1,12 +1,17 @@
 <md-toolbar layout="row" md-theme="{{theme}}">
-  <md-icon md-ink-ripple md-font-set="material-icons" ng-click="toggleSideNav()" class="material-icons md-24 arrow-icon"> menu </md-icon>
+  <md-icon md-ink-ripple md-font-set="material-icons" ng-click="toggleSideNav()" class="material-icons md-24 arrow-icon"> menu
+    <md-tooltip>Nav sidebar</md-tooltip>
+  </md-icon>
   <div style="outline:none;" class="md-toolbar-tools" tabindex="0">
     <span flex="none" style="outline:none; cursor:pointer;" ng-click="goToHome()">{{userRole}} Dashboard</span>
     <span flex layout="row"><span ng-show="currentPage.name">&nbsp; > &nbsp;</span><span class="page-title">{{currentPage.name}}</span></span>
     <div flex="none"class="md-toolbar-item md-tools docs-tools" layout="column" layout-gt-md="row">
       <md-menu md-position-mode="target-right target" md-offset="0 78" >
         <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-          <div id="user-menu" class="circular-login"></div>
+          <div id="user-menu" class="circular-login">
+            <md-icon class="material-icons md-48 arrow-icon">face</md-icon>
+            <md-tooltip>User menu</md-tooltip>
+          </div>
         </md-button>
         <md-menu-content width="4" >
           <md-menu-item>
@@ -25,16 +30,8 @@
                 </div>
             </md-button>
           </md-menu-item>
-          <md-menu-item ng-show="userRole != 'Student' && userRole != 'Guardian'">
-            <md-button ng-click="ctrl.announceClick($index)">
-                <div layout="row">
-                  <p flex>Report Builder</p>
-                  <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
-                </div>
-            </md-button>
-          </md-menu-item>
           <md-menu-item>
-            <hr/>
+            <md-divider></md-divider>
           </md-menu-item>
           <md-menu-item ng-show="userRole == 'Administrator'">
             <md-button ng-click="goToAdmin()">
@@ -58,11 +55,17 @@
     </div>
   </div>
 </md-toolbar>
-<md-content layout="row" flex>
+<md-content md-theme="{{theme}}" layout="row" flex>
   <div layout="column">
     <md-sidenav layout="column" flex class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
-      <md-content layout-padding>
-        some garbage content
+      <md-content>
+        <h2 class="menu-heading md-subhead">Navigation Menu</h2>
+        <md-button class="md-primary nav-item md-ink-ripple"><span>Students</span></md-button>
+        <md-button class="md-primary nav-item md-ink-ripple"><span>School Dashboard</span></md-button>
+        <md-button class="md-primary nav-item md-ink-ripple"><span>Saved Reports</span></md-button>
+        <md-button class="md-primary nav-item md-ink-ripple"><span>Report Builder</span></md-button>
+        <md-divider></md-divider>
+        <md-button class="md-primary nav-item md-ink-ripple"><span>System Administration</span></md-button>
       </md-content>
     </md-sidenav>
   </div>
