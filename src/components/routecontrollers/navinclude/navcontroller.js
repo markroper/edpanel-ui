@@ -22,23 +22,33 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager) {
       }
 
     }
+    var SIDE_NAV_NAME = 'left';
+    $scope.closeSizeNav = function() {
+      $mdSidenav(SIDE_NAV_NAME).close();
+    }
     $scope.toggleSideNav = function() {
-      $mdSidenav('left').toggle();
+      $mdSidenav(SIDE_NAV_NAME).toggle();
     };
-    $scope.toggleList =  function() {
-      $mdSidenav('left').toggle();
-    };
+
     $scope.goToHome = function() {
       $state.go('app.home', { schoolId: $state.params.schoolId });
+      $scope.closeSizeNav();
+    };
+    $scope.goToSchoolDash = function() {
+      $state.go('app.schoolDash', { schoolId: $state.params.schoolId });
+      $scope.closeSizeNav();
     };
     $scope.goToAdmin = function() {
       $state.go('app.admin', { schoolId: $state.params.schoolId });
+      $scope.closeSizeNav();
     };
     $scope.goToReports = function() {
       $state.go('app.reports', { schoolId: $state.params.schoolId });
+      $scope.closeSizeNav();
     };
     $scope.goToReportBuilder = function() {
       $state.go('app.reportbuilder', { schoolId: $state.params.schoolId });
+      $scope.closeSizeNav();
     };
     $scope.logout = function() {
         api.logout.save(

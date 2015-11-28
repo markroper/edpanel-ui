@@ -35,7 +35,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
             roles.GUARDIAN,
             roles.SUPER_ADMIN
           ]
-        },
+        }
       })
       .state('app.home', {
         url: 'schools/:schoolId',
@@ -49,7 +49,19 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
             roles.GUARDIAN,
             roles.SUPER_ADMIN
           ]
-        },
+        }
+      })
+      .state('app.schoolDash', {
+        url: 'schools/:schoolId/dashboard',
+        templateUrl: rootUrl + '/components/routecontrollers/schooldash/schooldash.html',
+        controller: 'SchoolDash',
+        data: {
+          roles: [
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.SUPER_ADMIN
+          ]
+        }
       })
       .state('app.student', {
       	url: 'schools/:schoolId/student/:studentId',
@@ -63,7 +75,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
             roles.GUARDIAN,
             roles.SUPER_ADMIN
           ]
-        },
+        }
       })
       .state('app.admin', {
         url: 'schools/:schoolId/admin',
@@ -87,7 +99,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
             roles.GUARDIAN,
             roles.SUPER_ADMIN
           ]
-        },
+        }
       })
       .state('app.reports', {
         url: 'schools/:schoolId/reports/:reportId',
@@ -99,7 +111,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
             roles.TEACHER,
             roles.SUPER_ADMIN
           ]
-        },
+        }
       })
       .state('app.reportbuilder', {
         url: 'schools/:schoolId/reportbuilder',
