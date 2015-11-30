@@ -57,10 +57,10 @@
         <h2 class="menu-heading md-subhead">Navigation Menu</h2>
         <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToHome()"><span>Student List</span></md-button>
         <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToSchoolDash()"><span>School Dashboard</span></md-button>
-        <md-button class="md-primary nav-item md-ink-ripple"><span>Saved Reports</span></md-button>
-        <md-button class="md-primary nav-item md-ink-ripple"><span>Report Builder</span></md-button>
+        <md-button ng-disabled="true" class="md-primary nav-item md-ink-ripple">Saved Reports</md-button>
+        <md-button ng-disabled="true" class="md-primary nav-item md-ink-ripple">Report Builder</md-button>
         <md-divider></md-divider>
-        <md-button class="md-primary nav-item md-ink-ripple"><span>System Administration</span></md-button>
+        <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToAdmin()"><span>System Administration</span></md-button>
       </md-content>
     </md-sidenav>
   </div>
