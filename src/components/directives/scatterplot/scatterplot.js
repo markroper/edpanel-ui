@@ -77,9 +77,6 @@ angular.module('teacherdashboard')
         };
         scope.chartDataPromise.then(function(theData){
           var data = processRawAssignments(theData);
-          var end = new Date().getTime();
-          var time = end - start;
-          console.log('scatterplot data transform took: ' + time);
           scope.assignments = data;
           var exs = {};
           var categories = [];

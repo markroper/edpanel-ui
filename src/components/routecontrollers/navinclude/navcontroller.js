@@ -25,7 +25,7 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager) {
     var SIDE_NAV_NAME = 'left';
     $scope.closeSizeNav = function() {
       $mdSidenav(SIDE_NAV_NAME).close();
-    }
+    };
     $scope.toggleSideNav = function() {
       $mdSidenav(SIDE_NAV_NAME).toggle();
     };

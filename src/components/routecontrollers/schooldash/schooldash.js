@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts',
-    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts) {
+  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',
+    function ($scope, api, statebag, $q) {
       statebag.currentPage.name = statebag.school.name;
       var min = moment(statebag.currentTerm.startDate).valueOf();
       var max = moment(statebag.currentTerm.endDate).valueOf();
@@ -46,7 +46,7 @@ angular.module('teacherdashboard')
           for(var i = 0; i < results.records.length; i++) {
             var singleRowResults = results.records[i].values;
             //TODO: generify, hardocded for excel's formula of a tardy = .2 of an absence
-            var score = singleRowResults[2] + (singleRowResults[3] * .2);
+            var score = singleRowResults[2] + (singleRowResults[3] * 0.2);
             if(score === 0) {
               attendanceHistogram[0][1]++;
             }else if(score <= 1) {

@@ -1,9 +1,10 @@
-.scatterplot {  
+.scatterplot {
   height: $scatterplot-height;
   position:relative;
 
   .table-view-container, .svg-container {
     width: 100%;
+    input{ height: 14px; }
   }
   .radio-buttons {
     position: absolute;
@@ -30,7 +31,7 @@
   circle:hover {
     fill-opacity: 1;
   }
-  
+
   circle {
     fill-opacity: 0.75;
     cursor:pointer;
@@ -76,8 +77,8 @@
 .scatterplot.DisableSpanish .Spanish,
 .scatterplot.DisableGeometry .Geometry,
 .scatterplot.DisableHistory .History,
-.scatterplot.DisableCalculus .Calculus, 
-.scatterplot.DisableBiology .Biology, 
+.scatterplot.DisableCalculus .Calculus,
+.scatterplot.DisableBiology .Biology,
 .scatterplot.DisableChemistry .Chemistry {
   fill:#BBB;
   fill-opacity: 0.2;
