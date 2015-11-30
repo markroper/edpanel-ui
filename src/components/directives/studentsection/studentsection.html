@@ -9,7 +9,6 @@
         <div layout="row" layout-wrap layout-align="center start" class="grade-container">
           <div flex="none" class="grade-goal" style="position: relative">
               <h3 class="md-subhead">Current Grade</h3>
-
             <md-fab-speed-dial class="md-fab-top-right"  md-open="section.isClosed" md-direction="left" ng-class="toolbarAnimation">
               <md-fab-trigger>
                 <md-button aria-label="menu" class="md-icon-button">
@@ -22,9 +21,7 @@
                 </md-button>
               </md-fab-actions>
             </md-fab-speed-dial>
-
             <div id="gauge-{{::section.goal.nameId}}" class="goal-gauge" style="height: 175px"></div>
-
             <div ng-show="section.editActive" class="editSlider">
               <md-content>
                 <div layout>

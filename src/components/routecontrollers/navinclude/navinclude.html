@@ -13,7 +13,7 @@
         </md-button>
         <md-menu-content width="4" >
           <md-menu-item>
-            <md-button ng-click="ctrl.announceClick($index)">
+            <md-button ng-disabled="true">
                 <div layout="row">
                   <p flex>My Alerts</p>
                   <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>
@@ -21,7 +21,7 @@
             </md-button>
           </md-menu-item>
           <md-menu-item ng-show="userRole != 'Student' && userRole != 'Guardian'">
-            <md-button ng-click="ctrl.announceClick($index)">
+            <md-button ng-disabled="true">
                 <div layout="row">
                   <p flex>My Reports</p>
                   <md-icon md-menu-align-target style="margin: auto 3px auto 0;"></md-icon>

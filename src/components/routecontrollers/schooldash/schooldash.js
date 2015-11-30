@@ -10,20 +10,30 @@ angular.module('teacherdashboard')
       $scope.teacherBehaviorPromise = teacherBehaviorDataDeferred.promise;
       $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
 
-      api.query.save(
+      var meritDemeritsPromises = [];
+
+      meritDemeritsPromises.push(api.query.save(
         { schoolId: statebag.school.id },
-        getCountsOfTeacherMeritsAndDemerits(min, max),
-        function(results){
-          var meritDemeritChartData = [ ['demerits'], ['merits'], ['teachers'] ];
-          for(var i = 0; i < results.records.length; i++) {
-            var singleRowResults = results.records[i].values;
-            meritDemeritChartData[0].push(singleRowResults[2]);
-            meritDemeritChartData[1].push(singleRowResults[3]);
-            meritDemeritChartData[2].push(singleRowResults[1]);
+        getCountsOfTeacherMeritsAndDemerits(min, max)
+      ).$promise);
+      meritDemeritsPromises.push(api.query.save(
+        { schoolId: statebag.school.id },
+        getCountsOfAdminMeritsAndDemerits(min, max)
+      ).$promise);
+      $q.all(meritDemeritsPromises).then(function(results){
+        var meritDemeritChartData = [ ['demerits'], ['merits'], ['teachers'] ];
+        results.forEach(function(entity){
+          for(var i = 0; i < entity.records.length; i++) {
+            var singleRowResults = entity.records[i].values;
+            if(singleRowResults[2] || singleRowResults[3]) {
+              meritDemeritChartData[0].push(singleRowResults[2]);
+              meritDemeritChartData[1].push(singleRowResults[3]);
+              meritDemeritChartData[2].push(singleRowResults[1]);
+            }
           }
-          teacherBehaviorDataDeferred.resolve(meritDemeritChartData);
-        }
-      );
+        });
+        teacherBehaviorDataDeferred.resolve(meritDemeritChartData);
+      });
 
       api.query.save(
         { schoolId: statebag.school.id },
@@ -127,15 +137,21 @@ angular.module('teacherdashboard')
         return teacherBehaviorQuery;
       }
 
+      function getCountsOfAdminMeritsAndDemerits(startDate, endDate) {
+        return getCountsOfAdultMeritsAndDemerits(startDate, endDate, 'ADMINISTRATOR');
+      }
       function getCountsOfTeacherMeritsAndDemerits(startDate, endDate) {
-        var teacherBehaviorQuery = {
+        return getCountsOfAdultMeritsAndDemerits(startDate, endDate, 'TEACHER');
+      }
+      function  getCountsOfAdultMeritsAndDemerits(startDate, endDate, personDim) {
+        var personQuery = {
           'aggregateMeasures': [
             {'measure':'DEMERIT','aggregation':'SUM'},
             {'measure':'MERIT','aggregation':'SUM'}
           ],
           'fields':[
-            { 'dimension':'TEACHER','field':'ID' },
-            { 'dimension':'TEACHER','field':'Name' }
+            { 'dimension': personDim,'field':'ID' },
+            { 'dimension': personDim,'field':'Name' }
           ],
           'filter': {
             'type': 'EXPRESSION',
@@ -144,7 +160,7 @@ angular.module('teacherdashboard')
               'leftHandSide': {
                 'type': 'DIMENSION',
                 'value': {
-                  'dimension': 'TEACHER',
+                  'dimension': personDim,
                   'field': 'School'
                 }
               },
@@ -191,7 +207,7 @@ angular.module('teacherdashboard')
             }
           }
         };
-        return teacherBehaviorQuery;
+        return personQuery;
       }
 
     }]);

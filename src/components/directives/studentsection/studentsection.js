@@ -100,7 +100,7 @@ angular.module('teacherdashboard')
               '#4CAF50'
             ]
           });
-        });
+        }, 50);
       }
     };
   }]);

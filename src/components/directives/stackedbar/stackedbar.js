@@ -34,6 +34,9 @@ angular.module('teacherdashboard')
               groups: [ groups ],
               order: 'desc'
             },
+            legend: {
+              position: 'inset'
+            },
             axis: {
               x: {
                 type: 'category',
