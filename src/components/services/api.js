@@ -64,6 +64,13 @@ angular.module('teacherdashboard')
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
       //GPA
       gpa: $resource(base + '/schools/:schoolId/gpas/4'),
+      failingClasses: $resource(
+        base + '/ui/school/:schoolId/years/:schoolYearId/terms/:termId/classes',
+        {},
+        {
+          'get': {isArray: true}
+        }
+      ),
       studentGoals: $resource(
         base + '/students/:studentId/goals',
         {},
