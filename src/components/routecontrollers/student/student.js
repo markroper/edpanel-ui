@@ -24,17 +24,31 @@ angular.module('teacherdashboard')
                       statebag.currentStudent = d;
                     }
                   });
-                  resolveStudentSectionData();
-                  resolveBehaviorData();
+                  resolveAllData();
                 });
             });
         });
     } else {
-      resolveStudentSectionData();
-      resolveBehaviorData();
-
+      resolveAllData();
     }
 
+    function resolveAllData() {
+      resolveStudentSectionData();
+      resolveBehaviorData();
+      resolveStudentGpa();
+    }
+
+    function resolveStudentGpa() {
+      $scope.gpa = {};
+      api.gpa.get(
+        {schoolId: statebag.school.id, id: [ statebag.currentStudent.id ]},
+        function(results) {
+          if(results && results[statebag.currentStudent.id]) {
+            $scope.gpa.score = Math.round(results[statebag.currentStudent.id] * 10)/10;
+          }
+        }
+      );
+    }
     /**
      * Resolve the current student's behavior data and add a promise to the scope behaviorDataPromise
      * that resolves with that behavior data when it is returned from the server.

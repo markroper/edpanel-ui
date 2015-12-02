@@ -5,11 +5,7 @@
 				<div class="summary-row" layout="row" layout-align="center center" layout-wrap ng-cloak>
           <div class="gpa-summary grade-summary" layout="column" layout-align="center center">
             <div class="grade-summary-title md-body-1">GPA</div>
-            <h2 class="grade-summary-grade md-headline">--</h2>
-          </div>
-          <div class="gpa-summary grade-summary" layout="column" layout-align="center center">
-            <div class="grade-summary-title md-body-1">Quarter GPA</div>
-            <h2 class="grade-summary-grade md-headline">--</h2>
+            <h2 class="grade-summary-grade md-headline">{{gpa.score || '--'}}</h2>
           </div>
 				  <div ng-repeat="section in sections" class="grade-summary" layout="column" layout-align="center center">
 				  	<div class="grade-summary-title md-body-1">{{::section.course.name}}
