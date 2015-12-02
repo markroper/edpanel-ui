@@ -7,11 +7,42 @@ angular.module('teacherdashboard')
       var max = moment(statebag.currentTerm.endDate).valueOf();
       var teacherBehaviorDataDeferred = $q.defer();
       var studentAbsesnseAndTardyDeferred = $q.defer();
+      var studentGpaDataDeferred = $q.defer();
       $scope.teacherBehaviorPromise = teacherBehaviorDataDeferred.promise;
       $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
+      $scope.gpaDataPromise = studentGpaDataDeferred.promise;
 
+      //Resolve GPAs for current students
+      api.gpasInSchool.get(
+        { schoolId: statebag.school.id },
+        function(results) {
+          var gpaData = [
+            ['students', 0, 0, 0, 0, 0, 0, 0],
+            ['counts', '0 - 1', '1 - 1.5', '1.5 - 2', '2 - 2.5', '2.5 - 3', '3 - 3.5', '3.5 - 4']
+          ];
+          for(var i = 0; i < results.length; i++) {
+            var score = results[i].score;
+            if(score <= 1) {
+              gpaData[0][1]++;
+            } else if(score <= 1.5) {
+              gpaData[0][2]++;
+            } else if(score <= 2) {
+              gpaData[0][3]++;
+            } else if(score <= 2.5) {
+              gpaData[0][4]++;
+            } else if(score <= 3) {
+              gpaData[0][5]++;
+            } else if (score <= 3.5) {
+              gpaData[0][6]++;
+            } else if (score > 3.5) {
+              gpaData[0][7]++;
+            }
+          }
+          studentGpaDataDeferred.resolve(gpaData);
+        });
+
+      //Resolve merits and demerits awarded by all teachers and admins in the school
       var meritDemeritsPromises = [];
-
       meritDemeritsPromises.push(api.query.save(
         { schoolId: statebag.school.id },
         getCountsOfTeacherMeritsAndDemerits(min, max)
@@ -35,6 +66,7 @@ angular.module('teacherdashboard')
         teacherBehaviorDataDeferred.resolve(meritDemeritChartData);
       });
 
+      //Resolve absense and tardy data
       api.query.save(
         { schoolId: statebag.school.id },
         getAbsenseAndTardyCount(min, max, statebag.school.id),
