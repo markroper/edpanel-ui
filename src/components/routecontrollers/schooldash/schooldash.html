@@ -1,7 +1,27 @@
-<div class="schooldash">
-  <h3 class="md-headline">Demerit & Merit Counts by Teacher (Current Year)</h3>
-  <stackedbar columns-promise="teacherBehaviorPromise"></stackedbar>
-  <h3 class="md-headline">Count of Students by Absences (Current Year)</h3>
-  <stackedbar columns-promise="studentAttendancePromise"></stackedbar>
-  <span class="md-subhead">* absences calculated as # absenses + # tardy multiplied by 0.2</span>
+<div class="schooldash" layout="column">
+  <div layout="row" layout-wrap>
+    <div flex="50">
+      <md-card flex="100">
+        <md-card-content>
+          <div class="md-headline">Students in GPA Ranges</div>
+          <stackedbar columns-promise="gpaDataPromise"></stackedbar>
+        </md-card-content>
+      </md-card>
+    </div>
+    <div flex="50" layout="row">
+      <md-card flex="100">
+        <md-card-content>
+          <div class="md-headline">Student Count by Absences (Current Year)</div>
+          <stackedbar columns-promise="studentAttendancePromise"></stackedbar>
+          <span class="md-subhead">* absences calculated as sum(absenses) + sum(tardy) * 0.2</span>
+        </md-card-content>
+      </md-card>
+    </div>
+  </div>
+  <md-card flex>
+    <md-card-content>
+      <div class="md-headline">Demerit & Merit Counts by Staff (Current Year)</div>
+      <stackedbar columns-promise="teacherBehaviorPromise"></stackedbar>
+    </md-card-content>
+  </md-card>
 </div>

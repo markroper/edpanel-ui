@@ -63,7 +63,8 @@ angular.module('teacherdashboard')
       savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
       //GPA
-      gpa: $resource(base + '/schools/:schoolId/gpas/4'),
+      gpa: $resource(base + '/schools/:schoolId/gpas'),
+      gpasInSchool: $resource(base + '/gpas', {}, { 'get': { isArray: true } }),
       studentGoals: $resource(
         base + '/students/:studentId/goals',
         {},
