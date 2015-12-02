@@ -37,6 +37,9 @@ angular.module('teacherdashboard')
             legend: {
               position: 'inset'
             },
+            color: {
+              pattern: ['#1f77b4', '#d62728', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728']
+            },
             axis: {
               x: {
                 type: 'category',
