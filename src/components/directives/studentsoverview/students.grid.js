@@ -12,8 +12,9 @@ angular.module('teacherdashboard')
       replace: true,
       controller: function($scope) {
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
-        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
+        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
+        var gpaChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="calculationDate" key-to-y="score" date-time-data-promise="gpaDataPromise"></datetimechart></div>';
 
         $scope.showMoreStudents = true;
         $scope.limit = 30;
@@ -73,6 +74,10 @@ angular.module('teacherdashboard')
                   startDate: moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
                   endDate: moment(statebag.currentYear.endDate).format('YYYY-MM-DD')
                 }).$promise;
+            } else if(template === gpaChartTemplate) {
+              $scope.choroScope.gpaDataPromise = api.gpasOverTime.get(
+                { studentId: student.id }
+              ).$promise;
             }
             $scope.choroScope.hideTray = $scope.hideTray;
             $scope.choroCal = $compile(template)($scope.choroScope);
@@ -89,8 +94,8 @@ angular.module('teacherdashboard')
         $scope.showHomeworkTray = function(ev, student) {
           $scope.showTray(ev, student, hwCompletionChartHtml);
         };
-        $scope.showGpaTray = function() {
-          //TODO: implement me
+        $scope.showGpaTray = function(ev, student) {
+          $scope.showTray(ev, student, gpaChartTemplate);
         };
         $scope.showAttendanceTray = function(ev, student) {
           $scope.showTray(ev, student, attendanceTableHtml);

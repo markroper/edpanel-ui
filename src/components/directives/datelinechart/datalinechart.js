@@ -5,7 +5,8 @@ angular.module('teacherdashboard')
       scope: {
         dateTimeDataPromise: '=',
         slideClosed: '=',
-        seriesName: '='
+        keyToX: '@',
+        keyToY: '@'
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/datelinechart/datelinechart.html',
@@ -20,8 +21,8 @@ angular.module('teacherdashboard')
               json: theData,
               type: 'line',
               keys: {
-                x:'weekEnding',
-                value:['score']
+                x: scope.keyToX,
+                value:[scope.keyToY]
               }
             },
             grid: {
@@ -34,7 +35,7 @@ angular.module('teacherdashboard')
             axis: {
               y : {
                 tick: {
-                  format: function (d) { return Math.round(d); }
+                  format: function (d) { return Math.round(d * 10) / 10; }
                 }
               },
               x: {

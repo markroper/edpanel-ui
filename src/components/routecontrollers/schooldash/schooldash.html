@@ -1,17 +1,17 @@
 <div class="schooldash" layout="column">
   <div layout="row" layout-wrap>
-    <div flex="50">
+    <div flex="100" flex-gt-md="50">
       <md-card flex="100">
         <md-card-content>
-          <div class="md-headline">Students in GPA Ranges</div>
+          <div class="md-headline">Students by GPA Range</div>
           <stackedbar columns-promise="gpaDataPromise"></stackedbar>
         </md-card-content>
       </md-card>
     </div>
-    <div flex="50" layout="row">
+    <div flex="100" flex-gt-md="50">
       <md-card flex="100">
         <md-card-content>
-          <div class="md-headline">Student Count by Absences (Current Year)</div>
+          <div class="md-headline">Students by Absences (Current Year)</div>
           <stackedbar columns-promise="studentAttendancePromise"></stackedbar>
           <span class="md-subhead">* absences calculated as sum(absenses) + sum(tardy) * 0.2</span>
         </md-card-content>

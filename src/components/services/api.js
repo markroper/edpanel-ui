@@ -65,6 +65,7 @@ angular.module('teacherdashboard')
       //GPA
       gpa: $resource(base + '/schools/:schoolId/gpas'),
       gpasInSchool: $resource(base + '/gpas', {}, { 'get': { isArray: true } }),
+      gpasOverTime: $resource(base + '/gpas/students/:studentId/historicals', {}, { 'get': { isArray: true } }),
       studentGoals: $resource(
         base + '/students/:studentId/goals',
         {},
