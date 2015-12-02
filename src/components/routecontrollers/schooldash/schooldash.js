@@ -52,13 +52,13 @@ angular.module('teacherdashboard')
         getCountsOfAdminMeritsAndDemerits(min, max)
       ).$promise);
       $q.all(meritDemeritsPromises).then(function(results){
-        var meritDemeritChartData = [ ['demerits'], ['merits'], ['teachers'] ];
+        var meritDemeritChartData = [ ['merits'], ['demerits'], ['teachers'] ];
         results.forEach(function(entity){
           for(var i = 0; i < entity.records.length; i++) {
             var singleRowResults = entity.records[i].values;
             if(singleRowResults[2] || singleRowResults[3]) {
-              meritDemeritChartData[0].push(singleRowResults[2]);
-              meritDemeritChartData[1].push(singleRowResults[3]);
+              meritDemeritChartData[0].push(singleRowResults[3]);
+              meritDemeritChartData[1].push(singleRowResults[2]);
               meritDemeritChartData[2].push(singleRowResults[1]);
             }
           }
