@@ -3,7 +3,7 @@
 angular.module('teacherdashboard')
   .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts',
     function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts) {
-      statebag.currentPage.name = '';
+      statebag.currentPage.name = 'Students';
       $scope.showFilter=true;
       function retrieveHomePageData() {
         /* This code block makes 1 api call, followed by 2 more api calls if the first one succeeds.

@@ -2,7 +2,7 @@
 angular.module('teacherdashboard')
   .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',
     function ($scope, api, statebag, $q) {
-      statebag.currentPage.name = statebag.school.name;
+      statebag.currentPage.name = 'School Dashboard';
       var min = moment(statebag.currentTerm.startDate).valueOf();
       var max = moment(statebag.currentTerm.endDate).valueOf();
       var teacherBehaviorDataDeferred = $q.defer();

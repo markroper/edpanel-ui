@@ -2,7 +2,7 @@
 angular.module('teacherdashboard')
 .controller('PasswordCtrl', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager', 'consts',
   function ($scope, api, $state, authentication, statebag, statebagapimanager, consts) {
-    statebag.currentPage.name = 'Reset Password';
+    statebag.currentPage.name = 'Password Reset';
     $scope.oldPassword = '';
     $scope.newPassword = '';
     $scope.newPassword2 = '';
