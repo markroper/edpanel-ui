@@ -45,8 +45,14 @@ angular.module('teacherdashboard')
               roles: [data.type]
             };
         		authentication.authenticate(identity);
-            //Resolve the school
 
+            //If the user logged in with a one time use password, redirect them to password
+            // reset otherwise all subsequent API calls on this cookie will fail.
+            if(data.mustResetPassword) {
+              $state.go('app.resetPassword', {userId: data.id});
+            }
+
+            //Resolve the school
             if(data.currentSchoolId) {
               api.school.get(
                 {schoolId: data.currentSchoolId},
