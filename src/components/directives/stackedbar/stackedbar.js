@@ -18,8 +18,12 @@ angular.module('teacherdashboard')
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/stackedbar/stackedbar.html',
       replace: true,
-      link: function(scope, elem){
+      link: function(scope, elem, attrs){
         scope.columnsPromise.then(function(theData){
+          var insetPosition = attrs.sbLegendPos;
+          if(typeof insetPosition === 'undefined') {
+            insetPosition = "top-left";
+          }
           var groups = [];
           var xTickValues = theData[theData.length - 1].slice(1);
           for(var i = 0; i < theData.length - 1; i++) {
@@ -37,7 +41,7 @@ angular.module('teacherdashboard')
             legend: {
               position: 'inset',
               inset: {
-                anchor: 'top-right'
+                anchor: insetPosition
               }
             },
             color: {
