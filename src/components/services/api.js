@@ -12,6 +12,8 @@ angular.module('teacherdashboard')
     return {
       login: $resource(base + '/login'),
       logout: $resource(base + '/logout'),
+      changePassword: $resource(base + '/users/passwordReset/:userId', {},
+        {'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }}),
       authCheck: $resource(base + '/auth'),
       //School endpoints
       school: $resource(base + '/schools/:schoolId'),

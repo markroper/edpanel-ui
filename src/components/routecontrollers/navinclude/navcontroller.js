@@ -1,6 +1,6 @@
 'use strict';
-angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager',
-function($scope, $state, $mdSidenav, api, statebag, statebagapimanager) {
+angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager', 'authentication',
+function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authentication) {
     $scope.userRole = statebag.userRole;
     $scope.currentPage = statebag.currentPage;
     $scope.theme = statebag.theme;
@@ -40,6 +40,10 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager) {
     };
     $scope.goToAdmin = function() {
       $state.go('app.admin', { schoolId: $state.params.schoolId });
+      $scope.closeSizeNav();
+    };
+    $scope.goToChangePassword = function() {
+      $state.go('app.resetPassword', { userId: authentication.identity().id });
       $scope.closeSizeNav();
     };
     $scope.goToReports = function() {
