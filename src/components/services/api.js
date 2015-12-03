@@ -20,6 +20,7 @@ angular.module('teacherdashboard')
       student: $resource(base + '/students/:studentId'),
       allStudents: $resource(base + '/students', {}, { 'get': { isArray: true }}),
       users: $resource(base + '/users', {}, {'get': { isArray: true }}),
+      unverifiedUsers: $resource(base + '/users/unverified', {}, {'get': { isArray: true }}),
       user: $resource(base + '/users/:userId', {},
         {
           'patch': { method:'PATCH', headers: {'Content-Type': 'application/json'} },
