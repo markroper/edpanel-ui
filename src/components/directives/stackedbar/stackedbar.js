@@ -35,7 +35,10 @@ angular.module('teacherdashboard')
               order: 'desc'
             },
             legend: {
-              position: 'inset'
+              position: 'inset',
+              inset: {
+                anchor: 'top-right'
+              }
             },
             color: {
               pattern: ['#1f77b4', '#d62728', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728']
