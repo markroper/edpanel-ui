@@ -119,9 +119,9 @@ angular.module('teacherdashboard')
     //Triggers an email invite/password reset for all users for which we have an email address
     $scope.resendEmailInviteToAllUsersWithEmail = function() {
       $scope.firstTimeUsers.forEach(function(user){
-        if(user.email && user.username) {
-          api.passwordReset.initiate({ username: user.username }, null, function(){
-            showSimpleToast('Emailed link to ' + user.username);
+        if(user.user.email && user.user.username) {
+          api.passwordReset.initiate({ username: user.user.username }, null, function(){
+            showSimpleToast('Emailed link to ' + user.user.username);
           });
         }
       });

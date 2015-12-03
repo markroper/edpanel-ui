@@ -18,8 +18,8 @@ angular.module('teacherdashboard')
         });
     };
   })
-  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager',
-    function ($scope, api, $state, authentication, statebag, statebagapimanager) {
+  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager', 'consts',
+    function ($scope, api, $state, authentication, statebag, statebagapimanager, consts) {
       statebag.currentPage.name = 'Login';
 	    $scope.inputEmail = '';
       $scope.password = '';
@@ -46,21 +46,28 @@ angular.module('teacherdashboard')
             };
         		authentication.authenticate(identity);
             //Resolve the school
-            //TODO: for now we just grab the first school in the district. Need a better way
-            api.school.get(
-              { schoolId: data.currentSchoolId },
-              //Success callback
-              function(schoolData){
+
+            if(data.currentSchoolId) {
+              api.school.get(
+                {schoolId: data.currentSchoolId},
+                //Success callback
+                function (schoolData) {
                   statebag.school = schoolData;
                   statebag.currentYear = statebagapimanager.resolveCurrentYear();
                   statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
-                  $state.go('app.home', { schoolId: statebag.school.id });
-              },
-              //Error callback
-              function(){
+                  statebag.lastFullRefresh = null;
+                  $state.go('app.home', {schoolId: statebag.school.id});
+                },
+                //Error callback
+                function () {
                   $scope.showErrorMsg = true;
                   $scope.mode = '';
-            });
+                });
+            } else if(data.type === consts.roles.ADMIN ||
+                data.type === consts.roles.SUPER_ADMIN) {
+              console.log('Admin user with no associated school');
+              $state.go('app.schoolSelector');
+            }
         	},
           //Error callback
           function() {
