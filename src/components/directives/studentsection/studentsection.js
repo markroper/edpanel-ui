@@ -53,8 +53,6 @@ angular.module('teacherdashboard')
           var goal = datifyGoal(section.goal);
           section.editActive = false;
           goal.desiredValue = section.goal.proposedValue;
-          console.log(goal);
-          console.log(goal.id);
           api.editStudentGoal.patch(
             { studentId: goal.student.id,
               goalId: goal.id},
