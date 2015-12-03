@@ -16,7 +16,7 @@ angular.module('teacherdashboard')
       } else if($scope.newPassword !== $scope.newPassword2) {
         $scope.error.msg = "The passwords you typed don't match";
       }else if ($scope.newPassword.length < 8) {
-        $scope.error.msg = "The must be at least 8 chars";
+        $scope.error.msg = "Passwords must be at least 8 chars";
       } else {
         $scope.error.msg = null;
         $scope.mode = 'indeterminate';
