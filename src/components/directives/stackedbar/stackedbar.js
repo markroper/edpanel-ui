@@ -43,7 +43,10 @@ angular.module('teacherdashboard')
             axis: {
               x: {
                 type: 'category',
-                categories: xTickValues
+                categories: xTickValues,
+                tick: {
+                  fit: true
+                }
               }
             }
           });

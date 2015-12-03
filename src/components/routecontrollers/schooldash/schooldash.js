@@ -18,10 +18,6 @@ angular.module('teacherdashboard')
           termId: statebag.currentTerm.id
         }).$promise;
 
-      $scope.failingClassesPromise.then(function() {
-        console.log($scope.failingClassesPromise);
-      }
-      )
 
       var failingPromises = [];
 
@@ -99,8 +95,6 @@ angular.module('teacherdashboard')
             }
           }
         });
-        console.log("CHART DATA");
-        console.log(meritDemeritChartData);
         teacherBehaviorDataDeferred.resolve(meritDemeritChartData);
       });
 

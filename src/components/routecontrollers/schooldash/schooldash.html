@@ -5,21 +5,25 @@
         <md-card-content>
           <div class="md-headline">Students by GPA Range</div>
           <stackedbar columns-promise="gpaDataPromise"></stackedbar>
-          <span class="md-subhead"></span>
+          <span class="md-subhead">GPA Ranges</span>
         </md-card-content>
       </md-card>
     </div>
     <div flex="100" flex-gt-md="50">
       <md-card flex="100">
         <md-card-content>
-          <div class="md-headline">Students by Absences (Current Year)</div>
+          <div class="md-headline">Students by Absences* (Current Year)
+            <md-tooltip md-direction="bottom">
+              Absences calculated as sum(absences) + sum(tardy) * 0.2
+            </md-tooltip>
+          </div>
           <stackedbar columns-promise="studentAttendancePromise"></stackedbar>
-          <span class="md-subhead">* absences calculated as sum(absenses) + sum(tardy) * 0.2</span>
+          <span class="md-subhead">Number of Absences</span>
         </md-card-content>
       </md-card>
     </div>
     </div>
-  <div layout="row" layout-wrap>
+  <div layout="row" layout-align="center center" layout-wrap>
     <div flex="100" flex-gt-md="50">
       <md-card flex="100">
         <md-card-content>
@@ -29,7 +33,7 @@
         </md-card-content>
       </md-card>
     </div>
-  <div flex="100" flex-gt-md="50">
+  <div flex="100" flex-gt-md="100">
   <md-card flex>
     <md-card-content>
       <div class="md-headline">Demerit & Merit Counts by Staff (Current Year)</div>
