@@ -1,6 +1,6 @@
 <div class="schooldash" layout="column">
   <div layout="row" layout-wrap>
-    <div flex="100" flex-gt-md="50">
+    <div flex="100" flex-gt-md="33">
       <md-card flex="100">
         <md-card-content>
           <div class="md-headline">Students by GPA Range</div>
@@ -9,7 +9,7 @@
         </md-card-content>
       </md-card>
     </div>
-    <div flex="100" flex-gt-md="50">
+    <div flex="100" flex-gt-md="33">
       <md-card flex="100">
         <md-card-content>
           <div class="md-headline">Students by Absences* (Current Year)
@@ -22,24 +22,24 @@
         </md-card-content>
       </md-card>
     </div>
-    </div>
-  <div layout="row" layout-align="center center" layout-wrap>
-    <div flex="100" flex-gt-md="50">
+    <div flex="100" flex-gt-md="33">
       <md-card flex="100">
         <md-card-content>
           <div class="md-headline">Count of Students Failing Classes (Current Term)</div>
           <stackedbar sb-legend-pos="top-right" columns-promise="failingClassesPromise"></stackedbar>
-          <span class="md-subhead">Number of Classes Failed</span>
+          <span class="md-subhead">Number of Classes Failing</span>
         </md-card-content>
       </md-card>
     </div>
-  <div flex="100" flex-gt-md="100">
-  <md-card flex>
-    <md-card-content>
-      <div class="md-headline">Demerit & Merit Counts by Staff (Current Year)</div>
-      <stackedbar columns-promise="teacherBehaviorPromise"></stackedbar>
-    </md-card-content>
-  </md-card>
+  </div>
+  <div layout="row" layout-align="center center" layout-wrap>
+    <div flex="100" flex-gt-md="100">
+      <md-card flex>
+        <md-card-content>
+          <div class="md-headline">Demerit & Merit Counts by Staff (Current Year)</div>
+          <stackedbar columns-promise="teacherBehaviorPromise"></stackedbar>
+        </md-card-content>
+      </md-card>
     </div>
   </div>
   </div>

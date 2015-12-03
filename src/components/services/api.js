@@ -12,6 +12,8 @@ angular.module('teacherdashboard')
     return {
       login: $resource(base + '/login'),
       logout: $resource(base + '/logout'),
+      changePassword: $resource(base + '/users/passwordReset/:userId', {},
+        {'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }}),
       authCheck: $resource(base + '/auth'),
       //School endpoints
       school: $resource(base + '/schools/:schoolId'),
@@ -20,6 +22,7 @@ angular.module('teacherdashboard')
       student: $resource(base + '/students/:studentId'),
       allStudents: $resource(base + '/students', {}, { 'get': { isArray: true }}),
       users: $resource(base + '/users', {}, {'get': { isArray: true }}),
+      unverifiedUsers: $resource(base + '/users/unverified', {}, {'get': { isArray: true }}),
       user: $resource(base + '/users/:userId', {},
         {
           'patch': { method:'PATCH', headers: {'Content-Type': 'application/json'} },

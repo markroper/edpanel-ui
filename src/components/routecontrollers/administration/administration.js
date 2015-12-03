@@ -2,11 +2,10 @@
 angular.module('teacherdashboard')
 .controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast', '$document',
   function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document) {
-    statebag.currentPage.name = 'Administration';
+    statebag.currentPage.name = 'System Admin';
     //Resolve the invalidated users
-    api.users.get(
-      { schoolId: statebag.school.id,
-        enabled: false },
+    api.unverifiedUsers.get(
+      { schoolId: statebag.school.id },
       function(data) {
         $scope.firstTimeUsers = data;
       });
