@@ -30,20 +30,20 @@
                 <!-- The div below just makes the user list print one-per-page ;) -->
                 <div class="page-break" style="page-break-before: always;"></div>
                 <div flex="25" layout="row" layout-align="center center">
-                  <span>{{user.name}}</span>
+                  <span>{{user.user.name}}</span>
                 </div>
                 <div flex="20" layout="row" layout-align="center center">
-                  <md-button ng-click="saveUserEmailAndSendInvite(user)" aria-label="email" class="email-button md-fab md-mini md-primary">
+                  <md-button ng-click="saveUserEmailAndSendInvite(user.user)" aria-label="email" class="email-button md-fab md-mini md-primary">
                     <md-icon md-font-set="material-icons">save</md-icon>
                     <md-tooltip>save & email invite</md-tooltip>
                   </md-button>
                   <md-input-container md-no-float>
-                    <input type="email" placeholder="email" ng-model="user.email">
+                    <input type="email" placeholder="email" ng-model="user.user.email">
                   </md-input-container>
                 </div>
-                <div flex="15" layout="row" layout-align="center center"><span>{{user.type}}</span></div>
-                <div flex="20" layout="row" layout-align="center center"><span>{{user.username}}</span></div>
-                <div flex="20" layout="row" layout-align="center center"><span>{{user.oneTimePass}}</span></div>
+                <div flex="15" layout="row" layout-align="center center"><span>{{user.user.type}}</span></div>
+                <div flex="20" layout="row" layout-align="center center"><span>{{user.user.username}}</span></div>
+                <div flex="20" layout="row" layout-align="center center"><span>{{user.tempPass}}</span></div>
               </div>
             </md-card-content>
           </md-card>
@@ -51,7 +51,7 @@
         </md-content>
       </md-tab>
       <md-tab label="Settings">
-        <md-content class="md-padding settings">  
+        <md-content class="md-padding settings">
           <h2>Colors & Date Ranges</h2>
           <p>On dashboards, values for attendance, homework completion, behavior and GPA are expressed as the colors green, yellow, and red. The colors indicate level of conern. Green means the value on the metric is positive, yellow is cautionary, and red warning. In the case of behavior, homework completion and attendance, these metrics also have customizable time period. You may configure these default values below.</p>
           <div class="save-settings">

@@ -1,0 +1,4 @@
+<div class="schoolselector" layout="row" layout-wrap layout-align="center center">
+  <span flex="100" layout="row" layout-align="center center"><h3 class="md-headline">Choose a school!</h3></span>
+  <md-button ng-repeat="school in schools" ng-click="goToSchool(school)" class="md-raised md-accent">{{school.name}}</md-button>
+</div>
