@@ -7,10 +7,42 @@ angular.module('teacherdashboard')
       var max = moment(statebag.currentTerm.endDate).valueOf();
       var teacherBehaviorDataDeferred = $q.defer();
       var studentAbsesnseAndTardyDeferred = $q.defer();
+      var failingClassesDeferred = $q.defer();
+      $scope.teacherBehaviorPromise = teacherBehaviorDataDeferred.promise;
+      $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
+      $scope.failingClassesPromise = failingClassesDeferred.promise;
+        api.failingClasses.get(
+        {
+          schoolId: statebag.school.id,
+          schoolYearId: statebag.currentYear.id,
+          termId: statebag.currentTerm.id
+        }).$promise;
+
+
+      var failingPromises = [];
+
+      failingPromises.push(api.failingClasses.get(
+        {
+          schoolId: statebag.school.id,
+          schoolYearId: statebag.currentYear.id,
+          termId: statebag.currentTerm.id
+        }).$promise);
+      $q.all(failingPromises).then(function(results) {
+        var failingChartData = [];
+        results[0].forEach(function(entity) {
+          var array = [];
+          for (var key in entity.toJSON()) {
+            array.push(entity[key]);
+          }
+          failingChartData.push(array);
+        });
+        failingClassesDeferred.resolve(failingChartData);
+      });
       var studentGpaDataDeferred = $q.defer();
       $scope.teacherBehaviorPromise = teacherBehaviorDataDeferred.promise;
       $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
       $scope.gpaDataPromise = studentGpaDataDeferred.promise;
+
 
       //Resolve GPAs for current students
       api.gpasInSchool.get(
