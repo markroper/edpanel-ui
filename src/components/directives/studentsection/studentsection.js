@@ -30,6 +30,7 @@ angular.module('teacherdashboard')
           components: componentGrades
         };
         scope.editGoal = function(section) {
+          console.log(section);
           //Call api to edit the goal
           section.editActive = true;
 
