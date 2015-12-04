@@ -4,17 +4,21 @@ angular.module('teacherdashboard')
     return {
       scope: {
         weeklyBehaviorPromise: '=',
-        section: '='
+        targetScore: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/behaviorgraph/behaviorgraph.html',
       replace: true,
       controllerAs: 'ctrl',
       link: function(scope, elem){
-        scope.weeklyBehaviorPromise.then(function(theData){
+        scope.weeklyBehaviorPromise.then(function(theData) {
           var exs = {};
           var categorizedData = {};
           var chartData = [];
+          var targetScore = 80;
+          if(scope.targetScore) {
+            targetScore = scope.targetScore;
+          }
           var WEEKSCORE = 'score';
           exs[WEEKSCORE] = WEEKSCORE + '_x';
           categorizedData.weekscore = [[WEEKSCORE], [WEEKSCORE + '_x']];
@@ -36,8 +40,16 @@ angular.module('teacherdashboard')
               xs: exs,
               type: 'line'
             },
+            grid: {
+              y:{
+                lines:[
+                  { value: targetScore, text: 'target score' }
+                ]
+              }
+            },
             axis: {
               y : {
+                min: 30,
                 tick: {
                   format: function (d) { return Math.round(d); }
                 }
