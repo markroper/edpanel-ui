@@ -2,9 +2,7 @@
   <div layout="row" layout-wrap>
     <div flex="100" flex-gt-md="33">
       <md-card flex="100" >
-
-        <md-card-content >
-
+        <md-card-content class="graph">
           <div class="md-headline">Students by GPA Range (Cumulative)</div>
           <stackedbar sb-legend-pos="top-left" columns-promise="gpaDataPromise"></stackedbar>
           <span class="md-subhead">
@@ -12,9 +10,10 @@
         </md-card-content>
       </md-card>
     </div>
+
     <div flex="100" flex-gt-md="33">
       <md-card flex="100">
-        <md-card-content>
+        <md-card-content class="graph">
           <div class="md-headline">Students by Absences* (Current Year)
             <md-tooltip md-direction="bottom">
               Absences calculated as sum(absences) + sum(tardy) * 0.2
@@ -25,6 +24,7 @@
         </md-card-content>
       </md-card>
     </div>
+
     <div flex="100" flex-gt-md="33" style="position: relative">
       <md-fab-speed-dial style="bottom:0px" class="md-fab-bottom-right md-scale"  md-open="demo.isOpen" md-direction="left" >
         <md-fab-trigger>
@@ -44,7 +44,6 @@
               </md-select>
             </md-input-container>
           </div>
-
         </md-fab-actions>
       </md-fab-speed-dial>
       <md-card flex="100" >
@@ -52,15 +51,15 @@
           <div class="md-headline">Count of Students Failing Classes (Current Term)</div>
           <stackedbar control="stackedBarControl" sb-legend-pos="top-right" columns-promise="failingClassesPromise"></stackedbar>
           <span class="md-subhead">Number of Classes Failing</span>
-
         </md-card-content>
       </md-card>
     </div>
   </div>
+
   <div layout="row" layout-align="center center" layout-wrap>
     <div flex="100" flex-gt-md="100">
       <md-card flex>
-        <md-card-content>
+        <md-card-content class="graph">
           <div class="md-headline">Demerit & Merit Counts by Staff (Current Year)</div>
           <stackedbar columns-promise="teacherBehaviorPromise"></stackedbar>
         </md-card-content>
