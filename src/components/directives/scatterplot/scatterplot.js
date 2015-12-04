@@ -19,6 +19,7 @@ angular.module('teacherdashboard')
           paginationPageSizes: [8, 20, 50, 100],
           enablePaginationControls: true,
           columnDefs: [
+            { field: 'name' },
             { field: 'date', type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
             { field: 'category' },
             { field: 'grade' },

@@ -22,7 +22,7 @@
 				<div flex="{{::cellWidth}}" class="table-cell">Attendance</div>
 				<div flex="{{::cellWidth}}" class="table-cell">GPA</div>
 			</div>
-      <div class="table-row" layout="row" layout-wrap ng-repeat="student in studentsData | filter:search:strict | limitTo: limit track by student.id">
+      <div class="table-row" layout="row" layout-wrap ng-repeat="student in studentsData | orderBy:'name' | filter:search:strict | limitTo: limit track by student.id">
         <div class="table-cell" flex="{{::cellWidth}}" flex-sm="100" ng-show="showFilter">
           <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
             <md-button md-no-ink class="md-primary" ng-click="goToStudent(student)">
@@ -70,5 +70,5 @@
       </div>
 		</div>
 	</section>
-  <md-button md-no-ink class="md-primary" ng-click="increaseLimit()" ng-show="showMoreStudents && studentsData" style="margin:10px;">More students</md-button>
+  <md-button md-no-ink class="md-primary" ng-click="increaseLimit()" ng-show="showMoreStudents && studentsData" style="margin:10px 0px;">More students</md-button>
 </div>

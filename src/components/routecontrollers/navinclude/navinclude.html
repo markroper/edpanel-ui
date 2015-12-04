@@ -53,8 +53,16 @@
     </md-sidenav>
   </div>
   <div layout="column" flex md-theme="{{theme}}">
-      <md-content flex layout="column" id="content">
+      <md-content flex layout="column" layout-align="space-between none" id="content">
         <div ui-view class="main-container"></div>
+        <div layout="row" class="product-footer" layout-align="start center">
+          <div class="edpanel-logo" flex="none"></div>
+          <div flex></div>
+          <div layout="row" layout-align="center center">
+            <md-button class="md-primary" ng-href="http://myedpanel.com/about" target="_blank">About Us</md-button>
+            <md-button class="md-primary" ng-href="http://myedpanel.com/privacy" target="_blank">Privacy</md-button>
+          </div>
+        </div>
       </md-content>
   </div>
 </md-content>

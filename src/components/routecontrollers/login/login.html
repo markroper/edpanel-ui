@@ -1,19 +1,31 @@
-<md-toolbar layout="row">
-  <div class="md-toolbar-tools" tabindex="0">
-    <span>EdPanel - Excel Academy</span>
+<div flex layout="column" layout-fill >
+  <md-toolbar layout="row">
+    <div class="md-toolbar-tools" tabindex="0">
+      <span>Excel Academy</span>
+    </div>
+  </md-toolbar>
+  <div flex layout-fill layout="column">
+    <form flex name="login" class="row login" layout="row" layout-align="center start">
+      <div layout="column" layout-align="center center">
+        <div class="md-headline form-signin-heading" style="margin-top:10px; text-align:center;">Please sign in</div>
+        <md-input-container md-no-float>
+              <input required autofocus placeholder="Username" name="email" ng-model="inputEmail" edpanel-enter-keypress="authenticate();" tabindex="1">
+        </md-input-container>
+        <md-input-container md-no-float>
+              <input type="password" placeholder="Password" ng-model="password" edpanel-enter-keypress="authenticate();" tabindex="2">
+        </md-input-container>
+        <md-progress-linear md-mode="{{mode}}"></md-progress-linear>
+        <md-button id="sign-in" class="sign-in md-raised md-primary" ng-click="authenticate()">Sign in</md-button>
+        <h3 ng-show="showErrorMsg" style="text-align:center;color:red;">Unable to authenticate</h3>
+      </div>
+    </form>
+    <div layout="row" class="product-footer" layout-align="start center">
+      <div class="edpanel-logo" flex="none"></div>
+      <div flex></div>
+      <div layout="row" layout-align="center center">
+        <md-button class="md-primary" ng-href="http://myedpanel.com/about" target="_blank">About Us</md-button>
+        <md-button class="md-primary" ng-href="http://myedpanel.com/privacy" target="_blank">Privacy</md-button>
+      </div>
+    </div>
   </div>
-</md-toolbar>
-<form name="login" class="row login" layout="row" layout-align="center start">
-  <div layout="column" layout-align="center center">
-    <h2 class="form-signin-heading" style="text-align:center;">Please sign in</h2>
-    <md-input-container md-no-float>
-          <input required autofocus placeholder="Username" name="email" ng-model="inputEmail" edpanel-enter-keypress="authenticate();" tabindex="1">
-    </md-input-container>
-    <md-input-container md-no-float>
-          <input type="password" placeholder="Password" ng-model="password" edpanel-enter-keypress="authenticate();" tabindex="2">
-    </md-input-container>
-    <md-progress-linear md-mode="{{mode}}"></md-progress-linear>
-    <md-button id="sign-in" class="sign-in md-raised md-primary" ng-click="authenticate()">Sign in</md-button>
-    <h3 ng-show="showErrorMsg" style="text-align:center;color:red;">Unable to authenticate</h3>
-  </div>
-</form>
+</div>

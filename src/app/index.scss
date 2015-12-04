@@ -50,39 +50,34 @@ md-radio-button{
 .dropdown-menu li:hover {
     cursor: pointer;
 }
+.product-footer {
+  background-color: #E8E8E8;
+  margin-top: 20px;
+  padding: 45px 0px 45px 0px;
+  a {
+
+  }
+  .edpanel-logo {
+    height: 30px;
+    width: 136px;
+    background-size: 100%;
+    background: url('../assets/images/edpanel.svg');
+  }
+}
 
 .circular-login {
-      width: 50px;
-      height: 50px;
-      border-radius: 25px;
-      -webkit-border-radius: 25px;
-      -moz-border-radius: 25px;
-      cursor:pointer;
-      }
-.sidemenu-icon.behavior { background: url(../assets/images/behavior-icon.png) no-repeat; }
-.sidemenu-icon.attendance { background: url(../assets/images/attendance.png) no-repeat; }
-.sidemenu-icon.grades { background: url(../assets/images/grades.png) no-repeat; }
-.sidemenu-icon.goals { background: url(../assets/images/goals.png) no-repeat; }
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  cursor:pointer;
+}
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
   color: #000;
   padding: 0.2em 0;
-}
-.jumbotron {
-  background-color:rgba(0, 0, 0, 0.0);
-  height: 275px;
-  color: white;
-  text-shadow: 1px 1px 1px #000;
-  font-family: Lato,"Helvetica Neue",Helvetica,Arial,sans-serif;
-  text-align:center;
-}
-.thumbnail {
-  height: 200px;
-
-  img.pull-right {
-    width: 50px;
-  }
 }
 html, body {
   font-family: 'Roboto', sans-serif;
@@ -133,10 +128,6 @@ md-list .md-button {
   right: 25px;
 }
 
-#content md-icon.avatar {
-  margin-top: 10px;
-}
-
 #content .md-button.share > md-icon {
   fill:black;
   width:36px;
@@ -147,13 +138,6 @@ md-button.menuBtn > md-icon {
   fill:white;
   width:24px;
   height:24px;
-}
-
-#content .md-button.share:active > md-icon {
-  background-color: #dadada;
-  border-radius: 75%;
-  padding:4px;
-  transition: all 100ms ease-out 30ms;
 }
 
 #content img {
@@ -174,23 +158,6 @@ md-toolbar h1 {
   font-size: 1.250em;
   font-weight: 400;
 }
-
-.avatar {
-  position: relative;
-  width: 128px;
-  height: 128px;
-  border: 1px solid #ddd;
-  border-radius: 50%;
-  display: inline-block;
-  overflow: hidden;
-  margin: 0px;
-  vertical-align: middle;
-  zoom:0.70;
-  transform: translateZ(0);
-  -webkit-transform: scale(0.70);
-  -moz-transform:scale(0.70);
-}
-
 
 md-bottom-sheet  md-icon {
   margin-right:20px;

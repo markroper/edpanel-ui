@@ -107,7 +107,7 @@ angular.module('teacherdashboard')
         uiAttrsDeferred.resolve();
       }
       //Once we have UI attributes, resolve the data for the home page
-      uiAttrsDeferred.promise.then(function(){
+      uiAttrsDeferred.promise.then(function() {
         var studentIds = [];
         var studentMap = {};
         for(var i = 0; i < statebag.students.length; i++) {
@@ -128,7 +128,6 @@ angular.module('teacherdashboard')
         studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, hwQuery).$promise);
         studentDataPromises.push(api.query.save({ schoolId: statebag.school.id }, attendanceQuery).$promise);
         studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
-
         studentDataPromises.push(api.studentsPrepScores.get({
           studentId: studentIds,
           startDate: moment(statebag.currentYear.startDate).format(DATE_FORMAT),
@@ -137,7 +136,6 @@ angular.module('teacherdashboard')
 
         //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
         $q.all(studentDataPromises).then(function(responses) {
-          var resolvedStudents = [];
           //Handle the HW completion & attendance values
           responses[0].records.forEach(function(student){
             studentMap[student.values[0]] = resolveStudentScopeObject(student.values);
@@ -162,7 +160,6 @@ angular.module('teacherdashboard')
               if(pluckedStudent) {
                 pluckedStudent.gpa = Math.round( responses[2][idKey] * 10 ) / 10;
                 pluckedStudent.gpaClass = resolveGpaClass(pluckedStudent.gpa);
-                resolvedStudents.unshift(pluckedStudent);
               }
             }
           }
@@ -178,6 +175,10 @@ angular.module('teacherdashboard')
               pluckedStudent.behaviorPeriod = returnComponentPeriod('behavior');
             }
           }
+          var resolvedStudents = [];
+          angular.forEach(studentMap, function(value) {
+            this.unshift(value);
+          }, resolvedStudents);
           statebag.lastFullRefresh = new Date().getTime();
           statebag.studentPerfData = resolvedStudents;
           deferred.resolve(statebag.studentPerfData);
