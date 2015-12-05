@@ -14,12 +14,19 @@
     <div flex="100" flex-gt-md="33">
       <md-card flex="100">
         <md-card-content class="graph">
-          <div class="md-headline">Students by Absences* (Current Year)
+          <div class="md-headline">Students by Absences*
             <md-tooltip md-direction="bottom">
               Absences calculated as sum(absences) + sum(tardy) * 0.2
             </md-tooltip>
           </div>
-          <stackedbar sb-legend-pos="top-right" columns-promise="studentAttendancePromise"></stackedbar>
+          <div class="md-subhead">
+            <md-input-container>
+              <md-select ng-model="attendanceTerm" ng-change="updateAttendanceTerm()" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+          <stackedbar control="attendanceControl" sb-legend-pos="top-right" columns-promise="studentAttendancePromise"></stackedbar>
           <span class="md-subhead">Number of Absences</span>
         </md-card-content>
       </md-card>

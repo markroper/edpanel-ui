@@ -8,13 +8,62 @@ angular.module('teacherdashboard')
       var teacherBehaviorDataDeferred = $q.defer();
       var studentAbsesnseAndTardyDeferred = $q.defer();
       var failingClassesDeferred = $q.defer();
+      var studentGpaDataDeferred = $q.defer();
+      var termsDeferred = $q.defer();
+
+
+      $scope.gpaDataPromise = studentGpaDataDeferred.promise;
       $scope.teacherBehaviorPromise = teacherBehaviorDataDeferred.promise;
       $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
       $scope.failingClassesPromise = failingClassesDeferred.promise;
+      $scope.termsPromise = termsDeferred.promise;
+
+
       $scope.failingBreakdown = "RACE";
+      $scope.attendanceTerm = statebag.currentTerm ;
+      $scope.attendanceControl = {
+
+      };
       $scope.stackedBarControl = {
 
       };
+
+      $scope.updateAttendanceTerm = function() {
+        var attendanceStatus = [];
+        console.log($scope.attendanceTerm);
+        attendanceStatus.push(api.query.save(
+          { schoolId: statebag.school.id },
+          getAbsenseAndTardyCount($scope.attendanceTerm.startDate, $scope.attendanceTerm.endDate, statebag.school.id)).$promise);
+          $q.all(attendanceStatus).then(function(results){
+            var attendanceHistogram = [
+              ['students', 0, 0, 0, 0, 0, 0, 0 ],
+              ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
+            ];
+            console.log(results[0]);
+        for(var i = 0; i < results[0].records.length; i++) {
+          var singleRowResults = results[0].records[i].values;
+          //TODO: generify, hardocded for excel's formula of a tardy = .2 of an absence
+          var score = singleRowResults[2] + (singleRowResults[3] * 0.2);
+          if(score === 0) {
+            attendanceHistogram[0][1]++;
+          }else if(score <= 1) {
+            attendanceHistogram[0][2]++;
+          } else if(score <= 2) {
+            attendanceHistogram[0][3]++;
+          } else if(score <= 4) {
+            attendanceHistogram[0][4]++;
+          } else if(score <= 6) {
+            attendanceHistogram[0][5]++;
+          } else if(score <= 8) {
+            attendanceHistogram[0][6]++;
+          } else {
+            attendanceHistogram[0][7]++;
+          }
+        }
+            $scope.attendanceControl.updateChart(attendanceHistogram);
+      });
+
+      }
 
       $scope.changeFailingBreakdown = function() {
         var failingPromises = [];
@@ -61,10 +110,26 @@ angular.module('teacherdashboard')
         });
         failingClassesDeferred.resolve(failingChartData);
       });
-      var studentGpaDataDeferred = $q.defer();
-      $scope.teacherBehaviorPromise = teacherBehaviorDataDeferred.promise;
-      $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
-      $scope.gpaDataPromise = studentGpaDataDeferred.promise;
+
+      var termPromises = [];
+      //TODO We should make this work over multiple years
+      termPromises.push(api.terms.get(
+        {
+          schoolId: statebag.school.id,
+          yearId: statebag.currentYear.id
+        }
+      ).$promise);
+      $q.all(termPromises).then(function(results) {
+        var terms = [];
+        results[0].forEach(function(entity) {
+          terms.push(entity);
+        });
+        termsDeferred.resolve(terms);
+        $scope.terms = terms;
+      })
+
+
+
 
 
       //Resolve GPAs for current students
