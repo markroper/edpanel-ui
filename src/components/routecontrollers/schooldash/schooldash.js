@@ -11,13 +11,35 @@ angular.module('teacherdashboard')
       $scope.teacherBehaviorPromise = teacherBehaviorDataDeferred.promise;
       $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
       $scope.failingClassesPromise = failingClassesDeferred.promise;
-        api.failingClasses.get(
-        {
-          schoolId: statebag.school.id,
-          schoolYearId: statebag.currentYear.id,
-          termId: statebag.currentTerm.id
-        }).$promise;
+      $scope.failingBreakdown = "RACE";
+      $scope.stackedBarControl = {
 
+      };
+
+      $scope.changeFailingBreakdown = function() {
+        var failingPromises = [];
+
+        failingPromises.push(api.failingClasses.get(
+          {
+            schoolId: statebag.school.id,
+            schoolYearId: statebag.currentYear.id,
+            termId: statebag.currentTerm.id,
+            breakdownKey: $scope.failingBreakdown
+          }).$promise);
+
+        $q.all(failingPromises).then(function(results) {
+          var failingChartData = [];
+          results[0].forEach(function(entity) {
+            var array = [];
+            for (var key in entity.toJSON()) {
+              array.push(entity[key]);
+            }
+            failingChartData.push(array);
+          });
+          $scope.stackedBarControl.updateChart(failingChartData);
+        });
+
+      };
 
       var failingPromises = [];
 
@@ -25,7 +47,8 @@ angular.module('teacherdashboard')
         {
           schoolId: statebag.school.id,
           schoolYearId: statebag.currentYear.id,
-          termId: statebag.currentTerm.id
+          termId: statebag.currentTerm.id,
+          breakdownKey: $scope.failingBreakdown
         }).$promise);
       $q.all(failingPromises).then(function(results) {
         var failingChartData = [];

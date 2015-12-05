@@ -1,41 +1,65 @@
 <div class="schooldash" layout="column">
   <div layout="row" layout-wrap>
     <div flex="100" flex-gt-md="33">
-      <md-card flex="100">
-        <md-card-content>
-          <div class="md-headline">Students by GPA Range</div>
-          <stackedbar columns-promise="gpaDataPromise"></stackedbar>
-          <span class="md-subhead">GPA Ranges</span>
+      <md-card flex="100" >
+        <md-card-content class="graph">
+          <div class="md-headline">Students by GPA Range (Cumulative)</div>
+          <stackedbar sb-legend-pos="top-left" columns-promise="gpaDataPromise"></stackedbar>
+          <span class="md-subhead">
+            GPA Ranges</span>
         </md-card-content>
       </md-card>
     </div>
+
     <div flex="100" flex-gt-md="33">
       <md-card flex="100">
-        <md-card-content>
+        <md-card-content class="graph">
           <div class="md-headline">Students by Absences* (Current Year)
             <md-tooltip md-direction="bottom">
               Absences calculated as sum(absences) + sum(tardy) * 0.2
             </md-tooltip>
           </div>
-          <stackedbar columns-promise="studentAttendancePromise"></stackedbar>
+          <stackedbar sb-legend-pos="top-right" columns-promise="studentAttendancePromise"></stackedbar>
           <span class="md-subhead">Number of Absences</span>
         </md-card-content>
       </md-card>
     </div>
-    <div flex="100" flex-gt-md="33">
-      <md-card flex="100">
-        <md-card-content>
-          <div class="md-headline">Students Failing Classes (Current Term)</div>
-          <stackedbar columns-promise="failingClassesPromise"></stackedbar>
+
+    <div flex="100" flex-gt-md="33" style="position: relative">
+      <md-fab-speed-dial style="bottom:0px" class="md-fab-bottom-right md-scale"  md-open="demo.isOpen" md-direction="left" >
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-icon-button">
+            <md-icon md-font-set="material-icons">settings</md-icon>
+            <md-tooltip>chart settings</md-tooltip>
+          </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+          <div class="row">
+            <span>View breakdown by: </span>
+            <md-input-container style="margin-right: 10px;">
+              <label>Demographic</label>
+              <md-select ng-model="failingBreakdown" ng-change="changeFailingBreakdown()">
+                <md-option  value="RACE">Race</md-option>
+                <md-option  value="GENDER">Gender</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+      <md-card flex="100" >
+        <md-card-content class="graph">
+          <div class="md-headline">Count of Students Failing Classes (Current Term)</div>
+          <stackedbar control="stackedBarControl" sb-legend-pos="top-right" columns-promise="failingClassesPromise"></stackedbar>
           <span class="md-subhead">Number of Classes Failing</span>
         </md-card-content>
       </md-card>
     </div>
   </div>
+
   <div layout="row" layout-align="center center" layout-wrap>
     <div flex="100" flex-gt-md="100">
       <md-card flex>
-        <md-card-content>
+        <md-card-content class="graph">
           <div class="md-headline">Demerit & Merit Counts by Staff (Current Year)</div>
           <stackedbar columns-promise="teacherBehaviorPromise"></stackedbar>
         </md-card-content>

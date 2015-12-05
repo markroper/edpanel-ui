@@ -70,7 +70,7 @@ angular.module('teacherdashboard')
       gpasInSchool: $resource(base + '/gpas', {}, { 'get': { isArray: true } }),
       gpasOverTime: $resource(base + '/gpas/students/:studentId/historicals', {}, { 'get': { isArray: true } }),
       failingClasses: $resource(
-        base + '/ui/school/:schoolId/years/:schoolYearId/terms/:termId/classes',
+        base + '/ui/school/:schoolId/years/:schoolYearId/terms/:termId/classes?breakdown=:breakdownKey',
         {},
         {
           'get': {isArray: true}
