@@ -1,7 +1,10 @@
 'use strict';
 angular.module('teacherdashboard')
-  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',
-    function ($scope, api, statebag, $q) {
+  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', '$location',
+    function ($scope, api, statebag, $q, $window, $location) {
+      $scope.$on('$viewContentLoaded', function() {
+        $window.ga('send', 'pageview', { page: $location.url() });
+      });
       statebag.currentPage.name = 'School Dashboard';
       var min = moment(statebag.currentTerm.startDate).valueOf();
       var max = moment(statebag.currentTerm.endDate).valueOf();

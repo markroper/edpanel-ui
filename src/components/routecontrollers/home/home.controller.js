@@ -1,8 +1,11 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts',
-    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts) {
+  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$window', '$location',
+    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $window, $location) {
+      $scope.$on('$viewContentLoaded', function() {
+        $window.ga('send', 'pageview', { page: $location.url() });
+      });
       statebag.currentPage.name = 'Students';
       $scope.showFilter=true;
       function retrieveHomePageData() {

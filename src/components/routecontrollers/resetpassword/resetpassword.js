@@ -1,7 +1,10 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('PasswordCtrl', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager', 'consts',
-  function ($scope, api, $state, authentication, statebag, statebagapimanager, consts) {
+.controller('PasswordCtrl', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager', 'consts', '$window', '$location',
+  function ($scope, api, $state, authentication, statebag, statebagapimanager, consts, $window, $location) {
+    $scope.$on('$viewContentLoaded', function() {
+      $window.ga('send', 'pageview', { page: $location.url() });
+    });
     statebag.currentPage.name = 'Password Reset';
     $scope.oldPassword = '';
     $scope.newPassword = '';

@@ -18,8 +18,11 @@ angular.module('teacherdashboard')
         });
     };
   })
-  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager', 'consts',
-    function ($scope, api, $state, authentication, statebag, statebagapimanager, consts) {
+  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager', 'consts', '$window', '$location',
+    function ($scope, api, $state, authentication, statebag, statebagapimanager, consts, $window, $location) {
+      $scope.$on('$viewContentLoaded', function() {
+        $window.ga('send', 'pageview', { page: $location.url() });
+      });
       statebag.currentPage.name = 'Login';
 	    $scope.inputEmail = '';
       $scope.password = '';
