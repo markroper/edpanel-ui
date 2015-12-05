@@ -21,11 +21,35 @@ angular.module('teacherdashboard')
 
       $scope.failingBreakdown = "RACE";
       $scope.attendanceTerm = statebag.currentTerm ;
+      $scope.demeritTerm = statebag.currentTerm;
       $scope.attendanceControl = {
 
       };
-      $scope.stackedBarControl = {
+      $scope.failureControl = {
 
+      };
+      $scope.demeritControl = {
+
+      };
+
+      $scope.updateDemeritTerm = function() {
+        var meritDemeritsPromises = [];
+        makeMeritDemeritRequests(meritDemeritsPromises);
+
+        $q.all(meritDemeritsPromises).then(function(results){
+          var meritDemeritChartData = [ ['merits'], ['demerits'], ['teachers'] ];
+          results.forEach(function(entity){
+            for(var i = 0; i < entity.records.length; i++) {
+              var singleRowResults = entity.records[i].values;
+              if(singleRowResults[2] || singleRowResults[3]) {
+                meritDemeritChartData[0].push(singleRowResults[3]);
+                meritDemeritChartData[1].push(singleRowResults[2]);
+                meritDemeritChartData[2].push(singleRowResults[1]);
+              }
+            }
+          });
+          $scope.demeritControl.updateChart(meritDemeritChartData);
+        });
       };
 
       $scope.updateAttendanceTerm = function() {
@@ -68,13 +92,7 @@ angular.module('teacherdashboard')
       $scope.changeFailingBreakdown = function() {
         var failingPromises = [];
 
-        failingPromises.push(api.failingClasses.get(
-          {
-            schoolId: statebag.school.id,
-            schoolYearId: statebag.currentYear.id,
-            termId: statebag.currentTerm.id,
-            breakdownKey: $scope.failingBreakdown
-          }).$promise);
+        makeFailureRequests(failingPromises);
 
         $q.all(failingPromises).then(function(results) {
           var failingChartData = [];
@@ -85,20 +103,15 @@ angular.module('teacherdashboard')
             }
             failingChartData.push(array);
           });
-          $scope.stackedBarControl.updateChart(failingChartData);
+          $scope.failureControl.updateChart(failingChartData);
         });
 
       };
 
       var failingPromises = [];
 
-      failingPromises.push(api.failingClasses.get(
-        {
-          schoolId: statebag.school.id,
-          schoolYearId: statebag.currentYear.id,
-          termId: statebag.currentTerm.id,
-          breakdownKey: $scope.failingBreakdown
-        }).$promise);
+      makeFailureRequests(failingPromises);
+
       $q.all(failingPromises).then(function(results) {
         var failingChartData = [];
         results[0].forEach(function(entity) {
@@ -163,14 +176,8 @@ angular.module('teacherdashboard')
 
       //Resolve merits and demerits awarded by all teachers and admins in the school
       var meritDemeritsPromises = [];
-      meritDemeritsPromises.push(api.query.save(
-        { schoolId: statebag.school.id },
-        getCountsOfTeacherMeritsAndDemerits(min, max)
-      ).$promise);
-      meritDemeritsPromises.push(api.query.save(
-        { schoolId: statebag.school.id },
-        getCountsOfAdminMeritsAndDemerits(min, max)
-      ).$promise);
+      makeMeritDemeritRequests(meritDemeritsPromises);
+
       $q.all(meritDemeritsPromises).then(function(results){
         var meritDemeritChartData = [ ['merits'], ['demerits'], ['teachers'] ];
         results.forEach(function(entity){
@@ -218,6 +225,27 @@ angular.module('teacherdashboard')
           studentAbsesnseAndTardyDeferred.resolve(attendanceHistogram);
         }
       );
+
+      function makeMeritDemeritRequests(promises) {
+        promises.push(api.query.save(
+          { schoolId: statebag.school.id },
+          getCountsOfTeacherMeritsAndDemerits($scope.demeritTerm.startDate, $scope.demeritTerm.endDate)
+        ).$promise);
+        promises.push(api.query.save(
+          { schoolId: statebag.school.id },
+          getCountsOfAdminMeritsAndDemerits($scope.demeritTerm.startDate, $scope.demeritTerm.endDate)
+        ).$promise);
+      }
+
+      function makeFailureRequests(promises) {
+        promises.push(api.failingClasses.get(
+          {
+            schoolId: statebag.school.id,
+            schoolYearId: statebag.currentYear.id,
+            termId: statebag.currentTerm.id,
+            breakdownKey: $scope.failingBreakdown
+          }).$promise);
+      }
 
       function getAbsenseAndTardyCount(startDate, endDate, schoolId) {
         if(!schoolId) {
