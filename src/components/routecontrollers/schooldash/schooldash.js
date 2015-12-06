@@ -20,6 +20,7 @@ angular.module('teacherdashboard')
 
 
       $scope.failingBreakdown = "RACE";
+      $scope.attendanceBreakdown = "RACE";
       $scope.attendanceTerm = statebag.currentTerm ;
       $scope.demeritTerm = statebag.currentTerm;
       $scope.attendanceControl = {
@@ -54,37 +55,46 @@ angular.module('teacherdashboard')
 
       $scope.updateAttendanceTerm = function() {
         var attendanceStatus = [];
-        console.log($scope.attendanceTerm);
         attendanceStatus.push(api.query.save(
           { schoolId: statebag.school.id },
           getAbsenseAndTardyCount($scope.attendanceTerm.startDate, $scope.attendanceTerm.endDate, statebag.school.id)).$promise);
           $q.all(attendanceStatus).then(function(results){
-            var attendanceHistogram = [
-              ['students', 0, 0, 0, 0, 0, 0, 0 ],
-              ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
-            ];
-            console.log(results[0]);
-        for(var i = 0; i < results[0].records.length; i++) {
-          var singleRowResults = results[0].records[i].values;
-          //TODO: generify, hardocded for excel's formula of a tardy = .2 of an absence
-          var score = singleRowResults[2] + (singleRowResults[3] * 0.2);
-          if(score === 0) {
-            attendanceHistogram[0][1]++;
-          }else if(score <= 1) {
-            attendanceHistogram[0][2]++;
-          } else if(score <= 2) {
-            attendanceHistogram[0][3]++;
-          } else if(score <= 4) {
-            attendanceHistogram[0][4]++;
-          } else if(score <= 6) {
-            attendanceHistogram[0][5]++;
-          } else if(score <= 8) {
-            attendanceHistogram[0][6]++;
-          } else {
-            attendanceHistogram[0][7]++;
-          }
-        }
-            $scope.attendanceControl.updateChart(attendanceHistogram);
+            var singleRowResults;
+            var gender;
+            var race;
+            if ($scope.attendanceBreakdown == "GENDER") {
+              var attendanceHistogram = [
+                ['male', 0, 0, 0, 0, 0, 0, 0],
+                ['female', 0, 0, 0, 0, 0, 0, 0],
+                ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
+              ];
+
+              for (var i = 0; i < results[0].records.length; i++) {
+                singleRowResults = results[0].records[i].values;
+                gender = singleRowResults[2];
+                generateAttendanceBuckets(singleRowResults, gender, attendanceHistogram);
+              }
+              $scope.attendanceControl.updateChart(attendanceHistogram);
+            } else {
+              var attendanceHistogram = [
+                ['White', 0, 0, 0, 0, 0, 0, 0],
+                ['Black', 0, 0, 0, 0, 0, 0, 0],
+                ['Asian', 0, 0, 0, 0, 0, 0, 0],
+                ['Indian', 0, 0, 0, 0, 0, 0, 0],
+                ['Hispanic', 0, 0, 0, 0, 0, 0, 0],
+                ['Pacific', 0, 0, 0, 0, 0, 0, 0],
+                ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
+              ];
+
+              for (var i = 0; i < results[0].records.length; i++) {
+                singleRowResults = results[0].records[i].values;
+                race = resolveRaceAttendanceSelector(singleRowResults[3], singleRowResults[4]);
+                generateAttendanceBuckets(singleRowResults, race, attendanceHistogram);
+
+              }
+              $scope.attendanceControl.updateChart(attendanceHistogram);
+            }
+
       });
 
       }
@@ -198,33 +208,87 @@ angular.module('teacherdashboard')
         { schoolId: statebag.school.id },
         getAbsenseAndTardyCount(min, max, statebag.school.id),
         function(results) {
-          var attendanceHistogram = [
-            ['students', 0, 0, 0, 0, 0, 0, 0 ],
-            ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
-          ];
-          for(var i = 0; i < results.records.length; i++) {
-            var singleRowResults = results.records[i].values;
-            //TODO: generify, hardocded for excel's formula of a tardy = .2 of an absence
-            var score = singleRowResults[2] + (singleRowResults[3] * 0.2);
-            if(score === 0) {
-              attendanceHistogram[0][1]++;
-            }else if(score <= 1) {
-              attendanceHistogram[0][2]++;
-            } else if(score <= 2) {
-              attendanceHistogram[0][3]++;
-            } else if(score <= 4) {
-              attendanceHistogram[0][4]++;
-            } else if(score <= 6) {
-              attendanceHistogram[0][5]++;
-            } else if(score <= 8) {
-              attendanceHistogram[0][6]++;
-            } else {
-              attendanceHistogram[0][7]++;
+          console.log(results);
+          var singleRowResults;
+          var gender;
+          var race;
+          var attendanceHistogram;
+          if ($scope.attendanceBreakdown == "GENDER") {
+            attendanceHistogram = [
+              ['male', 0, 0, 0, 0, 0, 0, 0],
+              ['female', 0, 0, 0, 0, 0, 0, 0],
+              ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
+            ];
+            for(var i = 0; i < results.records.length; i++) {
+               singleRowResults = results.records[i].values;
+               gender = singleRowResults[2];
+              generateAttendanceBuckets(singleRowResults, gender, attendanceHistogram);
             }
+            studentAbsesnseAndTardyDeferred.resolve(attendanceHistogram);
+          } else {
+            attendanceHistogram = [
+              ['White', 0, 0, 0, 0, 0, 0, 0],
+              ['Black', 0, 0, 0, 0, 0, 0, 0],
+              ['Asian', 0, 0, 0, 0, 0, 0, 0],
+              ['Indian', 0, 0, 0, 0, 0, 0, 0],
+              ['Hispanic', 0, 0, 0, 0, 0, 0, 0],
+              ['Pacific', 0, 0, 0, 0, 0, 0, 0],
+              ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
+            ];
+
+            for (var i = 0; i < results.records.length; i++) {
+              singleRowResults = results.records[i].values;
+              race = resolveRaceAttendanceSelector(singleRowResults[3], singleRowResults[4]);
+              generateAttendanceBuckets(singleRowResults, race, attendanceHistogram);
+            }
+            studentAbsesnseAndTardyDeferred.resolve(attendanceHistogram);
           }
-          studentAbsesnseAndTardyDeferred.resolve(attendanceHistogram);
         }
       );
+
+      function resolveRaceAttendanceSelector(raceCode, ethnicity) {
+        switch (raceCode) {
+          case "W":
+                return 0;
+          case "B":
+                return 1;
+          case "A":
+                return 2;
+          case "I":
+            if (ethnicity == "YES") {
+              return 4;
+            } else {
+              return 3;
+            }
+          case "P":
+                return 5;
+          default:
+            //TODO There is a null value... what do we do about their race...
+                return 0;
+        }
+      }
+
+      function generateAttendanceBuckets(singleRowResults, rowSelector, attendanceHistogram) {
+          //Male = 0 Female=1;
+          //TODO: generify, hardocded for excel's formula of a tardy = .2 of an absence
+          var score = singleRowResults[5] + (singleRowResults[6] * 0.2);
+          if(score === 0) {
+            attendanceHistogram[rowSelector][1]++;
+          }else if(score <= 1) {
+            attendanceHistogram[rowSelector][2]++;
+          } else if(score <= 2) {
+            attendanceHistogram[rowSelector][3]++;
+          } else if(score <= 4) {
+            attendanceHistogram[rowSelector][4]++;
+          } else if(score <= 6) {
+            attendanceHistogram[rowSelector][5]++;
+          } else if(score <= 8) {
+            attendanceHistogram[rowSelector][6]++;
+          } else {
+            attendanceHistogram[rowSelector][7]++;
+          }
+
+      }
 
       function makeMeritDemeritRequests(promises) {
         promises.push(api.query.save(
@@ -258,10 +322,15 @@ angular.module('teacherdashboard')
           ],
           'fields':[
             { 'dimension':'STUDENT','field':'ID' },
-            { 'dimension':'STUDENT','field':'Name' }
+            { 'dimension':'STUDENT','field':'Name' },
+            { 'dimension':'STUDENT','field':'Gender'},
+            { 'dimension':'STUDENT','field':'Race'},
+            {'dimension':'STUDENT', 'field':'Ethnicity'}
+
           ],
           'filter': {
             'type': 'EXPRESSION',
+            //'leftHandSide': {
             'leftHandSide': {
               'type': 'EXPRESSION',
               'leftHandSide': {
@@ -276,6 +345,23 @@ angular.module('teacherdashboard')
                 'type': 'NUMERIC',
                 'value': schoolId
               }
+            //},
+              //'operator':'AND',
+              //rightHandSide: {
+              //  'type': 'EXPRESSION',
+              //  'leftHandSide': {
+              //    'type': 'DIMENSION',
+              //    'value': {
+              //      'dimension': 'STUDENT',
+              //      'field':'Gender'
+              //    }
+              //  },
+              //  'operator':'EQUAL',
+              //  'rightHandSide': {
+              //    'type':'STRING',
+              //    'value': 'Male'
+              //  }
+              //}
             },
             'operator': 'AND',
             'rightHandSide': {

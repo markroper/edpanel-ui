@@ -11,7 +11,27 @@
       </md-card>
     </div>
 
-    <div flex="100" flex-gt-md="33">
+    <div flex="100" flex-gt-md="33" style="position: relative">
+      <md-fab-speed-dial style="bottom:0px" class="md-fab-bottom-right md-scale"  md-open="attendance.isOpen" md-direction="left" >
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-icon-button">
+            <md-icon md-font-set="material-icons">settings</md-icon>
+            <md-tooltip>chart settings</md-tooltip>
+          </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+          <div class="row">
+            <span>View breakdown by: </span>
+            <md-input-container style="margin-right: 10px;">
+              <label>Demographic</label>
+              <md-select ng-model="attendanceBreakdown" ng-change="updateAttendanceTerm()">
+                <md-option  value="RACE">Race</md-option>
+                <md-option  value="GENDER">Gender</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+        </md-fab-actions>
+      </md-fab-speed-dial>
       <md-card flex="100">
         <md-card-content class="graph">
           <div class="md-headline">Students by Absences*
@@ -33,7 +53,7 @@
     </div>
 
     <div flex="100" flex-gt-md="33" style="position: relative">
-      <md-fab-speed-dial style="bottom:0px" class="md-fab-bottom-right md-scale"  md-open="demo.isOpen" md-direction="left" >
+      <md-fab-speed-dial style="bottom:0px" class="md-fab-bottom-right md-scale"  md-open="failing.isOpen" md-direction="left" >
         <md-fab-trigger>
           <md-button aria-label="menu" class="md-icon-button">
             <md-icon md-font-set="material-icons">settings</md-icon>
