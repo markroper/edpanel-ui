@@ -50,6 +50,9 @@ angular.module('teacherdashboard')
       teacher: $resource(base + '/teachers/:teacherId'),
       year: $resource(base + '/schools/:schoolId/years/:yearId'),
       term: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId'),
+      terms: $resource(base + '/schools/:schoolId/years/:yearId/terms/',
+        {},
+        {'get': {isArray:true}}),
       //Sections
       section: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId'),
       studentSections: $resource(base + '/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId/sections', {}, { 'get': { isArray: true }}),

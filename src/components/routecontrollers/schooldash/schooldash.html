@@ -3,7 +3,14 @@
     <div flex="100" flex-gt-md="33">
       <md-card flex="100" >
         <md-card-content class="graph">
-          <div class="md-headline">Students by GPA Range (Cumulative)</div>
+          <div class="md-headline">Students by GPA Range</div>
+          <div class="md-subhead">
+            <md-input-container>
+              <md-select ng-model="attendanceTerm" ng-change="updateAttendanceTerm()" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
           <stackedbar sb-legend-pos="top-left" columns-promise="gpaDataPromise"></stackedbar>
           <span class="md-subhead">
             GPA Ranges</span>
@@ -11,22 +18,8 @@
       </md-card>
     </div>
 
-    <div flex="100" flex-gt-md="33">
-      <md-card flex="100">
-        <md-card-content class="graph">
-          <div class="md-headline">Students by Absences* (Current Year)
-            <md-tooltip md-direction="bottom">
-              Absences calculated as sum(absences) + sum(tardy) * 0.2
-            </md-tooltip>
-          </div>
-          <stackedbar sb-legend-pos="top-right" columns-promise="studentAttendancePromise"></stackedbar>
-          <span class="md-subhead">Number of Absences</span>
-        </md-card-content>
-      </md-card>
-    </div>
-
     <div flex="100" flex-gt-md="33" style="position: relative">
-      <md-fab-speed-dial style="bottom:0px" class="md-fab-bottom-right md-scale"  md-open="demo.isOpen" md-direction="left" >
+      <md-fab-speed-dial style="bottom:0px" class="md-fab-bottom-right md-scale"  md-open="attendance.isOpen" md-direction="left" >
         <md-fab-trigger>
           <md-button aria-label="menu" class="md-icon-button">
             <md-icon md-font-set="material-icons">settings</md-icon>
@@ -37,7 +30,46 @@
           <div class="row">
             <span>View breakdown by: </span>
             <md-input-container style="margin-right: 10px;">
-              <label>Demographic</label>
+              <md-select ng-model="attendanceBreakdown" ng-change="updateAttendanceTerm()">
+                <md-option  value="RACE">Race</md-option>
+                <md-option  value="GENDER">Gender</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+      <md-card flex="100">
+        <md-card-content class="graph">
+          <div class="md-headline">Students by Absences*
+            <md-tooltip md-direction="bottom">
+              Absences calculated as sum(absences) + sum(tardy) * 0.2
+            </md-tooltip>
+          </div>
+          <div class="md-subhead">
+            <md-input-container>
+              <md-select ng-model="attendanceTerm" ng-change="updateAttendanceTerm()" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+          <stackedbar control="attendanceControl" sb-legend-pos="top-right" columns-promise="studentAttendancePromise"></stackedbar>
+          <span class="md-subhead">Number of Absences</span>
+        </md-card-content>
+      </md-card>
+    </div>
+
+    <div flex="100" flex-gt-md="33" style="position: relative">
+      <md-fab-speed-dial style="bottom:0px" class="md-fab-bottom-right md-scale"  md-open="failing.isOpen" md-direction="left" >
+        <md-fab-trigger>
+          <md-button aria-label="menu" class="md-icon-button">
+            <md-icon md-font-set="material-icons">settings</md-icon>
+            <md-tooltip>chart settings</md-tooltip>
+          </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+          <div class="row">
+            <span>View breakdown by: </span>
+            <md-input-container style="margin-right: 10px;">
               <md-select ng-model="failingBreakdown" ng-change="changeFailingBreakdown()">
                 <md-option  value="RACE">Race</md-option>
                 <md-option  value="GENDER">Gender</md-option>
@@ -48,8 +80,15 @@
       </md-fab-speed-dial>
       <md-card flex="100" >
         <md-card-content class="graph">
-          <div class="md-headline">Count of Students Failing Classes (Current Term)</div>
-          <stackedbar control="stackedBarControl" sb-legend-pos="top-right" columns-promise="failingClassesPromise"></stackedbar>
+          <div class="md-headline">Count of Students Failing Classes </div>
+          <div class="md-subhead">
+            <md-input-container>
+              <md-select ng-model="attendanceTerm" ng-change="updateAttendanceTerm()" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+          <stackedbar control="failureControl" sb-legend-pos="top-right" columns-promise="failingClassesPromise"></stackedbar>
           <span class="md-subhead">Number of Classes Failing</span>
         </md-card-content>
       </md-card>
@@ -60,8 +99,15 @@
     <div flex="100" flex-gt-md="100">
       <md-card flex>
         <md-card-content class="graph">
-          <div class="md-headline">Demerit & Merit Counts by Staff (Current Year)</div>
-          <stackedbar columns-promise="teacherBehaviorPromise"></stackedbar>
+          <div class="md-headline">Demerit & Merit Counts by Staff</div>
+          <div class="md-subhead">
+            <md-input-container>
+              <md-select ng-model="demeritTerm" ng-change="updateDemeritTerm()" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+          <stackedbar control="demeritControl" columns-promise="teacherBehaviorPromise"></stackedbar>
         </md-card-content>
       </md-card>
     </div>
