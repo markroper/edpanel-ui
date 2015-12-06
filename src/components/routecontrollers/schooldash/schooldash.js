@@ -67,8 +67,8 @@ angular.module('teacherdashboard')
             var race;
             if ($scope.attendanceBreakdown == "GENDER") {
               var attendanceHistogram = [
-                ['male', 0, 0, 0, 0, 0, 0, 0],
-                ['female', 0, 0, 0, 0, 0, 0, 0],
+                ['Male', 0, 0, 0, 0, 0, 0, 0],
+                ['Female', 0, 0, 0, 0, 0, 0, 0],
                 ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
               ];
 
@@ -83,9 +83,9 @@ angular.module('teacherdashboard')
                 ['White', 0, 0, 0, 0, 0, 0, 0],
                 ['Black', 0, 0, 0, 0, 0, 0, 0],
                 ['Asian', 0, 0, 0, 0, 0, 0, 0],
-                ['Indian', 0, 0, 0, 0, 0, 0, 0],
+                ['American Indian', 0, 0, 0, 0, 0, 0, 0],
                 ['Hispanic', 0, 0, 0, 0, 0, 0, 0],
-                ['Pacific', 0, 0, 0, 0, 0, 0, 0],
+                ['Pacific Islander', 0, 0, 0, 0, 0, 0, 0],
                 ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
               ];
 
@@ -233,9 +233,9 @@ angular.module('teacherdashboard')
               ['White', 0, 0, 0, 0, 0, 0, 0],
               ['Black', 0, 0, 0, 0, 0, 0, 0],
               ['Asian', 0, 0, 0, 0, 0, 0, 0],
-              ['Indian', 0, 0, 0, 0, 0, 0, 0],
+              ['American Indian', 0, 0, 0, 0, 0, 0, 0],
               ['Hispanic', 0, 0, 0, 0, 0, 0, 0],
-              ['Pacific', 0, 0, 0, 0, 0, 0, 0],
+              ['Pacific Islander', 0, 0, 0, 0, 0, 0, 0],
               ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
             ];
 
