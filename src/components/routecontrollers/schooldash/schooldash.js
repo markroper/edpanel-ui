@@ -348,23 +348,6 @@ angular.module('teacherdashboard')
                 'type': 'NUMERIC',
                 'value': schoolId
               }
-            //},
-              //'operator':'AND',
-              //rightHandSide: {
-              //  'type': 'EXPRESSION',
-              //  'leftHandSide': {
-              //    'type': 'DIMENSION',
-              //    'value': {
-              //      'dimension': 'STUDENT',
-              //      'field':'Gender'
-              //    }
-              //  },
-              //  'operator':'EQUAL',
-              //  'rightHandSide': {
-              //    'type':'STRING',
-              //    'value': 'Male'
-              //  }
-              //}
             },
             'operator': 'AND',
             'rightHandSide': {

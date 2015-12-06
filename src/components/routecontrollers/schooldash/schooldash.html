@@ -3,7 +3,14 @@
     <div flex="100" flex-gt-md="33">
       <md-card flex="100" >
         <md-card-content class="graph">
-          <div class="md-headline">Students by GPA Range (Cumulative)</div>
+          <div class="md-headline">Students by GPA Range</div>
+          <div class="md-subhead">
+            <md-input-container>
+              <md-select ng-model="attendanceTerm" ng-change="updateAttendanceTerm()" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
           <stackedbar sb-legend-pos="top-left" columns-promise="gpaDataPromise"></stackedbar>
           <span class="md-subhead">
             GPA Ranges</span>
@@ -75,7 +82,14 @@
       </md-fab-speed-dial>
       <md-card flex="100" >
         <md-card-content class="graph">
-          <div class="md-headline">Count of Students Failing Classes (Current Term)</div>
+          <div class="md-headline">Count of Students Failing Classes </div>
+          <div class="md-subhead">
+            <md-input-container>
+              <md-select ng-model="attendanceTerm" ng-change="updateAttendanceTerm()" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
           <stackedbar control="failureControl" sb-legend-pos="top-right" columns-promise="failingClassesPromise"></stackedbar>
           <span class="md-subhead">Number of Classes Failing</span>
         </md-card-content>
