@@ -1,6 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentsection', [ '$window','statebagApiManager' , 'api', '$compile','$timeout', '$mdToast', function($window, statebagApiManager, api, $compile, $timeout, mdToast) {
+  .directive('studentsection', [ '$window','statebagApiManager' , 'api', '$compile','$timeout', '$mdToast',
+  function($window, statebagApiManager, api, $compile, $timeout, mdToast) {
     return {
       scope: {
         section: '=',
@@ -31,6 +32,7 @@ angular.module('teacherdashboard')
         };
         scope.editGoal = function(section) {
           //Call api to edit the goal
+          $window.ga('send', 'event', 'Goal', 'EditGoal', 'Edit Goal');
           section.editActive = true;
 
         };
@@ -67,6 +69,7 @@ angular.module('teacherdashboard')
         };
 
         scope.showAssignments = function() {
+          $window.ga('send', 'event', 'StudentSection', 'ShowAssignments', 'Show Assignments');
           if($assignmentsContainer.children().length === 0) {
             $assignmentsContainer.append($compile(scatterPlotHtml)(scope));
           }

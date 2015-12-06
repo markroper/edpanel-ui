@@ -189,6 +189,14 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       }
     };
   })
+  .factory('UAService', function() {
+    return {
+      isChrome: /chrome/i.test(navigator.userAgent),
+      isSafari: /safari/i.test(navigator.userAgent),
+      isIE: /MSIE/i.test(navigator.userAgent),
+      isAndroid: /Android/i.test(navigator.userAgent)
+    };
+  })
   .run(['$rootScope', '$state', '$stateParams', 'authorization',
       function($rootScope, $state, $stateParams, authorization) {
         $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {

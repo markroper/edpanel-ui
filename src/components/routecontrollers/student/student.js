@@ -1,7 +1,10 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager',
-  function ($scope, statebag, api, $q, $state, statebagApiManager) {
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location',
+  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location) {
+    $scope.$on('$viewContentLoaded', function() {
+      $window.ga('send', 'pageview', { page: $location.url() });
+    });
     $scope.showFilter=false;
     $scope.students = [];
     $scope.sections = [];

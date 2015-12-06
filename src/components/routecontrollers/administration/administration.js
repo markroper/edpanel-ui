@@ -1,7 +1,11 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast', '$document',
-  function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document) {
+.controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast', '$document', '$window', '$location',
+  function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document, $window, $location) {
+    $scope.$on('$viewContentLoaded', function() {
+      $window.ga('send', 'pageview', { page: $location.url() });
+    });
+
     statebag.currentPage.name = 'System Admin';
     //Resolve the invalidated users
     api.unverifiedUsers.get(
