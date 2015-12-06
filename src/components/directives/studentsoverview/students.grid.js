@@ -1,6 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', function($state, statebag, api, $mdDialog, $compile, $timeout) {
+  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',
+  function($state, statebag, api, $mdDialog, $compile, $timeout, $window) {
     return {
       scope: {
         studentsData: '=',
@@ -89,15 +90,19 @@ angular.module('teacherdashboard')
           }
         };
         $scope.showBehaviorTray = function(ev, student) {
+          $window.ga('send', 'event', 'Home', 'ShowBehavior', 'Open Behavior Tray');
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
         $scope.showHomeworkTray = function(ev, student) {
+          $window.ga('send', 'event', 'Home', 'ShowHomework', 'Open HW Completion Tray');
           $scope.showTray(ev, student, hwCompletionChartHtml);
         };
         $scope.showGpaTray = function(ev, student) {
+          $window.ga('send', 'event', 'Home', 'ShowGpa', 'Open GPA Tray');
           $scope.showTray(ev, student, gpaChartTemplate);
         };
         $scope.showAttendanceTray = function(ev, student) {
+          $window.ga('send', 'event', 'Home', 'ShowAttendance', 'Open Attendance Tray');
           $scope.showTray(ev, student, attendanceTableHtml);
         };
       }
