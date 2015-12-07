@@ -25,7 +25,11 @@ angular.module('teacherdashboard')
       $scope.failingBreakdown = "RACE";
       $scope.attendanceBreakdown = "RACE";
       $scope.attendanceTerm = statebag.currentTerm ;
+      $scope.failingTerm = statebag.currentTerm ;
       $scope.demeritTerm = statebag.currentTerm;
+      //TODO We can't change GPA terms yet
+      //$scope.gpaTerm = statebag.currentTerm;
+      $scope.gpaTerm = "2015-2016";
       $scope.attendanceControl = {
 
       };
@@ -80,11 +84,11 @@ angular.module('teacherdashboard')
               $scope.attendanceControl.updateChart(attendanceHistogram);
             } else {
               var attendanceHistogram = [
-                ['White', 0, 0, 0, 0, 0, 0, 0],
-                ['Black', 0, 0, 0, 0, 0, 0, 0],
+                ['Caucasian', 0, 0, 0, 0, 0, 0, 0],
+                ['African American', 0, 0, 0, 0, 0, 0, 0],
                 ['Asian', 0, 0, 0, 0, 0, 0, 0],
                 ['American Indian', 0, 0, 0, 0, 0, 0, 0],
-                ['Hispanic', 0, 0, 0, 0, 0, 0, 0],
+                ['Hispanic or Latino', 0, 0, 0, 0, 0, 0, 0],
                 ['Pacific Islander', 0, 0, 0, 0, 0, 0, 0],
                 ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
               ];
@@ -102,10 +106,23 @@ angular.module('teacherdashboard')
 
       }
 
+      //TODO REMOVE THIS,
+      //This is a map between the term ids we have and the term ids that are stored in the termGrades of SSG
+      var hackyMap = {
+        1: 115931, //Full year
+        2: 115929, //S1
+        3: 115930, //S2
+        4: 115925, //Q1
+        5: 115926, //Q2
+        6: 115927, //Q3
+        7: 115928 //Q4
+      };
+
       $scope.changeFailingBreakdown = function() {
+
         var failingPromises = [];
 
-        makeFailureRequests(failingPromises);
+        makeFailureRequests(failingPromises, hackyMap[$scope.failingTerm.id]);
 
         $q.all(failingPromises).then(function(results) {
           var failingChartData = [];
@@ -123,7 +140,7 @@ angular.module('teacherdashboard')
 
       var failingPromises = [];
 
-      makeFailureRequests(failingPromises);
+      makeFailureRequests(failingPromises, hackyMap[$scope.failingTerm.id]);
 
       $q.all(failingPromises).then(function(results) {
         var failingChartData = [];
@@ -211,7 +228,6 @@ angular.module('teacherdashboard')
         { schoolId: statebag.school.id },
         getAbsenseAndTardyCount(min, max, statebag.school.id),
         function(results) {
-          console.log(results);
           var singleRowResults;
           var gender;
           var race;
@@ -230,11 +246,11 @@ angular.module('teacherdashboard')
             studentAbsesnseAndTardyDeferred.resolve(attendanceHistogram);
           } else {
             attendanceHistogram = [
-              ['White', 0, 0, 0, 0, 0, 0, 0],
-              ['Black', 0, 0, 0, 0, 0, 0, 0],
+              ['Caucasian', 0, 0, 0, 0, 0, 0, 0],
+              ['African American', 0, 0, 0, 0, 0, 0, 0],
               ['Asian', 0, 0, 0, 0, 0, 0, 0],
               ['American Indian', 0, 0, 0, 0, 0, 0, 0],
-              ['Hispanic', 0, 0, 0, 0, 0, 0, 0],
+              ['Hispanic or Latino', 0, 0, 0, 0, 0, 0, 0],
               ['Pacific Islander', 0, 0, 0, 0, 0, 0, 0],
               ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
             ];
@@ -304,12 +320,12 @@ angular.module('teacherdashboard')
         ).$promise);
       }
 
-      function makeFailureRequests(promises) {
+      function makeFailureRequests(promises, termId) {
         promises.push(api.failingClasses.get(
           {
             schoolId: statebag.school.id,
             schoolYearId: statebag.currentYear.id,
-            termId: statebag.currentTerm.id,
+            termId: termId,
             breakdownKey: $scope.failingBreakdown
           }).$promise);
       }
