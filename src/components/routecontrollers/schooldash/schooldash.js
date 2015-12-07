@@ -28,7 +28,8 @@ angular.module('teacherdashboard')
       $scope.failingTerm = statebag.currentTerm ;
       $scope.demeritTerm = statebag.currentTerm;
       //TODO We can't change GPA terms yet
-      $scope.gpaTerm = statebag.currentTerm;
+      //$scope.gpaTerm = statebag.currentTerm;
+      $scope.gpaTerm = "2015-2016";
       $scope.attendanceControl = {
 
       };
