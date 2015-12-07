@@ -11,24 +11,101 @@ angular.module('teacherdashboard')
       var teacherBehaviorDataDeferred = $q.defer();
       var studentAbsesnseAndTardyDeferred = $q.defer();
       var failingClassesDeferred = $q.defer();
+      var studentGpaDataDeferred = $q.defer();
+      var termsDeferred = $q.defer();
+
+
+      $scope.gpaDataPromise = studentGpaDataDeferred.promise;
       $scope.teacherBehaviorPromise = teacherBehaviorDataDeferred.promise;
       $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
       $scope.failingClassesPromise = failingClassesDeferred.promise;
+      $scope.termsPromise = termsDeferred.promise;
+
+
       $scope.failingBreakdown = "RACE";
-      $scope.stackedBarControl = {
+      $scope.attendanceBreakdown = "RACE";
+      $scope.attendanceTerm = statebag.currentTerm ;
+      $scope.demeritTerm = statebag.currentTerm;
+      $scope.attendanceControl = {
 
       };
+      $scope.failureControl = {
+
+      };
+      $scope.demeritControl = {
+
+      };
+
+      $scope.updateDemeritTerm = function() {
+        var meritDemeritsPromises = [];
+        makeMeritDemeritRequests(meritDemeritsPromises);
+
+        $q.all(meritDemeritsPromises).then(function(results){
+          var meritDemeritChartData = [ ['merits'], ['demerits'], ['teachers'] ];
+          results.forEach(function(entity){
+            for(var i = 0; i < entity.records.length; i++) {
+              var singleRowResults = entity.records[i].values;
+              if(singleRowResults[2] || singleRowResults[3]) {
+                meritDemeritChartData[0].push(singleRowResults[3]);
+                meritDemeritChartData[1].push(singleRowResults[2]);
+                meritDemeritChartData[2].push(singleRowResults[1]);
+              }
+            }
+          });
+          $scope.demeritControl.updateChart(meritDemeritChartData);
+        });
+      };
+
+      $scope.updateAttendanceTerm = function() {
+        var attendanceStatus = [];
+        attendanceStatus.push(api.query.save(
+          { schoolId: statebag.school.id },
+          getAbsenseAndTardyCount($scope.attendanceTerm.startDate, $scope.attendanceTerm.endDate, statebag.school.id)).$promise);
+          $q.all(attendanceStatus).then(function(results){
+            var singleRowResults;
+            var gender;
+            var race;
+            if ($scope.attendanceBreakdown == "GENDER") {
+              var attendanceHistogram = [
+                ['Male', 0, 0, 0, 0, 0, 0, 0],
+                ['Female', 0, 0, 0, 0, 0, 0, 0],
+                ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
+              ];
+
+              for (var i = 0; i < results[0].records.length; i++) {
+                singleRowResults = results[0].records[i].values;
+                gender = singleRowResults[2];
+                generateAttendanceBuckets(singleRowResults, gender, attendanceHistogram);
+              }
+              $scope.attendanceControl.updateChart(attendanceHistogram);
+            } else {
+              var attendanceHistogram = [
+                ['White', 0, 0, 0, 0, 0, 0, 0],
+                ['Black', 0, 0, 0, 0, 0, 0, 0],
+                ['Asian', 0, 0, 0, 0, 0, 0, 0],
+                ['American Indian', 0, 0, 0, 0, 0, 0, 0],
+                ['Hispanic', 0, 0, 0, 0, 0, 0, 0],
+                ['Pacific Islander', 0, 0, 0, 0, 0, 0, 0],
+                ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
+              ];
+
+              for (var i = 0; i < results[0].records.length; i++) {
+                singleRowResults = results[0].records[i].values;
+                race = resolveRaceAttendanceSelector(singleRowResults[3], singleRowResults[4]);
+                generateAttendanceBuckets(singleRowResults, race, attendanceHistogram);
+
+              }
+              $scope.attendanceControl.updateChart(attendanceHistogram);
+            }
+
+      });
+
+      }
 
       $scope.changeFailingBreakdown = function() {
         var failingPromises = [];
 
-        failingPromises.push(api.failingClasses.get(
-          {
-            schoolId: statebag.school.id,
-            schoolYearId: statebag.currentYear.id,
-            termId: statebag.currentTerm.id,
-            breakdownKey: $scope.failingBreakdown
-          }).$promise);
+        makeFailureRequests(failingPromises);
 
         $q.all(failingPromises).then(function(results) {
           var failingChartData = [];
@@ -39,20 +116,15 @@ angular.module('teacherdashboard')
             }
             failingChartData.push(array);
           });
-          $scope.stackedBarControl.updateChart(failingChartData);
+          $scope.failureControl.updateChart(failingChartData);
         });
 
       };
 
       var failingPromises = [];
 
-      failingPromises.push(api.failingClasses.get(
-        {
-          schoolId: statebag.school.id,
-          schoolYearId: statebag.currentYear.id,
-          termId: statebag.currentTerm.id,
-          breakdownKey: $scope.failingBreakdown
-        }).$promise);
+      makeFailureRequests(failingPromises);
+
       $q.all(failingPromises).then(function(results) {
         var failingChartData = [];
         results[0].forEach(function(entity) {
@@ -64,10 +136,26 @@ angular.module('teacherdashboard')
         });
         failingClassesDeferred.resolve(failingChartData);
       });
-      var studentGpaDataDeferred = $q.defer();
-      $scope.teacherBehaviorPromise = teacherBehaviorDataDeferred.promise;
-      $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
-      $scope.gpaDataPromise = studentGpaDataDeferred.promise;
+
+      var termPromises = [];
+      //TODO We should make this work over multiple years
+      termPromises.push(api.terms.get(
+        {
+          schoolId: statebag.school.id,
+          yearId: statebag.currentYear.id
+        }
+      ).$promise);
+      $q.all(termPromises).then(function(results) {
+        var terms = [];
+        results[0].forEach(function(entity) {
+          terms.push(entity);
+        });
+        termsDeferred.resolve(terms);
+        $scope.terms = terms;
+      })
+
+
+
 
 
       //Resolve GPAs for current students
@@ -101,14 +189,8 @@ angular.module('teacherdashboard')
 
       //Resolve merits and demerits awarded by all teachers and admins in the school
       var meritDemeritsPromises = [];
-      meritDemeritsPromises.push(api.query.save(
-        { schoolId: statebag.school.id },
-        getCountsOfTeacherMeritsAndDemerits(min, max)
-      ).$promise);
-      meritDemeritsPromises.push(api.query.save(
-        { schoolId: statebag.school.id },
-        getCountsOfAdminMeritsAndDemerits(min, max)
-      ).$promise);
+      makeMeritDemeritRequests(meritDemeritsPromises);
+
       $q.all(meritDemeritsPromises).then(function(results){
         var meritDemeritChartData = [ ['merits'], ['demerits'], ['teachers'] ];
         results.forEach(function(entity){
@@ -129,33 +211,108 @@ angular.module('teacherdashboard')
         { schoolId: statebag.school.id },
         getAbsenseAndTardyCount(min, max, statebag.school.id),
         function(results) {
-          var attendanceHistogram = [
-            ['students', 0, 0, 0, 0, 0, 0, 0 ],
-            ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
-          ];
-          for(var i = 0; i < results.records.length; i++) {
-            var singleRowResults = results.records[i].values;
-            //TODO: generify, hardocded for excel's formula of a tardy = .2 of an absence
-            var score = singleRowResults[2] + (singleRowResults[3] * 0.2);
-            if(score === 0) {
-              attendanceHistogram[0][1]++;
-            }else if(score <= 1) {
-              attendanceHistogram[0][2]++;
-            } else if(score <= 2) {
-              attendanceHistogram[0][3]++;
-            } else if(score <= 4) {
-              attendanceHistogram[0][4]++;
-            } else if(score <= 6) {
-              attendanceHistogram[0][5]++;
-            } else if(score <= 8) {
-              attendanceHistogram[0][6]++;
-            } else {
-              attendanceHistogram[0][7]++;
+          console.log(results);
+          var singleRowResults;
+          var gender;
+          var race;
+          var attendanceHistogram;
+          if ($scope.attendanceBreakdown == "GENDER") {
+            attendanceHistogram = [
+              ['male', 0, 0, 0, 0, 0, 0, 0],
+              ['female', 0, 0, 0, 0, 0, 0, 0],
+              ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
+            ];
+            for(var i = 0; i < results.records.length; i++) {
+               singleRowResults = results.records[i].values;
+               gender = singleRowResults[2];
+              generateAttendanceBuckets(singleRowResults, gender, attendanceHistogram);
             }
+            studentAbsesnseAndTardyDeferred.resolve(attendanceHistogram);
+          } else {
+            attendanceHistogram = [
+              ['White', 0, 0, 0, 0, 0, 0, 0],
+              ['Black', 0, 0, 0, 0, 0, 0, 0],
+              ['Asian', 0, 0, 0, 0, 0, 0, 0],
+              ['American Indian', 0, 0, 0, 0, 0, 0, 0],
+              ['Hispanic', 0, 0, 0, 0, 0, 0, 0],
+              ['Pacific Islander', 0, 0, 0, 0, 0, 0, 0],
+              ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
+            ];
+
+            for (var i = 0; i < results.records.length; i++) {
+              singleRowResults = results.records[i].values;
+              race = resolveRaceAttendanceSelector(singleRowResults[3], singleRowResults[4]);
+              generateAttendanceBuckets(singleRowResults, race, attendanceHistogram);
+            }
+            studentAbsesnseAndTardyDeferred.resolve(attendanceHistogram);
           }
-          studentAbsesnseAndTardyDeferred.resolve(attendanceHistogram);
         }
       );
+
+      function resolveRaceAttendanceSelector(raceCode, ethnicity) {
+        switch (raceCode) {
+          case "W":
+                return 0;
+          case "B":
+                return 1;
+          case "A":
+                return 2;
+          case "I":
+            if (ethnicity == "YES") {
+              return 4;
+            } else {
+              return 3;
+            }
+          case "P":
+                return 5;
+          default:
+            //TODO There is a null value... what do we do about their race...
+                return 0;
+        }
+      }
+
+      function generateAttendanceBuckets(singleRowResults, rowSelector, attendanceHistogram) {
+          //Male = 0 Female=1;
+          //TODO: generify, hardocded for excel's formula of a tardy = .2 of an absence
+          var score = singleRowResults[5] + (singleRowResults[6] * 0.2);
+          if(score === 0) {
+            attendanceHistogram[rowSelector][1]++;
+          }else if(score <= 1) {
+            attendanceHistogram[rowSelector][2]++;
+          } else if(score <= 2) {
+            attendanceHistogram[rowSelector][3]++;
+          } else if(score <= 4) {
+            attendanceHistogram[rowSelector][4]++;
+          } else if(score <= 6) {
+            attendanceHistogram[rowSelector][5]++;
+          } else if(score <= 8) {
+            attendanceHistogram[rowSelector][6]++;
+          } else {
+            attendanceHistogram[rowSelector][7]++;
+          }
+
+      }
+
+      function makeMeritDemeritRequests(promises) {
+        promises.push(api.query.save(
+          { schoolId: statebag.school.id },
+          getCountsOfTeacherMeritsAndDemerits($scope.demeritTerm.startDate, $scope.demeritTerm.endDate)
+        ).$promise);
+        promises.push(api.query.save(
+          { schoolId: statebag.school.id },
+          getCountsOfAdminMeritsAndDemerits($scope.demeritTerm.startDate, $scope.demeritTerm.endDate)
+        ).$promise);
+      }
+
+      function makeFailureRequests(promises) {
+        promises.push(api.failingClasses.get(
+          {
+            schoolId: statebag.school.id,
+            schoolYearId: statebag.currentYear.id,
+            termId: statebag.currentTerm.id,
+            breakdownKey: $scope.failingBreakdown
+          }).$promise);
+      }
 
       function getAbsenseAndTardyCount(startDate, endDate, schoolId) {
         if(!schoolId) {
@@ -168,10 +325,15 @@ angular.module('teacherdashboard')
           ],
           'fields':[
             { 'dimension':'STUDENT','field':'ID' },
-            { 'dimension':'STUDENT','field':'Name' }
+            { 'dimension':'STUDENT','field':'Name' },
+            { 'dimension':'STUDENT','field':'Gender'},
+            { 'dimension':'STUDENT','field':'Race'},
+            {'dimension':'STUDENT', 'field':'Ethnicity'}
+
           ],
           'filter': {
             'type': 'EXPRESSION',
+            //'leftHandSide': {
             'leftHandSide': {
               'type': 'EXPRESSION',
               'leftHandSide': {
