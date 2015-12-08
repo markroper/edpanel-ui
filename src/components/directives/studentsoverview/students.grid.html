@@ -18,7 +18,7 @@
 			<div hide-sm layout="row" style="font-size: 16px; width:100%;">
 				<div flex="{{::cellWidth}}" class="table-cell" ng-show="showFilter"></div>
 				<div flex="{{::cellWidth}}" class="table-cell">Behavior</div>
-				<div flex="{{::cellWidth}}" class="table-cell">Homework</div>
+				<div flex="{{::cellWidth}}" class="table-cell">HW Completion</div>
 				<div flex="{{::cellWidth}}" class="table-cell">Attendance</div>
 				<div flex="{{::cellWidth}}" class="table-cell">GPA</div>
 			</div>
@@ -46,7 +46,7 @@
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
               <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
             </div>
-            <md-tooltip>{{::student.homework || 0}}% yearly completion</md-tooltip>
+            <md-tooltip>{{::student.homework || 0}}% annual completion</md-tooltip>
           </div>
         </div>
         <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showAttendanceTray($event, student)">
