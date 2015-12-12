@@ -9,6 +9,12 @@ angular.module('teacherdashboard').
       statebag.currentYear = statebagapimanager.resolveCurrentYear();
       statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
       statebag.lastFullRefresh = null;
+
+      //TODO GET BACK TO THIS CHRIS
+      if (statebag.userRole == "TEACHER") {
+        console.log("WINNING");
+      }
+      console.log(statebag.userRole);
       $state.go('app.home', { schoolId: statebag.school.id });
     }
     api.schools.get({}, function(results){
