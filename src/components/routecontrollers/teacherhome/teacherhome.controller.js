@@ -74,6 +74,7 @@ angular.module('teacherdashboard')
             for (var i = 0; i < data.length; i++) {
               total += data[i].grade;
             }
+            statebag.currentSections[index]["gradeClass"] = statebagApiManager.resolveSectionGradeClass(total/data.length);
             statebag.currentSections[index]["aveGrade"] = total/data.length;
           },
           //Error callback

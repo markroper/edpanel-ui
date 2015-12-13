@@ -72,6 +72,22 @@ angular.module('teacherdashboard')
         return statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
       }
     },
+    resolveSectionGradeClass: function(sectionGrade) {
+      //What shoudl these values be?
+      var greenThreshold = 85;
+      var yellowThreshold = 70;
+      if(statebag.uiAttributes) {
+        greenThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.green;
+        yellowThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.yellow;
+      }
+      if(sectionGrade < yellowThreshold) {
+        return '40-50';
+      } else if(sectionGrade < greenThreshold) {
+        return '70-80';
+      } else {
+        return '90-100';
+      }
+    },
     retrieveAndCacheSchool: function(schoolId) {
       var that = this;
       return api.school.get(
@@ -386,6 +402,8 @@ angular.module('teacherdashboard')
       };
     return query;
   }
+
+
   /*
    * Helper functions below
    */
@@ -419,6 +437,7 @@ angular.module('teacherdashboard')
       return '90-100';
     }
   }
+
   function resolveHomeworkClass(homeworkScore) {
     var greenThreshold = 0.92;
     var yellowThreshold = 0.89;

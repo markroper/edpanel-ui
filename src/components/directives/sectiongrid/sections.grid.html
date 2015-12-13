@@ -32,7 +32,7 @@
           </section>
         </div>
         <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showBehaviorTray($event, student)">
-          <div class="choropleth band-40-50" layout="row" layout-align="center center">
+          <div class="choropleth band-{{::section.gradeClass}}" layout="row" layout-align="center center">
             <span class="mobile-label md-subhead" hide-gt-sm>Behavior</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
               <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
