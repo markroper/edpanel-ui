@@ -1,8 +1,8 @@
 <md-toolbar layout="row" md-theme="{{theme}}">
   <md-icon md-ink-ripple md-font-set="material-icons" ng-click="toggleSideNav()" class="material-icons md-24 arrow-icon"> menu </md-icon>
-  <div style="outline:none;" class="md-toolbar-tools" tabindex="0">
-    <span flex="none" style="outline:none; cursor:pointer;" ng-click="goToHome()">Excel Academy</span>
-    <span flex layout="row"><span ng-show="currentPage.name">&nbsp; > &nbsp;</span><span class="page-title">{{currentPage.name}}</span></span>
+  <div style="outline:none;" class="md-toolbar-tools no-select" tabindex="0">
+    <span flex="none" class="no-select" style="outline:none; cursor:pointer;" ng-click="goToHome()">Excel Academy</span>
+    <span flex layout="row"><span class="page-title" ng-show="currentPage.name">&nbsp; > &nbsp;</span><span class="page-title">{{currentPage.name}}</span></span>
     <div flex="none" layout="column" layout-gt-md="row">
     <md-menu-bar>
       <md-menu md-position-mode="target-right target" md-offset="0 78" >

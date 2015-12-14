@@ -17,6 +17,25 @@ angular.module('teacherdashboard')
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
         var gpaChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="calculationDate" key-to-y="score" date-time-data-promise="gpaDataPromise"></datetimechart></div>';
 
+        //Use the name as the sort field for the list, to start
+        $scope.order = 'name';
+        $scope.sortElement = null;
+        $scope.setOrder = function(ev, keyToUse) {
+          var el = angular.element(ev.target);
+          if($scope.sortElement) {
+            $scope.sortElement.removeClass('desc');
+            $scope.sortElement.removeClass('asc');
+          }
+          if($scope.order === keyToUse) {
+            keyToUse = '-' + keyToUse;
+            el.addClass('desc');
+          } else {
+            el.addClass('asc');
+          }
+          $scope.sortElement = el;
+          $scope.order = keyToUse;
+        };
+
         $scope.showMoreStudents = true;
         $scope.limit = 30;
         $scope.increaseLimit = function() {
