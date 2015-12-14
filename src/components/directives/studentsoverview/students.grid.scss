@@ -8,6 +8,27 @@
 }
 
 .students-grid {
+  .list-filter {
+    padding: 3px 0px;
+    cursor: pointer;
+    position:relative;
+    .sort-icon {
+      display: none;
+      position: absolute;
+      right:10px;
+      top:0;
+    }
+  }
+  .list-filter:hover .sort-icon {
+    display: inline-block;
+  }
+  .list-filter.desc .sort-icon {
+    display: inline-block;
+    transform: rotate(180deg);
+  }
+  .list-filter.asc .sort-icon {
+    display:inline-block;
+  }
   md-input-container {
     margin:10px 0px;
   }

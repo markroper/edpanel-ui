@@ -17,12 +17,24 @@
 		<div class="table-container" ng-show="studentsData">
 			<div hide-sm layout="row" style="font-size: 16px; width:100%;">
 				<div flex="{{::cellWidth}}" class="table-cell" ng-show="showFilter"></div>
-				<div flex="{{::cellWidth}}" class="table-cell">Behavior</div>
-				<div flex="{{::cellWidth}}" class="table-cell">HW Completion</div>
-				<div flex="{{::cellWidth}}" class="table-cell">Attendance</div>
-				<div flex="{{::cellWidth}}" class="table-cell">GPA</div>
+				<div flex="{{::cellWidth}}" class="table-cell list-filter" ng-click="setOrder($event, 'behavior')">
+          Behavior
+          <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
+        </div>
+				<div flex="{{::cellWidth}}" class="table-cell list-filter" ng-click="setOrder($event, 'homework')">
+          HW Completion
+          <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
+        </div>
+				<div flex="{{::cellWidth}}" class="table-cell list-filter" ng-click="setOrder($event, 'attendance')">
+          Attendance
+          <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
+        </div>
+				<div flex="{{::cellWidth}}" class="table-cell list-filter" ng-click="setOrder($event, 'gpa')">
+          GPA
+          <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
+        </div>
 			</div>
-      <div class="table-row" layout="row" layout-wrap ng-repeat="student in studentsData | orderBy:'name' | filter:search:strict | limitTo: limit track by student.id">
+      <div class="table-row" layout="row" layout-wrap ng-repeat="student in studentsData | orderBy:order | filter:search:strict | limitTo: limit track by student.id">
         <div class="table-cell" flex="{{::cellWidth}}" flex-sm="100" ng-show="showFilter">
           <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
             <md-button md-no-ink class="md-primary" ng-click="goToStudent(student)">
