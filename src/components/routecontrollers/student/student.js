@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location',
-  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location) {
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll',
+  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll) {
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: $location.url() });
     });
@@ -34,7 +34,10 @@ angular.module('teacherdashboard')
     } else {
       resolveAllData();
     }
-
+    $scope.scrollToCard = function(idName) {
+      $location.hash('section-card-' + idName);
+      $anchorScroll();
+    }
     function resolveAllData() {
       resolveStudentSectionData();
       resolveBehaviorData();
