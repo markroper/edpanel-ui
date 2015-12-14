@@ -17,19 +17,19 @@
 		<div class="table-container" ng-show="studentsData">
 			<div hide-sm layout="row" style="font-size: 16px; width:100%;">
 				<div flex="{{::cellWidth}}" class="table-cell" ng-show="showFilter"></div>
-				<div flex="{{::cellWidth}}" class="table-cell list-filter" ng-click="setOrder($event, 'behavior')">
+				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'behavior')">
           Behavior
           <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
         </div>
-				<div flex="{{::cellWidth}}" class="table-cell list-filter" ng-click="setOrder($event, 'homework')">
+				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'homework')">
           HW Completion
           <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
         </div>
-				<div flex="{{::cellWidth}}" class="table-cell list-filter" ng-click="setOrder($event, 'attendance')">
+				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'attendance')">
           Attendance
           <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
         </div>
-				<div flex="{{::cellWidth}}" class="table-cell list-filter" ng-click="setOrder($event, 'gpa')">
+				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'gpa')">
           GPA
           <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
         </div>
