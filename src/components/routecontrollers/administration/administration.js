@@ -144,8 +144,8 @@ angular.module('teacherdashboard')
     $scope.printCredentials = function (divName) {
       var printContents = $document[0].getElementById(divName).innerHTML;
       var popupWin;
-      if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
-        popupWin = window.open('', '_blank', 'width=600,height=600,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
+      if ($window.navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+        popupWin = $window.open('', '_blank', 'width=600,height=600,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
         popupWin.window.focus();
         popupWin.document.write('<!DOCTYPE html><html><head>' +
           '<link rel="stylesheet" type="text/css" href="style.css" />' +
@@ -161,7 +161,7 @@ angular.module('teacherdashboard')
           popupWin.close();
         };
       } else {
-        popupWin = window.open('', '_blank', 'width=800,height=600');
+        popupWin = $window.open('', '_blank', 'width=800,height=600');
         popupWin.document.open();
         popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</html>');
         popupWin.document.close();

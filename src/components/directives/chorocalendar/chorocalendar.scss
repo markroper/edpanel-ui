@@ -1,7 +1,20 @@
+.choro-tooltip {
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  height: 12px;
+  padding: 4px;
+  margin-top: -20px;
+  font: 10px sans-serif;
+  background-color: rgba(0,0,0,0.54);
+  color: white;
+  border-radius: 3px;
+  pointer-events: none;
+}
 .choropleth {
   font: 1.1em;
   position:relative;
-  
+
   .close-cal {
     position: absolute;
     top: 0px;

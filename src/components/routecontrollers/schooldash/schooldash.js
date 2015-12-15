@@ -6,8 +6,8 @@ angular.module('teacherdashboard')
         $window.ga('send', 'pageview', { page: $location.url() });
       });
       statebag.currentPage.name = 'School Dashboard';
-      var min = moment(statebag.currentTerm.startDate).valueOf();
-      var max = moment(statebag.currentTerm.endDate).valueOf();
+      var min = $window.moment(statebag.currentTerm.startDate).valueOf();
+      var max = $window.moment(statebag.currentTerm.endDate).valueOf();
       var teacherBehaviorDataDeferred = $q.defer();
       var studentAbsesnseAndTardyDeferred = $q.defer();
       var failingClassesDeferred = $q.defer();

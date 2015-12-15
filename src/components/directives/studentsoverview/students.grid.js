@@ -91,8 +91,8 @@ angular.module('teacherdashboard')
             } else if(template === hwCompletionChartHtml) {
               $scope.choroScope.dateTimeDataPromise = api.studentHwRates.get({
                   studentId: student.id,
-                  startDate: moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
-                  endDate: moment(statebag.currentYear.endDate).format('YYYY-MM-DD')
+                  startDate: $window.moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
+                  endDate: $window.moment(statebag.currentYear.endDate).format('YYYY-MM-DD')
                 }).$promise;
             } else if(template === gpaChartTemplate) {
               $scope.choroScope.gpaDataPromise = api.gpasOverTime.get(

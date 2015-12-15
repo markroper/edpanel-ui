@@ -1,14 +1,14 @@
 'use strict';
 angular.module('teacherdashboard')
-.service('statebagApiManager', ['statebag', '$q', 'api', function(statebag, $q, api){
+.service('statebagApiManager', ['statebag', '$q', 'api', '$window', function(statebag, $q, api, $window){
   var DATE_FORMAT = 'YYYY-MM-DD';
   //Returns a promise
   return {
     resolveCurrentYear: function() {
       var currentTime = new Date().getTime();
       for(var i = 0; i < statebag.school.years.length; i++) {
-        if(moment(statebag.school.years[i].startDate).valueOf() <= currentTime ||
-          moment(statebag.school.years[i].endDate).valueOf() >= currentTime) {
+        if($window.moment(statebag.school.years[i].startDate).valueOf() <= currentTime ||
+          $window.moment(statebag.school.years[i].endDate).valueOf() >= currentTime) {
           return statebag.school.years[i];
         }
         return statebag.school.years[statebag.school.years.length - 1];
@@ -50,8 +50,8 @@ angular.module('teacherdashboard')
       //Find a full year term whose date range encloses the current date
       for(var i = 0; i < statebag.currentYear.terms.length; i++) {
         var portion = statebag.currentYear.terms[i].portion;
-        termStart = moment(statebag.currentYear.terms[i].startDate).valueOf();
-        termEnd = moment(statebag.currentYear.terms[i].endDate).valueOf();
+        termStart = $window.moment(statebag.currentYear.terms[i].startDate).valueOf();
+        termEnd = $window.moment(statebag.currentYear.terms[i].endDate).valueOf();
         if(portion && portion === 1) {
           fullYearTerms.push(statebag.currentYear.terms[i]);
           if(termStart <= currentTime && termEnd >= currentTime) {
@@ -61,8 +61,8 @@ angular.module('teacherdashboard')
       }
       //Find any term whose date range encloses the current date
       for(var j = 0; j < statebag.currentYear.terms.length; j++) {
-        termStart = moment(statebag.currentYear.terms[j].startDate).valueOf();
-        termEnd = moment(statebag.currentYear.terms[j].endDate).valueOf();
+        termStart = $window.moment(statebag.currentYear.terms[j].startDate).valueOf();
+        termEnd = $window.moment(statebag.currentYear.terms[j].endDate).valueOf();
         if(termStart <= currentTime && termEnd >= currentTime) {
           return statebag.currentYear.terms[j];
         }
@@ -130,8 +130,8 @@ angular.module('teacherdashboard')
         studentDataPromises.push(api.gpa.get({schoolId: statebag.school.id, id: studentIds}).$promise);
         studentDataPromises.push(api.studentsPrepScores.get({
           studentId: studentIds,
-          startDate: moment(statebag.currentYear.startDate).format(DATE_FORMAT),
-          endDate: moment().format(DATE_FORMAT)
+          startDate: $window.moment(statebag.currentYear.startDate).format(DATE_FORMAT),
+          endDate: $window.moment().format(DATE_FORMAT)
         }).$promise);
 
         //When both the GPA and HW/Attendance queries have returned, populate the objects bound to the DOM!
@@ -168,8 +168,8 @@ angular.module('teacherdashboard')
             var score = responses[3][student];
             var pluckedStudent = studentMap[score.studentId];
             if(pluckedStudent && score.endDate &&
-                ( !maxEndDate || maxEndDate <= moment(score.endDate).valueOf())) {
-              maxEndDate = moment(score.endDate).valueOf();
+                ( !maxEndDate || maxEndDate <= $window.moment(score.endDate).valueOf())) {
+              maxEndDate = $window.moment(score.endDate).valueOf();
               pluckedStudent.behavior = score.score;
               pluckedStudent.behaviorClass = resolveBehaviorClass(pluckedStudent.behavior);
               pluckedStudent.behaviorPeriod = returnComponentPeriod('behavior');
@@ -220,25 +220,25 @@ angular.module('teacherdashboard')
       case 'day':
         break;
       case 'week':
-        dates.min = moment().day(0).valueOf();
-        dates.max = moment().valueOf();
+        dates.min = $window.moment().day(0).valueOf();
+        dates.max = $window.moment().valueOf();
         break;
       case 'month':
-        dates.min = moment().date(1).valueOf();
-        dates.max = moment().valueOf();
+        dates.min = $window.moment().date(1).valueOf();
+        dates.max = $window.moment().valueOf();
         break;
       case 'term':
-        dates.min = moment(statebag.currentTerm.startDate).valueOf();
-        dates.max = moment(statebag.currentTerm.endDate).valueOf();
+        dates.min = $window.moment(statebag.currentTerm.startDate).valueOf();
+        dates.max = $window.moment(statebag.currentTerm.endDate).valueOf();
         break;
       case 'year':
-        dates.min = moment(statebag.currentYear.startDate).valueOf();
-        dates.max = moment(statebag.currentYear.endDate).valueOf();
+        dates.min = $window.moment(statebag.currentYear.startDate).valueOf();
+        dates.max = $window.moment(statebag.currentYear.endDate).valueOf();
         break;
     }
     //Never let a max date be greater than the current date, duh
-    if(dates.max > moment().valueOf()) {
-      dates.max = moment().valueOf();
+    if(dates.max > $window.moment().valueOf()) {
+      dates.max = $window.moment().valueOf();
     }
     return dates;
   }
