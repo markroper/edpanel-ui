@@ -22,7 +22,7 @@ angular.module('teacherdashboard')
       link: function(scope, elem, attrs){
         var insetPosition = attrs.sbLegendPos;
         if(typeof insetPosition === 'undefined') {
-          insetPosition = "top-left";
+          insetPosition = 'top-left';
         }
         scope.internalControl = scope.control || {};
         scope.internalControl.updateChart = function(newData) {
@@ -30,7 +30,7 @@ angular.module('teacherdashboard')
           // the groups correctly
           createChart(newData);
 
-        }
+        };
         scope.columnsPromise.then(function(theData){
           createChart(theData);
         });
@@ -69,8 +69,7 @@ angular.module('teacherdashboard')
               }
             }
           });
-
-        }
+        };
       }
     };
   }]);

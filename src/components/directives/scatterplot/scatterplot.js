@@ -11,7 +11,6 @@ angular.module('teacherdashboard')
       replace: true,
       controllerAs: 'ctrl',
       link: function(scope, elem){
-        var start = new Date().getTime();
         scope.tableConfig = {
           data: 'assignments',
           enableColumnMenus: false,

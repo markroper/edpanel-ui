@@ -15,11 +15,11 @@ angular.module('teacherdashboard')
 
     $scope.changePassword = function() {
       if(!$scope.newPassword || !$scope.newPassword2) {
-        $scope.error.msg = "Please type a new password twice";
+        $scope.error.msg = 'Please type a new password twice';
       } else if($scope.newPassword !== $scope.newPassword2) {
-        $scope.error.msg = "The passwords you typed don't match";
+        $scope.error.msg = 'The passwords you typed don\'t match';
       }else if ($scope.newPassword.length < 8) {
-        $scope.error.msg = "Passwords must be at least 8 chars";
+        $scope.error.msg = 'Passwords must be at least 8 chars';
       } else {
         $scope.error.msg = null;
         $scope.mode = 'indeterminate';
@@ -50,11 +50,11 @@ angular.module('teacherdashboard')
               data.type === consts.roles.SUPER_ADMIN) {
               $state.go('app.schoolSelector');
             }
-          }),
+          },
           function() {
             $scope.mode = '';
-            $scope.error.msg = "Could not update password";
-          };
+            $scope.error.msg = 'Could not update password';
+          });
       }
-    }
+    };
   }]);

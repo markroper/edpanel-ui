@@ -10,8 +10,8 @@ angular.module('teacherdashboard').
       statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
       statebag.lastFullRefresh = null;
       $state.go('app.home', { schoolId: statebag.school.id });
-    }
+    };
     api.schools.get({}, function(results){
       $scope.schools = results;
-    })
+    });
   }]);

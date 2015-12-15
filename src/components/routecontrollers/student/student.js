@@ -37,7 +37,7 @@ angular.module('teacherdashboard')
     $scope.scrollToCard = function(idName) {
       $location.hash('section-card-' + idName);
       $anchorScroll();
-    }
+    };
     function resolveAllData() {
       resolveStudentSectionData();
       resolveBehaviorData();
