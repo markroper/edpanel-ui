@@ -23,6 +23,18 @@ angular.module('teacherdashboard')
       $scope.$on('$viewContentLoaded', function() {
         $window.ga('send', 'pageview', { page: $location.url() });
       });
+
+      $scope.surveyType = 'school';
+      $scope.survey = {
+        name: 'mark\s survey',
+        administeredDate: $window.moment().toDate(),
+        questions: [
+          { question: 'what is the question?', required: true, type: 'OPEN_RESPONSE' },
+          { question: 'i can\'t hear you', required: false, type: 'TRUE_FALSE' },
+          { question: 'pick from choices', required: true, type: 'MULTIPLE_CHOICE', choices: ['one', 'two', 'buckle my shoe'] }
+        ]
+      }
+
       statebag.currentPage.name = 'Login';
 	    $scope.inputEmail = '';
       $scope.password = '';

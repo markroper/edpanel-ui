@@ -1,5 +1,5 @@
 'use strict';
-angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.grid', 'ui.grid.pagination'])
+angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.grid', 'ui.grid.pagination', 'angular-sortable-view'])
   .config(function ($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider, $httpProvider, $locationProvider, constsProvider) {
     //Forces angular to request that any CORS cookies be sent back by the server
     $httpProvider.defaults.withCredentials = true;

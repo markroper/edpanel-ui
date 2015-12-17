@@ -1,0 +1,41 @@
+<div class="survey-question-builder">
+  <div class="md-title">Question</div>
+  <md-input-container class="md-icon-float md-block">
+    <!-- Use floating label instead of placeholder -->
+    <label>Question</label>
+    <input ng-model="question.question" type="text">
+  </md-input-container>
+  <div layout layout-align="center center">
+    <md-input-container flex="50">
+      <label>Question type</label>
+      <md-select ng-model="question.type">
+        <md-option value="TRUE_FALSE">
+          Boolean
+        </md-option>
+        <md-option value="OPEN_RESPONSE">
+          Open response
+        </md-option>
+        <md-option value="MULTIPLE_CHOICE">
+          Multiple choice
+        </md-option>
+      </md-select>
+    </md-input-container>
+    <md-checkbox ng-model="question.required" aria-label="required" flex="50">
+      answer required
+    </md-checkbox>
+  </div>
+  <div ng-show="question.type === 'MULTIPLE_CHOICE'">
+    <div class="md-title">Choices</div>
+    <div layout layout-align="center center" class="choice md-subhead" ng-repeat="choice in question.choices">
+      <div style="position:relative" flex="100">{{choice}}
+        <md-button class="remove-question md-warn" aria-label="Remove question" ng-click="removeChoice(choice)">
+          <md-icon md-font-set="material-icons">clear</md-icon>
+        </md-button>
+      </div>
+    </div>
+  </div>
+  <md-button class="remove-question md-warn" aria-label="Remove question" ng-click="removeQuestion(question)">
+    <md-icon md-font-set="material-icons">clear</md-icon>
+    <md-tooltip>remove question</md-tooltip>
+  </md-button>
+</div>
