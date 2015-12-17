@@ -19,8 +19,14 @@ angular.module('teacherdashboard')
         $scope.removeChoice = function(choice) {
           $scope.question.choices =
             $scope.question.choices.filter(function (el) {
-              return el !== choice;
+              return el.val !== choice;
             });
+        };
+        $scope.addChoice = function() {
+          if(!$scope.question.choices) {
+            $scope.question.choices = [];
+          }
+          $scope.question.choices.push({val:''});
         };
       }
     };

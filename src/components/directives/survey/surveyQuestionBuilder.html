@@ -1,11 +1,10 @@
-<div class="survey-question-builder">
-  <div class="md-title">Question</div>
+<div class="survey-question-builder md-whiteframe-1dp">
   <md-input-container class="md-icon-float md-block">
     <!-- Use floating label instead of placeholder -->
     <label>Question</label>
     <input ng-model="question.question" type="text">
   </md-input-container>
-  <div layout layout-align="center center">
+  <div layout layout-align="space-around center" class="type-required">
     <md-input-container flex="50">
       <label>Question type</label>
       <md-select ng-model="question.type">
@@ -24,15 +23,20 @@
       answer required
     </md-checkbox>
   </div>
-  <div ng-show="question.type === 'MULTIPLE_CHOICE'">
-    <div class="md-title">Choices</div>
-    <div layout layout-align="center center" class="choice md-subhead" ng-repeat="choice in question.choices">
-      <div style="position:relative" flex="100">{{choice}}
-        <md-button class="remove-question md-warn" aria-label="Remove question" ng-click="removeChoice(choice)">
+  <div class="choices" ng-show="question.type === 'MULTIPLE_CHOICE'">
+    <div class="md-subhead" layout layout-align="center center">
+      Choices
+      <md-button class="md-fab-mini md-primary md-hue-2" aria-label="Add Choice" ng-click="addChoice()">
+        <md-icon md-font-set="material-icons">add</md-icon>
+        <md-tooltip>add choice</md-tooltip>
+      </md-button>
+    </div>
+      <md-input-container class="md-icon-float md-block" class="choice md-subhead" ng-repeat="choice in question.choices">
+        <input ng-model="choice.val" type="text">
+        <md-button class="remove-question md-warn" aria-label="Remove question" ng-click="removeChoice(choice.val)">
           <md-icon md-font-set="material-icons">clear</md-icon>
         </md-button>
-      </div>
-    </div>
+      </md-input-container>
   </div>
   <md-button class="remove-question md-warn" aria-label="Remove question" ng-click="removeQuestion(question)">
     <md-icon md-font-set="material-icons">clear</md-icon>

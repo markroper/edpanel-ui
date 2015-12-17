@@ -2,19 +2,31 @@
   cursor: grabbing;
 }
 .survey-question-builder {
+  > md-input-container {
+    margin: 0px 0px;
+  }
   background-color: white;
   border-radius: 3px;
   margin:5px;
   position:relative;
   padding: 30px;
   cursor: grab;
-  .choice {
-    padding-left: 15px;
-    > div {
-      height: 40px;
-      padding-top:8px;
+  .type-required > md-input-container {
+    padding-right:25px;
+  }
+  .choices {
+    text-align: center;
+    md-input-container {
+      margin: 0px 0px;
+      padding-right:75px;
     }
-    postiion:relative;
+    .choice {
+      > div {
+        height: 40px;
+        padding-top: 8px;
+      }
+      postiion: relative;
+    }
   }
   .remove-question {
     margin: 0px 0px;

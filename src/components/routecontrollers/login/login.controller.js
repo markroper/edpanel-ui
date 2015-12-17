@@ -31,7 +31,7 @@ angular.module('teacherdashboard')
         questions: [
           { question: 'what is the question?', required: true, type: 'OPEN_RESPONSE' },
           { question: 'i can\'t hear you', required: false, type: 'TRUE_FALSE' },
-          { question: 'pick from choices', required: true, type: 'MULTIPLE_CHOICE', choices: ['one', 'two', 'buckle my shoe'] }
+          { question: 'pick from choices', required: true, type: 'MULTIPLE_CHOICE', choices: [{val: 'one'}, {val: 'two'}, {val:'buckle my shoe'}] }
         ]
       }
 
