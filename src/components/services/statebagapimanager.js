@@ -103,6 +103,36 @@ angular.module('teacherdashboard')
             console.log('failed to resolve the school!');
       }).$promise;
     },
+    resolveAttendanceClass: function(attendanceScore) {
+    var greenThreshold = 3;
+    var yellowThreshold = 6;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.attendance.green;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.attendance.yellow;
+    }
+    if(attendanceScore <= greenThreshold) {
+      return '90-100';
+    } else if(attendanceScore < yellowThreshold) {
+      return '70-80';
+    } else {
+      return '40-50';
+    }
+  },
+    resolveHomeworkClass: function(homeworkScore) {
+    var greenThreshold = 0.92;
+    var yellowThreshold = 0.89;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.homework.green/100;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.homework.yellow/100;
+    }
+    if(homeworkScore < yellowThreshold) {
+      return '40-50';
+    } else if(homeworkScore < greenThreshold) {
+      return '70-80';
+    } else {
+      return '90-100';
+    }
+  },
     retrieveAndCacheStudentPerfData: function() {
       var deferred = $q.defer();
 
@@ -438,36 +468,8 @@ angular.module('teacherdashboard')
     }
   }
 
-  function resolveHomeworkClass(homeworkScore) {
-    var greenThreshold = 0.92;
-    var yellowThreshold = 0.89;
-    if(statebag.uiAttributes) {
-      greenThreshold = statebag.uiAttributes.attributes.jsonNode.homework.green/100;
-      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.homework.yellow/100;
-    }
-    if(homeworkScore < yellowThreshold) {
-      return '40-50';
-    } else if(homeworkScore < greenThreshold) {
-      return '70-80';
-    } else {
-      return '90-100';
-    }
-  }
-  function resolveAttendanceClass(attendanceScore) {
-    var greenThreshold = 3;
-    var yellowThreshold = 6;
-    if(statebag.uiAttributes) {
-      greenThreshold = statebag.uiAttributes.attributes.jsonNode.attendance.green;
-      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.attendance.yellow;
-    }
-    if(attendanceScore <= greenThreshold) {
-      return '90-100';
-    } else if(attendanceScore < yellowThreshold) {
-      return '70-80';
-    } else {
-      return '40-50';
-    }
-  }
+
+
   function resolveGpaClass(gpa) {
     var greenThreshold = 3.3;
     var yellowThreshold = 2.8;

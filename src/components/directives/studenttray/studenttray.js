@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',
+  .directive('studentTray', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',
   function($state, statebag, api, $mdDialog, $compile, $timeout, $window) {
     return {
       scope: {
@@ -9,15 +9,11 @@ angular.module('teacherdashboard')
         cellWidth: '@'
       },
       restrict: 'E',
-      templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
+      templateUrl: api.basePrefix + '/components/directives/studenttray/studenttray.html',
       replace: true,
       controller: function($scope) {
-        var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
-        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
-        var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
-        var gpaChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="calculationDate" key-to-y="score" date-time-data-promise="gpaDataPromise"></datetimechart></div>';
-
-        $scope.showMoreStudents = true;
+        console.log($scope.studentsData);
+   $scope.showMoreStudents = true;
         $scope.limit = 30;
         $scope.increaseLimit = function() {
           if ($scope.studentsData && $scope.limit < $scope.studentsData.length) {

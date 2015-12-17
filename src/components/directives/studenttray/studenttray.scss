@@ -1,0 +1,125 @@
+@keyframes slideOpenVertical {
+	0% { height: 0px; }
+	100% { height: 310px; }
+}
+@keyframes slideClosedVertical {
+	0% { height:310px; }
+	100% { height: 0px; }
+}
+
+.student-tray {
+  md-input-container {
+    margin:10px 0px;
+  }
+  .toggle-icon-wrapper {
+    height:100%;
+    md-icon {
+      transform: rotate(0deg);
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.5s linear;
+      -webkit-transition: 250ms ease all;
+      -moz-transition: 250ms ease all;
+      -o-transition: 250ms ease all;
+      transition: 250ms ease all;
+    }
+  }
+  .choropleth:hover {
+    md-icon {
+      visibility: visible;
+      opacity: 1;
+      color:rgb(255,64,129);
+    }
+  }
+  .deployed .toggle-icon-wrapper md-icon {
+    transform: rotate(180deg);
+    visibility: visible;
+    opacity: 1;
+  }
+
+	.slidercontainer {
+    overflow: hidden;
+    animation: slideOpenVertical 250ms linear;
+	}
+	.oldslidercontainer {
+		overflow:hidden;
+		height:0;
+		animation: slideClosedVertical 250ms linear;
+	}
+
+	div {
+		outline:none;
+	}
+	md-card {
+		padding: 0px 20px 0px 20px;
+	}
+	button.md-primary {
+		width: 100%;
+    margin: 0px;
+		text-overflow: ellipsis;
+	}
+	button > span {
+		margin: 0px 0px 0px 0px;
+		font-size: 16px;
+		text-overflow: ellipsis;
+	}
+	.md-36 { font-size: 36px; }
+	input.md-input { font-size: 18px; width:225px;}
+	.table-container{
+		width:100%;
+		max-width:1200px;
+		text-align: center;
+		vertical-align: middle;
+		.table-row {
+			.table-cell {
+				.student-link {
+					cursor: pointer;
+				}
+				.choropleth {
+					vertical-align: inherit;
+					height:38px;
+					border: 1px solid $off-white;
+					cursor: pointer;
+					.mobile-label {
+            color: $off-white;
+						font-size: 16px;
+					}
+				}
+			}
+		}
+	}
+	.band-0 {
+		background-color: #E6E6E6;
+	}
+
+	.band-0-10 {
+		background-color: $red-color;
+	}
+	.band-10-20 {
+		background-color: $red-color;
+	}
+	.band-20-30 {
+		background-color: $red-color;
+	}
+	.band-30-40 {
+		background-color: $red-color;
+	}
+	.band-40-50 {
+		background-color: $red-color;
+	}
+	.band-50-60 {
+		background-color: $red-color;
+	}
+	.band-60-70 {
+		background-color: $yellow-color;
+	}
+	.band-70-80 {
+		background-color: $yellow-color;
+	}
+	.band-80-90 {
+		background-color: $green-color;
+	}
+	.band-90-100 {
+		background-color: $green-color;
+	}
+}

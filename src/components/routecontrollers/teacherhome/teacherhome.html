@@ -1,3 +1,3 @@
 <div class="my-sections">
-  <section-grid sections-data="sections" show-filter="showFilter" cellWidth="20"></section-grid>
+  <section-grid ng-repeat="section in sections" section="section" promise="hwPromise" students="section.enrolledStudents"></section-grid>
 </div>

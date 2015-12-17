@@ -1,93 +1,62 @@
-@keyframes slideOpenVertical {
-	0% { height: 0px; }
-	100% { height: 310px; }
+@keyframes slideOpenAssignments {
+  0% { height: 0px; }
+  100% { height: $scatterplot-height; }
 }
-@keyframes slideClosedVertical {
-	0% { height:310px; }
-	100% { height: 0px; }
+@keyframes slideClosedAssignments {
+  0% { height: $scatterplot-height; }
+  100% { height: 0px; }
+}
+.temp-Display {
+  font-size: 50px;
 }
 
 .section-grid {
-  md-input-container {
-    margin:10px 0px;
+  text-align: center;
+  max-width: 1100px;
+
+  .assignment-toggler {
+    margin: 0px 0px 0px 0px;
+    border-radius:0px;
   }
-  .toggle-icon-wrapper {
-    height:100%;
-    md-icon {
-      transform: rotate(0deg);
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 0s, opacity 0.5s linear;
-      -webkit-transition: 250ms ease all;
-      -moz-transition: 250ms ease all;
-      -o-transition: 250ms ease all;
-      transition: 250ms ease all;
-    }
+  md-icon {
+    transition: color 200ms ease;
   }
-  .choropleth:hover {
-    md-icon {
-      visibility: visible;
-      opacity: 1;
+  .assignment-toggler:hover {
+    background-color: #DBDBDB !important;
+    md-icon{
       color:rgb(255,64,129);
     }
+
   }
-  .deployed .toggle-icon-wrapper md-icon {
+
+  button .rotate {
     transform: rotate(180deg);
-    visibility: visible;
-    opacity: 1;
+  }
+  button .rotateCounterwise {
+    transform: rotate(0deg);
+  }
+  button .rotate,
+  button .rotateCounterwise {
+    -webkit-transition: 250ms ease all;
+    -moz-transition: 250ms ease all;
+    -o-transition: 250ms ease all;
+    transition: 250ms ease all;
   }
 
-	.slidercontainer {
+  .assignment-scores {
+    width: 100%;
+  }
+  .slide-open-assignments {
     overflow: hidden;
-    animation: slideOpenVertical 250ms linear;
-	}
-	.oldslidercontainer {
-		overflow:hidden;
-		height:0;
-		animation: slideClosedVertical 250ms linear;
-	}
+    height:$scatterplot-height;
+    animation: slideOpenAssignments 250ms linear;
+  }
+  .slide-closed-assignments {
+    overflow:hidden;
+    height:0px;
+    animation: slideClosedAssignments 250ms linear;
+  }
 
-	div {
-		outline:none;
-	}
-	md-card {
-		padding: 0px 20px 0px 20px;
-	}
-	button.md-primary {
-		width: 100%;
-    margin: 0px;
-		text-overflow: ellipsis;
-	}
-	button > span {
-		margin: 0px 0px 0px 0px;
-		font-size: 16px;
-		text-overflow: ellipsis;
-	}
-	.md-36 { font-size: 36px; }
-	input.md-input { font-size: 18px; width:225px;}
-	.table-container{
-		width:100%;
-		max-width:1200px;
-		text-align: center;
-		vertical-align: middle;
-		.table-row {
-			.table-cell {
-				.student-link {
-					cursor: pointer;
-				}
-				.choropleth {
-					vertical-align: inherit;
-					height:38px;
-					border: 1px solid $off-white;
-					cursor: pointer;
-					.mobile-label {
-            color: $off-white;
-						font-size: 16px;
-					}
-				}
-			}
-		}
-	}
 	.band-0 {
 		background-color: #E6E6E6;
 	}
