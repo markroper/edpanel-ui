@@ -63,6 +63,20 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
           ]
         }
       })
+      .state('app.mySurveys', {
+        url: 'mysurveys',
+        templateUrl: rootUrl + '/components/routecontrollers/mysurveys/mySurveys.html',
+        controller: 'MySurveys',
+        data: {
+          roles: [
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.SUPER_ADMIN,
+            roles.STUDENT,
+            roles.GUARDIAN
+          ]
+        }
+      })
       .state('app.resetPassword', {
         url: 'passwordreset/:userId',
         templateUrl: rootUrl + '/components/routecontrollers/resetpassword/resetpassword.html',

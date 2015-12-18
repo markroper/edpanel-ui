@@ -18,13 +18,18 @@ angular.module('teacherdashboard')
           'get': { isArray: true },
           'post': { method: 'POST', headers: {'Content-Type': 'application/json' }}
         }),
-      surveyBySchool: $resource(base + '/surveys/schools/{schoolId}', {}, { 'get': { isArray: true }}),
-      surveyBySection: $resource(base + '/surveys/schools/{schoolId}/sections/{sectionId}',
+      surveyByRespondent: $resource(
+        base + '/surveys/schools/:schoolId/years/:yearId/terms/:termId/respondents/:respondentId',
+        {},
+        {'get': { isArray: true }}),
+      surveyBySchool: $resource(base + '/surveys/schools/:schoolId', {}, { 'get': { isArray: true }}),
+      surveyBySection: $resource(base + '/surveys/schools/:schoolId/sections/:sectionId',
         {},
         {
           'get': { isArray: true }
         }),
-      surveyByCreator: $resource(base + '/surveys/users/{userId}', {}, { 'get': { isArray: true }}),
+      surveyByCreator: $resource(base + '/surveys/users/:userId', {}, { 'get': { isArray: true }}),
+      surveyResponses: $resource(base + '/surveys/respondents/:respondentId/responses', {}, { 'get': { isArray: true }}),
       //Password
       changePassword: $resource(base + '/users/passwordReset/:userId', {},
         {'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }}),

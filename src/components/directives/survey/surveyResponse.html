@@ -1,0 +1,17 @@
+<div class="survey-response" ng-show="survey">
+  <h3 class="md-headline">Response to survey: {{survey.name}}</h3>
+  <h3 class="md-subhead"> by {{survey.creator.name}}</h3>
+  <h3 class="md-subhead"> created {{survey.createdDate}}</h3>
+  <div ng-if="questionsAndAnswers">
+    <div ng-repeat="q in questionsAndAnswers">
+      <div class="question">{{q.question.question}}</div>
+      <md-input-container>
+        <input ng-model="q.answer" type="text">
+      </md-input-container>
+    </div>
+  </div>
+  <div layout layout-align="center center">
+    <md-button class="md-raised md-primary" ng-click="submitResponse()">Submit Response</md-button>
+    <md-button class="md-raised" ng-click="cancelResponse()">Cancel</md-button>
+  </div>
+</div>
