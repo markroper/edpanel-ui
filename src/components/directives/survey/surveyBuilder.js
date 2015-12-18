@@ -13,8 +13,8 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/survey/surveyBuilder.html',
       replace: true,
       link: function($scope){
-        $scope.minDate = moment().toDate();
-        $scope.maxDate = moment().add(1, 'years').toDate();
+        $scope.minDate = $window.moment().toDate();
+        $scope.maxDate = $window.moment().add(1, 'years').toDate();
         $scope.addQuestion = function() {
           if(!$scope.survey.questions) {
             $scope.survey.questions = [];
@@ -37,7 +37,7 @@ angular.module('teacherdashboard')
           }
           surveyToCreate.administeredDate = $window.moment(surveyToCreate.administeredDate).format('YYYY-MM-DD');
           surveyToCreate.questions.forEach(function(question) {
-            delete question['$$hashkey'];
+            delete question.$$hashkey;
             if(question.type === 'MULTIPLE_CHOICE') {
               var choices = [];
               question.choices.forEach(function(choice){

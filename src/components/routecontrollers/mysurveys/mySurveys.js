@@ -54,5 +54,5 @@ angular.module('teacherdashboard')
           return questions[key];
         });
         $scope.questions = questionAnswers;
-      }
+      };
     }]);
