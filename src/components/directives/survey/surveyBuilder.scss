@@ -1,3 +1,12 @@
 .survey-builder {
-  max-width: 500px;
+  background-color: white;
+  h3 {
+    text-align: center;
+  }
+  .survey-top {
+    width:500px;
+    md-input-container {
+      margin-bottom:0px;
+    }
+  }
 }

@@ -12,6 +12,16 @@ angular.module('teacherdashboard')
     return {
       login: $resource(base + '/login'),
       logout: $resource(base + '/logout'),
+      //Survey
+      survey: $resource(base + '/surveys', {},
+        {
+          'get': { isArray: true },
+          'post': { method: 'POST', headers: {'Content-Type': 'application/json' }}
+        }),
+      surveyBySchool: $resource(base + '/surveys/schools/{schoolId}', {}, { 'get': { isArray: true }}),
+      surveyBySection: $resource(base + '/surveys/schools/{schoolId}/sections/{sectionId}', {}, { 'get': { isArray: true }}),
+      surveyByCreator: $resource(base + '/surveys/users/{userId}', {}, { 'get': { isArray: true }}),
+      //Password
       changePassword: $resource(base + '/users/passwordReset/:userId', {},
         {'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }}),
       authCheck: $resource(base + '/auth'),

@@ -1,13 +1,22 @@
 .survey-question-builder:active {
   cursor: grabbing;
 }
+.survey-question-builder:hover {
+  .choices {
+    display:block;
+  }
+  .remove-question {
+    display: block;
+  }
+}
 .survey-question-builder {
   > md-input-container {
     margin: 0px 0px;
+    width: 275px;
   }
   background-color: white;
   border-radius: 3px;
-  margin:5px;
+  margin:15px 5px;
   position:relative;
   padding: 30px;
   cursor: grab;
@@ -15,6 +24,7 @@
     padding-right:25px;
   }
   .choices {
+    display:none;
     text-align: center;
     md-input-container {
       margin: 0px 0px;
@@ -29,6 +39,7 @@
     }
   }
   .remove-question {
+    display:none;
     margin: 0px 0px;
     padding: 0px 0px;
     position: absolute;

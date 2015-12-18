@@ -51,6 +51,18 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
           ]
         }
       })
+      .state('app.createSurvey', {
+        url: 'createsurvey',
+        templateUrl: rootUrl + '/components/routecontrollers/createsurvey/createSurvey.html',
+        controller: 'CreateSurvey',
+        data: {
+          roles: [
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.SUPER_ADMIN
+          ]
+        }
+      })
       .state('app.resetPassword', {
         url: 'passwordreset/:userId',
         templateUrl: rootUrl + '/components/routecontrollers/resetpassword/resetpassword.html',
@@ -200,10 +212,16 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
   .run(['$rootScope', '$state', '$stateParams', 'authorization',
       function($rootScope, $state, $stateParams, authorization) {
         $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-        // track the state the user wants to go to; authorization service needs this
-        $rootScope.toState = toState;
-        $rootScope.toStateParams = toStateParams;
-        authorization.authorize(event);
-      });
+          // track the state the user wants to go to; authorization service needs this
+          $rootScope.toState = toState;
+          $rootScope.toStateParams = toStateParams;
+          authorization.authorize(event);
+        });
+        $rootScope.previousState;
+        $rootScope.previousStateParams;
+        $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+          $rootScope.previousState = from.name;
+          $rootScope.previousStateParams = fromParams;
+        });
     }
   ]);

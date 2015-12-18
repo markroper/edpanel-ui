@@ -1,37 +1,43 @@
-<div class="survey-builder">
-  <h3 class="md-headline">Survey</h3>
-  <md-input-container class="md-icon-float md-block">
-    <!-- Use floating label instead of placeholder -->
-    <label>Survey Name</label>
-    <input ng-model="survey.name" type="text">
-  </md-input-container>
-  <div layout layout-align="center center">
-    <md-input-container class="md-block" flex="50">
-      <label>Administer to</label>
-      <md-select ng-model="surveyType">
-        <md-option value="district">
-          All students in district
-        </md-option>
-        <md-option value="school">
-          All students in school
-        </md-option>
-        <md-option value="section">
-          All students in section
-        </md-option>
-      </md-select>
+<div class="survey-builder" layout="column" layout-align="center center">
+  <div class="survey-top">
+    <h3 class="md-display-1">Create Survey</h3>
+    <md-input-container class="md-icon-float md-block">
+      <!-- Use floating label instead of placeholder -->
+      <label>Survey Name</label>
+      <input ng-model="survey.name" type="text">
     </md-input-container>
-    <md-datepicker flex="50" ng-model="survey.administeredDate" md-placeholder="Enter due date"md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
-  </div>
-  <h3 class="md-headline">Survey Questions</h3>
-
-  <div class="sortable-container" sv-root sv-part="survey.questions">
-    <div ng-repeat="question in survey.questions" sv-element>
-      <survey-question-builder survey="survey" question="question"></survey-question-builder>
+    <div layout layout-align="center center">
+      <md-input-container class="md-block" flex="50">
+        <label>Administer to</label>
+        <md-select ng-model="surveyType">
+          <md-option value="district">
+            All students in district
+          </md-option>
+          <md-option value="school">
+            All students in school
+          </md-option>
+          <md-option value="section">
+            All students in section
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <md-datepicker flex="50" ng-model="survey.administeredDate" md-placeholder="Enter due date" md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
     </div>
   </div>
-
-  <md-button class="md-fab md-primary md-hue-2" aria-label="Add Question" ng-click="addQuestion()">
-    <md-icon md-font-set="material-icons">add</md-icon>
-    <md-tooltip>add question</md-tooltip>
-  </md-button>
+  <div class="survey-questions">
+    <h3 class="md-headline">Questions</h3>
+    <div layout layout-wrap class="sortable-container" sv-root sv-part="survey.questions">
+      <div flex="none" ng-repeat="question in survey.questions" sv-element>
+        <survey-question-builder survey="survey" question="question"></survey-question-builder>
+      </div>
+      <md-button flex="none" class="md-fab md-primary md-hue-2" aria-label="Add Question" ng-click="addQuestion()">
+        <md-icon md-font-set="material-icons">add</md-icon>
+        <md-tooltip>add question</md-tooltip>
+      </md-button>
+    </div>
+  </div>
+  <div layout layout-align="center center">
+    <md-button class="md-raised md-primary" ng-click="createSurvey()">Create Survey</md-button>
+    <md-button class="md-raised" ng-click="cancelCreateSurvey()">Cancel</md-button>
+  </div>
 </div>

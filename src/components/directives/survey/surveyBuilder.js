@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('surveyBuilder', [ '$window', 'api', function($window, api) {
+  .directive('surveyBuilder', [ '$window', 'api', '$rootScope', '$state', function($window, api, $rootScope, $state) {
     return {
       scope: {
         school: '=',
@@ -20,7 +20,15 @@ angular.module('teacherdashboard')
           }
           $scope.survey.questions.push(
             { question:'', required: false, type: 'OPEN_RESPONSE' });
-        }
+        };
+        $scope.createSurvey = function() {
+          api.survey.save({}, $scope.survey, function(){
+            $state.go($rootScope.previousState, $rootScope.previousStateParams);
+          });
+        };
+        $scope.cancelCreateSurvey = function() {
+          $state.go($rootScope.previousState, $rootScope.previousStateParams);
+        };
       }
     };
   }]);
