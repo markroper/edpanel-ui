@@ -103,6 +103,22 @@ angular.module('teacherdashboard')
             console.log('failed to resolve the school!');
       }).$promise;
     },
+    //TODO THIS IS ARBITARY I DONT KNOW WHAT THIS SHOULD BE
+    resolveBehaviorClass: function(behaviorScore) {
+    var greenThreshold = 10;
+    var yellowThreshold = 25;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.green;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.yellow;
+    }
+    if(behaviorScore > yellowThreshold) {
+      return '40-50';
+    } else if(behaviorScore > greenThreshold) {
+      return '70-80';
+    } else {
+      return '90-100';
+    }
+  },
     resolveAttendanceClass: function(attendanceScore) {
     var greenThreshold = 3;
     var yellowThreshold = 6;

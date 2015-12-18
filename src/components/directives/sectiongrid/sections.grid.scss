@@ -43,18 +43,18 @@
     transition: 250ms ease all;
   }
 
-  .assignment-scores {
+  .student-slide {
     width: 100%;
   }
-  .slide-open-assignments {
+  .slide-open-students {
     overflow: hidden;
     height:$scatterplot-height;
-    animation: slideOpenAssignments 250ms linear;
+    animation: slideOpenStudents 250ms linear;
   }
-  .slide-closed-assignments {
+  .slide-closed-students {
     overflow:hidden;
     height:0px;
-    animation: slideClosedAssignments 250ms linear;
+    animation: slideClosedStudents 250ms linear;
   }
 
 	.band-0 {

@@ -19,10 +19,14 @@ angular.module('teacherdashboard')
          */
         var promises = [];
         var sectionGradesPromise = [];
-        var sectionHwPromise = [];
+        var sectionPromise = [];
         //Resolve the students!
         promises.push(resolveSections());
 
+        var demeritPromise = [];
+
+        var behaviorQuery = getStudentsDemeritCount();
+        sectionPromise.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise);
 
         //After the school and students are resolved, resolve the student performance data
         var sectionIds = [];
@@ -34,15 +38,20 @@ angular.module('teacherdashboard')
           }
 
           var hwQuery = getHwQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate, sectionIds);
-          sectionHwPromise.push(api.query.save({ schoolId: statebag.school.id }, hwQuery).$promise);
+          sectionPromise.push(api.query.save({ schoolId: statebag.school.id }, hwQuery).$promise);
 
-          $q.all(sectionHwPromise).then(function(responses) {
+          $q.all(sectionPromise).then(function(responses) {
             var hwCompletions = {};
+            var demeritMap = {};
 
-            for (var i = 0; i < responses[0].records.length; i++) {
-              var sectId = responses[0].records[i].values[0];
-              var studId = responses[0].records[i].values[1];
-              if (!hwCompletions[responses[0].records[i].values[0]]) {
+            for (var j = 0; j < responses[0].records.length; j++ ) {
+              demeritMap[responses[0].records[j].values[0]] = responses[0].records[j].values[2];
+            }
+
+            for (var i = 0; i < responses[1].records.length; i++) {
+              var sectId = responses[1].records[i].values[0];
+              var studId = responses[1].records[i].values[1];
+              if (!hwCompletions[responses[1].records[i].values[0]]) {
                 hwCompletions[sectId] = {};
                 hwCompletions[sectId]["count"] = 0;
                 hwCompletions[sectId]["total"] = 0;
@@ -50,19 +59,29 @@ angular.module('teacherdashboard')
               }
 
                 hwCompletions[sectId]["count"] += 1;
-                hwCompletions[sectId]["total"] += Math.round(parseFloat(responses[0].records[i].values[2]) * 100);
-                hwCompletions[sectId]["students"][studId] = Math.round(parseFloat(responses[0].records[i].values[2]) * 100);
+                hwCompletions[sectId]["total"] += Math.round(parseFloat(responses[1].records[i].values[2]) * 100);
+                hwCompletions[sectId]["students"][studId] = Math.round(parseFloat(responses[1].records[i].values[2]) * 100);
              }
 
-
+            console.log(demeritMap);
             for (var i = 0; i < statebag.currentSections.length; i++) {
               sectId = statebag.currentSections[i].id;
               statebag.currentSections[i]["HomeworkCompletion"] = hwCompletions[sectId].total / hwCompletions[sectId].count;
               statebag.currentSections[i]["Attendance"] = hwCompletions[sectId].total / hwCompletions[sectId].count;
+              //TODO ACTUALLY RESOLVE ATTENDANCE
+              statebag.currentSections[i]["attendanceClass"] = statebagApiManager.resolveAttendanceClass(statebag.currentSections[i]["Attendance"]);
               for (var j = 0; j < statebag.currentSections[i].enrolledStudents.length; j++) {
                 studId = statebag.currentSections[i].enrolledStudents[j].id;
                 statebag.currentSections[i].enrolledStudents[j]["homework"] = hwCompletions[sectId]["students"][studId];
                 statebag.currentSections[i].enrolledStudents[j]["homeworkClass"] = statebagApiManager.resolveHomeworkClass(hwCompletions[sectId]["students"][studId]/100.0);
+                var studentDemerits = demeritMap[studId];
+                if (!studentDemerits) {
+                  studentDemerits = 0;
+
+                }
+                statebag.currentSections[i].enrolledStudents[j]["demerits"] = studentDemerits;
+                statebag.currentSections[i].enrolledStudents[j]["demeritClass"] = statebagApiManager.resolveBehaviorClass(studentDemerits);
+
               }
             }
             statebag.hwCompleteSections = hwCompletions;
@@ -74,6 +93,101 @@ angular.module('teacherdashboard')
 
         });
 
+      }
+
+      function  getStudentsDemeritCount() {
+        var identity = authentication.identity();
+        var personQuery = {
+          "aggregateMeasures":[
+            {
+              "measure":"DEMERIT",
+              "aggregation":"SUM"
+            }
+          ],
+          "fields":[
+            {
+              "dimension":"STUDENT",
+              "field":"ID"
+            },
+            {
+              "dimension":"STUDENT",
+              "field":"Name"
+            }
+          ],
+          "filter":{
+            "type":"EXPRESSION",
+            "leftHandSide": {
+              "type": "EXPRESSION",
+              "leftHandSide": {
+                "type": "EXPRESSION",
+                "leftHandSide": {
+                  "type": "DIMENSION",
+                  "value": {
+                    "dimension": "STUDENT",
+                    "field": "School"
+                  }
+                },
+                "operator": "EQUAL",
+                "rightHandSide": {
+                  "type": "NUMERIC",
+                  "value": statebag.school.id
+                }
+              },
+              "operator": "AND",
+              "rightHandSide": {
+                "type": "EXPRESSION",
+                "leftHandSide": {
+                  "type": "EXPRESSION",
+                  "leftHandSide": {
+                    "type": "MEASURE",
+                    "value": {
+                      "measure": "DEMERIT",
+                      "field": "Behavior Date"
+                    }
+                  },
+                  "operator": "GREATER_THAN_OR_EQUAL",
+                  "rightHandSide": {
+                    "type": "DATE",
+                    "value": statebag.currentTerm.startDate
+                  }
+                },
+                "operator": "AND",
+                "rightHandSide": {
+                  "type": "EXPRESSION",
+                  "leftHandSide": {
+                    "type": "MEASURE",
+                    "value": {
+                      "measure": "DEMERIT",
+                      "field": "Behavior Date"
+                    }
+                  },
+                  "operator": "LESS_THAN_OR_EQUAL",
+                  "rightHandSide": {
+                    "type": "DATE",
+                    "value": statebag.currentTerm.endDate
+                  }
+                }
+              }
+            },
+            "operator":"AND",
+            "rightHandSide":{
+              "type":"EXPRESSION",
+              "leftHandSide":{
+                "type": "DIMENSION",
+                "value": {
+                  "dimension":"USER",
+                  "field":"ID"
+                }
+              },
+              "operator": "EQUAL",
+              "rightHandSide": {
+                "type": "NUMERIC",
+                "value": identity.id
+              }
+            }
+          }
+        };
+        return personQuery;
       }
 
       function resolveSections() {

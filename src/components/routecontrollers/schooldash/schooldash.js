@@ -475,6 +475,7 @@ angular.module('teacherdashboard')
             }
           }
         };
+
         return personQuery;
       }
 
