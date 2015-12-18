@@ -35,6 +35,10 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
       $state.go('app.home', { schoolId: $state.params.schoolId });
       $scope.closeSizeNav();
     };
+    $scope.goToCreateSurvey = function() {
+      $state.go('app.createSurvey', {});
+      $scope.closeSizeNav();
+    };
     $scope.goToSchoolDash = function() {
       $state.go('app.schoolDash', { schoolId: $state.params.schoolId });
       $scope.closeSizeNav();

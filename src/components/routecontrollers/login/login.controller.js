@@ -28,9 +28,6 @@ angular.module('teacherdashboard')
       $scope.password = '';
       $scope.showErrorMsg = false;
       $scope.mode = '';
-      $scope.goToCreateSurvey = function() {
-        $state.go('app.createSurvey');
-      }
       $scope.authenticate = function() {
       	var authBody = {
 			    username: $scope.inputEmail,

@@ -64,6 +64,7 @@ angular.module('teacherdashboard')
         {},
         {'get': {isArray:true}}),
       //Sections
+      sections: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections', {}, { 'get':{ isArray: true }}),
       section: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId'),
       studentSections: $resource(base + '/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId/sections', {}, { 'get': { isArray: true }}),
       course: $resource(base + '/schools/:schoolId/courses/:courseId'),

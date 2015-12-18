@@ -1,6 +1,5 @@
 <div class="survey-builder" layout="column" layout-align="center center">
   <div class="survey-top">
-    <h3 class="md-display-1">Create Survey</h3>
     <md-input-container class="md-icon-float md-block">
       <!-- Use floating label instead of placeholder -->
       <label>Survey Name</label>
@@ -9,7 +8,7 @@
     <div layout layout-align="center center">
       <md-input-container class="md-block" flex="50">
         <label>Administer to</label>
-        <md-select ng-model="surveyType">
+        <md-select ng-model="surveyType.type">
           <md-option value="district">
             All students in district
           </md-option>
