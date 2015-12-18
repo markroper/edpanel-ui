@@ -20,7 +20,7 @@ angular.module('teacherdashboard')
             $scope.survey.questions = [];
           }
           $scope.survey.questions.push(
-            { question:'', required: false, type: 'OPEN_RESPONSE' });
+            { question:'', responseRequired: false, type: 'OPEN_RESPONSE' });
         };
         $scope.createSurvey = function() {
           var surveyToCreate = {};
@@ -53,7 +53,7 @@ angular.module('teacherdashboard')
             id: authentication.identity().id,
             type: authentication.identity().roles[0],
           };
-          api.survey.save(
+          api.survey.post(
             {},
             surveyToCreate,
             function(){

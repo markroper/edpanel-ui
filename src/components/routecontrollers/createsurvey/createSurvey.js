@@ -20,9 +20,9 @@ angular.module('teacherdashboard')
       name: '',
       administeredDate: $window.moment().toDate(),
       questions: [
-        { question: '', required: false, type: 'OPEN_RESPONSE' },
-        //{ question: 'i can\'t hear you', required: false, type: 'TRUE_FALSE' },
-        //{ question: 'pick from choices', required: true, type: 'MULTIPLE_CHOICE', choices: [{val: 'one'}, {val: 'two'}, {val:'buckle my shoe'}] }
+        { question: '', responseRequired: false, type: 'OPEN_RESPONSE' },
+        //{ question: 'i can\'t hear you', responseRequired: false, type: 'TRUE_FALSE' },
+        //{ question: 'pick from choices', responseRequired: true, type: 'MULTIPLE_CHOICE', choices: [{val: 'one'}, {val: 'two'}, {val:'buckle my shoe'}] }
       ]
     };
   }]);
