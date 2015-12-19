@@ -1,16 +1,28 @@
-<div class="survey-response" ng-show="survey">
-  <h3 class="md-headline">Response to survey: {{survey.name}}</h3>
+<div flex="grow" flex-lt-lg="100" class="survey-response" ng-show="survey">
+  <h3 class="md-headline">{{survey.name}}</h3>
   <h3 class="md-subhead"> by {{survey.creator.name}}</h3>
   <h3 class="md-subhead"> created {{survey.createdDate}}</h3>
+  <h3 class="md-subhead"> Questions:</h3>
   <div ng-if="questionsAndAnswers">
-    <div ng-repeat="q in questionsAndAnswers">
-      <div class="question">{{q.question.question}}</div>
-      <md-input-container>
-        <input ng-model="q.answer" type="text">
-      </md-input-container>
+    <div layout layout-align="start center" ng-repeat="q in questionsAndAnswers">
+      <div flex="none" class="question">{{q.question.question}}</div>
+      <div flex="grow" flex-lt-lg="100" class="answer-container">
+        <md-input-container ng-if="q.question.type === 'OPEN_RESPONSE'">
+          <input ng-model="q.answer" type="text">
+        </md-input-container>
+        <md-input-container class="multiple-choice" ng-if="q.question.type === 'MULTIPLE_CHOICE'">
+          <label>Question type</label>
+          <md-select ng-model="q.answer">
+            <md-option ng-repeat="choice in q.question.choices" value="{{choice}}">
+              {{choice}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-checkbox class="boolean-answer" ng-model="q.answer" ng-if="q.question.type === 'TRUE_FALSE'"></md-checkbox>
+      </div>
     </div>
   </div>
-  <div layout layout-align="center center">
+  <div layout layout-align="start center">
     <md-button class="md-raised md-primary" ng-click="submitResponse()">Submit Response</md-button>
     <md-button class="md-raised" ng-click="cancelResponse()">Cancel</md-button>
   </div>

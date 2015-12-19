@@ -1,3 +1,12 @@
 .survey-response {
-
+  padding: 0px 20px;
+  .multiple-choice {
+    margin: 0px 0px;
+  }
+  .boolean-answer {
+    margin-top: 16px;
+  }
+  .answer-container {
+    padding-left: 20px;
+  }
 }

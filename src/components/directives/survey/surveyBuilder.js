@@ -31,10 +31,11 @@ angular.module('teacherdashboard')
             if($scope.survey.sectionFk) {
               delete surveyToCreate.sectionFk;
             }
-          } else if($scope.surveyType.type === 'section' && $scope.school && $scope.section) {
+          } else if($scope.surveyType.type === 'section' && $scope.school && $scope.survey.sectionFk) {
             surveyToCreate.schoolFk = $scope.school.id;
-            surveyToCreate.sectionFk = $scope.section.id;
+            surveyToCreate.sectionFk = Number($scope.survey.sectionFk);
           }
+          surveyToCreate.createdDate = $window.moment().format('YYYY-MM-DD');
           surveyToCreate.administeredDate = $window.moment(surveyToCreate.administeredDate).format('YYYY-MM-DD');
           surveyToCreate.questions.forEach(function(question) {
             delete question.$$hashkey;

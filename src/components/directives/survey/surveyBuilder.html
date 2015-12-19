@@ -5,7 +5,7 @@
       <label>Survey Name</label>
       <input ng-model="survey.name" type="text">
     </md-input-container>
-    <div layout layout-align="center center">
+    <div layout layout-align="center center" layout-wrap>
       <md-input-container class="md-block" flex="50">
         <label>Administer to</label>
         <md-select ng-model="surveyType.type">
@@ -20,6 +20,16 @@
           </md-option>
         </md-select>
       </md-input-container>
+      <div flex="50" class="md-block" ng-if="surveyType.type === 'section'">
+        <md-input-container class="md-block" flex="50">
+          <label>Section</label>
+          <md-select ng-model="survey.sectionFk">
+            <md-option ng-repeat="section in sections" value="{{section.id}}">
+              {{section.course.name}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
       <md-datepicker flex="50" ng-model="survey.administeredDate" md-placeholder="Enter due date" md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
     </div>
   </div>
