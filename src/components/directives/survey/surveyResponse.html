@@ -8,7 +8,7 @@
       <div flex="none" class="question">{{q.question.question}}</div>
       <div flex="grow" flex-lt-lg="100" class="answer-container">
         <md-input-container ng-if="q.question.type === 'OPEN_RESPONSE'">
-          <input ng-model="q.answer" type="text">
+          <textarea rows="5" cols="50" ng-model="q.answer"></textarea>
         </md-input-container>
         <md-input-container class="multiple-choice" ng-if="q.question.type === 'MULTIPLE_CHOICE'">
           <label>Question type</label>

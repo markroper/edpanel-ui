@@ -63,10 +63,10 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
           ]
         }
       })
-      .state('app.mySurveys', {
-        url: 'mysurveys',
-        templateUrl: rootUrl + '/components/routecontrollers/mysurveys/mySurveys.html',
-        controller: 'MySurveys',
+      .state('app.mySurveyResponses', {
+        url: 'mysurveyresponses',
+        templateUrl: rootUrl + '/components/routecontrollers/mysurveyresponses/mySurveyResponses.html',
+        controller: 'MySurveyResponses',
         data: {
           roles: [
             roles.ADMIN,

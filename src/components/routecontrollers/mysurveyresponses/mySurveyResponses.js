@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication',
+  .controller('MySurveyResponses', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication',
     function ($scope, api, $state, statebag, $window, $location, authentication) {
       statebag.currentPage.name = 'My Survey Responses';
       api.surveyByRespondent.get(
