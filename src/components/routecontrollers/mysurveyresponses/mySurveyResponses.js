@@ -4,6 +4,32 @@ angular.module('teacherdashboard')
   .controller('MySurveyResponses', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication', 'statebagApiManager',
     function ($scope, api, $state, statebag, $window, $location, authentication, statebagapimanager) {
       statebag.currentPage.name = 'My Survey Responses';
+      $scope.unansweredOnly = false;
+      var filterValuesAdded = false;
+      $scope.surveyFilter = function(survey) {
+        if($scope.unansweredOnly) {
+          if(survey.hasResponse) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+        return true;
+      }
+      $scope.evaluateSurveyFilter = function() {
+        if(!filterValuesAdded) {
+          var surveyMap = {};
+          $scope.surveys.forEach(function(survey){
+            surveyMap[survey.id] = survey;
+          });
+          $scope.responses.forEach(function(resp){
+            if(surveyMap[resp.survey.id]) {
+              surveyMap[resp.survey.id].hasResponse = true;
+            }
+          });
+        }
+      }
+
       //We need student ID, school, currentYear, currentTerm in order to proceed
       var identity = authentication.identity();
       if(!identity || !identity.schoolId) {
@@ -30,7 +56,7 @@ angular.module('teacherdashboard')
         api.surveyResponses.get(
           {
             respondentId: authentication.identity().id,
-            startDate: $window.moment().format('YYYY-MM-DD')
+            startDate: $window.moment().subtract(1, 'years').format('YYYY-MM-DD')
           },
           function(responses){
             $scope.responses = responses;
@@ -81,7 +107,7 @@ angular.module('teacherdashboard')
         if($scope.response) {
           $scope.response.answers.forEach(function (a) {
             if (questions[a.question.question]) {
-              questions[a.question.question].answer = a.question.answer;
+              questions[a.question.question].answer = a.answer;
             }
           });
         }

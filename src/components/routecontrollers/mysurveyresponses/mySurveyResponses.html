@@ -1,7 +1,12 @@
 <div layout layout-align="center start" layout-wrap>
   <div flex="none" flex-lt-lg="100" layout="column" layout-align="center center" layout-wrap class="my-surveys">
-    <h3 class="md-headline">Recent Surveys</h3>
-    <div flex="none" layout layout-align="center center" class="survey" ng-repeat="survey in surveys | orderBy: survey.createdDate">
+    <div layout layout-align="center center">
+      <h3 flex="none" class="md-headline" style="padding-right:20px;">Recent Surveys</h3>
+      <md-switch flex="none" ng-click="evaluateSurveyFilter()" ng-model="unansweredOnly" aria-label="show all surveys">
+        All - Unanswered
+      </md-switch>
+    </div>
+    <div flex="none" layout layout-align="center center" class="survey" ng-repeat="survey in surveys | filter:surveyFilter | orderBy: survey.createdDate">
       <div flex>{{survey.name}}</div>
       <div flex>{{survey.createdDate}}</div>
       <div flex>{{survey.creator.name}}</div>
