@@ -1,0 +1,9 @@
+.my-surveys {
+  padding: 0px 20px;
+  .odd {
+    background-color: $row-gray;
+  }
+  .survey {
+    width:550px;
+  }
+}

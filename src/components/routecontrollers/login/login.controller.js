@@ -45,7 +45,8 @@ angular.module('teacherdashboard')
               username: $scope.inputEmail,
               name: data.name,
               id: data.id,
-              roles: [data.type]
+              roles: [data.type],
+              schoolId: data.currentSchoolId
             };
         		authentication.authenticate(identity);
 

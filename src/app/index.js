@@ -1,5 +1,5 @@
 'use strict';
-angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.grid', 'ui.grid.pagination'])
+angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.grid', 'ui.grid.pagination', 'angular-sortable-view'])
   .config(function ($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider, $httpProvider, $locationProvider, constsProvider) {
     //Forces angular to request that any CORS cookies be sent back by the server
     $httpProvider.defaults.withCredentials = true;
@@ -48,6 +48,32 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
             roles.STUDENT,
             roles.GUARDIAN,
             roles.SUPER_ADMIN
+          ]
+        }
+      })
+      .state('app.createSurvey', {
+        url: 'createsurvey',
+        templateUrl: rootUrl + '/components/routecontrollers/createsurvey/createSurvey.html',
+        controller: 'CreateSurvey',
+        data: {
+          roles: [
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.SUPER_ADMIN
+          ]
+        }
+      })
+      .state('app.mySurveyResponses', {
+        url: 'mysurveyresponses',
+        templateUrl: rootUrl + '/components/routecontrollers/mysurveyresponses/mySurveyResponses.html',
+        controller: 'MySurveyResponses',
+        data: {
+          roles: [
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.SUPER_ADMIN,
+            roles.STUDENT,
+            roles.GUARDIAN
           ]
         }
       })
@@ -200,10 +226,16 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
   .run(['$rootScope', '$state', '$stateParams', 'authorization',
       function($rootScope, $state, $stateParams, authorization) {
         $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-        // track the state the user wants to go to; authorization service needs this
-        $rootScope.toState = toState;
-        $rootScope.toStateParams = toStateParams;
-        authorization.authorize(event);
-      });
+          // track the state the user wants to go to; authorization service needs this
+          $rootScope.toState = toState;
+          $rootScope.toStateParams = toStateParams;
+          authorization.authorize(event);
+        });
+        $rootScope.previousState;
+        $rootScope.previousStateParams;
+        $rootScope.$on('$stateChangeSuccess', function(ev, to, toParams, from, fromParams) {
+          $rootScope.previousState = from.name;
+          $rootScope.previousStateParams = fromParams;
+        });
     }
   ]);
