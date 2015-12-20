@@ -15,7 +15,7 @@ angular.module('teacherdashboard')
             this.serverCookieAuthUpdate().then(
               function(){
                 context.passthroughOrRedirect(event, true);
-              }, 
+              },
               function(){
                 context.passthroughOrRedirect(event);
               });
@@ -32,7 +32,7 @@ angular.module('teacherdashboard')
           if(!authentication.isInAnyRole($rootScope.toState.data.roles)) {
             //Prevent the previous event from redirecting the URL
             event.preventDefault();
-            if (isAuthenticated) { 
+            if (isAuthenticated) {
               $state.go('accessdenied');
             } else {
               // user is not authenticated. stow the state they wanted before you
@@ -42,8 +42,8 @@ angular.module('teacherdashboard')
               // now, send them to the signin state so they can log in
               $state.go('login');
             }
-          } 
-          //When a user clicks a link or does a full page refresh we need to force 
+          }
+          //When a user clicks a link or does a full page refresh we need to force
           //a route reload after we've resolved the user to get everything in a consistent state.
           //This is because our angular material themes which control colors and some other
           //global state display are not scope variable bound and don't get updated :(
@@ -53,11 +53,11 @@ angular.module('teacherdashboard')
       },
       //If the user is not authenticated, call to the server for a cookie check
       //The user may be logged in but clicking a link or refreshing the browser
-      //In these cases, JS can't access teh valid cookie we need to ask the server 
+      //In these cases, JS can't access teh valid cookie we need to ask the server
       //to interrogate the cookie for us and hand back a user, if there is a valid cookie
       serverCookieAuthUpdate: function() {
         return api.authCheck.get(
-          {}, 
+          {},
           function(data){
             statebag.userRole = data.type.charAt(0) + data.type.toLowerCase().slice(1);
             statebag.theme = statebag.resolveTheme(data.type);
@@ -65,10 +65,11 @@ angular.module('teacherdashboard')
               username: data.username,
               name: data.name,
               id: data.id,
-              roles: [ data.type ]
+              roles: [ data.type ],
+              schoolId: data.currentSchoolId
             };
           authentication.authenticate(identity);
-          }, 
+          },
           function(error){
             console.log('we are not authenticated ' + JSON.stringify(error));
           }).$promise;

@@ -30,6 +30,12 @@ angular.module('teacherdashboard')
         }),
       surveyByCreator: $resource(base + '/surveys/users/:userId', {}, { 'get': { isArray: true }}),
       surveyResponses: $resource(base + '/surveys/respondents/:respondentId/responses', {}, { 'get': { isArray: true }}),
+      surveyResponse: $resource(base + '/surveys/:surveyId/responses/:responseId',
+        {},
+        {
+          'put': { method:'PUT', headers: {'Content-Type': 'application/json'} },
+          'post': { method:'POST', headers: {'Content-Type': 'application/json'} }
+        }),
       //Password
       changePassword: $resource(base + '/users/passwordReset/:userId', {},
         {'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }}),

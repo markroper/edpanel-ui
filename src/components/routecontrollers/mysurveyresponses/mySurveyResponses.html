@@ -5,8 +5,8 @@
       <div flex>{{survey.name}}</div>
       <div flex>{{survey.createdDate}}</div>
       <div flex>{{survey.creator.name}}</div>
-      <md-button ng-click="surveyResponse(survey)">Response</md-button>
+      <md-button class="md-primary" ng-click="selectSurveyResponse(survey)">Response</md-button>
     </div>
   </div>
-  <survey-response survey="survey" questions-and-answers="questions"></survey-response>
+  <survey-response survey="survey" survey-response="surveyResponse" questions-and-answers="questions"></survey-response>
 </div>

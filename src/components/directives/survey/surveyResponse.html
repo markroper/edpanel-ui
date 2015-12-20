@@ -1,7 +1,6 @@
 <div flex="noshrink" flex-lt-lg="100" class="survey-response" ng-show="survey">
   <h3 class="md-headline">{{survey.name}}</h3>
-  <h3 class="md-subhead"> by {{survey.creator.name}}</h3>
-  <h3 class="md-subhead"> created {{survey.createdDate}}</h3>
+  <h3 class="md-subhead"> Created by {{survey.creator.name}} on {{survey.createdDate}}</h3>
   <h3 class="md-subhead"> Questions:</h3>
   <div ng-if="questionsAndAnswers">
     <div layout layout-align="start center" ng-repeat="q in questionsAndAnswers">
@@ -11,9 +10,9 @@
           <textarea rows="5" cols="50" ng-model="q.answer"></textarea>
         </md-input-container>
         <md-input-container class="multiple-choice" ng-if="q.question.type === 'MULTIPLE_CHOICE'">
-          <label>Question type</label>
+          <label>Choices</label>
           <md-select ng-model="q.answer">
-            <md-option ng-repeat="choice in q.question.choices" value="{{choice}}">
+            <md-option ng-repeat="choice in q.question.choices" value="{{$index}}">
               {{choice}}
             </md-option>
           </md-select>
