@@ -86,7 +86,7 @@ angular.module('teacherdashboard')
 
           };
           $scope.cancelResponse = function() {
-
+            $scope.survey = null;
           };
         }
       };

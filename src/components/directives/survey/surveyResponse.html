@@ -1,9 +1,8 @@
 <div flex="noshrink" flex-lt-lg="100" class="survey-response" ng-show="survey">
-  <h3 class="md-headline">{{survey.name}}</h3>
+  <h3 class="md-headline">{{survey.name}} Response</h3>
   <h3 class="md-subhead"> Created by {{survey.creator.name}} on {{survey.createdDate}}</h3>
-  <h3 class="md-subhead"> Questions:</h3>
-  <div ng-if="questionsAndAnswers">
-    <div layout layout-align="start center" ng-repeat="q in questionsAndAnswers">
+  <div ng-if="questionsAndAnswers" class="questions-container">
+    <div layout layout-align="start center" ng-repeat="q in questionsAndAnswers" ng-class-odd="'odd'">
       <div flex="none" class="question">{{q.question.question}}</div>
       <div flex="grow" flex-lt-lg="100" class="answer-container">
         <md-input-container ng-if="q.question.type === 'OPEN_RESPONSE'">

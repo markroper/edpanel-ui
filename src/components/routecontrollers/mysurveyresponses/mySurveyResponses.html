@@ -6,11 +6,19 @@
         All - Unanswered
       </md-switch>
     </div>
-    <div flex="none" layout layout-align="center center" class="survey" ng-repeat="survey in surveys | filter:surveyFilter | orderBy: survey.createdDate">
-      <div flex>{{survey.name}}</div>
-      <div flex>{{survey.createdDate}}</div>
-      <div flex>{{survey.creator.name}}</div>
-      <md-button class="md-primary" ng-click="selectSurveyResponse(survey)">Response</md-button>
+    <div layout layout-align="center center" class="survey md-subhead">
+      <div flex="25">Name</div>
+      <div flex="25">Created</div>
+      <div flex="25">Created By</div>
+      <div flex="25"></div>
+    </div>
+    <div flex="none" layout layout-align="center center" class="survey" ng-class-odd="'odd'" ng-repeat="survey in surveys | filter:surveyFilter | orderBy: survey.createdDate">
+      <div flex="25">{{survey.name}}</div>
+      <div flex="25">{{survey.createdDate}}</div>
+      <div flex="25">{{survey.creator.name}}</div>
+      <div flex="25">
+        <md-button class="md-primary" ng-click="selectSurveyResponse(survey)">Response</md-button>
+      </div>
     </div>
   </div>
   <survey-response survey="survey" survey-response="surveyResponse" questions-and-answers="questions"></survey-response>

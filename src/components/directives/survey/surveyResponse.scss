@@ -1,5 +1,15 @@
 .survey-response {
   padding: 0px 20px;
+  .question {
+    width: 200px;
+    word-wrap: normal;
+    padding: 20px;
+  }
+  .questions-container {
+    .odd {
+      background-color: $row-gray;
+    }
+  }
   .multiple-choice {
     margin: 0px 0px;
   }
