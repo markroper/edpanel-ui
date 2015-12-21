@@ -1,15 +1,18 @@
 'use strict';
 
 angular.module('teacherdashboard')
-.controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication',
-  function ($scope, api, $state, statebag, $window, $location, authentication) {
+.controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication','$compile',
+  function ($scope, api, $state, statebag, $window, $location, authentication, $compile) {
     statebag.currentPage.name = 'My Surveys';
+    var surveyBuilderDirective = '<survey-builder survey="survey" surveyType="surveyType" school="school" sections="sections" dismiss="dismissSurveyResults"></survey-builder>';
+    var surveyResultsDirective = '<survey-aggregate aggregate-survey="aggregateSurvey" survey-aggregates="surveyAggregates" dismiss="dismissSurveyResults"></survey-aggregate>';
     //We need student ID, school, currentYear, currentTerm in order to proceed
     var identity = authentication.identity();
     if(!identity || (!identity.schoolId && !statebag.school)) {
       $state.go('login');
     }
-
+    var containerEl = angular.element('.create-survey-controller');
+    var oldElem = null;
     var resolveSurveysAndSections = function() {
       api.sections.get(
         {
@@ -49,7 +52,6 @@ angular.module('teacherdashboard')
     } else {
       resolveSurveysAndSections();
     }
-
     $scope.createNewSurvey = function(s) {
       $scope.surveyAggregates = null;
       $scope.aggregateSurvey = null;
@@ -66,6 +68,12 @@ angular.module('teacherdashboard')
           ]
         };
       }
+      if($scope.childScope) {
+        $scope.childScope.$destroy();
+      }
+      $scope.childScope = $scope.$new(false, $scope);
+      oldElem = $compile(surveyBuilderDirective)($scope.childScope);
+      containerEl.append(oldElem);
     };
 
     $scope.cloneSurvey = function(survey) {
@@ -93,10 +101,31 @@ angular.module('teacherdashboard')
         function(resp) {
           $scope.surveyAggregates = resp;
           $scope.aggregateSurvey = survey;
+          if($scope.childScope) {
+            $scope.childScope.$destroy();
+          }
+          $scope.childScope = $scope.$new(false, $scope);
+          $scope.childScope.surveyAggregates = resp;
+          $scope.childScope.aggregateSurvey = survey;
+          $scope.childScope.dismissSurveyResults = $scope.dismissSurveyResults;
+          oldElem = $compile(surveyResultsDirective)($scope.childScope);
+          containerEl.append(oldElem);
         },
         function() {
           //TODO: handle error
         });
+    };
 
+    $scope.dismissSurveyResults = function() {
+      $scope.survey = null;
+      $scope.aggregateSurvey = null;
+      $scope.surveyAggregates = null;
+      if($scope.childScope) {
+        $scope.childScope.$destroy();
+      }
+      if(oldElem) {
+        oldElem.remove();
+        oldElem = null;
+      }
     };
   }]);

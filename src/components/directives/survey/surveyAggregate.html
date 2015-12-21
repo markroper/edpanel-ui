@@ -1,23 +1,18 @@
-<div flex="noshrink" flex-lt-lg="100" class="survey-aggregate" ng-show="surveyAggregates">
+<div flex="noshrink" flex-lt-lg="100" class="survey-aggregate">
   <h3 class="md-headline">{{aggregateSurvey.name}} Results</h3>
   <h3 class="md-subhead"> Created by {{aggregateSurvey.creator.name}} on {{aggregateSurvey.createdDate}}</h3>
   <div ng-if="surveyAggregates.questions" class="questions-container">
     <div layout layout-align="start center" ng-repeat="q in surveyAggregates.questions" ng-class-odd="'odd'">
       <div flex="none" class="question">{{q.question.question}}</div>
       <div flex="grow" flex-lt-lg="100" class="answer-container">
-        <div class="open-response-results" ng-if="q.question.type === 'OPEN_RESPONSE'">
-          OPEN RESP
-        </div>
-        <div class="multiple-choice-results" ng-if="q.question.type === 'MULTIPLE_CHOICE'">
-          MULT CHOICE
-        </div>
-        <div class="boolean-results" ng-if="q.question.type === 'TRUE_FALSE'">
-          TRUE / FALSE
+        Question type: {{q.question.type}}. Total responses: {{q.respondents}}.
+        <div class="multiple-choice-results" ng-if="q.question.type === 'MULTIPLE_CHOICE' || q.question.type === 'TRUE_FALSE'">
+          <stackedbar columns-promise="q.chartDataPromise"></stackedbar>
         </div>
       </div>
     </div>
   </div>
   <div layout layout-align="start center">
-    <md-button class="md-raised" ng-click="dismissAggregateResults()">Dismiss</md-button>
+    <md-button class="md-raised" ng-click="dismiss()">Dismiss</md-button>
   </div>
 </div>

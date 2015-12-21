@@ -1,5 +1,5 @@
-<div layout layout-align="center start" layout-wrap>
-  <div flex="none" flex-lt-lg="100" layout="column" layout-align="center center" layout-wrap class="my-surveys">
+<div layout layout-align="center start" layout-wrap class="my-survey-responses">
+  <div flex="none" flex-lt-lg="100" layout="column" layout-align="center center" layout-wrap class="my-surveys" ng-show="!questions">
     <div layout layout-align="center center">
       <h3 flex="none" class="md-headline" style="padding-right:20px;">Recent Surveys</h3>
       <md-switch flex="none" ng-click="evaluateSurveyFilter()" ng-model="unansweredOnly" aria-label="show all surveys">
@@ -21,5 +21,4 @@
       </div>
     </div>
   </div>
-  <survey-response survey="survey" survey-response="surveyResponse" questions-and-answers="questions"></survey-response>
 </div>
