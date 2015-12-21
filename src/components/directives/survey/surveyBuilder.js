@@ -64,7 +64,7 @@ angular.module('teacherdashboard')
                     .content('Survey saved')
                     .hideDelay(2000)
                 );
-                $state.go($rootScope.previousState, $rootScope.previousStateParams);
+                $scope.cancelCreateSurvey();
               }
             },
             function() {
@@ -73,12 +73,12 @@ angular.module('teacherdashboard')
                   .content('Could not save survey')
                   .hideDelay(2000)
               );
-              $state.go($rootScope.previousState, $rootScope.previousStateParams);
+              $scope.cancelCreateSurvey();
             });
         };
         $scope.cancelCreateSurvey = function() {
           if($rootScope.previousState) {
-            $state.go($rootScope.previousState, $rootScope.previousStateParams);
+            $scope.survey = null;
           }
         };
       }
