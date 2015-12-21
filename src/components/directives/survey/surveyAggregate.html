@@ -1,6 +1,6 @@
 <div flex="noshrink" flex-lt-lg="100" class="survey-aggregate" ng-show="surveyAggregates">
-  <h3 class="md-headline">{{survey.name}} Results</h3>
-  <h3 class="md-subhead"> Created by {{survey.creator.name}} on {{survey.createdDate}}</h3>
+  <h3 class="md-headline">{{aggregateSurvey.name}} Results</h3>
+  <h3 class="md-subhead"> Created by {{aggregateSurvey.creator.name}} on {{aggregateSurvey.createdDate}}</h3>
   <div ng-if="surveyAggregates.questions" class="questions-container">
     <div layout layout-align="start center" ng-repeat="q in surveyAggregates.questions" ng-class-odd="'odd'">
       <div flex="none" class="question">{{q.question.question}}</div>

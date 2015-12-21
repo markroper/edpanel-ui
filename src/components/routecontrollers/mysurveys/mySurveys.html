@@ -1,5 +1,5 @@
 <div class="create-survey-controller" layout layout-align="center start" layout-wrap>
-  <div flex="none" flex-lt-lg="100" layout="column" layout-align="center center" layout-wrap class="my-surveys">
+  <div ng-show="!surveyAggregates && !survey" flex="none" flex-lt-lg="100" layout="column" layout-align="center center" layout-wrap class="my-surveys">
     <div layout layout-align="center center">
       <h3 flex="none" class="md-headline" style="padding-right:25px;">My Surveys</h3>
       <md-button class="md-fab md-primary" ng-click="createNewSurvey()"><md-icon>add</md-icon><md-tooltip>create new survey</md-tooltip></md-button>
@@ -28,5 +28,5 @@
     </div>
   </div>
   <survey-builder survey="survey" surveyType="surveyType" school="school" sections="sections"></survey-builder>
-  <survey-aggregate survey="aggregateSurvey" survey-aggregates="surveyAggregates"></survey-aggregate>
+  <survey-aggregate aggregate-survey="aggregateSurvey" survey-aggregates="surveyAggregates"></survey-aggregate>
 </div>

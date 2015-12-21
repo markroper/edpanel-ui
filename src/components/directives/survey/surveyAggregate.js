@@ -4,7 +4,7 @@ angular.module('teacherdashboard')
     function($window, api, $rootScope, $state, $mdToast, authentication) {
       return {
         scope: {
-          survey: '=',
+          aggregateSurvey: '=',
           surveyAggregates: '='
         },
         restrict: 'E',
@@ -12,7 +12,7 @@ angular.module('teacherdashboard')
         replace: true,
         link: function($scope) {
           $scope.dismissAggregateResults = function() {
-            $scope.survey = null;
+            $scope.aggregateSurvey = null;
             $scope.surveyAggregates = null;
           };
           /*
