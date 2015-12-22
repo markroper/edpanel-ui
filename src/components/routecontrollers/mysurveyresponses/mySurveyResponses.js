@@ -15,7 +15,7 @@ angular.module('teacherdashboard')
           }
         }
         return true;
-      }
+      };
       $scope.evaluateSurveyFilter = function() {
         if(!filterValuesAdded) {
           var surveyMap = {};
@@ -28,7 +28,7 @@ angular.module('teacherdashboard')
             }
           });
         }
-      }
+      };
       var containerEl = angular.element('.my-survey-responses');
       var responseDirective =
         '<survey-response survey="survey" survey-response="surveyResponse" questions-and-answers="questions" dismiss="dismiss"></survey-response>';

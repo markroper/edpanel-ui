@@ -15,19 +15,18 @@ angular.module('teacherdashboard')
             if(q.question.type === 'MULTIPLE_CHOICE' || q.question.type === 'TRUE_FALSE') {
               var d = $q.defer();
               q.chartDataPromise = d.promise;
+              var results = q.results;
               if (q.question.type === 'MULTIPLE_CHOICE') {
                 var choices = q.question.choices;
                 choices.unshift('choices');
-                var results = q.results;
                 results.unshift('responses');
                 d.resolve([results, choices ]);
               } else if (q.question.type === 'TRUE_FALSE') {
-                var results = q.results;
                 results.unshift('responses');
                 d.resolve([ results, ['choices', 'true', 'false']]);
               }
             }
           });
         }
-      }
+      };
     }]);

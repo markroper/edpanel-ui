@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('teacherdashboard')
-.controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication','$compile', '$mdToast',
-  function ($scope, api, $state, statebag, $window, $location, authentication, $compile, $mdToast) {
+.controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication','$compile', '$mdToast', 'statebagApiManager',
+  function ($scope, api, $state, statebag, $window, $location, authentication, $compile, $mdToast, statebagapimanager) {
     statebag.currentPage.name = 'My Surveys';
     var surveyBuilderDirective = '<survey-builder survey="survey" survey-type="surveyType" school="school" sections="sections" dismiss="dismissSurveyResults"></survey-builder>';
     //We need student ID, school, currentYear, currentTerm in order to proceed
@@ -112,7 +112,7 @@ angular.module('teacherdashboard')
               .content('Failed to delete survey')
               .hideDelay(2000)
           );
-        })
+        });
     };
 
     $scope.selectSurveyResponse = function(survey) {
