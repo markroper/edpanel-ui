@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('teacherdashboard')
-.controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication','$compile',
-  function ($scope, api, $state, statebag, $window, $location, authentication, $compile) {
+.controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication','$compile', '$mdToast',
+  function ($scope, api, $state, statebag, $window, $location, authentication, $compile, $mdToast) {
     statebag.currentPage.name = 'My Surveys';
-    var surveyBuilderDirective = '<survey-builder survey="survey" surveyType="surveyType" school="school" sections="sections" dismiss="dismissSurveyResults"></survey-builder>';
+    var surveyBuilderDirective = '<survey-builder survey="survey" survey-type="surveyType" school="school" sections="sections" dismiss="dismissSurveyResults"></survey-builder>';
     //We need student ID, school, currentYear, currentTerm in order to proceed
     var identity = authentication.identity();
     if(!identity || (!identity.schoolId && !statebag.school)) {
@@ -78,19 +78,40 @@ angular.module('teacherdashboard')
     $scope.cloneSurvey = function(survey) {
         var newSurvey = angular.copy(survey);
         newSurvey.id = null;
-        if(newSurvey.schoolFk) {
+        if(newSurvey.sectionFk) {
+          $scope.surveyType = {type: 'section'};
+        } else {
           $scope.surveyType = {type: 'school'};
         }
+        newSurvey.administeredDate = $window.moment(newSurvey.administeredDate).toDate();
         $scope.createNewSurvey(newSurvey);
     };
 
     $scope.deleteSurvey = function(survey) {
       api.survey.delete({surveyId: survey.id},
         function(){
-          //TODO: delete succeeded
+          for(var i = 0; i < $scope.surveys.length; i++) {
+            if($scope.surveys[i].id === survey.id) {
+              $scope.surveys.splice(i, 1);
+              break;
+            }
+          }
+          $scope.surveys
+            .filter(function (el) {
+              return !angular.equals(el, survey);
+            });
+          $mdToast.show(
+            $mdToast.simple()
+              .content('Survey deleted')
+              .hideDelay(2000)
+          );
         },
         function(){
-          //TODO: delete failed
+          $mdToast.show(
+            $mdToast.simple()
+              .content('Failed to delete survey')
+              .hideDelay(2000)
+          );
         })
     };
 
@@ -101,6 +122,15 @@ angular.module('teacherdashboard')
 
     $scope.dismissSurveyResults = function() {
       $scope.survey = null;
+      //Refresh survey list
+      api.surveyByCreator.get(
+        {
+          userId: identity.id
+        },
+        function(results){
+          $scope.surveys = results;
+        });
+
       if($scope.childScope) {
         $scope.childScope.$destroy();
       }
