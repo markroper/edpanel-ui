@@ -1,6 +1,7 @@
 'use strict';
 angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager', 'authentication', 'UAService',
 function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authentication, UAService) {
+    $scope.statebag = statebag;
     $scope.userRole = statebag.userRole;
     $scope.currentPage = statebag.currentPage;
     $scope.theme = statebag.theme;

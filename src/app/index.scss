@@ -179,8 +179,8 @@ span.name {
 }
 
 // injector
-@import '../components/directives/behaviorgraph/behaviorgraph.scss';
 @import '../components/directives/attendancetable/attendancetable.scss';
+@import '../components/directives/behaviorgraph/behaviorgraph.scss';
 @import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/chorocalendar/chorocalendar.scss';
 @import '../components/directives/datelinechart/datelinechart.scss';
@@ -196,8 +196,8 @@ span.name {
 @import '../components/directives/survey/surveyQuestionBuilder.scss';
 @import '../components/directives/survey/surveyResponse.scss';
 @import '../components/routecontrollers/administration/administration.scss';
-@import '../components/routecontrollers/login/login.scss';
 @import '../components/routecontrollers/home/home.scss';
+@import '../components/routecontrollers/login/login.scss';
 @import '../components/routecontrollers/mysurveyresponses/mySurveyResponses.scss';
 @import '../components/routecontrollers/mysurveys/mySurveys.scss';
 @import '../components/routecontrollers/navinclude/navinclude.scss';
