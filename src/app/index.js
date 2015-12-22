@@ -69,11 +69,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         controller: 'MySurveyResponses',
         data: {
           roles: [
-            roles.ADMIN,
-            roles.TEACHER,
-            roles.SUPER_ADMIN,
-            roles.STUDENT,
-            roles.GUARDIAN
+            roles.STUDENT
           ]
         }
       })
