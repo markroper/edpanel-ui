@@ -6,7 +6,8 @@ angular.module('teacherdashboard')
         scope: {
           survey: '=',
           surveyResponse: '=',
-          questionsAndAnswers: '='
+          questionsAndAnswers: '=',
+          dismiss: '='
         },
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/survey/surveyResponse.html',
@@ -68,7 +69,14 @@ angular.module('teacherdashboard')
                 },
                 responseToSubmit,
                 function() {
-                  console.log('success updating');
+                  $mdToast.show(
+                    $mdToast.simple()
+                      .content('Updated response')
+                      .hideDelay(2000)
+                  );
+                  if($scope.dismiss) {
+                    $scope.dismiss();
+                  }
                 }
               );
             } else {
@@ -79,14 +87,16 @@ angular.module('teacherdashboard')
                 },
                 responseToSubmit,
                 function() {
-                  console.log('success creating');
+                  $mdToast.show(
+                    $mdToast.simple().
+                      content('Saved response').hideDelay(2000));
+                  if($scope.dismiss) {
+                    $scope.dismiss();
+                  }
                 }
               );
             }
 
-          };
-          $scope.cancelResponse = function() {
-            $scope.survey = null;
           };
         }
       };

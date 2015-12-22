@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('MySurveyResponses', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication', 'statebagApiManager',
-    function ($scope, api, $state, statebag, $window, $location, authentication, statebagapimanager) {
+  .controller('MySurveyResponses', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication', 'statebagApiManager', '$compile',
+    function ($scope, api, $state, statebag, $window, $location, authentication, statebagapimanager, $compile) {
       statebag.currentPage.name = 'My Survey Responses';
       $scope.unansweredOnly = false;
       var filterValuesAdded = false;
@@ -29,7 +29,10 @@ angular.module('teacherdashboard')
           });
         }
       }
-
+      var containerEl = angular.element('.my-survey-responses');
+      var responseDirective =
+        '<survey-response survey="survey" survey-response="surveyResponse" questions-and-answers="questions" dismiss="dismiss"></survey-response>';
+      var oldElem = null;
       //We need student ID, school, currentYear, currentTerm in order to proceed
       var identity = authentication.identity();
       if(!identity || !identity.schoolId) {
@@ -115,5 +118,25 @@ angular.module('teacherdashboard')
           return questions[key];
         });
         $scope.questions = questionAnswers;
+
+        if($scope.childScope) {
+          $scope.childScope.$destroy();
+        }
+        $scope.childScope = $scope.$new(false, $scope);
+        oldElem = $compile(responseDirective)($scope.childScope);
+        containerEl.append(oldElem);
+      };
+
+      $scope.dismiss = function() {
+        $scope.surveyResponse = null;
+        $scope.questions = null;
+        $scope.survey = null;
+        if($scope.childScope) {
+          $scope.childScope.$destroy();
+        }
+        if(oldElem) {
+          oldElem.remove();
+          oldElem = null;
+        }
       };
     }]);

@@ -7,7 +7,8 @@ angular.module('teacherdashboard')
         school: '=',
         sections: '=',
         surveyType: '=',
-        survey: '='
+        survey: '=',
+        dismiss: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/survey/surveyBuilder.html',
@@ -64,7 +65,7 @@ angular.module('teacherdashboard')
                     .content('Survey saved')
                     .hideDelay(2000)
                 );
-                $state.go($rootScope.previousState, $rootScope.previousStateParams);
+                $scope.dismiss();
               }
             },
             function() {
@@ -73,13 +74,8 @@ angular.module('teacherdashboard')
                   .content('Could not save survey')
                   .hideDelay(2000)
               );
-              $state.go($rootScope.previousState, $rootScope.previousStateParams);
+              $scope.dismiss();
             });
-        };
-        $scope.cancelCreateSurvey = function() {
-          if($rootScope.previousState) {
-            $state.go($rootScope.previousState, $rootScope.previousStateParams);
-          }
         };
       }
     };

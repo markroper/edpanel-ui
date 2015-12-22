@@ -1,4 +1,4 @@
-<div flex="noshrink" flex-lt-lg="100" class="survey-response" ng-show="survey">
+<div flex="noshrink" flex-lt-lg="100" class="survey-response">
   <h3 class="md-headline">{{survey.name}} Response</h3>
   <h3 class="md-subhead"> Created by {{survey.creator.name}} on {{survey.createdDate}}</h3>
   <div ng-if="questionsAndAnswers" class="questions-container">
@@ -22,6 +22,6 @@
   </div>
   <div layout layout-align="start center">
     <md-button class="md-raised md-primary" ng-click="submitResponse()">Submit Response</md-button>
-    <md-button class="md-raised" ng-click="cancelResponse()">Cancel</md-button>
+    <md-button class="md-raised" ng-click="dismiss()">Cancel</md-button>
   </div>
 </div>

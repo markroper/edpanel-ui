@@ -13,10 +13,12 @@ angular.module('teacherdashboard')
       login: $resource(base + '/login'),
       logout: $resource(base + '/logout'),
       //Survey
-      survey: $resource(base + '/surveys', {},
+      survey: $resource(base + '/surveys/:surveyId', {},
         {
           'get': { isArray: true },
-          'post': { method: 'POST', headers: {'Content-Type': 'application/json' }}
+          'getOne': { methos: 'GET' },
+          'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
+          'delete': { method: 'DELETE' }
         }),
       surveyByRespondent: $resource(
         base + '/surveys/schools/:schoolId/years/:yearId/terms/:termId/respondents/:respondentId',
@@ -36,6 +38,7 @@ angular.module('teacherdashboard')
           'put': { method:'PUT', headers: {'Content-Type': 'application/json'} },
           'post': { method:'POST', headers: {'Content-Type': 'application/json'} }
         }),
+      surveyAggregateResults: $resource(base + '/surveys/:surveyId/responses/aggregates'),
       //Password
       changePassword: $resource(base + '/users/passwordReset/:userId', {},
         {'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }}),

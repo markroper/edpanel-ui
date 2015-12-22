@@ -45,8 +45,8 @@
         <h2 class="menu-heading md-subhead">Navigation Menu</h2>
         <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToHome()"><span>Student List</span></md-button>
         <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToSchoolDash()"><span>School Dashboard</span></md-button>
-        <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToCreateSurvey()"><span>Create Survey</span></md-button>
-        <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToMySurveyResponses()"><span>My Survey Responses</span></md-button>
+        <md-button ng-show="userRole !== 'Student' && userRole !== 'Guardian'" class="md-primary nav-item md-ink-ripple" ng-click="goToMySurveys()"><span>My Surveys</span></md-button>
+        <md-button ng-show="userRole === 'Student'"class="md-primary nav-item md-ink-ripple" ng-click="goToMySurveyResponses()"><span>My Survey Responses</span></md-button>
         <md-button ng-disabled="true" class="md-primary nav-item md-ink-ripple">Saved Reports</md-button>
         <md-button ng-disabled="true" class="md-primary nav-item md-ink-ripple">Report Builder</md-button>
         <md-divider></md-divider>

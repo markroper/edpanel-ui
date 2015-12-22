@@ -51,10 +51,10 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
           ]
         }
       })
-      .state('app.createSurvey', {
-        url: 'createsurvey',
-        templateUrl: rootUrl + '/components/routecontrollers/createsurvey/createSurvey.html',
-        controller: 'CreateSurvey',
+      .state('app.mySurveys', {
+        url: 'mysurveys',
+        templateUrl: rootUrl + '/components/routecontrollers/mysurveys/mySurveys.html',
+        controller: 'MySurveys',
         data: {
           roles: [
             roles.ADMIN,
@@ -69,11 +69,19 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         controller: 'MySurveyResponses',
         data: {
           roles: [
+            roles.STUDENT
+          ]
+        }
+      })
+      .state('app.surveyResults', {
+        url: 'surveyresults/:surveyId',
+        templateUrl: rootUrl + '/components/routecontrollers/surveyresults/surveyResults.html',
+        controller: 'SurveyResults',
+        data: {
+          roles: [
             roles.ADMIN,
             roles.TEACHER,
-            roles.SUPER_ADMIN,
-            roles.STUDENT,
-            roles.GUARDIAN
+            roles.SUPER_ADMIN
           ]
         }
       })
