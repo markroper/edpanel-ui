@@ -32,18 +32,18 @@ angular.module('teacherdashboard')
         var sectionIds = [];
         $q.all(promises).then(function() {
 
-          for (var i = 0; i < statebag.currentSections.length; i++) {
-            sectionIds.push(statebag.currentSections[i].id);
-            sectionGradesPromise.push(resolveSectionGrades(statebag.currentSections[i], i));
-          }
-
           var hwQuery = getHwQuery(statebag.currentTerm.startDate, statebag.currentTerm.endDate, sectionIds);
           sectionPromise.push(api.query.save({ schoolId: statebag.school.id }, hwQuery).$promise);
+
+          for (var i = 0; i < statebag.currentSections.length; i++) {
+            sectionIds.push(statebag.currentSections[i].id);
+            sectionPromise.push(resolveSectionGrades(statebag.currentSections[i], i));
+          }
 
           $q.all(sectionPromise).then(function(responses) {
             var hwCompletions = {};
             var demeritMap = {};
-
+            console.log(responses);
             for (var j = 0; j < responses[0].records.length; j++ ) {
               demeritMap[responses[0].records[j].values[0]] = responses[0].records[j].values[2];
             }
@@ -87,7 +87,7 @@ angular.module('teacherdashboard')
             statebag.hwCompleteSections = hwCompletions;
           });
 
-          $q.all(sectionGradesPromise).then(function() {
+          $q.all(sectionPromise).then(function() {
             $scope.sections = statebag.currentSections;
           });
 
@@ -223,6 +223,7 @@ angular.module('teacherdashboard')
           },
           //Success callback
           function(data){
+            console.log("RESOLVING DATA");
             statebag.currentSections[index]["grades"] = data;
             var total = 0;
             data.sort(function(grade) {

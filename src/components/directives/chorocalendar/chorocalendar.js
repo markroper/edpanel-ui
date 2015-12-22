@@ -46,7 +46,7 @@ angular.module('teacherdashboard')
           .append('g');
 
         var rect = svg.selectAll('.day')
-            .data(function(d) { 
+            .data(function(d) {
               return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
             })
           .enter().append('rect')
@@ -55,9 +55,9 @@ angular.module('teacherdashboard')
             .attr('height', cellSize)
             .attr('x', function(d) {
               var monthPadding = 1.2 * cellSize*7 * ((month(d)-1) % (noMonthsInARow));
-              return day(d) * cellSize + monthPadding; 
+              return day(d) * cellSize + monthPadding;
             })
-            .attr('y', function(d) { 
+            .attr('y', function(d) {
               var weekDiff = week(d) - week(new Date(year(d), month(d)-1, 1) );
               var rowLevel = Math.ceil(month(d) / (noMonthsInARow));
               return (weekDiff*cellSize) + rowLevel*cellSize*8 - cellSize/2 - shiftUp;
@@ -65,7 +65,7 @@ angular.module('teacherdashboard')
             .datum(format);
 
         svg.selectAll('.month-title')  // Jan, Feb, Mar and the whatnot
-              .data(function(d) { 
+              .data(function(d) {
                 return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
             .enter().append('text')
               .text(monthTitle)
@@ -86,6 +86,7 @@ angular.module('teacherdashboard')
         elem.find(CHORO_CONTAINER_SELECTOR).scrollLeft(svgWidth);
 
         scope.calendarDataPromise.then(function(resolvedData) {
+          console.log(resolvedData);
           var behaviorByDate = {};
           resolvedData.forEach(function(behavior){
             var currDate = moment(behavior.behaviorDate);
@@ -96,7 +97,7 @@ angular.module('teacherdashboard')
               behaviorByDate[dateString].push(behavior);
             }
           });
-          rect.attr('class', function(d) { 
+          rect.attr('class', function(d) {
             var weekday = moment(d).weekday();
             var colorVal = '11';
             //Only evaluate wekdays

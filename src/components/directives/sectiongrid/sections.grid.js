@@ -40,16 +40,6 @@ angular.module('teacherdashboard')
         console.log($scope.section);
         $scope.showMoreStudents = true;
         $scope.limit = 30;
-        function getAverageGrade(section) {
-          var total = 0;
-          for (var i = 0 ; i < section.grades.length; i++) {
-            total += section.grades[i].grade;
-          }
-          console.log(total);
-          return total/section.grades.length;
-        }
-        $scope.section['averageGrade'] = getAverageGrade($scope.section);
-        console.log($scope.section);
 
 
 

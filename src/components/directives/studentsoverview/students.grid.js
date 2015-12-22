@@ -28,8 +28,6 @@ angular.module('teacherdashboard')
         };
 
         var cell;
-        console.log("RUNNING");
-        console.log($scope.studentsData);
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
