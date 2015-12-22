@@ -5,17 +5,17 @@
       <md-button class="md-fab md-primary" ng-click="createNewSurvey()"><md-icon>add</md-icon><md-tooltip>create new survey</md-tooltip></md-button>
     </div>
     <div layout layout-align="center center" class="survey md-subhead">
-      <div flex="20">Name</div>
-      <div flex="20">Created</div>
-      <div flex="20">Administer</div>
+      <div flex="30">Name</div>
+      <div flex="15">Created</div>
+      <div flex="15">Administer</div>
       <div flex="15"> </div>
       <div flex="15"> </div>
       <div flex="15"> </div>
     </div>
     <div flex="none" layout layout-align="center center" class="survey" ng-class-odd="'odd'" ng-repeat="survey in surveys | filter:surveyFilter | orderBy: survey.createdDate">
-      <div flex="20">{{survey.name}}</div>
-      <div flex="20">{{survey.createdDate}}</div>
-      <div flex="20">{{survey.administeredDate}}</div>
+      <div flex="30">{{survey.name}}</div>
+      <div flex="15">{{survey.createdDate}}</div>
+      <div flex="15">{{survey.administeredDate}}</div>
       <div flex="15">
         <md-button class="md-primary" ng-click="cloneSurvey(survey)">Clone<md-tooltip>Create new survey from template</md-tooltip></md-button>
       </div>

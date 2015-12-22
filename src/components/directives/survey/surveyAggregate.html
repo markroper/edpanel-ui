@@ -1,18 +1,15 @@
-<div flex="noshrink" flex-lt-lg="100" class="survey-aggregate">
-  <h3 class="md-headline">{{aggregateSurvey.name}} Results</h3>
+<div flex="100" class="survey-aggregate">
+  <h3 class="md-display-1">{{aggregateSurvey.name}} Results</h3>
   <h3 class="md-subhead"> Created by {{aggregateSurvey.creator.name}} on {{aggregateSurvey.createdDate}}</h3>
-  <div ng-if="surveyAggregates.questions" class="questions-container">
-    <div layout layout-align="start center" ng-repeat="q in surveyAggregates.questions" ng-class-odd="'odd'">
-      <div flex="none" class="question">{{q.question.question}}</div>
-      <div flex="grow" flex-lt-lg="100" class="answer-container">
-        Question type: {{q.question.type}}. Total responses: {{q.respondents}}.
-        <div class="multiple-choice-results" ng-if="q.question.type === 'MULTIPLE_CHOICE' || q.question.type === 'TRUE_FALSE'">
-          <stackedbar columns-promise="q.chartDataPromise"></stackedbar>
-        </div>
+  <div layout layout-wrap layout-align="center center">
+    <div flex="50" flex-lt-lg="100" layout="column" class="answer-container" ng-repeat="q in surveyAggregates.questions">
+      <div class="aggregate-inner md-whiteframe-1dp">
+      <h3 class="question md-headline">{{q.question.question}}</h3>
+      <div class="summary" ng-class="{ openresponse: q.question.type==='OPEN_RESPONSE' }">Question type: {{q.question.type}}. Total responses: {{q.respondents}}.</div>
+      <div class="multiple-choice-results" ng-if="q.question.type === 'MULTIPLE_CHOICE' || q.question.type === 'TRUE_FALSE'">
+        <stackedbar columns-promise="q.chartDataPromise"></stackedbar>
+      </div>
       </div>
     </div>
-  </div>
-  <div layout layout-align="start center">
-    <md-button class="md-raised" ng-click="dismiss()">Dismiss</md-button>
   </div>
 </div>

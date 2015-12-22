@@ -5,8 +5,7 @@ angular.module('teacherdashboard')
       return {
         scope: {
           aggregateSurvey: '=',
-          surveyAggregates: '=',
-          dismiss: '='
+          surveyAggregates: '='
         },
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/survey/surveyAggregate.html',

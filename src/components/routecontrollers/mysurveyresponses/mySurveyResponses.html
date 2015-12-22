@@ -7,16 +7,16 @@
       </md-switch>
     </div>
     <div layout layout-align="center center" class="survey md-subhead">
-      <div flex="25">Name</div>
-      <div flex="25">Created</div>
-      <div flex="25">Created By</div>
-      <div flex="25"></div>
+      <div flex="35">Name</div>
+      <div flex="20">Created</div>
+      <div flex="20">Created By</div>
+      <div flex="20"></div>
     </div>
     <div flex="none" layout layout-align="center center" class="survey" ng-class-odd="'odd'" ng-repeat="survey in surveys | filter:surveyFilter | orderBy: survey.createdDate">
-      <div flex="25">{{survey.name}}</div>
-      <div flex="25">{{survey.createdDate}}</div>
-      <div flex="25">{{survey.creator.name}}</div>
-      <div flex="25">
+      <div flex="35">{{survey.name}}</div>
+      <div flex="20">{{survey.createdDate}}</div>
+      <div flex="20">{{survey.creator.name}}</div>
+      <div flex="20">
         <md-button class="md-primary" ng-click="selectSurveyResponse(survey)">Response</md-button>
       </div>
     </div>

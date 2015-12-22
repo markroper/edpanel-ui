@@ -5,7 +5,6 @@ angular.module('teacherdashboard')
   function ($scope, api, $state, statebag, $window, $location, authentication, $compile) {
     statebag.currentPage.name = 'My Surveys';
     var surveyBuilderDirective = '<survey-builder survey="survey" surveyType="surveyType" school="school" sections="sections" dismiss="dismissSurveyResults"></survey-builder>';
-    var surveyResultsDirective = '<survey-aggregate aggregate-survey="aggregateSurvey" survey-aggregates="surveyAggregates" dismiss="dismissSurveyResults"></survey-aggregate>';
     //We need student ID, school, currentYear, currentTerm in order to proceed
     var identity = authentication.identity();
     if(!identity || (!identity.schoolId && !statebag.school)) {
@@ -96,30 +95,12 @@ angular.module('teacherdashboard')
     };
 
     $scope.selectSurveyResponse = function(survey) {
-      $scope.survey = null;
-      api.surveyAggregateResults.get({ surveyId: survey.id },
-        function(resp) {
-          $scope.surveyAggregates = resp;
-          $scope.aggregateSurvey = survey;
-          if($scope.childScope) {
-            $scope.childScope.$destroy();
-          }
-          $scope.childScope = $scope.$new(false, $scope);
-          $scope.childScope.surveyAggregates = resp;
-          $scope.childScope.aggregateSurvey = survey;
-          $scope.childScope.dismissSurveyResults = $scope.dismissSurveyResults;
-          oldElem = $compile(surveyResultsDirective)($scope.childScope);
-          containerEl.append(oldElem);
-        },
-        function() {
-          //TODO: handle error
-        });
+      statebag.currentSurvey = survey;
+      $state.go('app.surveyResults', { surveyId: survey.id });
     };
 
     $scope.dismissSurveyResults = function() {
       $scope.survey = null;
-      $scope.aggregateSurvey = null;
-      $scope.surveyAggregates = null;
       if($scope.childScope) {
         $scope.childScope.$destroy();
       }

@@ -16,6 +16,7 @@ angular.module('teacherdashboard')
       survey: $resource(base + '/surveys/:surveyId', {},
         {
           'get': { isArray: true },
+          'getOne': { methos: 'GET' },
           'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
           'delete': { method: 'DELETE' }
         }),
