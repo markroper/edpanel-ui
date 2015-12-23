@@ -209,15 +209,44 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         .alwaysWatchTheme(true);
   })
   .provider('consts', function(){
+    var BLACK = 'Black or African American';
+    var ASIAN = 'Asian';
+    var PACIFIC_ISLANDER = 'Native Hawaiian or Pacific Islander';
+    var AM_INDIAN = 'American Indian or Alaska Native';
+    var WHITE = 'White';
+    var LATINO_HISPANIC = 'Hispanic or Latino';
+    var NON_LATINO = 'Not Hispanic or Latino';
     return {
       $get: function () {
         return {
           roles: {
-                ADMIN:'ADMINISTRATOR',
-                TEACHER: 'TEACHER',
-                STUDENT: 'STUDENT',
-                GUARDIAN: 'GUARDIAN',
-                SUPER_ADMIN: 'SUPER_ADMINISTRATOR'
+            ADMIN:'ADMINISTRATOR',
+            TEACHER: 'TEACHER',
+            STUDENT: 'STUDENT',
+            GUARDIAN: 'GUARDIAN',
+            SUPER_ADMIN: 'SUPER_ADMINISTRATOR'
+          },
+          race: {
+            BLACK: BLACK,
+            ASIAN: ASIAN,
+            PACIFIC_ISLANDER: PACIFIC_ISLANDER,
+            AM_INDIAN: AM_INDIAN,
+            WHITE: WHITE
+          },
+          ethnicity: {
+            LATINO: LATINO_HISPANIC,
+            NON_LATINO: NON_LATINO
+          },
+          ethnicityMap: {
+            'YES': LATINO_HISPANIC,
+            'NO': NON_LATINO
+          },
+          raceMap: {
+            'B': BLACK,
+            'P': PACIFIC_ISLANDER,
+            'I': AM_INDIAN,
+            'A': ASIAN,
+            'W': WHITE
           }
         };
       }

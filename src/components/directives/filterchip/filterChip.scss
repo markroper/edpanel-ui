@@ -1,0 +1,31 @@
+.filter-chip {
+  width:100%;
+  background-color: #F0F0F0;
+  position:relative;
+  margin: 15px;
+  padding: 22px 15px 15px 15px;
+  border-radius: 5px;
+  .range-input {
+    md-input-container {
+      width: 60px;
+    }
+    .range-label {
+      padding: 10px;
+    }
+    .md-errors-spacer {
+      display: none !important;
+    }
+  }
+  .filter-type {
+    position:absolute;
+    top: 5px;
+    left: 10px;
+  }
+  .remove-filter {
+    width:35px;
+    min-width:35px;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+  }
+}

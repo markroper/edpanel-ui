@@ -6,7 +6,6 @@
 	0% { height:310px; }
 	100% { height: 0px; }
 }
-
 .students-grid {
   .list-filter {
     padding: 3px 0px;
@@ -75,7 +74,7 @@
 	md-card {
 		padding: 0px 20px 0px 20px;
 	}
-	button.md-primary {
+	button.student-name {
 		width: 100%;
     margin: 0px;
 		text-overflow: ellipsis;
@@ -86,7 +85,16 @@
 		text-overflow: ellipsis;
 	}
 	.md-36 { font-size: 36px; }
-	input.md-input { font-size: 18px; width:225px;}
+	input.search-name { font-size: 18px; width:225px;}
+  .facet-container {
+    .filters-title {
+      text-align: center;
+      cursor: default;
+      color: $gray-headline;
+    }
+    width:350px;
+    backrgound-color:black;
+  }
 	.table-container{
 		width:100%;
 		max-width:1200px;
