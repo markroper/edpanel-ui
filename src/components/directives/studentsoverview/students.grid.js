@@ -26,16 +26,6 @@ angular.module('teacherdashboard')
         $scope.filters = ['Section', 'GPA', 'Behavior', 'Homework Completion',
           'Absenses', 'Gender', 'Race', 'Ethnicity', 'Grade Level'];
         $scope.currentFilters = {};
-
-        $scope.toggleFilters = function() {
-          $scope.showFilters = !$scope.showFilters;
-        };
-        $scope.addFilter = function() {
-          if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
-            $scope.currentFilters[$scope.filter] = { type: $scope.filter };
-            console.log('Added filter value');
-          }
-        };
         /**
          *
          * @param filter  - The filter object from the child directive calling back
@@ -52,7 +42,113 @@ angular.module('teacherdashboard')
         };
         $scope.removeFilter = function(filter) {
           delete $scope.currentFilters[filter];
+        };
+        $scope.toggleFilters = function() {
+          $scope.showFilters = !$scope.showFilters;
+        };
+        $scope.addFilter = function() {
+          if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
+            $scope.currentFilters[$scope.filter] = { type: $scope.filter };
+            console.log('Added filter value');
+          }
+        };
+        //TODO: move this kind of think up to a consts file somewhere?
+        var raceMapping = {
+          'B':'Black or African American',
+          'P':'Native Hawaiian or Other Pacific Islander',
+          'I':'American Indian or Alaska Native',
+          'A':'Asian',
+          'W':'White'
+        };
+        var ethnicityMapping = {
+          'YES': 'Hispanic or Latino',
+          'NO': 'Not Hispanic or Latino'
+        };
+        var genderMapping = {
+          'MALE': 'Male',
+          'FEMALE': 'Female'
         }
+        var BreakException= {};
+        $scope.filterStudents = function(student) {
+          try {
+            angular.forEach($scope.currentFilters, function (value, key) {
+              //Perform the filter
+              if (key === 'GPA') {
+                if(value.values) {
+                  if (value.values.min && student.gpa < value.values.min) {
+                    throw BreakException;
+                  }
+                  if (value.values.max && student.gpa > value.values.max) {
+                    throw BreakException;
+                  }
+                }
+              } else if (key === 'Behavior') {
+                if (value.values.min && student.behavior < value.values.min) {
+                  throw BreakException;
+                }
+                if (value.values.max && student.behavior > value.values.max) {
+                  throw BreakException;
+                }
+              } else if (key === 'Homework Completion') {
+                if (value.values.min && student.homework < value.values.min) {
+                  throw BreakException;
+                }
+                if (value.values.max && student.homework > value.values.max) {
+                  throw BreakException;
+                }
+              } else if (key === 'Absenses') {
+                if (value.values.min && student.attendance < value.values.min) {
+                  throw BreakException;
+                }
+                if (value.values.max && student.attendance > value.values.max) {
+                  throw BreakException;
+                }
+              } else if (key === 'Gender') {
+                if (value.values && value.values.length > 0) {// && !value.values[genderMapping[student.student.gender]]) {
+                  var match = false;
+                  for(var i = 0; i < value.values.length; i++) {
+                    if(value.values[i].name === genderMapping[student.student.gender]) {
+                      match = true;
+                      break;
+                    }
+                  }
+                  if(!match) {
+                    throw BreakException;
+                  }
+                }
+              } else if (key === 'Race') {
+                if (value.values && value.values.length > 0) {
+                  var match = false;
+                  for(var i = 0; i < value.values.length; i++) {
+                    if(value.values[i].name === raceMapping[student.student.federalRace]) {
+                      match = true;
+                      break;
+                    }
+                  }
+                  if(!match) {
+                    throw BreakException;
+                  }
+                }
+              } else if (key === 'Ethnicity') {
+                if (value.values && value.values.length > 0) {
+                  var match = false;
+                  for(var i = 0; i < value.values.length; i++) {
+                    if(value.values[i].name === ethnicityMapping[student.student.federalEthnicity]) {
+                      match = true;
+                      break;
+                    }
+                  }
+                  if(!match) {
+                    throw BreakException;
+                  }
+                }
+              }
+            });
+          } catch (e) {
+            return false;
+          }
+          return true;
+        };
 
 
         //SORT RELATED
