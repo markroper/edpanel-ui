@@ -4,6 +4,9 @@ angular.module('teacherdashboard')
 .controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication','$compile', '$mdToast', 'statebagApiManager',
   function ($scope, api, $state, statebag, $window, $location, authentication, $compile, $mdToast, statebagapimanager) {
     statebag.currentPage.name = 'My Surveys';
+    $scope.$on('$viewContentLoaded', function() {
+      $window.ga('send', 'pageview', { page: $location.url() });
+    });
     var surveyBuilderDirective = '<survey-builder survey="survey" survey-type="surveyType" school="school" sections="sections" dismiss="dismissSurveyResults"></survey-builder>';
     //We need student ID, school, currentYear, currentTerm in order to proceed
     var identity = authentication.identity();
@@ -52,6 +55,7 @@ angular.module('teacherdashboard')
       resolveSurveysAndSections();
     }
     $scope.createNewSurvey = function(s) {
+      $window.ga('send', 'event', 'Survey', 'CreateSurvey', 'Create a new survey');
       $scope.surveyAggregates = null;
       $scope.aggregateSurvey = null;
       $scope.school = statebag.school;

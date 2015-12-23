@@ -4,6 +4,9 @@ angular.module('teacherdashboard')
   .controller('MySurveyResponses', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication', 'statebagApiManager', '$compile',
     function ($scope, api, $state, statebag, $window, $location, authentication, statebagapimanager, $compile) {
       statebag.currentPage.name = 'My Survey Responses';
+      $scope.$on('$viewContentLoaded', function() {
+        $window.ga('send', 'pageview', { page: $location.url() });
+      });
       $scope.unansweredOnly = false;
       var filterValuesAdded = false;
       $scope.surveyFilter = function(survey) {

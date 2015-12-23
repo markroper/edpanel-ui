@@ -56,6 +56,7 @@ angular.module('teacherdashboard')
         $scope.addFilter = function() {
           if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
             $scope.currentFilters[$scope.filter] = { type: $scope.filter };
+            $window.ga('send', 'event', 'Home', 'FilterStudents', 'Adds an advanced filter');
           }
         };
         var genderMapping = {
