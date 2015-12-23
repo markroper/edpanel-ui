@@ -27,6 +27,8 @@ angular.module('teacherdashboard')
           'Gender', 'Race', 'Ethnicity', 'Absences'];
         $scope.currentFilters = {};
         /**
+         * When a user types in values for a filter, this method is called back to update
+         * the filter values, which triggers a student list filter via a digest loop.
          *
          * @param filter  - The filter object from the child directive calling back
          * @param filterValues The values set on the filter
@@ -64,87 +66,73 @@ angular.module('teacherdashboard')
         var genderMapping = {
           'MALE': 'Male',
           'FEMALE': 'Female'
-        }
+        };
+
+        /**
+         * Throws an exception if a candidate value does not match the filterConditions where the filter conditions
+         * are a list of valid values.
+         * @param filterConditions
+         * @param candidate
+         */
+        var evalListCondition = function(filterConditions, candidate) {
+          if (filterConditions && filterConditions.length > 0) {
+            var match = false;
+            for(var i = 0; i < filterConditions.length; i++) {
+              if(filterConditions[i].name === candidate) {
+                match = true;
+                break;
+              }
+            }
+            if(!match) {
+              throw BreakException;
+            }
+          }
+        };
+        /**
+         * Throws an exception if a candidate value does not match the filterConditions where
+         * the filter conditions contain a numeric min and or max value.
+         * @param filterConditions
+         * @param candidate
+         */
+        var evalRangeCondition = function(filterConditions, candidate) {
+          if(filterConditions) {
+            if (filterConditions.min && (candidate < filterConditions.min || !candidate)) {
+              throw BreakException;
+            }
+            if (filterConditions.max && (candidate > filterConditions.max || !candidate)) {
+              throw BreakException;
+            }
+          }
+        };
+
         var BreakException= {};
+        /**
+         * The filter function called by ng-repeat on the student list to filter down the list. For each of the
+         * current filters the user has selected, student instances are compared against filter value and if it passes,
+         * the next filter is moved on to. If a filter condition is not met, false is immediately returned and the
+         * additional filters are not evaluated.  Filters are AND'd together in this manner.
+         *
+         * @param student
+         * @returns {boolean}
+         */
         $scope.filterStudents = function(student) {
           try {
             angular.forEach($scope.currentFilters, function (value, key) {
               //Perform the filter
               if (key === 'GPA') {
-                if(value.values) {
-                  if (value.values.min && (student.gpa < value.values.min || !student.gpa)) {
-                    throw BreakException;
-                  }
-                  if (value.values.max && (student.gpa > value.values.max || !student.gpa)) {
-                    throw BreakException;
-                  }
-                }
+                evalRangeCondition(value.values, student.gpa);
               } else if (key === 'Behavior') {
-                if(value.values) {
-                  if (value.values.min && (student.behavior < value.values.min || !student.behavior)) {
-                    throw BreakException;
-                  }
-                  if (value.values.max && (student.behavior > value.values.max || !student.behavior)) {
-                    throw BreakException;
-                  }
-                }
+                evalRangeCondition(value.values, student.behavior);
               } else if (key === 'Homework Completion') {
-                if(value.values) {
-                  if (value.values.min && (student.homework < value.values.min || !student.homework)) {
-                    throw BreakException;
-                  }
-                  if (value.values.max && (student.homework > value.values.max || !student.homework)) {
-                    throw BreakException;
-                  }
-                }
+                evalRangeCondition(value.values, student.homework);
               } else if (key === 'Absences') {
-                if(value.values) {
-                  if (value.values.min && (student.attendance < value.values.min || student.attendance)) {
-                    throw BreakException;
-                  }
-                  if (value.values.max && (student.attendance > value.values.max || student.attendance)) {
-                    throw BreakException;
-                  }
-                }
+                evalRangeCondition(value.values, student.attendance);
               } else if (key === 'Gender') {
-                if (value.values && value.values.length > 0) {// && !value.values[genderMapping[student.student.gender]]) {
-                  var match = false;
-                  for(var i = 0; i < value.values.length; i++) {
-                    if(value.values[i].name === genderMapping[student.student.gender]) {
-                      match = true;
-                      break;
-                    }
-                  }
-                  if(!match) {
-                    throw BreakException;
-                  }
-                }
+                evalListCondition(value.values, genderMapping[student.student.gender]);
               } else if (key === 'Race') {
-                if (value.values && value.values.length > 0) {
-                  var match = false;
-                  for(var i = 0; i < value.values.length; i++) {
-                    if(value.values[i].name === raceMapping[student.student.federalRace]) {
-                      match = true;
-                      break;
-                    }
-                  }
-                  if(!match) {
-                    throw BreakException;
-                  }
-                }
+                evalListCondition(value.values, raceMapping[student.student.federalRace]);
               } else if (key === 'Ethnicity') {
-                if (value.values && value.values.length > 0) {
-                  var match = false;
-                  for(var i = 0; i < value.values.length; i++) {
-                    if(value.values[i].name === ethnicityMapping[student.student.federalEthnicity]) {
-                      match = true;
-                      break;
-                    }
-                  }
-                  if(!match) {
-                    throw BreakException;
-                  }
-                }
+                evalListCondition(value.values, ethnicityMapping[student.student.federalEthnicity]);
               }
             });
           } catch (e) {
@@ -152,7 +140,6 @@ angular.module('teacherdashboard')
           }
           return true;
         };
-
 
         //SORT RELATED
         $scope.setOrder = function(ev, keyToUse) {

@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('filterChip', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',  '$mdToast',
-    function($state, statebag, api, $mdDialog, $compile, $timeout, $window, $mdToast) {
+  .directive('filterChip', ['$state', 'statebag', 'api', '$mdToast',
+    function($state, statebag, api, $mdToast) {
       return {
         scope: {
           filter: '=',
