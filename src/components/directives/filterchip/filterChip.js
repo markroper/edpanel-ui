@@ -5,17 +5,33 @@ angular.module('teacherdashboard')
       return {
         scope: {
           filter: '=',
-          filterChoices: '=',
-          removeFilter: '='
+          removeFilter: '=',
+          filterAdded: '='
         },
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/filterchip/filterChip.html',
         replace: true,
         controller: function($scope) {
           $scope.requireMatch = true;
+          $scope.selectFilter = false;
+          $scope.rangeFilter = false;
           $scope.selectedItem = null;
           $scope.selectedChoices = [];
+          $scope.selectedRange = {};
+          //Updated by the chip lists
+          $scope.$watch('selectedChoices', function (newVal, oldVal) {
+            if((newVal || oldVal) && newVal !== oldVal) {
+              $scope.filterAdded($scope.filter, $scope.selectedChoices, 'LIST', newVal, oldVal);
+            }
+          }, true);
+          //Updated by range selector
+          $scope.$watch('selectedRange', function (newVal, oldVal) {
+            if((newVal || oldVal) && newVal !== oldVal) {
+              $scope.filterAdded($scope.filter, $scope.selectedRange, 'RANGE', newVal, oldVal);
+            }
+          }, true);
           var sections = [];
+          var sectionMap = {};
           if($scope.filter.type === 'Section') {
             api.sections.get(
               {
@@ -24,13 +40,17 @@ angular.module('teacherdashboard')
                 termId: statebag.currentTerm.id
               },
               function (sections) {
-                this.sections = sections;
+                var sectionNames = [];
+                sections.forEach(function(s){
+                  sectionNames.push(s.name);
+                  sectionMap[s.name] = s;
+                });
+                $scope.choices = sectionNames;
               },
               function () {
                 console.log('failed to resolve sections');
               });
           }
-
           var selectFitlers = {
             'Section': sections,
             'Gender': ['Male', 'Female'],
@@ -45,9 +65,6 @@ angular.module('teacherdashboard')
             'Absenses': { min: 0, max: 20 },
             'Behavior': { min: 0, max: 200 }
           };
-
-          $scope.selectFilter = false;
-          $scope.rangeFilter = false;
           if(selectFitlers[$scope.filter.type]) {
             $scope.choices = selectFitlers[$scope.filter.type];
             $scope.selectFilter = true;

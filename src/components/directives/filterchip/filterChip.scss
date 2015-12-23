@@ -1,9 +1,20 @@
 .filter-chip {
+  background-color: #F0F0F0;
   position:relative;
   margin: 10px;
-  padding: 20px;
+  padding: 22px 15px 15px 15px;
   border-radius: 5px;
-  border: 1px solid #CFCFCF;
+  .range-input {
+    md-input-container {
+      width: 60px;
+    }
+    .range-label {
+      padding: 10px;
+    }
+    .md-errors-spacer {
+      display: none !important;
+    }
+  }
   .filter-type {
     position:absolute;
     top: 5px;

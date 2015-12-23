@@ -5,9 +5,19 @@
   </md-button>
   <div class="md-caption filter-type">{{filter.type}}</div>
 
-  <div class="range-input" ng-if="rangeFilter">
-    RANGE FILTER WILL GO HERE
+  <div class="range-input" ng-if="rangeFilter" layout layout-align="center center">
+    <div class="range-label md-subhead">Between</div>
+    <md-input-container>
+      <label>Min</label>
+      <input ng-model="selectedRange.min" type="number"  min="1" max="5" placeholder="{{choices.min}}">
+    </md-input-container>
+    <div class="range-label md-subhead">and</div>
+    <md-input-container>
+      <label>Max</label>
+      <input ng-model="selectedRange.email" type="number" min="1" max="5" placeholder="{{choices.max}}">
+    </md-input-container>
   </div>
+
   <md-chips ng-if="selectFilter"
             ng-model="selectedChoices" md-autocomplete-snap
             md-transform-chip="transformChip($chip)"

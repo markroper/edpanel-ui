@@ -86,8 +86,11 @@
 		text-overflow: ellipsis;
 	}
 	.md-36 { font-size: 36px; }
-	input.md-input { font-size: 18px; width:225px;}
+	input.search-name { font-size: 18px; width:225px;}
   .facet-container {
+    .filters-title {
+      text-align: center;
+    }
     width:350px;
     backrgound-color:black;
   }

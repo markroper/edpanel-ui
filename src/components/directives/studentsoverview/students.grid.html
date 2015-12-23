@@ -1,37 +1,42 @@
 <div class="students-grid">
-	<div ng-show="showFilter">
-		<div layout="row" layout-align="center center">
-			<md-card>
-      	<md-input-container md-no-float>
-      		<input ng-model="search.name" placeholder="Search students by name" tabindex="1">
-      	</md-input-container>
-    	</md-card>
-      <md-button class="md-fab md-primary" ng-click="toggleFilters()">
-        <md-icon>filter_list</md-icon>
-        <md-tooltip>show/hide filters</md-tooltip>
-      </md-button>
-		</div>
-	</div>
-	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!studentsData">
-		<h3 flex="50">Loading...</h3>
-		<br/>
-		<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
-	</div>
 	<section layout="row" layout-align="center start">
-    <div flex="none" class="facet-container" ng-show="showFilters">
-      <h3 class="md-headline">Filters</h3>
-      <md-input-container class="md-block" flex-gt-sm>
-        <label>Choose filter</label>
+    <!-- THE FILTER SIDEBAR -->
+    <div flex="none" class="facet-container" layout layout-align="center start" layout-wrap ng-show="showFilters">
+      <h3 flex="100" class="md-headline filters-title">Student List Filters</h3>
+      <md-input-container>
+        <label>Add filter</label>
         <md-select ng-model="filter" md-on-close="addFilter()">
           <md-option ng-repeat="filter in filters" value="{{filter}}">
             {{filter}}
           </md-option>
         </md-select>
       </md-input-container>
-      <filter-chip ng-repeat="(type, filter) in currentFilters" filter="filter" remove-filter="removeFilter"></filter-chip>
+      <filter-chip ng-repeat="(type, filter) in currentFilters"
+                   filter="filter"
+                   remove-filter="removeFilter"
+                   filter-added="filterAdded"></filter-chip>
     </div>
-		<div flex="grow"class="table-container" ng-show="studentsData">
-			<div hide-sm layout="row" style="font-size: 16px; width:100%;">
+		<!-- THE MAIN STUDENT LIST BODY, INLUDING SEARCH BOX -->
+    <div flex="grow"class="table-container">
+      <div ng-show="showFilter">
+        <div layout="row" layout-align="center center">
+          <md-button class="md-fab md-mini md-primary" ng-click="toggleFilters()">
+            <md-icon>filter_list</md-icon>
+            <md-tooltip>show/hide filters</md-tooltip>
+          </md-button>
+          <md-card>
+            <md-input-container md-no-float>
+              <input class="search-name" ng-model="search.name" placeholder="Search students by name" tabindex="1">
+            </md-input-container>
+          </md-card>
+        </div>
+      </div>
+      <div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!studentsData">
+        <h3 flex="50">Loading...</h3>
+        <br/>
+        <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
+      </div>
+			<div hide-sm layout="row" style="font-size: 16px; width:100%;" ng-show="studentsData">
 				<div flex="{{::cellWidth}}" class="table-cell" ng-show="showFilter"></div>
 				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'behavior')">
           Behavior
@@ -96,7 +101,7 @@
           </div>
         </div>
       </div>
-		</div>
+      <md-button md-no-ink class="md-primary" ng-click="increaseLimit()" ng-show="showMoreStudents && studentsData && limit < studentsData.length" style="margin:10px 0px;">More students</md-button>
+    </div>
 	</section>
-  <md-button md-no-ink class="md-primary" ng-click="increaseLimit()" ng-show="showMoreStudents && studentsData && limit < studentsData.length" style="margin:10px 0px;">More students</md-button>
 </div>

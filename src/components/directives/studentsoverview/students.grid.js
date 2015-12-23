@@ -16,28 +16,46 @@ angular.module('teacherdashboard')
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
         var gpaChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="calculationDate" key-to-y="score" date-time-data-promise="gpaDataPromise"></datetimechart></div>';
-
         //Use the name as the sort field for the list, to start
         $scope.order = 'name';
-        $scope.showfilters = false;
         $scope.sortElement = null;
-        $scope.toggleFilters = function() {
-          $scope.showFilters = !$scope.showFilters;
-        };
+
+        //FILTER RELATED
+        $scope.showfilters = false;
         $scope.filter = null;
         $scope.filters = ['Section', 'GPA', 'Behavior', 'Homework Completion',
           'Absenses', 'Gender', 'Race', 'Ethnicity', 'Grade Level'];
         $scope.currentFilters = {};
+
+        $scope.toggleFilters = function() {
+          $scope.showFilters = !$scope.showFilters;
+        };
         $scope.addFilter = function() {
-          if(!$scope.currentFilters[$scope.filter]) {
-            $scope.currentFilters[$scope.filter] = { type: $scope.filter, choices: [] };
+          if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
+            $scope.currentFilters[$scope.filter] = { type: $scope.filter };
             console.log('Added filter value');
           }
+        };
+        /**
+         *
+         * @param filter  - The filter object from the child directive calling back
+         * @param filterValues The values set on the filter
+         * @param filterStrategy The filter strategy, valid values are 'LIST' and 'RANGE'
+         * @param newVal The newly changed value
+         * @param oldVal The previous value
+         */
+        $scope.filterAdded = function(filter, filterValues, filterStrategy, newVal, oldVal) {
+          $scope.currentFilters[filter.type].values = filterValues;
+          $scope.currentFilters[filter.type].strategy = filterStrategy;
+          console.log('Filter value added for type: ' + filter.type + ' with strategy: ' +
+            filterStrategy + ' and filter values ' + JSON.stringify(filterValues));
         };
         $scope.removeFilter = function(filter) {
           delete $scope.currentFilters[filter];
         }
 
+
+        //SORT RELATED
         $scope.setOrder = function(ev, keyToUse) {
           var el = angular.element(ev.target);
           if($scope.sortElement) {
@@ -53,7 +71,6 @@ angular.module('teacherdashboard')
           $scope.sortElement = el;
           $scope.order = keyToUse;
         };
-
         $scope.showMoreStudents = true;
         $scope.limit = 30;
         $scope.increaseLimit = function() {
@@ -64,6 +81,7 @@ angular.module('teacherdashboard')
           }
         };
 
+        //TRAY RELATED
         var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
