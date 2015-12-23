@@ -211,7 +211,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
   .provider('consts', function(){
     var BLACK = 'Black or African American';
     var ASIAN = 'Asian';
-    var PACIFIC_ISLANDER = 'Native Hawaiian or Other Pacific Islander';
+    var PACIFIC_ISLANDER = 'Native Hawaiian or Pacific Islander';
     var AM_INDIAN = 'American Indian or Alaska Native';
     var WHITE = 'White';
     var LATINO_HISPANIC = 'Hispanic or Latino';

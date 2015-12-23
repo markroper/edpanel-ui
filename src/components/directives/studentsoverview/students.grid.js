@@ -12,6 +12,13 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
       replace: true,
       controller: function($scope) {
+        var GPA = 'GPA';
+        var BEHAVIOR = 'Behavior';
+        var HOMEWORK_COMPLETION = 'Homework Completion';
+        var GENDER = 'Gender';
+        var RACE = 'Race';
+        var ETHNICITY = 'Ethnicity';
+        var ABSENCES = 'Absences';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
@@ -23,8 +30,8 @@ angular.module('teacherdashboard')
         //FILTER RELATED
         $scope.showfilters = false;
         $scope.filter = null;
-        $scope.filters = ['GPA', 'Behavior', 'Homework Completion',
-          'Gender', 'Race', 'Ethnicity', 'Absences'];
+        $scope.filters = [GPA, BEHAVIOR, HOMEWORK_COMPLETION,
+          GENDER, RACE, ETHNICITY, ABSENCES];
         $scope.currentFilters = {};
         /**
          * When a user types in values for a filter, this method is called back to update
@@ -107,19 +114,19 @@ angular.module('teacherdashboard')
           try {
             angular.forEach($scope.currentFilters, function (value, key) {
               //Perform the filter
-              if (key === 'GPA') {
+              if (key === GPA) {
                 evalRangeCondition(value.values, student.gpa);
-              } else if (key === 'Behavior') {
+              } else if (key === BEHAVIOR) {
                 evalRangeCondition(value.values, student.behavior);
-              } else if (key === 'Homework Completion') {
+              } else if (key === HOMEWORK_COMPLETION) {
                 evalRangeCondition(value.values, student.homework);
-              } else if (key === 'Absences') {
+              } else if (key === ABSENCES) {
                 evalRangeCondition(value.values, student.attendance);
-              } else if (key === 'Gender') {
+              } else if (key === GENDER) {
                 evalListCondition(value.values, genderMapping[student.student.gender]);
-              } else if (key === 'Race') {
+              } else if (key === RACE) {
                 evalListCondition(value.values, consts.raceMap[student.student.federalRace]);
-              } else if (key === 'Ethnicity') {
+              } else if (key === ETHNICITY) {
                 evalListCondition(value.values, consts.ethnicityMap[student.student.federalEthnicity]);
               }
             });
