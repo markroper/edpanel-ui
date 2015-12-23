@@ -19,7 +19,25 @@ angular.module('teacherdashboard')
 
         //Use the name as the sort field for the list, to start
         $scope.order = 'name';
+        $scope.showfilters = false;
         $scope.sortElement = null;
+        $scope.toggleFilters = function() {
+          $scope.showFilters = !$scope.showFilters;
+        };
+        $scope.filter = null;
+        $scope.filters = ['Section', 'GPA', 'Behavior', 'Homework Completion',
+          'Absenses', 'Gender', 'Race', 'Ethnicity', 'Grade Level'];
+        $scope.currentFilters = {};
+        $scope.addFilter = function() {
+          if(!$scope.currentFilters[$scope.filter]) {
+            $scope.currentFilters[$scope.filter] = { type: $scope.filter, choices: [] };
+            console.log('Added filter value');
+          }
+        };
+        $scope.removeFilter = function(filter) {
+          delete $scope.currentFilters[filter];
+        }
+
         $scope.setOrder = function(ev, keyToUse) {
           var el = angular.element(ev.target);
           if($scope.sortElement) {

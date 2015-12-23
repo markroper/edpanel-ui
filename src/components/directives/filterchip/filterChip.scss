@@ -1,0 +1,19 @@
+.filter-chip {
+  position:relative;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 5px;
+  border: 1px solid #CFCFCF;
+  .filter-type {
+    position:absolute;
+    top: 5px;
+    left: 10px;
+  }
+  .remove-filter {
+    width:35px;
+    min-width:35px;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+  }
+}

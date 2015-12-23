@@ -113,6 +113,7 @@ angular.module('teacherdashboard')
         for(var i = 0; i < statebag.students.length; i++) {
           studentIds.push(statebag.students[i].id);
           studentMap[statebag.students[i].id] = {
+            student: statebag.students[i],
             name: statebag.students[i].name,
             id: statebag.students[i].id
           };
@@ -138,7 +139,8 @@ angular.module('teacherdashboard')
         $q.all(studentDataPromises).then(function(responses) {
           //Handle the HW completion & attendance values
           responses[0].records.forEach(function(student){
-            studentMap[student.values[0]] = resolveStudentScopeObject(student.values);
+            var stud = studentMap[student.values[0]];
+            studentMap[student.values[0]] = resolveStudentScopeObject(stud, student.values);
           });
 
           //Update the attendance data for each student
@@ -391,8 +393,10 @@ angular.module('teacherdashboard')
    */
 
 
-  function resolveStudentScopeObject(inputStudent) {
-    var student = {};
+  function resolveStudentScopeObject(student, inputStudent) {
+    if(!student) {
+      student = {};
+    }
     student.id = inputStudent[0];
     student.name = inputStudent[1];
     student.behavior = null;

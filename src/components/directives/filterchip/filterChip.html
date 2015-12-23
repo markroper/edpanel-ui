@@ -1,0 +1,29 @@
+<div class="filter-chip">
+  <md-button class="remove-filter" aria-label="Remove filter" ng-click="removeFilter(filter.type)">
+    <md-icon md-font-set="material-icons">clear</md-icon>
+    <md-tooltip>remove filter</md-tooltip>
+  </md-button>
+  <div class="md-caption filter-type">{{filter.type}}</div>
+
+  <div class="range-input" ng-if="rangeFilter">
+    RANGE FILTER WILL GO HERE
+  </div>
+  <md-chips ng-if="selectFilter"
+            ng-model="selectedChoices" md-autocomplete-snap
+            md-transform-chip="transformChip($chip)"
+            md-require-match="requireMatch">
+    <md-autocomplete
+      md-selected-item="selectedItem"
+      md-search-text="searchText"
+      md-items="item in querySearch(searchText)"
+      md-item-text="item"
+      placeholder="Search for {{filter.type}}">
+      <span md-highlight-text="searchText">{{item}}</span>
+    </md-autocomplete>
+    <md-chip-template>
+        <span>
+          <strong>{{$chip.name}}</strong>
+        </span>
+    </md-chip-template>
+  </md-chips>
+</div>

@@ -75,7 +75,7 @@
 	md-card {
 		padding: 0px 20px 0px 20px;
 	}
-	button.md-primary {
+	button.student-name {
 		width: 100%;
     margin: 0px;
 		text-overflow: ellipsis;
@@ -87,6 +87,10 @@
 	}
 	.md-36 { font-size: 36px; }
 	input.md-input { font-size: 18px; width:225px;}
+  .facet-container {
+    width:350px;
+    backrgound-color:black;
+  }
 	.table-container{
 		width:100%;
 		max-width:1200px;
