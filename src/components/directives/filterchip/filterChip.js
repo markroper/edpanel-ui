@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('filterChip', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',
-    function($state, statebag, api, $mdDialog, $compile, $timeout, $window) {
+  .directive('filterChip', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',  '$mdToast',
+    function($state, statebag, api, $mdDialog, $compile, $timeout, $window, $mdToast) {
       return {
         scope: {
           filter: '=',
@@ -48,7 +48,11 @@ angular.module('teacherdashboard')
                 $scope.choices = sectionNames;
               },
               function () {
-                console.log('failed to resolve sections');
+                $mdToast.show(
+                  $mdToast.simple()
+                    .content('Failed to resolve sections')
+                    .hideDelay(2000)
+                );
               });
           }
           var selectFitlers = {
@@ -62,7 +66,7 @@ angular.module('teacherdashboard')
           var rangeFilters = {
             'GPA': { min: 0, max: 5 },
             'Homework Completion': { min: 0, max: 100 },
-            'Absenses': { min: 0, max: 20 },
+            'Absences': { min: 0, max: 20 },
             'Behavior': { min: 0, max: 200 }
           };
           if(selectFitlers[$scope.filter.type]) {
@@ -72,7 +76,11 @@ angular.module('teacherdashboard')
             $scope.choices = rangeFilters[$scope.filter.type];
             $scope.rangeFilter = true;
           } else {
-            console.log('Filter type not supported :(');
+            $mdToast.show(
+              $mdToast.simple()
+                .content('Filter type not supported')
+                .hideDelay(2000)
+            );
           }
 
           function createFilterFor(query) {

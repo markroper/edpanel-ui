@@ -3,14 +3,16 @@
     <!-- THE FILTER SIDEBAR -->
     <div flex="none" class="facet-container" layout layout-align="center start" layout-wrap ng-show="showFilters">
       <h3 flex="100" class="md-headline filters-title">Student List Filters</h3>
-      <md-input-container>
-        <label>Add filter</label>
-        <md-select ng-model="filter" md-on-close="addFilter()">
-          <md-option ng-repeat="filter in filters" value="{{filter}}">
-            {{filter}}
-          </md-option>
-        </md-select>
-      </md-input-container>
+      <div flex="100" layout layout-align="center center">
+        <md-input-container>
+          <label>Add a filter</label>
+          <md-select ng-model="filter" md-on-close="addFilter()">
+            <md-option ng-repeat="filter in filters" value="{{filter}}">
+              {{filter}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
       <filter-chip ng-repeat="(type, filter) in currentFilters"
                    filter="filter"
                    remove-filter="removeFilter"
@@ -20,7 +22,7 @@
     <div flex="grow"class="table-container">
       <div ng-show="showFilter">
         <div layout="row" layout-align="center center">
-          <md-button class="md-fab md-mini md-primary" ng-click="toggleFilters()">
+          <md-button class="md-fab md-mini md-primary filter-toggler" ng-click="toggleFilters()">
             <md-icon>filter_list</md-icon>
             <md-tooltip>show/hide filters</md-tooltip>
           </md-button>

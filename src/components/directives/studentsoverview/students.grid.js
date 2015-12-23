@@ -23,8 +23,8 @@ angular.module('teacherdashboard')
         //FILTER RELATED
         $scope.showfilters = false;
         $scope.filter = null;
-        $scope.filters = ['Section', 'GPA', 'Behavior', 'Homework Completion',
-          'Absenses', 'Gender', 'Race', 'Ethnicity', 'Grade Level'];
+        $scope.filters = ['GPA', 'Behavior', 'Homework Completion',
+          'Gender', 'Race', 'Ethnicity', 'Absences'];
         $scope.currentFilters = {};
         /**
          *
@@ -34,11 +34,9 @@ angular.module('teacherdashboard')
          * @param newVal The newly changed value
          * @param oldVal The previous value
          */
-        $scope.filterAdded = function(filter, filterValues, filterStrategy, newVal, oldVal) {
+        $scope.filterAdded = function(filter, filterValues, filterStrategy) {
           $scope.currentFilters[filter.type].values = filterValues;
           $scope.currentFilters[filter.type].strategy = filterStrategy;
-          console.log('Filter value added for type: ' + filter.type + ' with strategy: ' +
-            filterStrategy + ' and filter values ' + JSON.stringify(filterValues));
         };
         $scope.removeFilter = function(filter) {
           delete $scope.currentFilters[filter];
@@ -49,10 +47,9 @@ angular.module('teacherdashboard')
         $scope.addFilter = function() {
           if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
             $scope.currentFilters[$scope.filter] = { type: $scope.filter };
-            console.log('Added filter value');
           }
         };
-        //TODO: move this kind of think up to a consts file somewhere?
+        //TODO: move this kind of think up to a consts file somewhere? To work, these lookups depend on a match to whats in filterChip.js & server side
         var raceMapping = {
           'B':'Black or African American',
           'P':'Native Hawaiian or Other Pacific Islander',
@@ -75,33 +72,39 @@ angular.module('teacherdashboard')
               //Perform the filter
               if (key === 'GPA') {
                 if(value.values) {
-                  if (value.values.min && student.gpa < value.values.min) {
+                  if (value.values.min && (student.gpa < value.values.min || !student.gpa)) {
                     throw BreakException;
                   }
-                  if (value.values.max && student.gpa > value.values.max) {
+                  if (value.values.max && (student.gpa > value.values.max || !student.gpa)) {
                     throw BreakException;
                   }
                 }
               } else if (key === 'Behavior') {
-                if (value.values.min && student.behavior < value.values.min) {
-                  throw BreakException;
-                }
-                if (value.values.max && student.behavior > value.values.max) {
-                  throw BreakException;
+                if(value.values) {
+                  if (value.values.min && (student.behavior < value.values.min || !student.behavior)) {
+                    throw BreakException;
+                  }
+                  if (value.values.max && (student.behavior > value.values.max || !student.behavior)) {
+                    throw BreakException;
+                  }
                 }
               } else if (key === 'Homework Completion') {
-                if (value.values.min && student.homework < value.values.min) {
-                  throw BreakException;
+                if(value.values) {
+                  if (value.values.min && (student.homework < value.values.min || !student.homework)) {
+                    throw BreakException;
+                  }
+                  if (value.values.max && (student.homework > value.values.max || !student.homework)) {
+                    throw BreakException;
+                  }
                 }
-                if (value.values.max && student.homework > value.values.max) {
-                  throw BreakException;
-                }
-              } else if (key === 'Absenses') {
-                if (value.values.min && student.attendance < value.values.min) {
-                  throw BreakException;
-                }
-                if (value.values.max && student.attendance > value.values.max) {
-                  throw BreakException;
+              } else if (key === 'Absences') {
+                if(value.values) {
+                  if (value.values.min && (student.attendance < value.values.min || student.attendance)) {
+                    throw BreakException;
+                  }
+                  if (value.values.max && (student.attendance > value.values.max || student.attendance)) {
+                    throw BreakException;
+                  }
                 }
               } else if (key === 'Gender') {
                 if (value.values && value.values.length > 0) {// && !value.values[genderMapping[student.student.gender]]) {
