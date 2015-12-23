@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('filterChip', ['$state', 'statebag', 'api', '$mdToast',
-    function($state, statebag, api, $mdToast) {
+  .directive('filterChip', ['$state', 'statebag', 'api', '$mdToast', 'consts',
+    function($state, statebag, api, $mdToast, consts) {
       return {
         scope: {
           filter: '=',
@@ -58,9 +58,9 @@ angular.module('teacherdashboard')
           var selectFitlers = {
             'Section': sections,
             'Gender': ['Male', 'Female'],
-            'Ethnicity': ['Hispanic or Latino', 'Not Hispanic or Latino'],
-            'Race': ['American Indian or Alaska Native', 'Asian', 'Black or African American',
-              'Native Hawaiian or Other Pacific Islander', 'White'],
+            'Ethnicity': [consts.ethnicity.LATINO, consts.ethnicity.NON_LATINO],
+            'Race': [consts.race.BLACK, consts.race.ASIAN, consts.race.PACIFIC_ISLANDER,
+              consts.race.AM_INDIAN, consts.race.WHITE],
             'Grade Level': [ '5', '6', '7', '8', '9', '10', '11', '12' ]
           };
           var rangeFilters = {

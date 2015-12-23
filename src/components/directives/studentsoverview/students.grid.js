@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',
-  function($state, statebag, api, $mdDialog, $compile, $timeout, $window) {
+  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window', 'consts',
+  function($state, statebag, api, $mdDialog, $compile, $timeout, $window, consts) {
     return {
       scope: {
         studentsData: '=',
@@ -50,18 +50,6 @@ angular.module('teacherdashboard')
           if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
             $scope.currentFilters[$scope.filter] = { type: $scope.filter };
           }
-        };
-        //TODO: move this kind of think up to a consts file somewhere? To work, these lookups depend on a match to whats in filterChip.js & server side
-        var raceMapping = {
-          'B':'Black or African American',
-          'P':'Native Hawaiian or Other Pacific Islander',
-          'I':'American Indian or Alaska Native',
-          'A':'Asian',
-          'W':'White'
-        };
-        var ethnicityMapping = {
-          'YES': 'Hispanic or Latino',
-          'NO': 'Not Hispanic or Latino'
         };
         var genderMapping = {
           'MALE': 'Male',
@@ -130,9 +118,9 @@ angular.module('teacherdashboard')
               } else if (key === 'Gender') {
                 evalListCondition(value.values, genderMapping[student.student.gender]);
               } else if (key === 'Race') {
-                evalListCondition(value.values, raceMapping[student.student.federalRace]);
+                evalListCondition(value.values, consts.raceMap[student.student.federalRace]);
               } else if (key === 'Ethnicity') {
-                evalListCondition(value.values, ethnicityMapping[student.student.federalEthnicity]);
+                evalListCondition(value.values, consts.ethnicityMap[student.student.federalEthnicity]);
               }
             });
           } catch (e) {
