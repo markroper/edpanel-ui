@@ -89,6 +89,8 @@
   .facet-container {
     .filters-title {
       text-align: center;
+      cursor: default;
+      color: $gray-headline;
     }
     width:350px;
     backrgound-color:black;
