@@ -6,12 +6,6 @@
 	0% { height:310px; }
 	100% { height: 0px; }
 }
-@media screen and (min-width: 0px) and (max-width: 900px) {
-  .filter-toggler {
-    display: none;
-  }
-}
-
 .students-grid {
   .list-filter {
     padding: 3px 0px;

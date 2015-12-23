@@ -1,7 +1,7 @@
 <div class="students-grid">
 	<section layout="row" layout-align="center start">
     <!-- THE FILTER SIDEBAR -->
-    <div flex="none" class="facet-container" layout layout-align="center start" layout-wrap ng-show="showFilters">
+    <div flex="none" class="facet-container" layout layout-align="center start" layout-wrap hide-sm hide-xs ng-show="showFilters">
       <h3 flex="100" class="md-headline filters-title">Student List Filters</h3>
       <div flex="100" layout layout-align="center center">
         <md-input-container>
@@ -22,7 +22,7 @@
     <div flex="grow"class="table-container">
       <div ng-show="showFilter">
         <div layout="row" layout-align="center center">
-          <md-button class="md-fab md-mini md-primary filter-toggler" ng-click="toggleFilters()">
+          <md-button class="md-fab md-mini md-primary filter-toggler" hide-sm hide-xs ng-click="toggleFilters()">
             <md-icon>filter_list</md-icon>
             <md-tooltip>show/hide filters</md-tooltip>
           </md-button>
@@ -38,7 +38,7 @@
         <br/>
         <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
       </div>
-			<div hide-sm layout="row" style="font-size: 16px; width:100%;" ng-show="studentsData">
+			<div hide-sm hide-xs layout="row" style="font-size: 16px; width:100%;" ng-show="studentsData">
 				<div flex="{{::cellWidth}}" class="table-cell" ng-show="showFilter"></div>
 				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'behavior')">
           Behavior
@@ -66,7 +66,7 @@
           </md-button>
           </section>
         </div>
-        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showBehaviorTray($event, student)">
+        <div hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showBehaviorTray($event, student)">
           <div class="choropleth band-{{::student.behaviorClass}}" layout="row" layout-align="center center">
             <span class="mobile-label md-subhead" hide-gt-sm>Behavior</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
@@ -75,7 +75,7 @@
             <md-tooltip>{{::student.behaviorPeriod || 'period'}}'s prep score: {{::student.behavior || 90}}</md-tooltip>
           </div>
         </div>
-        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showHomeworkTray($event, student)">
+        <div hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showHomeworkTray($event, student)">
           <div class="choropleth band-{{::student.homeworkClass}}" layout="row" layout-align="center center">
             <span class="mobile-label md-subhead" hide-gt-sm>Homework</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
@@ -84,7 +84,7 @@
             <md-tooltip>{{::student.homework || 0}}% annual completion</md-tooltip>
           </div>
         </div>
-        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showAttendanceTray($event, student)">
+        <div hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showAttendanceTray($event, student)">
           <div class="choropleth band-{{::student.attendanceClass}}" layout="row" layout-align="center center">
             <span class="mobile-label md-subhead" hide-gt-sm>Attendance</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
@@ -93,7 +93,7 @@
             <md-tooltip>{{::student.attendance || 0}} absenses this {{::student.attendancePeriod || 'period'}}</md-tooltip>
           </div>
         </div>
-        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showGpaTray($event, student)">
+        <div hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showGpaTray($event, student)">
           <div class="choropleth band-{{::student.gpaClass}}" layout="row" layout-align="center center">
             <span class="mobile-label md-subhead" hide-gt-sm>GPA</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
