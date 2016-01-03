@@ -89,7 +89,6 @@ angular.module('teacherdashboard')
                 ['African American', 0, 0, 0, 0, 0, 0, 0],
                 ['Asian', 0, 0, 0, 0, 0, 0, 0],
                 ['American Indian', 0, 0, 0, 0, 0, 0, 0],
-                ['Hispanic or Latino', 0, 0, 0, 0, 0, 0, 0],
                 ['Pacific Islander', 0, 0, 0, 0, 0, 0, 0],
                 ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
               ];
@@ -247,14 +246,13 @@ angular.module('teacherdashboard')
               ['African American', 0, 0, 0, 0, 0, 0, 0],
               ['Asian', 0, 0, 0, 0, 0, 0, 0],
               ['American Indian', 0, 0, 0, 0, 0, 0, 0],
-              ['Hispanic or Latino', 0, 0, 0, 0, 0, 0, 0],
               ['Pacific Islander', 0, 0, 0, 0, 0, 0, 0],
               ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
             ];
 
             for (var i = 0; i < results.records.length; i++) {
               singleRowResults = results.records[i].values;
-              race = resolveRaceAttendanceSelector(singleRowResults[3], singleRowResults[4]);
+              race = resolveRaceAttendanceSelector(singleRowResults[3]);
               generateAttendanceBuckets(singleRowResults, race, attendanceHistogram);
             }
             studentAbsesnseAndTardyDeferred.resolve(attendanceHistogram);
@@ -262,7 +260,7 @@ angular.module('teacherdashboard')
         }
       );
 
-      function resolveRaceAttendanceSelector(raceCode, ethnicity) {
+      function resolveRaceAttendanceSelector(raceCode) {
         switch (raceCode) {
           case 'W':
                 return 0;
@@ -270,13 +268,10 @@ angular.module('teacherdashboard')
                 return 1;
           case 'A':
                 return 2;
-          case 'I':
-            if (ethnicity === 'YES') {
-              return 4;
-            }
-            return 3;
-          case 'P':
-                return 5;
+          case "I":
+                return 3;
+          case "P":
+                return 4;
           default:
             //TODO There is a null value... what do we do about their race...
                 return 0;
