@@ -16,8 +16,8 @@ angular.module('teacherdashboard').
       }
       console.log(statebag.userRole);
       $state.go('app.home', { schoolId: statebag.school.id });
-    }
+    };
     api.schools.get({}, function(results){
       $scope.schools = results;
-    })
+    });
   }]);

@@ -9,10 +9,11 @@
     width: 125px;
   }
   .grade-summary {
+    cursor: pointer;
     width: 125px;
     padding: 4px;
     div, h2 {
-      cursor:default;
+      cursor:pointer;
       margin: 0px 0px 0px 0px;
       white-space: nowrap;
       overflow: hidden;

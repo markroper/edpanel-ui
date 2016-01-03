@@ -1,10 +1,13 @@
 <md-toolbar layout="row" md-theme="{{theme}}">
   <md-icon md-ink-ripple md-font-set="material-icons" ng-click="toggleSideNav()" class="material-icons md-24 arrow-icon"> menu </md-icon>
-  <div style="outline:none;" class="md-toolbar-tools" tabindex="0">
-    <span flex="none" style="outline:none; cursor:pointer;" ng-click="goToHome()">Excel Academy</span>
-    <span flex layout="row"><span ng-show="currentPage.name">&nbsp; > &nbsp;</span><span class="page-title">{{currentPage.name}}</span></span>
+  <div style="outline:none;" class="md-toolbar-tools no-select" tabindex="0">
+    <span flex="none" class="no-select" style="outline:none; cursor:pointer;" ng-click="goToHome()">
+      {{ statebag.school.name.substring(0, 14) || 'District' }}
+      <md-tooltip ng-show="statebag.school && statebag.school.name.length > 14  ">{{statebag.school.name}}</md-tooltip>
+    </span>
+    <span flex layout="row"><span class="page-title" ng-show="currentPage.name">&nbsp; > &nbsp;</span><span class="page-title">{{currentPage.name}}</span></span>
     <div flex="none" layout="column" layout-gt-md="row">
-    <md-menu-bar>
+    <md-menu-bar class="user-menu">
       <md-menu md-position-mode="target-right target" md-offset="0 78" >
         <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
           <div id="user-menu" class="circular-login">
@@ -44,11 +47,13 @@
       <md-content>
         <h2 class="menu-heading md-subhead">Navigation Menu</h2>
         <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToHome()"><span>Student List</span></md-button>
-        <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToSchoolDash()"><span>School Dashboard</span></md-button>
+        <md-button ng-show="userRole !== 'Student' && userRole !== 'Guardian'" class="md-primary nav-item md-ink-ripple" ng-click="goToSchoolDash()"><span>School Dashboard</span></md-button>
+        <md-button ng-show="userRole !== 'Student' && userRole !== 'Guardian'" class="md-primary nav-item md-ink-ripple" ng-click="goToMySurveys()"><span>My Surveys</span></md-button>
+        <md-button ng-show="userRole === 'Student'"class="md-primary nav-item md-ink-ripple" ng-click="goToMySurveyResponses()"><span>My Survey Responses</span></md-button>
         <md-button ng-disabled="true" class="md-primary nav-item md-ink-ripple">Saved Reports</md-button>
         <md-button ng-disabled="true" class="md-primary nav-item md-ink-ripple">Report Builder</md-button>
         <md-divider></md-divider>
-        <md-button class="md-primary nav-item md-ink-ripple" ng-click="goToAdmin()"><span>System Administration</span></md-button>
+        <md-button ng-show="userRole === 'Administrator' || userRole === 'Super_administrator'" class="md-primary nav-item md-ink-ripple" ng-click="goToAdmin()"><span>System Administration</span></md-button>
       </md-content>
     </md-sidenav>
   </div>
@@ -68,8 +73,8 @@
           <div class="edpanel-logo" flex="none"></div>
           <div flex></div>
           <div layout="row" layout-align="center center">
-            <md-button class="md-primary" ng-href="http://myedpanel.com/about" target="_blank">About Us</md-button>
-            <md-button class="md-primary" ng-href="http://myedpanel.com/privacy" target="_blank">Privacy</md-button>
+            <md-button class="md-primary" ng-href="http://myedpanel.com" target="_blank">About Us</md-button>
+            <md-button class="md-primary" ng-href="http://myedpanel.com/home/privacy" target="_blank">Privacy</md-button>
           </div>
         </div>
       </md-content>

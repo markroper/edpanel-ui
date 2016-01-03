@@ -1,0 +1,14 @@
+.survey-aggregate {
+  .openresponse {
+    height: 335px;
+  }
+  h3, .summary {
+    text-align: center;
+  }
+  .answer-container {
+    .aggregate-inner {
+      margin: 5px;
+      background-color: white;
+    }
+  }
+}

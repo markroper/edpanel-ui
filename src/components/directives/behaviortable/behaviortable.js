@@ -20,6 +20,7 @@ angular.module('teacherdashboard')
           columnDefs: [
             { field: 'behaviorCategory', name:'Category' },
             { field: 'behaviorDate', name:'Date', type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
+            { field: 'assigner.name', name: 'Assigner' },
             { field: 'name', name: 'Description' }
           ]
         };

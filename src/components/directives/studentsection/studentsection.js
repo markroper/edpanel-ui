@@ -87,7 +87,7 @@ angular.module('teacherdashboard')
         scope.myData = scope.sectionGrade.components;
 
         $timeout(function() {
-          scope.gage = new JustGage({
+          scope.gage = new $window.JustGage({
             id: 'gauge-'+ scope.section.goal.nameId,
             value: scope.section.goal.calculatedValue,
             min: 0,

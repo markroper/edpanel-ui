@@ -8,6 +8,7 @@ angular.module('teacherdashboard')
       });
       statebag.currentPage.name = 'Students';
       $scope.showFilter=true;
+
       function retrieveHomePageData() {
         /* This code block makes 1 api call, followed by 2 more api calls if the first one succeeds.
          * The first call resolve the students.  The second two calls

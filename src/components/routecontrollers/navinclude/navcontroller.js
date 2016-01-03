@@ -1,6 +1,7 @@
 'use strict';
 angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager', 'authentication', 'UAService',
 function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authentication, UAService) {
+    $scope.statebag = statebag;
     $scope.userRole = statebag.userRole;
     $scope.currentPage = statebag.currentPage;
     $scope.theme = statebag.theme;
@@ -33,6 +34,14 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
 
     $scope.goToHome = function() {
       $state.go('app.home', { schoolId: $state.params.schoolId });
+      $scope.closeSizeNav();
+    };
+    $scope.goToMySurveys = function() {
+      $state.go('app.mySurveys', {});
+      $scope.closeSizeNav();
+    };
+    $scope.goToMySurveyResponses = function() {
+      $state.go('app.mySurveyResponses', {});
       $scope.closeSizeNav();
     };
     $scope.goToSchoolDash = function() {

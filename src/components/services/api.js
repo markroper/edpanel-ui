@@ -12,6 +12,34 @@ angular.module('teacherdashboard')
     return {
       login: $resource(base + '/login'),
       logout: $resource(base + '/logout'),
+      //Survey
+      survey: $resource(base + '/surveys/:surveyId', {},
+        {
+          'get': { isArray: true },
+          'getOne': { methos: 'GET' },
+          'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
+          'delete': { method: 'DELETE' }
+        }),
+      surveyByRespondent: $resource(
+        base + '/surveys/schools/:schoolId/years/:yearId/terms/:termId/respondents/:respondentId',
+        {},
+        {'get': { isArray: true }}),
+      surveyBySchool: $resource(base + '/surveys/schools/:schoolId', {}, { 'get': { isArray: true }}),
+      surveyBySection: $resource(base + '/surveys/schools/:schoolId/sections/:sectionId',
+        {},
+        {
+          'get': { isArray: true }
+        }),
+      surveyByCreator: $resource(base + '/surveys/users/:userId', {}, { 'get': { isArray: true }}),
+      surveyResponses: $resource(base + '/surveys/respondents/:respondentId/responses', {}, { 'get': { isArray: true }}),
+      surveyResponse: $resource(base + '/surveys/:surveyId/responses/:responseId',
+        {},
+        {
+          'put': { method:'PUT', headers: {'Content-Type': 'application/json'} },
+          'post': { method:'POST', headers: {'Content-Type': 'application/json'} }
+        }),
+      surveyAggregateResults: $resource(base + '/surveys/:surveyId/responses/aggregates'),
+      //Password
       changePassword: $resource(base + '/users/passwordReset/:userId', {},
         {'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }}),
       authCheck: $resource(base + '/auth'),
@@ -62,6 +90,7 @@ angular.module('teacherdashboard')
         {},
         {'get': {isArray:true}}),
       //Sections
+      sections: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections', {}, { 'get':{ isArray: true }}),
       section: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId'),
       studentSections: $resource(base + '/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId/sections', {}, { 'get': { isArray: true }}),
       course: $resource(base + '/schools/:schoolId/courses/:courseId'),

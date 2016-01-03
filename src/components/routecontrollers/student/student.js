@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location',
-  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location) {
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll',
+  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll) {
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: $location.url() });
     });
@@ -34,7 +34,10 @@ angular.module('teacherdashboard')
     } else {
       resolveAllData();
     }
-
+    $scope.scrollToCard = function(idName) {
+      $location.hash('section-card-' + idName);
+      $anchorScroll();
+    };
     function resolveAllData() {
       resolveStudentSectionData();
       resolveBehaviorData();
@@ -63,8 +66,8 @@ angular.module('teacherdashboard')
       $scope.prepScorePromise =
         api.studentsPrepScores.get({
           studentId: [ statebag.currentStudent.id ],
-          startDate: moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
-          endDate: moment().format('YYYY-MM-DD')
+          startDate: $window.moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
+          endDate: $window.moment().format('YYYY-MM-DD')
         }).$promise;
     }
     /*
@@ -85,10 +88,10 @@ angular.module('teacherdashboard')
 
     function resolveCurrentTermFormula(gradeFormula) {
       var leafChildren = resolveLeafChildrenFormulas(gradeFormula);
-      var currDate = moment().valueOf();
+      var currDate = $window.moment().valueOf();
       for(var i = 0; i < leafChildren.length; i++){
-        var start = moment(leafChildren[i].startDate).valueOf();
-        var end = moment(leafChildren[i].endDate).valueOf();
+        var start = $window.moment(leafChildren[i].startDate).valueOf();
+        var end = $window.moment(leafChildren[i].endDate).valueOf();
         if(start <= currDate && end >= currDate) {
           return leafChildren[i];
         }

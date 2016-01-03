@@ -6,8 +6,8 @@ angular.module('teacherdashboard')
         $window.ga('send', 'pageview', { page: $location.url() });
       });
       statebag.currentPage.name = 'School Dashboard';
-      var min = moment(statebag.currentTerm.startDate).valueOf();
-      var max = moment(statebag.currentTerm.endDate).valueOf();
+      var min = $window.moment(statebag.currentTerm.startDate).valueOf();
+      var max = $window.moment(statebag.currentTerm.endDate).valueOf();
       var teacherBehaviorDataDeferred = $q.defer();
       var studentAbsesnseAndTardyDeferred = $q.defer();
       var failingClassesDeferred = $q.defer();
@@ -22,14 +22,14 @@ angular.module('teacherdashboard')
       $scope.termsPromise = termsDeferred.promise;
 
 
-      $scope.failingBreakdown = "RACE";
-      $scope.attendanceBreakdown = "RACE";
+      $scope.failingBreakdown = 'RACE';
+      $scope.attendanceBreakdown = 'RACE';
       $scope.attendanceTerm = statebag.currentTerm ;
       $scope.failingTerm = statebag.currentTerm ;
       $scope.demeritTerm = statebag.currentTerm;
       //TODO We can't change GPA terms yet
       //$scope.gpaTerm = statebag.currentTerm;
-      $scope.gpaTerm = "2015-2016";
+      $scope.gpaTerm = '2015-2016';
       $scope.attendanceControl = {
 
       };
@@ -69,8 +69,9 @@ angular.module('teacherdashboard')
             var singleRowResults;
             var gender;
             var race;
-            if ($scope.attendanceBreakdown == "GENDER") {
-              var attendanceHistogram = [
+            var attendanceHistogram;
+            if ($scope.attendanceBreakdown === 'GENDER') {
+              attendanceHistogram = [
                 ['Male', 0, 0, 0, 0, 0, 0, 0],
                 ['Female', 0, 0, 0, 0, 0, 0, 0],
                 ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
@@ -83,7 +84,7 @@ angular.module('teacherdashboard')
               }
               $scope.attendanceControl.updateChart(attendanceHistogram);
             } else {
-              var attendanceHistogram = [
+              attendanceHistogram = [
                 ['Caucasian', 0, 0, 0, 0, 0, 0, 0],
                 ['African American', 0, 0, 0, 0, 0, 0, 0],
                 ['Asian', 0, 0, 0, 0, 0, 0, 0],
@@ -104,7 +105,7 @@ angular.module('teacherdashboard')
 
       });
 
-      }
+      };
 
       //TODO REMOVE THIS,
       //This is a map between the term ids we have and the term ids that are stored in the termGrades of SSG
@@ -169,11 +170,7 @@ angular.module('teacherdashboard')
         });
         termsDeferred.resolve(terms);
         $scope.terms = terms;
-      })
-
-
-
-
+      });
 
       //Resolve GPAs for current students
       api.gpasInSchool.get(
@@ -232,7 +229,7 @@ angular.module('teacherdashboard')
           var gender;
           var race;
           var attendanceHistogram;
-          if ($scope.attendanceBreakdown == "GENDER") {
+          if ($scope.attendanceBreakdown === 'GENDER') {
             attendanceHistogram = [
               ['male', 0, 0, 0, 0, 0, 0, 0],
               ['female', 0, 0, 0, 0, 0, 0, 0],
@@ -267,19 +264,18 @@ angular.module('teacherdashboard')
 
       function resolveRaceAttendanceSelector(raceCode, ethnicity) {
         switch (raceCode) {
-          case "W":
+          case 'W':
                 return 0;
-          case "B":
+          case 'B':
                 return 1;
-          case "A":
+          case 'A':
                 return 2;
-          case "I":
-            if (ethnicity == "YES") {
+          case 'I':
+            if (ethnicity === 'YES') {
               return 4;
-            } else {
-              return 3;
             }
-          case "P":
+            return 3;
+          case 'P':
                 return 5;
           default:
             //TODO There is a null value... what do we do about their race...

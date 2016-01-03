@@ -4,6 +4,8 @@ angular.module('teacherdashboard')
     return {
       scope: {
         calendarDataPromise: '=',
+        greenToYellow: '@',
+        yellowToRed: '@',
         slideClosed: '='
       },
       restrict: 'E',
@@ -12,6 +14,12 @@ angular.module('teacherdashboard')
       controller: 'ChoroplethCtrl',
       controllerAs: 'ctrl',
       link: function(scope, elem){
+        if(!scope.greenToYellow) {
+          scope.greenToYellow = 1;
+        }
+        if(!scope.yellowToRed) {
+          scope.yellowToRed = 3;
+        }
         var d3 = $window.d3;
         var width = 4000,
             height = 290,
@@ -30,15 +38,14 @@ angular.module('teacherdashboard')
             week = d3.time.format('%U'), // week number of the year
             month = d3.time.format('%m'), // month number
             year = d3.time.format('%Y'),
-            percent = d3.format('.1%'),
             format = d3.time.format('%Y-%m-%d');
 
-        // var color = d3.scale.quantize()
-        //     .domain([-0.05, 0.05])
-        //     .range(d3.range(11).map(function(d) { return 'q' + d + '-11'; }));
+        var currentDate = $window.moment();
+        var lastYearToday = $window.moment().subtract(1, 'years');
+        var currentYear = currentDate.year();
 
         var svg = d3.select(elem.find(CHORO_CONTAINER_SELECTOR)[0]).selectAll('svg')
-            .data(d3.range(2015, 2016))
+            .data(d3.range(currentYear - 1, currentYear))
           .enter().append('svg')
             .attr('width', width)
             .attr('height', height)
@@ -46,8 +53,8 @@ angular.module('teacherdashboard')
           .append('g');
 
         var rect = svg.selectAll('.day')
-            .data(function(d) {
-              return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
+            .data(function() {
+              return d3.time.days(lastYearToday.toDate(), currentDate.toDate());
             })
           .enter().append('rect')
             .attr('class', 'day')
@@ -65,8 +72,9 @@ angular.module('teacherdashboard')
             .datum(format);
 
         svg.selectAll('.month-title')  // Jan, Feb, Mar and the whatnot
-              .data(function(d) {
-                return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
+              .data(function() {
+                return d3.time.months(lastYearToday.toDate(), currentDate.toDate());
+              })
             .enter().append('text')
               .text(monthTitle)
               .attr('x', function(d) {
@@ -89,7 +97,7 @@ angular.module('teacherdashboard')
           console.log(resolvedData);
           var behaviorByDate = {};
           resolvedData.forEach(function(behavior){
-            var currDate = moment(behavior.behaviorDate);
+            var currDate = $window.moment(behavior.behaviorDate);
             var dateString = currDate.format('YYYY-MM-DD');
             if(!behaviorByDate[dateString]) {
               behaviorByDate[dateString] = [behavior];
@@ -97,20 +105,28 @@ angular.module('teacherdashboard')
               behaviorByDate[dateString].push(behavior);
             }
           });
+
+          rect.attr('demerits', function(d){
+            if(behaviorByDate[d] && behaviorByDate[d].length > 0) {
+              return behaviorByDate[d].length;
+            }
+            return 0;
+          });
           rect.attr('class', function(d) {
-            var weekday = moment(d).weekday();
+            var weekday = $window.moment(d).weekday();
             var colorVal = '11';
             //Only evaluate wekdays
             if(weekday !== 0 && weekday !== 6) {
-
               if(behaviorByDate[d]) {
                 var size = behaviorByDate[d].length;
-                if(size === 1) {
+                if(size >= scope.yellowToRed){
+                  //multiple behavior events in one day is red
+                  colorVal = '1';
+                } else if(size >= scope.greenToYellow) {
                   //One behavior event is orange
                   colorVal = '3';
                 } else {
-                  //multiple behavior events in one day is red
-                  colorVal = '1';
+                  colorVal = '8';
                 }
               } else {
                 //If there were no behavior events, thats green!
@@ -118,9 +134,30 @@ angular.module('teacherdashboard')
               }
             }
             return 'day q' + colorVal + '-11';
-          })
-          .select('title')
-            .text(function(d) { return d + ': ' + percent(resolvedData[d]); });
+          }).select('title')
+            .text(function(d) { return behaviorByDate[d] + ' demerits'; });
+
+          var div = d3.select('body').append('div')
+            .attr('class', 'choro-tooltip')
+            .style('display', 'none');
+
+          function mouseover() {
+            if(this.attributes.demerits.value !== 0) {
+              div.style('display', 'inline');
+              div.text(this.attributes.demerits.value + ' demerit(s)');
+            }
+          }
+          function mousemove() {
+            div.style('left', (d3.event.pageX - 34) + 'px')
+              .style('top', (d3.event.pageY - 12) + 'px');
+          }
+          function mouseout() {
+            div.style('display', 'none');
+          }
+          rect.on('mouseover', mouseover)
+            .on('mousemove', mousemove)
+            .on('mouseout', mouseout);
+
         });
       }
     };

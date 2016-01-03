@@ -1,4 +1,4 @@
-<div class="student-section" flex="auto">
+<div class="student-section" id="section-card-{{section.course.name}}" flex="auto">
   <md-card>
       <md-card-content>
         <h2 class="md-headline">
@@ -7,21 +7,11 @@
         </h2>
         <div layout="row" layout-wrap layout-align="center start" class="grade-container">
           <div flex="none" class="grade-goal" style="position: relative">
-              <h3 class="md-subhead">Current Grade</h3>
-            <md-fab-speed-dial class="md-fab-top-right"  md-open="section.isClosed" md-direction="left" ng-class="toolbarAnimation">
-              <md-fab-trigger>
-                <md-button aria-label="menu" class="md-icon-button">
-                  <md-icon md-font-set="material-icons">more_vert</md-icon>
-                  <md-tooltip>grade goal menu</md-tooltip>
-                </md-button>
-              </md-fab-trigger>
-              <md-fab-actions>
-                <md-button  ng-click="editGoal(section)" class="md-fab md-primary md-raised md-mini">
-                  <md-icon md-font-set="material-icons"> mode_edit </md-icon>
-                  <md-tooltip>edit grade goal</md-tooltip>
-                </md-button>
-              </md-fab-actions>
-            </md-fab-speed-dial>
+            <h3 class="md-subhead">Current Grade</h3>
+            <md-button aria-label="menu" class="md-icon-button edit-goal-button">
+              <md-icon md-font-set="material-icons" ng-click="editGoal(section)">mode_edit</md-icon>
+              <md-tooltip>edit grade goal</md-tooltip>
+            </md-button>
             <div id="gauge-{{::section.goal.nameId}}" class="goal-gauge" style="height: 175px"></div>
             <div ng-show="section.editActive" class="editSlider">
               <md-content>

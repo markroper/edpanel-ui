@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',
-  function($state, statebag, api, $mdDialog, $compile, $timeout, $window) {
+  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window', 'consts',
+  function($state, statebag, api, $mdDialog, $compile, $timeout, $window, consts) {
     return {
       scope: {
         studentsData: '=',
@@ -12,11 +12,147 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
       replace: true,
       controller: function($scope) {
+        var GPA = 'GPA';
+        var BEHAVIOR = 'Behavior';
+        var HOMEWORK_COMPLETION = 'Homework Completion';
+        var GENDER = 'Gender';
+        var RACE = 'Race';
+        var ETHNICITY = 'Ethnicity';
+        var ABSENCES = 'Absences';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
         var gpaChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="calculationDate" key-to-y="score" date-time-data-promise="gpaDataPromise"></datetimechart></div>';
+        //Use the name as the sort field for the list, to start
+        $scope.order = 'name';
+        $scope.sortElement = null;
 
+        //FILTER RELATED
+        $scope.showfilters = false;
+        $scope.filter = null;
+        $scope.filters = [GPA, BEHAVIOR, HOMEWORK_COMPLETION,
+          GENDER, RACE, ETHNICITY, ABSENCES];
+        $scope.currentFilters = {};
+        /**
+         * When a user types in values for a filter, this method is called back to update
+         * the filter values, which triggers a student list filter via a digest loop.
+         *
+         * @param filter  - The filter object from the child directive calling back
+         * @param filterValues The values set on the filter
+         * @param filterStrategy The filter strategy, valid values are 'LIST' and 'RANGE'
+         * @param newVal The newly changed value
+         * @param oldVal The previous value
+         */
+        $scope.filterAdded = function(filter, filterValues, filterStrategy) {
+          $scope.currentFilters[filter.type].values = filterValues;
+          $scope.currentFilters[filter.type].strategy = filterStrategy;
+        };
+        $scope.removeFilter = function(filter) {
+          delete $scope.currentFilters[filter];
+        };
+        $scope.toggleFilters = function() {
+          $scope.showFilters = !$scope.showFilters;
+        };
+        $scope.addFilter = function() {
+          if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
+            $scope.currentFilters[$scope.filter] = { type: $scope.filter };
+            $window.ga('send', 'event', 'Home', 'FilterStudents', 'Adds an advanced filter');
+          }
+        };
+        var genderMapping = {
+          'MALE': 'Male',
+          'FEMALE': 'Female'
+        };
+
+        /**
+         * Throws an exception if a candidate value does not match the filterConditions where the filter conditions
+         * are a list of valid values.
+         * @param filterConditions
+         * @param candidate
+         */
+        var evalListCondition = function(filterConditions, candidate) {
+          if (filterConditions && filterConditions.length > 0) {
+            var match = false;
+            for(var i = 0; i < filterConditions.length; i++) {
+              if(filterConditions[i].name === candidate) {
+                match = true;
+                break;
+              }
+            }
+            if(!match) {
+              throw BreakException;
+            }
+          }
+        };
+        /**
+         * Throws an exception if a candidate value does not match the filterConditions where
+         * the filter conditions contain a numeric min and or max value.
+         * @param filterConditions
+         * @param candidate
+         */
+        var evalRangeCondition = function(filterConditions, candidate) {
+          if(filterConditions) {
+            if (filterConditions.min && (candidate < filterConditions.min || !candidate)) {
+              throw BreakException;
+            }
+            if (filterConditions.max && (candidate > filterConditions.max || !candidate)) {
+              throw BreakException;
+            }
+          }
+        };
+
+        var BreakException= {};
+        /**
+         * The filter function called by ng-repeat on the student list to filter down the list. For each of the
+         * current filters the user has selected, student instances are compared against filter value and if it passes,
+         * the next filter is moved on to. If a filter condition is not met, false is immediately returned and the
+         * additional filters are not evaluated.  Filters are AND'd together in this manner.
+         *
+         * @param student
+         * @returns {boolean}
+         */
+        $scope.filterStudents = function(student) {
+          try {
+            angular.forEach($scope.currentFilters, function (value, key) {
+              //Perform the filter
+              if (key === GPA) {
+                evalRangeCondition(value.values, student.gpa);
+              } else if (key === BEHAVIOR) {
+                evalRangeCondition(value.values, student.behavior);
+              } else if (key === HOMEWORK_COMPLETION) {
+                evalRangeCondition(value.values, student.homework);
+              } else if (key === ABSENCES) {
+                evalRangeCondition(value.values, student.attendance);
+              } else if (key === GENDER) {
+                evalListCondition(value.values, genderMapping[student.student.gender]);
+              } else if (key === RACE) {
+                evalListCondition(value.values, consts.raceMap[student.student.federalRace]);
+              } else if (key === ETHNICITY) {
+                evalListCondition(value.values, consts.ethnicityMap[student.student.federalEthnicity]);
+              }
+            });
+          } catch (e) {
+            return false;
+          }
+          return true;
+        };
+
+        //SORT RELATED
+        $scope.setOrder = function(ev, keyToUse) {
+          var el = angular.element(ev.target);
+          if($scope.sortElement) {
+            $scope.sortElement.removeClass('desc');
+            $scope.sortElement.removeClass('asc');
+          }
+          if($scope.order === keyToUse) {
+            keyToUse = '-' + keyToUse;
+            el.addClass('desc');
+          } else {
+            el.addClass('asc');
+          }
+          $scope.sortElement = el;
+          $scope.order = keyToUse;
+        };
         $scope.showMoreStudents = true;
         $scope.limit = 30;
         $scope.increaseLimit = function() {
@@ -27,6 +163,7 @@ angular.module('teacherdashboard')
           }
         };
 
+        //TRAY RELATED
         var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
@@ -72,8 +209,8 @@ angular.module('teacherdashboard')
             } else if(template === hwCompletionChartHtml) {
               $scope.choroScope.dateTimeDataPromise = api.studentHwRates.get({
                   studentId: student.id,
-                  startDate: moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
-                  endDate: moment(statebag.currentYear.endDate).format('YYYY-MM-DD')
+                  startDate: $window.moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
+                  endDate: $window.moment(statebag.currentYear.endDate).format('YYYY-MM-DD')
                 }).$promise;
             } else if(template === gpaChartTemplate) {
               $scope.choroScope.gpaDataPromise = api.gpasOverTime.get(
