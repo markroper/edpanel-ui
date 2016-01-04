@@ -1,16 +1,13 @@
 @keyframes slideOpenVertical {
 	0% { height: 0px; }
-	100% { height: 310px; }
+	100% { height: auto; }
 }
 @keyframes slideClosedVertical {
-	0% { height:310px; }
+	0% { height:auto; }
 	100% { height: 0px; }
 }
 
 .student-tray {
-  md-input-container {
-    margin:10px 0px;
-  }
   .toggle-icon-wrapper {
     height:100%;
     md-icon {
@@ -49,9 +46,6 @@
 
 	div {
 		outline:none;
-	}
-	md-card {
-		padding: 0px 20px 0px 20px;
 	}
 	button.md-primary {
 		width: 100%;
@@ -123,4 +117,7 @@
 	.band-90-100 {
 		background-color: $green-color;
 	}
+  .band-grey {
+    background-color: grey;
+  }
 }

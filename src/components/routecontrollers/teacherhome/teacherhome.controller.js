@@ -18,12 +18,10 @@ angular.module('teacherdashboard')
          * scope variables that are bound to DOM elements
          */
         var promises = [];
-        var sectionGradesPromise = [];
         var sectionPromise = [];
         //Resolve the students!
         promises.push(resolveSections());
 
-        var demeritPromise = [];
 
         var behaviorQuery = getStudentsDemeritCount();
         sectionPromise.push(api.query.save({ schoolId: statebag.school.id }, behaviorQuery).$promise);
@@ -45,7 +43,6 @@ angular.module('teacherdashboard')
           $q.all(sectionPromise).then(function(responses) {
             var hwCompletions = {};
             var demeritMap = {};
-            console.log(responses);
             for (var j = 0; j < responses[0].records.length; j++ ) {
               demeritMap[responses[0].records[j].values[0]] = responses[0].records[j].values[2];
             }
@@ -82,12 +79,9 @@ angular.module('teacherdashboard')
               attendanceMap[result[1]]["total"] += result[2];
               attendanceMap[result[1]]["count"] += 1;
             }
-            console.log(attendanceMap);
 
-            console.log(demeritMap);
             for (var i = 0; i < statebag.currentSections.length; i++) {
               sectId = statebag.currentSections[i].id;
-              console.log(hwCompletions[sectId]);
               //TODO have to give a grey class if its not graded
               if (typeof hwCompletions[sectId] != 'undefined') {
                 statebag.currentSections[i]["HomeworkCompletion"] = hwCompletions[sectId]["total"] / hwCompletions[sectId].count;

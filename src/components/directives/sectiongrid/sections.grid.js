@@ -13,8 +13,6 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/sectiongrid/sections.grid.html',
       replace: true,
       link: function(scope, elem) {
-        console.log(scope.students);
-        console.log(scope.section);
         var $studentContainer = angular.element(elem).find('.student-slide');
         var $studentArrowIcon = angular.element(elem).find('.arrow-icon');
         var ROTATE = 'rotate';
@@ -36,9 +34,6 @@ angular.module('teacherdashboard')
       },
       controller: function($scope) {
 
-        console.log("LOADING DIRECTIVE");
-        console.log($scope.sectionData);
-        console.log($scope.section);
         $scope.showMoreStudents = true;
         $scope.limit = 30;
 

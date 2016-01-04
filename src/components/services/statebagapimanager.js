@@ -243,7 +243,6 @@ angular.module('teacherdashboard')
     }
   }
    function resolveAttendanceClass(attendanceScore) {
-     console.log("OUR SCORE IS: " + attendanceScore);
     var greenThreshold = 3;
     var yellowThreshold = 6;
     if(statebag.uiAttributes) {

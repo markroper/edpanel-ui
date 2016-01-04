@@ -13,7 +13,6 @@ angular.module('teacherdashboard')
       replace: true,
       controller: function($scope) {
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
-        console.log($scope.studentsData);
         $scope.showMoreStudents = true;
         $scope.limit = 100;
 
@@ -91,119 +90,6 @@ angular.module('teacherdashboard')
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
 
-        function  getStudentsDemeritCount() {
-          var identity = authentication.identity();
-          var personQuery = {
-            "aggregateMeasures":[
-              {
-                "measure":"DEMERIT",
-                "aggregation":"COUNT"
-              }
-            ],
-            "fields":[
-              {
-                "dimension":"STUDENT",
-                "field":"ID"
-              },
-              {
-                "dimension":"STUDENT",
-                "field":"Name"
-              }
-            ],
-            "filter": {
-              "type": "EXPRESSION",
-              "leftHandSide": {
-                "type": "EXPRESSION",
-                "leftHandSide": {
-                  "type": "EXPRESSION",
-                  "leftHandSide": {
-                    "type": "EXPRESSION",
-                    "leftHandSide": {
-                      "type": "DIMENSION",
-                      "value": {
-                        "dimension": "STUDENT",
-                        "field": "School"
-                      }
-                    },
-                    "operator": "EQUAL",
-                    "rightHandSide": {
-                      "type": "NUMERIC",
-                      "value": statebag.school.id
-                    }
-                  },
-                  "operator": "AND",
-                  "rightHandSide": {
-                    "type": "EXPRESSION",
-                    "leftHandSide": {
-                      "type": "EXPRESSION",
-                      "leftHandSide": {
-                        "type": "MEASURE",
-                        "value": {
-                          "measure": "DEMERIT",
-                          "field": "Behavior Date"
-                        }
-                      },
-                      "operator": "GREATER_THAN_OR_EQUAL",
-                      "rightHandSide": {
-                        "type": "DATE",
-                        "value": statebag.currentTerm.startDate
-                      }
-                    },
-                    "operator": "AND",
-                    "rightHandSide": {
-                      "type": "EXPRESSION",
-                      "leftHandSide": {
-                        "type": "MEASURE",
-                        "value": {
-                          "measure": "DEMERIT",
-                          "field": "Behavior Date"
-                        }
-                      },
-                      "operator": "LESS_THAN_OR_EQUAL",
-                      "rightHandSide": {
-                        "type": "DATE",
-                        "value": statebag.currentTerm.endDate
-                      }
-                    }
-                  }
-                },
-                "operator": "AND",
-                "rightHandSide": {
-                  "type": "EXPRESSION",
-                  "leftHandSide": {
-                    "type": "DIMENSION",
-                    "value": {
-                      "dimension": "USER",
-                      "field": "ID"
-                    }
-                  },
-                  "operator": "EQUAL",
-                  "rightHandSide": {
-                    "type": "NUMERIC",
-                    "value": identity.id
-                  }
-                }
-              },
-              "operator":"AND",
-              "rightHandSide": {
-                "type":"EXPRESSION",
-                "leftHandSide": {
-                  "type":"DIMENSION",
-                  "value":{
-                    "dimension":"STUDENT",
-                    "field":"ID"
-                  }
-                },
-                "operator":"EQUAL",
-                "rightHandSide": {
-                  "type":"NUMERIC",
-                  "value":$scope.studentsData.id
-                }
-              }
-            }
-          };
-          return personQuery;
-        }
       }
     };
   }]);
