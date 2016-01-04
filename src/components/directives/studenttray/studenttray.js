@@ -12,6 +12,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/studenttray/studenttray.html',
       replace: true,
       controller: function($scope) {
+        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         $scope.showMoreStudents = true;
         $scope.limit = 100;
@@ -88,6 +89,10 @@ angular.module('teacherdashboard')
         $scope.showBehaviorTray = function(ev, student) {
           $window.ga('send', 'event', 'Home', 'ShowBehavior', 'Open Behavior Tray');
           $scope.showTray(ev, student, behaviorCalendarHtml);
+        };
+        $scope.showHomeworkTray = function(ev, student) {
+          $window.ga('send', 'event', 'Home', 'ShowHomework', 'Open HW Completion Tray');
+          $scope.showTray(ev, student, hwCompletionChartHtml);
         };
 
       }

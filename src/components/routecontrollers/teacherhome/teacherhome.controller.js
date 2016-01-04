@@ -82,11 +82,12 @@ angular.module('teacherdashboard')
 
             for (var i = 0; i < statebag.currentSections.length; i++) {
               sectId = statebag.currentSections[i].id;
+              var numStudentsEnrolled = statebag.currentSections[i].enrolledStudents.length;
               //TODO have to give a grey class if its not graded
               if (typeof hwCompletions[sectId] != 'undefined') {
                 statebag.currentSections[i]["HomeworkCompletion"] = hwCompletions[sectId]["total"] / hwCompletions[sectId].count;
-                statebag.currentSections[i]["Attendance"] = parseFloat((attendanceMap[sectId].total / attendanceMap[sectId].count).toFixed(1));
-                for (var j = 0; j < statebag.currentSections[i].enrolledStudents.length; j++) {
+                statebag.currentSections[i]["Attendance"] = parseFloat((attendanceMap[sectId].total / numStudentsEnrolled).toFixed(1));
+                for (var j = 0; j < numStudentsEnrolled; j++) {
                   studId = statebag.currentSections[i].enrolledStudents[j].id;
                   statebag.currentSections[i].enrolledStudents[j]["homework"] = hwCompletions[sectId]["students"][studId];
                   statebag.currentSections[i].enrolledStudents[j]["homeworkClass"] = statebagApiManager.resolveHomeworkClass(
