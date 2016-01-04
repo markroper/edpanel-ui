@@ -7,15 +7,15 @@
       <div layout="row" layout-wrap layout-align="center start">
         <div flex="33" class="grade-goal" style="position: relative">
           <h3 class="md-subhead">Class Average</h3>
-          <span class="temp-Display">{{section.aveGrade}}%</span>
+          <span class="temp-Display">{{::section.aveGrade ? section.aveGrade + "%" : '--'}}</span>
         </div>
         <div flex="33" class="grade-item">
           <h3 class="md-subhead">Homework Completion</h3>
-          <span class="temp-Display">{{section.HomeworkCompletion}}%</span>
+          <span class="temp-Display">{{::section.HomeworkCompletion ? section.HomeworkCompletion + "%" : '--'}}</span>
         </div>
         <div flex="33" class="component-grades grade-item">
-          <h3 class="md-subhead">Attendence</h3>
-          <span class="temp-Display">{{section.Attendance}}%</span>
+          <h3 class="md-subhead">Average Absences</h3>
+          <span class="temp-Display">{{::section.Attendance ? section.Attendance  : '--'}}</span>
         </div>
       </div>
       </md-card-content>

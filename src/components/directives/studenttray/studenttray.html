@@ -11,7 +11,7 @@
 				<div flex="{{::cellWidth}}" class="table-cell">Demerits</div>
 				<div flex="{{::cellWidth}}" class="table-cell">HW Completion</div>
 				<div flex="{{::cellWidth}}" class="table-cell">Attendance</div>
-				<div flex="{{::cellWidth}}" class="table-cell">GPA</div>
+				<div flex="{{::cellWidth}}" class="table-cell">Grade</div>
 			</div>
       <div class="table-row" layout="row" layout-wrap ng-repeat="student in studentsData | orderBy:'name' | filter:search:strict | limitTo: limit track by student.id">
         <div class="table-cell" flex="{{::cellWidth}}" flex-sm="100" >
@@ -46,7 +46,7 @@
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
               <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
             </div>
-            <md-tooltip>{{student.Attendance || 0}} absenses this {{::student.attendancePeriod || 'period'}}</md-tooltip>
+            <md-tooltip>{{student.attendance || 0}} absenses this {{::student.attendancePeriod || 'period'}}</md-tooltip>
           </div>
         </div>
         <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showGpaTray($event, student)">

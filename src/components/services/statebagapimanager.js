@@ -228,7 +228,6 @@ angular.module('teacherdashboard')
     }
   };
   function resolveHomeworkClass(homeworkScore) {
-    console.log(homeworkScore);
     var greenThreshold = 0.92;
     var yellowThreshold = 0.89;
     if(statebag.uiAttributes) {
@@ -244,6 +243,7 @@ angular.module('teacherdashboard')
     }
   }
    function resolveAttendanceClass(attendanceScore) {
+     console.log("OUR SCORE IS: " + attendanceScore);
     var greenThreshold = 3;
     var yellowThreshold = 6;
     if(statebag.uiAttributes) {

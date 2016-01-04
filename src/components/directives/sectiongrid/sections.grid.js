@@ -14,6 +14,7 @@ angular.module('teacherdashboard')
       replace: true,
       link: function(scope, elem) {
         console.log(scope.students);
+        console.log(scope.section);
         var $studentContainer = angular.element(elem).find('.student-slide');
         var $studentArrowIcon = angular.element(elem).find('.arrow-icon');
         var ROTATE = 'rotate';
