@@ -6,14 +6,17 @@ angular.module('teacherdashboard')
       scope: {
         studentsData: '=',
         showFilter: '=',
-        cellWidth: '@'
+        cellWidth: '@',
+        sectionId: '@'
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/studenttray/studenttray.html',
       replace: true,
       controller: function($scope) {
-        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
+        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
+        var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
+        var gpaChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="calculationDate" key-to-y="score" date-time-data-promise="gpaDataPromise"></datetimechart></div>';
         $scope.showMoreStudents = true;
         $scope.limit = 100;
 
@@ -24,6 +27,7 @@ angular.module('teacherdashboard')
         };
         $scope.showTray = function(ev, student, template) {
           if(!$scope.student || $scope.student.id !== student.id || $scope.currTemplate !== template) {
+            console.log($scope.sectionId);
             //Hide other dialog, if shown...
             $scope.hideTray(ev, student);
             $scope.student = student;
@@ -42,12 +46,11 @@ angular.module('teacherdashboard')
                   }, {}).$promise
             } else if(template === attendanceTableHtml) {
               $scope.choroScope.attendanceDataPromise =
-                $scope.studentsData.demerits.$promise;
+                api.studentSectionAttendance.get({ sectionId: $scope.sectionId ,schoolId: statebag.school.id, studentId: student.id }).$promise;
             } else if(template === hwCompletionChartHtml) {
-              $scope.choroScope.dateTimeDataPromise = api.studentHwRates.get({
+              $scope.choroScope.dateTimeDataPromise = api.studentSectionHwRates.get({
                 studentId: student.id,
-                startDate: moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
-                endDate: moment(statebag.currentYear.endDate).format('YYYY-MM-DD')
+                sectionId: $scope.sectionId
               }).$promise;
             } else if(template === gpaChartTemplate) {
               $scope.choroScope.gpaDataPromise = api.gpasOverTime.get(
@@ -93,6 +96,10 @@ angular.module('teacherdashboard')
         $scope.showHomeworkTray = function(ev, student) {
           $window.ga('send', 'event', 'Home', 'ShowHomework', 'Open HW Completion Tray');
           $scope.showTray(ev, student, hwCompletionChartHtml);
+        };
+        $scope.showAttendanceTray = function(ev, student) {
+          $window.ga('send', 'event', 'Home', 'ShowAttendance', 'Open Attendance Tray');
+          $scope.showTray(ev, student, attendanceTableHtml);
         };
 
       }
