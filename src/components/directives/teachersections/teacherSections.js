@@ -11,7 +11,6 @@ angular.module('teacherdashboard')
         templateUrl: api.basePrefix + '/components/directives/teachersections/teacherSections.html',
         replace: true,
         link: function(scope) {
-          console.log("DIRECTIVE CALLED");
           statebag.currentPage.name = 'Sections';
           scope.showFilter=true;
           scope.hwPromise= {};

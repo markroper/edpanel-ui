@@ -8,10 +8,11 @@ angular.module('teacherdashboard')
         keyToX: '@',
         keyToY: '@',
         objectField: '@',
-        yScalingFactor: '@'
+        yScalingFactor: '@',
+        yDataLabel: '@'
       },
       restrict: 'E',
-      templateUrl: api.basePrefix + '/components/directives/datelinechart/datelinechart.html',
+      templateUrl: api.basePrefix + '/components/directives/datetimechart/datetimechart.html',
       replace: true,
       link: function(scope, elem) {
         var elemToBindTo = elem.find('.datelinechart-container');
@@ -19,15 +20,19 @@ angular.module('teacherdashboard')
 
 
         scope.dateTimeDataPromise.then(function(theData){
+          if (!scope.yDataLabel) {
+             scope.yDataLabel = scope.keyToY;
+          }
           if (scope.objectField) {
             theData = theData[scope.objectField];
           }
           if (!scope.yScalingFactor) {
             scope.yScalingFactor = 1;
           }
-          //LEss then ideal, but we need to scale data by a value because grades come back as .75
+          //Less then ideal, but we need to scale data by a value because grades come back as .75
+          //We are also doing this so we can have custom labels on this thing
           for (var i = 0; i < theData.length; i++) {
-            theData[i][scope.keyToY] *= scope.yScalingFactor;
+            theData[i][scope.yDataLabel] = theData[i][scope.keyToY] * scope.yScalingFactor;
           }
           scope.chart = $window.c3.generate({
             bindto: elemToBindTo[0],
@@ -36,7 +41,7 @@ angular.module('teacherdashboard')
               type: 'line',
               keys: {
                 x: scope.keyToX,
-                value:[scope.keyToY]
+                value:[scope.yDataLabel]
               }
             },
             grid: {

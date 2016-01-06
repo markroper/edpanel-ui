@@ -6,7 +6,5 @@ angular.module('teacherdashboard')
       $scope.$on('$viewContentLoaded', function() {
         $window.ga('send', 'pageview', { page: $location.url() });
       });
-      statebag.currentPage.name = 'Survey Results';
-      console.log("BUTTS");
 
   }]);

@@ -14,9 +14,9 @@ angular.module('teacherdashboard')
       replace: true,
       controller: function($scope) {
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
-        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
+        var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" y-data-label="Homework Completion" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
-        var gradeChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" object-field="weeklyGradeProgression" y-scaling-factor="100" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="gradeDataPromise"></datetimechart></div>';
+        var gradeChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart y-data-label="Grade" slide-closed="hideTray" object-field="weeklyGradeProgression" y-scaling-factor="100" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="gradeDataPromise"></datetimechart></div>';
         $scope.showMoreStudents = true;
         $scope.limit = 100;
 
