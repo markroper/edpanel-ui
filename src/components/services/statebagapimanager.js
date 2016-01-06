@@ -105,8 +105,8 @@ angular.module('teacherdashboard')
     },
     //TODO THIS IS ARBITARY I DONT KNOW WHAT THIS SHOULD BE
     resolveBehaviorClass: function(behaviorScore) {
-    var greenThreshold = 10;
-    var yellowThreshold = 25;
+    var greenThreshold = 7;
+    var yellowThreshold = 20;
     if(statebag.uiAttributes) {
       greenThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.green;
       yellowThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.yellow;

@@ -10,7 +10,6 @@ angular.module('teacherdashboard').
       statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
       statebag.lastFullRefresh = null;
 
-      //TODO GET BACK TO THIS CHRIS
       if (statebag.userRole === "TEACHER") {
         $state.go('app.teacherHome', {schoolId: statebag.school.id});
       } else {
