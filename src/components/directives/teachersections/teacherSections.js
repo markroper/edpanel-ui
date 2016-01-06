@@ -59,6 +59,8 @@ angular.module('teacherdashboard')
                 for (i = 0; i < responses[1].records.length; i++) {
                   var sectId = responses[1].records[i].values[0];
                   var studId = responses[1].records[i].values[1];
+
+
                   if (!hwCompletions[responses[1].records[i].values[0]]) {
                     hwCompletions[sectId] = {};
                     //We need average info for a section, but also info for each student
@@ -97,7 +99,7 @@ angular.module('teacherdashboard')
                   var numStudentsEnrolled = statebag.currentSections[i].enrolledStudents.length;
 
                   //Some classes don't have grades. Only if it does should we add overall homework completion
-                  if (typeof hwCompletions[sectId] !== 'undefined') {
+                  if (typeof hwCompletions[sectId] !== 'undefined' ) {
                     statebag.currentSections[i]["HomeworkCompletion"] = hwCompletions[sectId]["total"] / hwCompletions[sectId].count;
                   }
                   //Overall average of attendance
@@ -107,7 +109,7 @@ angular.module('teacherdashboard')
                   for (var j = 0; j < numStudentsEnrolled; j++) {
                     studId = statebag.currentSections[i].enrolledStudents[j].id;
                     //If the section doesn't have grades don't populate the average homework for that grade
-                    if (typeof hwCompletions[sectId] !== 'undefined') {
+                    if (typeof hwCompletions[sectId] !== 'undefined' && hwCompletions[sectId]["total"] !== 0) {
                       statebag.currentSections[i].enrolledStudents[j]["homework"] = hwCompletions[sectId]["students"][studId];
                       statebag.currentSections[i].enrolledStudents[j]["homeworkClass"] = statebagApiManager.resolveHomeworkClass(
                         hwCompletions[sectId]["students"][studId]/100.0);
