@@ -3,6 +3,9 @@ angular.module('teacherdashboard')
   .controller('SurveyResults', ['$scope', 'api', '$state', 'statebag', '$window','$compile', '$stateParams',
     function ($scope, api, $state, statebag, $window, $compile, $stateParams) {
       statebag.currentPage.name = 'Survey Results';
+      $scope.$on('$viewContentLoaded', function() {
+        $window.ga('send', 'pageview', { page: "ui/surveyresults/*" });
+      });
       var surveyResultsDirective =
         '<survey-aggregate aggregate-survey="aggregateSurvey" survey-aggregates="surveyAggregates"></survey-aggregate>';
       //We need student ID, school, currentYear, currentTerm in order to proceed

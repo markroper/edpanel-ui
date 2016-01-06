@@ -3,7 +3,7 @@ angular.module('teacherdashboard')
   .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', '$location',
     function ($scope, api, statebag, $q, $window, $location) {
       $scope.$on('$viewContentLoaded', function() {
-        $window.ga('send', 'pageview', { page: $location.url() });
+        $window.ga('send', 'pageview', { page: "/ui/schools/*/dashboard" });
       });
       statebag.currentPage.name = 'School Dashboard';
       var min = $window.moment(statebag.currentTerm.startDate).valueOf();

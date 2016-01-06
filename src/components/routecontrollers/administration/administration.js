@@ -3,7 +3,7 @@ angular.module('teacherdashboard')
 .controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast', '$document', '$window', '$location',
   function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document, $window, $location) {
     $scope.$on('$viewContentLoaded', function() {
-      $window.ga('send', 'pageview', { page: $location.url() });
+      $window.ga('send', 'pageview', { page: "/ui/schools/*/admin" });
     });
 
     statebag.currentPage.name = 'System Admin';
