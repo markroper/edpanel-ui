@@ -32,15 +32,5 @@ angular.module('teacherdashboard')
           }
         };
       },
-      controller: function($scope) {
-
-        $scope.showMoreStudents = true;
-        $scope.limit = 30;
-
-
-
-
-
-      }
     };
   }]);

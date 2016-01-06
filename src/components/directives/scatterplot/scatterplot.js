@@ -76,7 +76,6 @@ angular.module('teacherdashboard')
           return processedAssignments;
         };
         scope.chartDataPromise.then(function(theData){
-          console.log("ITSSSS RUNNING");
           var data = processRawAssignments(theData);
           scope.assignments = data;
           var exs = {};
