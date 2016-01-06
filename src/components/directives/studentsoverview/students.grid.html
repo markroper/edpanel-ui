@@ -72,7 +72,7 @@
           <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
         </div>
 			</div>
-      <div class="table-row" layout="row" layout-wrap ng-repeat="student in (filteredStudentData = (studentsData | orderBy:order | filter:search:strict | filter:filterStudents | limitTo: limit)) track by student.id">
+      <div class="table-row" layout="row" layout-wrap ng-repeat="student in (filteredStudentData = (studentsData | orderBy:order | filter:search:strict | filter:filterStudents) | limitTo: limit) track by student.id">
         <div class="table-cell" flex="{{::cellWidth}}" flex-sm="100" ng-show="showFilter">
           <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
             <md-button md-no-ink class="md-primary student-name" ng-click="goToStudent(student)">

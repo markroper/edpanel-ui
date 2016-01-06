@@ -403,7 +403,7 @@ angular.module('teacherdashboard')
     student.behaviorClass = resolveBehaviorClass(student.behavior);
     student.homework = Math.round(inputStudent[2] * 100);
     student.homeworkClass = resolveHomeworkClass(inputStudent[2]);
-    student.attendanceClass= '90-100';
+    student.attendanceClass= '0';
     student.gpa = null;
     student.gpaClass = resolveGpaClass(student.gpa);
     return student;
@@ -419,8 +419,10 @@ angular.module('teacherdashboard')
       return '40-50';
     } else if(behaviorScore < greenThreshold) {
       return '70-80';
-    } else {
+    } else if(behaviorScore){
       return '90-100';
+    } else {
+      return '0';
     }
   }
   function resolveHomeworkClass(homeworkScore) {
@@ -434,8 +436,10 @@ angular.module('teacherdashboard')
       return '40-50';
     } else if(homeworkScore < greenThreshold) {
       return '70-80';
-    } else {
+    } else if(homeworkScore){
       return '90-100';
+    } else {
+      return '0';
     }
   }
   function resolveAttendanceClass(attendanceScore) {
@@ -449,8 +453,10 @@ angular.module('teacherdashboard')
       return '90-100';
     } else if(attendanceScore < yellowThreshold) {
       return '70-80';
-    } else {
+    } else if(attendanceScore){
       return '40-50';
+    } else {
+      return '0';
     }
   }
   function resolveGpaClass(gpa) {
