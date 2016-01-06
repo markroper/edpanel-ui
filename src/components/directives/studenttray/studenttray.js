@@ -73,7 +73,7 @@ angular.module('teacherdashboard')
           //Null out the active student
           $scope.student = null;
           $scope.currTemplate = null;
-          //Bury the body, hide the evidence
+          //Bury the body, hide the evidence (Clarification, Mark is burying the body. I copied this code from him)
           if($scope.choroScope) {
             $scope.choroScope.$destroy();
             $scope.choroScope = null;

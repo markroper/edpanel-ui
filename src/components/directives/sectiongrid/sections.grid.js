@@ -19,6 +19,7 @@ angular.module('teacherdashboard')
         var ROTATE_COUNTERWISE = 'rotateCounterwise';
         var SLIDE_OPEN_CLASS = 'slide-open-students';
         var SLIDE_CLOSED_CLASS = 'slide-closed-students';
+
         scope.showStudents = function() {
           $window.ga('send', 'event', 'StudentSection', 'ShowAssignments', 'Show Assignments');
           $studentContainer.toggleClass(SLIDE_OPEN_CLASS);
@@ -31,6 +32,6 @@ angular.module('teacherdashboard')
             $studentArrowIcon.addClass(ROTATE);
           }
         };
-      },
+      }
     };
   }]);
