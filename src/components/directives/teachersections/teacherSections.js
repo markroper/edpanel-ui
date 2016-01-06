@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .directive('teacherSections', [ 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$window', '$location',
-    function (api, statebag, $q, $state, statebagApiManager, authentication, consts, $window, $location) {
+  .directive('teacherSections', [ 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication',
+    function (api, statebag, $q, $state, statebagApiManager, authentication) {
       return {
         scope: {
 
