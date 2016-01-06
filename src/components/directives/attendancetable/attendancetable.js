@@ -23,7 +23,7 @@ angular.module('teacherdashboard')
             { field: 'schoolDay.date', name:'Date', type: 'date', cellFilter: 'date:\'yyyy-MM-dd\'' },
             { field: 'type', name: 'Type' },
             { field: 'status', name: 'Status' },
-            { field: 'sourceSystemPeriodId', name: 'Period' }
+            { field: 'section.name', name: 'Section Name' }
           ]
         };
         scope.attendanceDataPromise.then(function(theData){

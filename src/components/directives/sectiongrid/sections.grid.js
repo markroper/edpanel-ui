@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('sectionGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window','authentication',"$q",
-  function($state, statebag, api, $mdDialog, $compile, $timeout, $window, authentication, $q) {
+  .directive('sectionGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',
+  function($state, statebag, api, $mdDialog, $compile, $timeout, $window) {
     return {
       scope: {
         section: '=',
