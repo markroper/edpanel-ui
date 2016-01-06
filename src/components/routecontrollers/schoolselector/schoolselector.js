@@ -11,11 +11,12 @@ angular.module('teacherdashboard').
       statebag.lastFullRefresh = null;
 
       //TODO GET BACK TO THIS CHRIS
-      if (statebag.userRole == "TEACHER") {
-        console.log("WINNING");
+      if (statebag.userRole === "TEACHER") {
+        $state.go('app.teacherHome', {schoolId: statebag.school.id});
+      } else {
+        $state.go('app.home', { schoolId: statebag.school.id });
       }
-      console.log(statebag.userRole);
-      $state.go('app.home', { schoolId: statebag.school.id });
+
     };
     api.schools.get({}, function(results){
       $scope.schools = results;

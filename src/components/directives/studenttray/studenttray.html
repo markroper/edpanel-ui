@@ -49,7 +49,7 @@
             <md-tooltip>{{student.attendance || 0}} absenses this {{::student.attendancePeriod || 'period'}}</md-tooltip>
           </div>
         </div>
-        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showGpaTray($event, student)">
+        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showGradeTray($event, student)">
           <div class="choropleth band-{{student.gradeClass || 'grey'}}" layout="row" layout-align="center center">
             <span class="mobile-label md-subhead" hide-gt-sm>Grade</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">

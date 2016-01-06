@@ -63,8 +63,6 @@ angular.module('teacherdashboard')
 
               //TODO Filter or for teacher vs addmin home pages
               if (data.type === consts.roles.TEACHER) {
-                console.log("IT WORKDED");
-                console.log(data.currentSchoolId);
                 api.school.get(
                   {schoolId: data.currentSchoolId},
                   //Success callback

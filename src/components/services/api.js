@@ -75,6 +75,7 @@ angular.module('teacherdashboard')
         { 'get': { 'isArray': true}}
       ),
       studentPrepScores: $resource(base + '/students/:studentId/prepscores', {}, {'get': {isArray: true }}),
+      studentHistoricalGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectId/grades/students/:studId/weeks', {}, {'get':{isArray: false}}),
       studentHwRates: $resource(base + '/students/:studentId/homeworkrates', {}, {'get': {isArray: true }}),
       studentSectionHwRates: $resource(base + '/students/:studentId/homeworkrates/sections/:sectionId', {}, {'get': {isArray: true }}),
       studentAttendance: $resource(base + '/schools/:schoolId/students/:studentId/attendance', {}, {'get': {isArray: true }}),

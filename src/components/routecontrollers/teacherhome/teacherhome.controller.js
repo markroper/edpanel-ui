@@ -83,33 +83,36 @@ angular.module('teacherdashboard')
             for (var i = 0; i < statebag.currentSections.length; i++) {
               sectId = statebag.currentSections[i].id;
               var numStudentsEnrolled = statebag.currentSections[i].enrolledStudents.length;
-              //TODO have to give a grey class if its not graded
+
               if (typeof hwCompletions[sectId] != 'undefined') {
                 statebag.currentSections[i]["HomeworkCompletion"] = hwCompletions[sectId]["total"] / hwCompletions[sectId].count;
+              }
                 statebag.currentSections[i]["Attendance"] = parseFloat((attendanceMap[sectId].total / numStudentsEnrolled).toFixed(1));
-                for (var j = 0; j < numStudentsEnrolled; j++) {
-                  studId = statebag.currentSections[i].enrolledStudents[j].id;
+
+              for (var j = 0; j < numStudentsEnrolled; j++) {
+                studId = statebag.currentSections[i].enrolledStudents[j].id;
+                if (typeof hwCompletions[sectId] != 'undefined') {
                   statebag.currentSections[i].enrolledStudents[j]["homework"] = hwCompletions[sectId]["students"][studId];
                   statebag.currentSections[i].enrolledStudents[j]["homeworkClass"] = statebagApiManager.resolveHomeworkClass(
                     hwCompletions[sectId]["students"][studId]/100.0);
 
-                  var absences = attendanceMap[sectId][studId];
-                  //If it is undefined it means nothing came back from teh query so we have zero absenses
-                  if (!absences) {
-                    absences = 0
-                  }
-                  statebag.currentSections[i].enrolledStudents[j]["attendance"] = absences;
-                  statebag.currentSections[i].enrolledStudents[j]["attendanceClass"] = statebagApiManager.resolveAttendanceClass(
-                    absences);
-                  var studentDemerits = demeritMap[studId];
-                  if (!studentDemerits) {
-                    studentDemerits = 0;
-
-                  }
-                  statebag.currentSections[i].enrolledStudents[j]["demerits"] = studentDemerits;
-                  statebag.currentSections[i].enrolledStudents[j]["demeritClass"] = statebagApiManager.resolveBehaviorClass(studentDemerits);
+                }
+                var absences = attendanceMap[sectId][studId];
+                //If it is undefined it means nothing came back from teh query so we have zero absenses
+                if (!absences) {
+                  absences = 0
+                }
+                statebag.currentSections[i].enrolledStudents[j]["attendance"] = absences;
+                statebag.currentSections[i].enrolledStudents[j]["attendanceClass"] = statebagApiManager.resolveAttendanceClass(
+                  absences);
+                var studentDemerits = demeritMap[studId];
+                if (!studentDemerits) {
+                  studentDemerits = 0;
 
                 }
+                statebag.currentSections[i].enrolledStudents[j]["demerits"] = studentDemerits;
+                statebag.currentSections[i].enrolledStudents[j]["demeritClass"] = statebagApiManager.resolveBehaviorClass(studentDemerits);
+
               }
 
             }
@@ -308,8 +311,8 @@ angular.module('teacherdashboard')
         return {
           "aggregateMeasures": [
             {
-              "measure": "ABSENCE",
-              "aggregation": "COUNT"
+              "measure": "SECTION_ABSENCE",
+              "aggregation": "SUM"
             }
           ],
           "fields": [

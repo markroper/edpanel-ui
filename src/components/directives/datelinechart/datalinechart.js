@@ -6,7 +6,9 @@ angular.module('teacherdashboard')
         dateTimeDataPromise: '=',
         slideClosed: '=',
         keyToX: '@',
-        keyToY: '@'
+        keyToY: '@',
+        objectField: '@',
+        yScalingFactor: '@'
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/datelinechart/datelinechart.html',
@@ -14,7 +16,19 @@ angular.module('teacherdashboard')
       link: function(scope, elem) {
         var elemToBindTo = elem.find('.datelinechart-container');
 
+
+
         scope.dateTimeDataPromise.then(function(theData){
+          if (scope.objectField) {
+            theData = theData[scope.objectField];
+          }
+          if (!scope.yScalingFactor) {
+            scope.yScalingFactor = 1;
+          }
+          //LEss then ideal, but we need to scale data by a value because grades come back as .75
+          for (var i = 0; i < theData.length; i++) {
+            theData[i][scope.keyToY] *= scope.yScalingFactor;
+          }
           scope.chart = $window.c3.generate({
             bindto: elemToBindTo[0],
             data: {

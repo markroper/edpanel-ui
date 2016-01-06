@@ -16,7 +16,7 @@ angular.module('teacherdashboard')
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
-        var gpaChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" key-to-x="calculationDate" key-to-y="score" date-time-data-promise="gpaDataPromise"></datetimechart></div>';
+        var gradeChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" object-field="weeklyGradeProgression" y-scaling-factor="100" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="gradeDataPromise"></datetimechart></div>';
         $scope.showMoreStudents = true;
         $scope.limit = 100;
 
@@ -27,7 +27,6 @@ angular.module('teacherdashboard')
         };
         $scope.showTray = function(ev, student, template) {
           if(!$scope.student || $scope.student.id !== student.id || $scope.currTemplate !== template) {
-            console.log($scope.sectionId);
             //Hide other dialog, if shown...
             $scope.hideTray(ev, student);
             $scope.student = student;
@@ -35,7 +34,6 @@ angular.module('teacherdashboard')
             $scope.choroScope = $scope.$new(true);
             if(template === behaviorCalendarHtml) {
               //Cache the isolated scope variables needed for the chorocalendar directive
-              console.log($scope.studentsData);
               $scope.choroScope.behaviorDataPromise =
                 api.studentDemerits.get({
                   schoolId: statebag.school.id,
@@ -52,9 +50,14 @@ angular.module('teacherdashboard')
                 studentId: student.id,
                 sectionId: $scope.sectionId
               }).$promise;
-            } else if(template === gpaChartTemplate) {
-              $scope.choroScope.gpaDataPromise = api.gpasOverTime.get(
-                { studentId: student.id }
+            } else if(template === gradeChartTemplate) {
+              $scope.choroScope.gradeDataPromise = api.studentHistoricalGrade.get({
+                schoolId: statebag.school.id,
+                yearId: statebag.currentYear.id,
+                termId: statebag.currentTerm.id,
+                sectId: $scope.sectionId,
+                studId: student.id
+                }
               ).$promise;
             }
             $scope.choroScope.hideTray = $scope.hideTray;
@@ -100,6 +103,11 @@ angular.module('teacherdashboard')
         $scope.showAttendanceTray = function(ev, student) {
           $window.ga('send', 'event', 'Home', 'ShowAttendance', 'Open Attendance Tray');
           $scope.showTray(ev, student, attendanceTableHtml);
+        };
+        $scope.showGradeTray = function(ev, student) {
+          //TODO Change this analytics event
+          $window.ga('send', 'event', 'Home', 'ShowGpa', 'Open GPA Tray');
+          $scope.showTray(ev, student, gradeChartTemplate);
         };
 
       }
