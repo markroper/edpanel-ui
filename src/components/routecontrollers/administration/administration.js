@@ -60,6 +60,12 @@ angular.module('teacherdashboard')
       });
 
     $scope.saveSettingsChanges = function() {
+      $window.ga('send', {
+        hitType: 'event',
+        eventCategory: 'Administration',
+        eventAction: 'Save changes',
+        eventLabel: 'Save changes'
+      });
       var updatedAttributes = {
         'school': {
           'id': statebag.school.id,

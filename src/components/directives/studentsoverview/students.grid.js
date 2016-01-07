@@ -19,6 +19,10 @@ angular.module('teacherdashboard')
         var RACE = 'Race';
         var ETHNICITY = 'Ethnicity';
         var ABSENCES = 'Absences';
+        var BEHAVIOR_LABEL = 'BEHAVIOR';
+        var ATTENDANCE_LABEL = 'ATTENDANCE';
+        var GPA_LABEL = 'GPA';
+        var HOMEWORK_LABEL = 'HOMEWORK';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" y-data-label="Homework Completion" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
@@ -99,8 +103,24 @@ angular.module('teacherdashboard')
         };
         $scope.addFilter = function() {
           if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
+            console.log($scope.filter);
             $scope.currentFilters[$scope.filter] = { type: $scope.filter };
-            $window.ga('send', 'event', 'Home', 'FilterStudents', 'Adds an advanced filter');
+
+            //Analytics code lives here
+            var analyticsObject = {
+              hitType: 'event',
+              eventCategory: 'Student List',
+              eventAction: 'Add Filter',
+              eventLabel: $scope.filter.toUpperCase()
+            };
+            if ($scope.filter === HOMEWORK_COMPLETION) {
+              analyticsObject.eventLabel = HOMEWORK_LABEL;
+            } else if  ($scope.filter === ABSENCES) {
+              analyticsObject.eventLabel = ATTENDANCE_LABEL;
+            }
+            $window.ga('send', analyticsObject);
+            //END ANALYTICS CODE
+
           }
         };
         var genderMapping = {
@@ -183,7 +203,12 @@ angular.module('teacherdashboard')
 
         //SORT RELATED
         $scope.setOrder = function(ev, keyToUse) {
-          $window.ga('send', 'event', 'Student Sort', 'Sort By ' + keyToUse, 'Sort Student List by ' + keyToUse);
+          $window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'Student List',
+            eventAction: 'Admin Student Sort',
+            eventLabel: keyToUse.toUpperCase()
+          });
           var el = angular.element(ev.target);
           if($scope.sortElement) {
             $scope.sortElement.removeClass('desc');
@@ -272,19 +297,39 @@ angular.module('teacherdashboard')
           }
         };
         $scope.showBehaviorTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowBehavior', 'Open Behavior Tray');
+          $window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'Student List',
+            eventAction: 'Show Behavior',
+            eventLabel: BEHAVIOR_LABEL
+          });
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
         $scope.showHomeworkTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowHomework', 'Open HW Completion Tray');
+          $window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'Student List',
+            eventAction: 'Show Homework',
+            eventLabel: HOMEWORK_LABEL
+          });
           $scope.showTray(ev, student, hwCompletionChartHtml);
         };
         $scope.showGpaTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowGpa', 'Open GPA Tray');
+          $window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'Student List',
+            eventAction: 'Show Gpa',
+            eventLabel: GPA_LABEL
+          });
           $scope.showTray(ev, student, gpaChartTemplate);
         };
         $scope.showAttendanceTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowAttendance', 'Open Attendance Tray');
+          $window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'Student List',
+            eventAction: 'Show Attendance',
+            eventLabel: ATTENDANCE_LABEL
+          });
           $scope.showTray(ev, student, attendanceTableHtml);
         };
       }

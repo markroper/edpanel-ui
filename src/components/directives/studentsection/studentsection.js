@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentsection', [ '$window','statebagApiManager' , 'api', '$compile','$timeout', '$mdToast',
-  function($window, statebagApiManager, api, $compile, $timeout, mdToast) {
+  .directive('studentsection', [ '$window','statebagApiManager' , 'api', '$compile','$timeout', '$mdToast','statebag',
+  function($window, statebagApiManager, api, $compile, $timeout, mdToast, statebag) {
     return {
       scope: {
         section: '=',
@@ -32,7 +32,12 @@ angular.module('teacherdashboard')
         };
         scope.editGoal = function(section) {
           //Call api to edit the goal
-          $window.ga('send', 'event', 'StudentSection', 'EditGoal', 'Edit Goal');
+          $window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'StudentSection',
+            eventAction: 'Edit Goal',
+            eventLabel: statebag.userRole
+          });
           section.editActive = true;
 
         };
@@ -69,7 +74,12 @@ angular.module('teacherdashboard')
         };
 
         scope.showAssignments = function() {
-          $window.ga('send', 'event', 'StudentSection', 'ShowAssignments', 'Show Assignments');
+          $window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'StudentSection',
+            eventAction: 'Show Assignments',
+            eventLabel: statebag.userRole
+          });
           if($assignmentsContainer.children().length === 0) {
             $assignmentsContainer.append($compile(scatterPlotHtml)(scope));
           }

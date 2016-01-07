@@ -93,7 +93,12 @@ angular.module('teacherdashboard')
           }
         };
         $scope.showBehaviorTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowBehavior', 'Open Behavior Tray');
+            $window.ga('send', {
+              hitType: 'event',
+              eventCategory: 'Teacher Dashboard',
+              eventAction: 'Change term',
+              eventLabel: 'FAILURE'
+            });
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
         $scope.showHomeworkTray = function(ev, student) {

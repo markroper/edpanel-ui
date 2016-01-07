@@ -21,7 +21,13 @@ angular.module('teacherdashboard')
         var SLIDE_CLOSED_CLASS = 'slide-closed-students';
 
         scope.showStudents = function() {
-          $window.ga('send', 'event', 'StudentSection', 'ShowAssignments', 'Show Assignments');
+            $window.ga('send', {
+              hitType: 'event',
+              eventCategory: 'Teacher Dashboard',
+              eventAction: 'Show Students',
+              eventLabel: 'Show Students'
+            });
+
           $studentContainer.toggleClass(SLIDE_OPEN_CLASS);
           $studentContainer.toggleClass(SLIDE_CLOSED_CLASS);
           if($studentArrowIcon.hasClass(ROTATE)) {

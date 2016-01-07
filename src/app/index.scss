@@ -182,13 +182,8 @@ span.name {
 // injector
 @import '../components/directives/attendancetable/attendancetable.scss';
 @import '../components/directives/behaviorgraph/behaviorgraph.scss';
-<<<<<<< HEAD
 @import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/chorocalendar/chorocalendar.scss';
-=======
-@import '../components/directives/chorocalendar/chorocalendar.scss';
-@import '../components/directives/behaviortable/behaviortable.scss';
->>>>>>> master
 @import '../components/directives/datetimechart/datetimechart.scss';
 @import '../components/directives/filterchip/filterChip.scss';
 @import '../components/directives/goal/goals.scss';
@@ -212,12 +207,10 @@ span.name {
 @import '../components/routecontrollers/mysurveyresponses/mySurveyResponses.scss';
 @import '../components/routecontrollers/mysurveys/mySurveys.scss';
 @import '../components/routecontrollers/navinclude/navinclude.scss';
-@import '../components/routecontrollers/schooldash/schooldash.scss';
 @import '../components/routecontrollers/resetpassword/resetpassword.scss';
+@import '../components/routecontrollers/schooldash/schooldash.scss';
 @import '../components/routecontrollers/schoolselector/schoolselector.scss';
 @import '../components/routecontrollers/student/student.scss';
 @import '../components/routecontrollers/surveyresults/surveyResults.scss';
 @import '../components/routecontrollers/teacherhome/teacherhome.scss';
-@import '../components/routecontrollers/mysurveys/mySurveys.scss';
-@import '../components/routecontrollers/mysurveyresponses/mySurveyResponses.scss';
 // endinjector

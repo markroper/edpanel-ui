@@ -41,6 +41,12 @@ angular.module('teacherdashboard')
       };
 
       $scope.updateDemeritTerm = function() {
+        $window.ga('send', {
+          hitType: 'event',
+          eventCategory: 'School Dashboard',
+          eventAction: 'Change term',
+          eventLabel: 'BEHAVIOR'
+        });
         var meritDemeritsPromises = [];
         makeMeritDemeritRequests(meritDemeritsPromises);
 
@@ -120,7 +126,6 @@ angular.module('teacherdashboard')
       };
 
       $scope.changeFailingBreakdown = function() {
-
         var failingPromises = [];
 
         makeFailureRequests(failingPromises, hackyMap[$scope.failingTerm.id]);
@@ -471,5 +476,43 @@ angular.module('teacherdashboard')
 
         return personQuery;
       }
+
+      //ALL BELOW HERE LIVES ANALYTICS
+      $scope.$watch('failingTerm', function() {
+        $window.ga('send', {
+          hitType: 'event',
+          eventCategory: 'School Dashboard',
+          eventAction: 'Change term',
+          eventLabel: 'FAILURE'
+        });
+      });
+
+      $scope.$watch('failingBreakdown', function() {
+        $window.ga('send', {
+          hitType: 'event',
+          eventCategory: 'School Dashboard',
+          eventAction: 'Change Breakdown',
+          eventLabel: 'FAILURE'
+        });
+      });
+
+      $scope.$watch('attendanceTerm', function() {
+        $window.ga('send', {
+          hitType: 'event',
+          eventCategory: 'School Dashboard',
+          eventAction: 'Change term',
+          eventLabel: 'ATTENDANCE'
+        });
+      });
+
+      $scope.$watch('attendanceBreakdown', function() {
+        $window.ga('send', {
+          hitType: 'event',
+          eventCategory: 'School Dashboard',
+          eventAction: 'Change Breakdown',
+          eventLabel: 'ATTENDANCE'
+        });
+      });
+
 
     }]);
