@@ -51,6 +51,8 @@ angular.module('teacherdashboard')
                 var demeritMap = {};
                 var sectId;
                 var studId;
+                var totalAbsence;
+                var absences;
                 var i;
                 var j;
                 //responses[0] is the demerit query
@@ -108,7 +110,13 @@ angular.module('teacherdashboard')
                         hwCompletions[sectId].total / hwCompletions[sectId].count * 10) / 10;
                   }
                   //Overall average of attendance
-                  statebag.currentSections[i].Attendance = parseFloat((attendanceMap[sectId].total / numStudentsEnrolled).toFixed(1));
+                  //IF there was enver an absense in this class, this will be null
+                  if (!attendanceMap[sectId]) {
+                    totalAbsence = 0;
+                  } else {
+                    totalAbsence = attendanceMap[sectId].total
+                  }
+                  statebag.currentSections[i].Attendance = parseFloat((totalAbsence / numStudentsEnrolled).toFixed(1));
 
                   //FOr each section, iterate over all the students
                   for (j = 0; j < numStudentsEnrolled; j++) {
@@ -120,7 +128,12 @@ angular.module('teacherdashboard')
                         hwCompletions[sectId].students[studId]/100.0);
                     }
 
-                    var absences = attendanceMap[sectId][studId];
+                    //If there is a class no one has ever been absent in.
+                    if (!attendanceMap[sectId]) {
+                      absences = 0;
+                    } else {
+                      absences = attendanceMap[sectId][studId];
+                    }
                     //If it is undefined it means nothing came back from the query so we have zero absences
                     if (!absences) {
                       absences = 0;
