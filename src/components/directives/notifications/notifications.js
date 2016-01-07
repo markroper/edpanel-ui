@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
   //WORKING AROUND ng-click auto closing my menu on click
-  .directive('edpanelClick', function ($parse, $rootScope) {
+  .directive('edpanelClick', function ($parse) {
     return {
       restrict: 'A',
       compile: function ($element, attrs) {
@@ -12,13 +12,13 @@ angular.module('teacherdashboard')
               fn(scope, { $event: event });
             };
             scope.$apply(callback);
-          })
-        }
+          });
+        };
       }
-    }
+    };
   })
-  .directive('notifications', [ '$window', 'statebagApiManager', 'api', '$compile', '$timeout', '$mdToast',
-    function($window, statebagApiManager, api, $compile, $timeout, mdToast) {
+  .directive('notifications', [ '$window', 'statebagApiManager', 'api',
+    function($window, statebagApiManager, api) {
       return {
         scope: {
           notificationList: '='
@@ -26,7 +26,7 @@ angular.module('teacherdashboard')
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/notifications/notifications.html',
         replace: true,
-        link: function ($scope, elem) {
+        link: function ($scope) {
           var currentNotification;
 
           $scope.dismissNotification = function(index, $event) {
@@ -40,7 +40,7 @@ angular.module('teacherdashboard')
 
           $scope.toggleDetails = function(notification, $event) {
             $event.stopPropagation();
-            if(currentNotification && currentNotification != notification) {
+            if(currentNotification && currentNotification !== notification) {
               currentNotification.active = false;
             }
             currentNotification = notification;
@@ -49,9 +49,7 @@ angular.module('teacherdashboard')
             } else {
               currentNotification.active = true;
             }
-
           };
-
         }
-      }
+      };
     }]);
