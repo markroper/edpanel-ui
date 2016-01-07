@@ -7,6 +7,7 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
     $scope.theme = statebag.theme;
     $scope.UAService = UAService;
 
+    //TODO: make notification loading dynamic, with websocket?
     $scope.notificationList = [
       { title: 'Mark Roper - homework', type:'STUDENT', id:1, measure:'HOMEWORK', message:'Homework completion up 10% in the last 7 days', studentId: 1 },
       { title: 'Mark Roper - pride score', type:'STUDENT', id:1, measure:'BEHAVIOR', message:'Mark Roper\'s pride score of 70 this week is 25% lower than his average', studentId: 1 },
