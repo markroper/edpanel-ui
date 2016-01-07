@@ -39,7 +39,11 @@ angular.module('teacherdashboard')
                   statebag.currentYear = statebagapimanager.resolveCurrentYear();
                   statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
                   statebag.lastFullRefresh = null;
-                  $state.go('app.home', {schoolId: statebag.school.id});
+                  if (statebag.userRole === 'Teacher') {
+                    $state.go('app.teacherHome', {schoolId: statebag.school.id});
+                  } else {
+                    $state.go('app.home', { schoolId: statebag.school.id });
+                  }
                 },
                 //Error callback
                 function () {
@@ -47,7 +51,8 @@ angular.module('teacherdashboard')
                   $scope.mode = '';
                 });
             } else if(data.type === consts.roles.ADMIN ||
-              data.type === consts.roles.SUPER_ADMIN) {
+              data.type === consts.roles.SUPER_ADMIN ||
+              data.type === consts.roles.TEACHER) {
               $state.go('app.schoolSelector');
             }
           },

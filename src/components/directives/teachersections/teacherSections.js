@@ -49,6 +49,12 @@ angular.module('teacherdashboard')
               $q.all(sectionPromise).then(function(responses) {
                 var hwCompletions = {};
                 var demeritMap = {};
+                var sectId;
+                var studId;
+                var totalAbsence;
+                var absences;
+                var i;
+                var j;
                 //responses[0] is the demerit query
                 for (j = 0; j < responses[0].records.length; j++ ) {
                   //values[0] is the studentID, so this map goes from studentId to count of demerits
@@ -57,22 +63,22 @@ angular.module('teacherdashboard')
 
                 //responses[1] is the homework query
                 for (i = 0; i < responses[1].records.length; i++) {
-                  var sectId = responses[1].records[i].values[0];
-                  var studId = responses[1].records[i].values[1];
+                  sectId = responses[1].records[i].values[0];
+                  studId = responses[1].records[i].values[1];
 
 
                   if (!hwCompletions[responses[1].records[i].values[0]]) {
                     hwCompletions[sectId] = {};
                     //We need average info for a section, but also info for each student
                     //Hence this map
-                    hwCompletions[sectId]["count"] = 0;
-                    hwCompletions[sectId]["total"] = 0;
-                    hwCompletions[sectId]["students"] = {};
+                    hwCompletions[sectId].count = 0;
+                    hwCompletions[sectId].total = 0;
+                    hwCompletions[sectId].students = {};
                   }
 
-                  hwCompletions[sectId]["count"] += 1;
-                  hwCompletions[sectId]["total"] += Math.round(parseFloat(responses[1].records[i].values[2]) * 100);
-                  hwCompletions[sectId]["students"][studId] = Math.round(parseFloat(responses[1].records[i].values[2]) * 100);
+                  hwCompletions[sectId].count += 1;
+                  hwCompletions[sectId].total += Math.round(parseFloat(responses[1].records[i].values[2]) * 100);
+                  hwCompletions[sectId].students[studId] = Math.round(parseFloat(responses[1].records[i].values[2]) * 100);
                 }
 
                 var attendanceMap = {};
@@ -85,13 +91,13 @@ angular.module('teacherdashboard')
                   if (!attendanceMap[result[1]]) {
                     attendanceMap[result[1]] = {};
                     //Track total number of absences
-                    attendanceMap[result[1]]["total"] = 0;
+                    attendanceMap[result[1]].total = 0;
                     //Track total number of students
-                    attendanceMap[result[1]]["count"] = 0;
+                    attendanceMap[result[1]].count = 0;
                   }
                   attendanceMap[result[1]][result[0]] = result[2];
-                  attendanceMap[result[1]]["total"] += result[2];
-                  attendanceMap[result[1]]["count"] += 1;
+                  attendanceMap[result[1]].total += result[2];
+                  attendanceMap[result[1]].count += 1;
                 }
 
                 for (i = 0; i < statebag.currentSections.length; i++) {
@@ -100,28 +106,40 @@ angular.module('teacherdashboard')
 
                   //Some classes don't have grades. Only if it does should we add overall homework completion
                   if (typeof hwCompletions[sectId] !== 'undefined' ) {
-                    statebag.currentSections[i]["HomeworkCompletion"] = hwCompletions[sectId]["total"] / hwCompletions[sectId].count;
+                    statebag.currentSections[i].HomeworkCompletion = Math.round(
+                        hwCompletions[sectId].total / hwCompletions[sectId].count * 10) / 10;
                   }
                   //Overall average of attendance
-                  statebag.currentSections[i]["Attendance"] = parseFloat((attendanceMap[sectId].total / numStudentsEnrolled).toFixed(1));
+                  //IF there was enver an absense in this class, this will be null
+                  if (!attendanceMap[sectId]) {
+                    totalAbsence = 0;
+                  } else {
+                    totalAbsence = attendanceMap[sectId].total
+                  }
+                  statebag.currentSections[i].Attendance = parseFloat((totalAbsence / numStudentsEnrolled).toFixed(1));
 
                   //FOr each section, iterate over all the students
-                  for (var j = 0; j < numStudentsEnrolled; j++) {
+                  for (j = 0; j < numStudentsEnrolled; j++) {
                     studId = statebag.currentSections[i].enrolledStudents[j].id;
                     //If the section doesn't have grades don't populate the average homework for that grade
-                    if (typeof hwCompletions[sectId] !== 'undefined' && hwCompletions[sectId]["total"] !== 0) {
-                      statebag.currentSections[i].enrolledStudents[j]["homework"] = hwCompletions[sectId]["students"][studId];
-                      statebag.currentSections[i].enrolledStudents[j]["homeworkClass"] = statebagApiManager.resolveHomeworkClass(
-                        hwCompletions[sectId]["students"][studId]/100.0);
+                    if (typeof hwCompletions[sectId] !== 'undefined' && hwCompletions[sectId].total !== 0) {
+                      statebag.currentSections[i].enrolledStudents[j].homework = hwCompletions[sectId].students[studId];
+                      statebag.currentSections[i].enrolledStudents[j].homeworkClass = statebagApiManager.resolveHomeworkClass(
+                        hwCompletions[sectId].students[studId]/100.0);
                     }
 
-                    var absences = attendanceMap[sectId][studId];
+                    //If there is a class no one has ever been absent in.
+                    if (!attendanceMap[sectId]) {
+                      absences = 0;
+                    } else {
+                      absences = attendanceMap[sectId][studId];
+                    }
                     //If it is undefined it means nothing came back from the query so we have zero absences
                     if (!absences) {
-                      absences = 0
+                      absences = 0;
                     }
-                    statebag.currentSections[i].enrolledStudents[j]["attendance"] = absences;
-                    statebag.currentSections[i].enrolledStudents[j]["attendanceClass"] = statebagApiManager.resolveAttendanceClass(
+                    statebag.currentSections[i].enrolledStudents[j].attendance = absences;
+                    statebag.currentSections[i].enrolledStudents[j].attendanceClass = statebagApiManager.resolveAttendanceClass(
                       absences);
 
                     //If its undefined this teacher has given them no demerits so we say they have 0
@@ -130,8 +148,8 @@ angular.module('teacherdashboard')
                       studentDemerits = 0;
 
                     }
-                    statebag.currentSections[i].enrolledStudents[j]["demerits"] = studentDemerits;
-                    statebag.currentSections[i].enrolledStudents[j]["demeritClass"] = statebagApiManager.resolveBehaviorClass(studentDemerits);
+                    statebag.currentSections[i].enrolledStudents[j].demerits = studentDemerits;
+                    statebag.currentSections[i].enrolledStudents[j].demeritClass = statebagApiManager.resolveBehaviorClass(studentDemerits);
 
                   }
 
@@ -191,7 +209,7 @@ angular.module('teacherdashboard')
               },
               //Success callback
               function(data){
-                statebag.currentSections[index]["grades"] = data;
+                statebag.currentSections[index].grades = data;
                 var total = 0;
                 data.sort(function(grade) {
                   return grade.student.id;
@@ -206,15 +224,15 @@ angular.module('teacherdashboard')
                   if ( typeof data[i].grade !== 'undefined') {
                     isGradedClass = true;
                     total += data[i].grade;
-                    statebag.currentSections[index].enrolledStudents[i]["grade"] = data[i].grade;
-                    statebag.currentSections[index].enrolledStudents[i]["gradeClass"] = statebagApiManager.resolveSectionGradeClass(data[i].grade);
+                    statebag.currentSections[index].enrolledStudents[i].grade = data[i].grade;
+                    statebag.currentSections[index].enrolledStudents[i].gradeClass = statebagApiManager.resolveSectionGradeClass(data[i].grade);
 
                   }
 
                 }
                 if (isGradedClass) {
 
-                  statebag.currentSections[index]["aveGrade"] = Math.round(total/data.length);
+                  statebag.currentSections[index].aveGrade = Math.round(total/data.length);
                 }
 
 
@@ -231,91 +249,91 @@ angular.module('teacherdashboard')
           function  getStudentsDemeritCount() {
             var identity = authentication.identity();
             var personQuery = {
-              "aggregateMeasures":[
+              'aggregateMeasures':[
                 {
-                  "measure":"DEMERIT",
-                  "aggregation":"SUM"
+                  'measure':'DEMERIT',
+                  'aggregation':'SUM'
                 }
               ],
-              "fields":[
+              'fields':[
                 {
-                  "dimension":"STUDENT",
-                  "field":"ID"
+                  'dimension':'STUDENT',
+                  'field':'ID'
                 },
                 {
-                  "dimension":"STUDENT",
-                  "field":"Name"
+                  'dimension':'STUDENT',
+                  'field':'Name'
                 }
               ],
-              "filter":{
-                "type":"EXPRESSION",
-                "leftHandSide": {
-                  "type": "EXPRESSION",
-                  "leftHandSide": {
-                    "type": "EXPRESSION",
-                    "leftHandSide": {
-                      "type": "DIMENSION",
-                      "value": {
-                        "dimension": "STUDENT",
-                        "field": "School"
+              'filter':{
+                'type':'EXPRESSION',
+                'leftHandSide': {
+                  'type': 'EXPRESSION',
+                  'leftHandSide': {
+                    'type': 'EXPRESSION',
+                    'leftHandSide': {
+                      'type': 'DIMENSION',
+                      'value': {
+                        'dimension': 'STUDENT',
+                        'field': 'School'
                       }
                     },
-                    "operator": "EQUAL",
-                    "rightHandSide": {
-                      "type": "NUMERIC",
-                      "value": statebag.school.id
+                    'operator': 'EQUAL',
+                    'rightHandSide': {
+                      'type': 'NUMERIC',
+                      'value': statebag.school.id
                     }
                   },
-                  "operator": "AND",
-                  "rightHandSide": {
-                    "type": "EXPRESSION",
-                    "leftHandSide": {
-                      "type": "EXPRESSION",
-                      "leftHandSide": {
-                        "type": "MEASURE",
-                        "value": {
-                          "measure": "DEMERIT",
-                          "field": "Behavior Date"
+                  'operator': 'AND',
+                  'rightHandSide': {
+                    'type': 'EXPRESSION',
+                    'leftHandSide': {
+                      'type': 'EXPRESSION',
+                      'leftHandSide': {
+                        'type': 'MEASURE',
+                        'value': {
+                          'measure': 'DEMERIT',
+                          'field': 'Behavior Date'
                         }
                       },
-                      "operator": "GREATER_THAN_OR_EQUAL",
-                      "rightHandSide": {
-                        "type": "DATE",
-                        "value": statebag.currentTerm.startDate
+                      'operator': 'GREATER_THAN_OR_EQUAL',
+                      'rightHandSide': {
+                        'type': 'DATE',
+                        'value': statebag.currentTerm.startDate
                       }
                     },
-                    "operator": "AND",
-                    "rightHandSide": {
-                      "type": "EXPRESSION",
-                      "leftHandSide": {
-                        "type": "MEASURE",
-                        "value": {
-                          "measure": "DEMERIT",
-                          "field": "Behavior Date"
+                    'operator': 'AND',
+                    'rightHandSide': {
+                      'type': 'EXPRESSION',
+                      'leftHandSide': {
+                        'type': 'MEASURE',
+                        'value': {
+                          'measure': 'DEMERIT',
+                          'field': 'Behavior Date'
                         }
                       },
-                      "operator": "LESS_THAN_OR_EQUAL",
-                      "rightHandSide": {
-                        "type": "DATE",
-                        "value": statebag.currentTerm.endDate
+                      'operator': 'LESS_THAN_OR_EQUAL',
+                      'rightHandSide': {
+                        'type': 'DATE',
+                        'value': statebag.currentTerm.endDate
                       }
                     }
                   }
                 },
-                "operator":"AND",
-                "rightHandSide":{
-                  "type":"EXPRESSION",
-                  "leftHandSide":{
-                    "type": "DIMENSION",
-                    "value": {
-                      "dimension":"USER",
-                      "field":"ID"
+                'operator':'AND',
+                'rightHandSide':{
+                  'type':'EXPRESSION',
+                  'leftHandSide':{
+                    'type': 'DIMENSION',
+                    'value': {
+                      'dimension':'USER',
+                      'field':'ID'
                     }
                   },
-                  "operator": "EQUAL",
-                  "rightHandSide": {
-                    "type": "NUMERIC",
-                    "value": identity.id
+                  'operator': 'EQUAL',
+                  'rightHandSide': {
+                    'type': 'NUMERIC',
+                    'value': identity.id
                   }
                 }
               }
@@ -343,24 +361,24 @@ angular.module('teacherdashboard')
 
           function getAttendanceQuery(sectionIds) {
             return {
-              "aggregateMeasures": [
+              'aggregateMeasures': [
                 {
-                  "measure": "SECTION_ABSENCE",
-                  "aggregation": "SUM"
+                  'measure': 'SECTION_ABSENCE',
+                  'aggregation': 'SUM'
                 }
               ],
-              "fields": [
+              'fields': [
                 {
-                  "dimension": "STUDENT",
-                  "field": "ID"
+                  'dimension': 'STUDENT',
+                  'field': 'ID'
                 },
                 {
-                  "dimension": "SECTION",
-                  "field": "ID"
+                  'dimension': 'SECTION',
+                  'field': 'ID'
                 }
               ],
-              "filter": getSectionIdsExpression(sectionIds)
-            }
+              'filter': getSectionIdsExpression(sectionIds)
+            };
           }
 
           function getHwQuery(startDate, endDate, studentIds) {
@@ -369,8 +387,8 @@ angular.module('teacherdashboard')
                 {'measure':'HW_COMPLETION','aggregation':'AVG'}
               ],
               'fields':[
-                {'dimension':"SECTION",'field':'ID'},
-                {'dimension':"STUDENT",'field':'ID'}
+                {'dimension':'SECTION','field':'ID'},
+                {'dimension':'STUDENT','field':'ID'}
               ],
               'filter': {
                 'type': 'EXPRESSION',
@@ -415,7 +433,7 @@ angular.module('teacherdashboard')
             return hwQuery;
           }
         }
-      }
+      };
 
 
 
