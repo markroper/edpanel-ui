@@ -139,6 +139,7 @@ angular.module('teacherdashboard')
 
         //SORT RELATED
         $scope.setOrder = function(ev, keyToUse) {
+          $window.ga('send', 'event', 'Student Sort', 'Sort By ' + keyToUse, 'Sort Student List by ' + keyToUse);
           var el = angular.element(ev.target);
           if($scope.sortElement) {
             $scope.sortElement.removeClass('desc');

@@ -32,7 +32,7 @@ angular.module('teacherdashboard')
         };
         scope.editGoal = function(section) {
           //Call api to edit the goal
-          $window.ga('send', 'event', 'Goal', 'EditGoal', 'Edit Goal');
+          $window.ga('send', 'event', 'StudentSection', 'EditGoal', 'Edit Goal');
           section.editActive = true;
 
         };
