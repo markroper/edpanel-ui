@@ -100,7 +100,8 @@ angular.module('teacherdashboard')
 
                   //Some classes don't have grades. Only if it does should we add overall homework completion
                   if (typeof hwCompletions[sectId] !== 'undefined' ) {
-                    statebag.currentSections[i]["HomeworkCompletion"] = hwCompletions[sectId]["total"] / hwCompletions[sectId].count;
+                    statebag.currentSections[i]["HomeworkCompletion"] = Math.round(
+                        hwCompletions[sectId]["total"] / hwCompletions[sectId].count * 10) / 10;
                   }
                   //Overall average of attendance
                   statebag.currentSections[i]["Attendance"] = parseFloat((attendanceMap[sectId].total / numStudentsEnrolled).toFixed(1));
