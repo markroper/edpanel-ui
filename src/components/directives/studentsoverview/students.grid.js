@@ -12,6 +12,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
       replace: true,
       controller: function($scope) {
+        var PAGENAME = 'Student List';
         var GPA = 'GPA';
         var BEHAVIOR = 'Behavior';
         var HOMEWORK_COMPLETION = 'Homework Completion';
@@ -103,13 +104,12 @@ angular.module('teacherdashboard')
         };
         $scope.addFilter = function() {
           if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
-            console.log($scope.filter);
             $scope.currentFilters[$scope.filter] = { type: $scope.filter };
 
             //Analytics code lives here
             var analyticsObject = {
               hitType: 'event',
-              eventCategory: 'Student List',
+              eventCategory: PAGENAME,
               eventAction: 'Add Filter',
               eventLabel: $scope.filter.toUpperCase()
             };
@@ -205,7 +205,7 @@ angular.module('teacherdashboard')
         $scope.setOrder = function(ev, keyToUse) {
           $window.ga('send', {
             hitType: 'event',
-            eventCategory: 'Student List',
+            eventCategory: PAGENAME,
             eventAction: 'Admin Student Sort',
             eventLabel: keyToUse.toUpperCase()
           });
@@ -237,6 +237,12 @@ angular.module('teacherdashboard')
         var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
+          $window.ga('send', {
+            hitType: 'event',
+            eventCategory: PAGENAME,
+            eventAction: 'Go to Student',
+            eventLabel: 'STUDENT'
+          });
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
         $scope.hideTray = function() {
@@ -299,7 +305,7 @@ angular.module('teacherdashboard')
         $scope.showBehaviorTray = function(ev, student) {
           $window.ga('send', {
             hitType: 'event',
-            eventCategory: 'Student List',
+            eventCategory: PAGENAME,
             eventAction: 'Show Behavior',
             eventLabel: BEHAVIOR_LABEL
           });
@@ -308,7 +314,7 @@ angular.module('teacherdashboard')
         $scope.showHomeworkTray = function(ev, student) {
           $window.ga('send', {
             hitType: 'event',
-            eventCategory: 'Student List',
+            eventCategory: PAGENAME,
             eventAction: 'Show Homework',
             eventLabel: HOMEWORK_LABEL
           });
@@ -317,7 +323,7 @@ angular.module('teacherdashboard')
         $scope.showGpaTray = function(ev, student) {
           $window.ga('send', {
             hitType: 'event',
-            eventCategory: 'Student List',
+            eventCategory: PAGENAME,
             eventAction: 'Show Gpa',
             eventLabel: GPA_LABEL
           });
@@ -326,7 +332,7 @@ angular.module('teacherdashboard')
         $scope.showAttendanceTray = function(ev, student) {
           $window.ga('send', {
             hitType: 'event',
-            eventCategory: 'Student List',
+            eventCategory: PAGENAME,
             eventAction: 'Show Attendance',
             eventLabel: ATTENDANCE_LABEL
           });
