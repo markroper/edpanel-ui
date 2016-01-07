@@ -2,13 +2,15 @@
   <md-menu>
     <button ng-click="$mdOpenMenu($event)" layout layout-align="center center" aria-label="Notifications" class="notifications-circle" ng-class="{ 'active': notificationList.length}">
       <md-icon class="material-icons md-24">notifications</md-icon>
+      <md-tooltip>notifications</md-tooltip>
     </button>
-    <md-menu-content width="10">
+    <md-menu-content width="6">
       <div layout layout-align="space-between center">
         <md-icon class="material-icons md-24 notification-settings-icon">settings</md-icon>
         <span>EdPanel Notifications</span>
         <md-icon class="material-icons md-24 notification-settings-icon" ng-click="dismissAll()">clear_all</md-icon>
       </div>
+      <div layout layout-align="center center" class="md-title" style="color: red;">UNDER DEVELOPMENT</div>
       <md-list class="notification-list">
         <md-list-item layout="column" layout-align="start start" ng-repeat="notification in notificationList">
           <div flex class="notification md-list-item-text md-whiteframe-1dp" layout="column" layout-fill edpanel-click="toggleDetails(notification, $event)">
