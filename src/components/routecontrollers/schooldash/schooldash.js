@@ -66,6 +66,7 @@ angular.module('teacherdashboard')
           { schoolId: statebag.school.id },
           getAbsenseAndTardyCount($scope.attendanceTerm.startDate, $scope.attendanceTerm.endDate, statebag.school.id)).$promise);
           $q.all(attendanceStatus).then(function(results){
+            var i;
             var singleRowResults;
             var gender;
             var race;
@@ -77,7 +78,7 @@ angular.module('teacherdashboard')
                 ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
               ];
 
-              for (var i = 0; i < results[0].records.length; i++) {
+              for (i = 0; i < results[0].records.length; i++) {
                 singleRowResults = results[0].records[i].values;
                 gender = singleRowResults[2];
                 generateAttendanceBuckets(singleRowResults, gender, attendanceHistogram);
@@ -93,7 +94,7 @@ angular.module('teacherdashboard')
                 ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
               ];
 
-              for (var i = 0; i < results[0].records.length; i++) {
+              for (i = 0; i < results[0].records.length; i++) {
                 singleRowResults = results[0].records[i].values;
                 race = resolveRaceAttendanceSelector(singleRowResults[3], singleRowResults[4]);
                 generateAttendanceBuckets(singleRowResults, race, attendanceHistogram);
@@ -227,6 +228,7 @@ angular.module('teacherdashboard')
           var singleRowResults;
           var gender;
           var race;
+          var i;
           var attendanceHistogram;
           if ($scope.attendanceBreakdown === 'GENDER') {
             attendanceHistogram = [
@@ -234,7 +236,7 @@ angular.module('teacherdashboard')
               ['female', 0, 0, 0, 0, 0, 0, 0],
               ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
             ];
-            for(var i = 0; i < results.records.length; i++) {
+            for(i = 0; i < results.records.length; i++) {
                singleRowResults = results.records[i].values;
                gender = singleRowResults[2];
               generateAttendanceBuckets(singleRowResults, gender, attendanceHistogram);
@@ -250,7 +252,7 @@ angular.module('teacherdashboard')
               ['counts', '0', '0-1', '1-2', '2-4', '4-6', '6-8', '8+']
             ];
 
-            for (var i = 0; i < results.records.length; i++) {
+            for (i = 0; i < results.records.length; i++) {
               singleRowResults = results.records[i].values;
               race = resolveRaceAttendanceSelector(singleRowResults[3]);
               generateAttendanceBuckets(singleRowResults, race, attendanceHistogram);
@@ -268,9 +270,9 @@ angular.module('teacherdashboard')
                 return 1;
           case 'A':
                 return 2;
-          case "I":
+          case 'I':
                 return 3;
-          case "P":
+          case 'P':
                 return 4;
           default:
             //TODO There is a null value... what do we do about their race...

@@ -41,7 +41,7 @@ angular.module('teacherdashboard')
                   termId: statebag.currentTerm.id,
                   teacherId: authentication.identity().id,
                   studentId: $scope.student.id
-                  }, {}).$promise
+                  }, {}).$promise;
             } else if(template === attendanceTableHtml) {
               $scope.choroScope.attendanceDataPromise =
                 api.studentSectionAttendance.get({ sectionId: $scope.sectionId ,schoolId: statebag.school.id, studentId: student.id }).$promise;
