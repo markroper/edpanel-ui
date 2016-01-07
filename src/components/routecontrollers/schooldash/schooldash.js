@@ -22,7 +22,7 @@ angular.module('teacherdashboard')
       $scope.termsPromise = termsDeferred.promise;
 
 
-      $scope.failingBreakdown = 'RACE';
+      $scope.failingBreakdown = 'GENDER';
       $scope.attendanceBreakdown = 'RACE';
       $scope.attendanceTerm = statebag.currentTerm ;
       $scope.failingTerm = statebag.currentTerm ;

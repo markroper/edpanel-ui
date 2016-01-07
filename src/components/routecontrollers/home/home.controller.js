@@ -6,7 +6,7 @@ angular.module('teacherdashboard')
       $scope.$on('$viewContentLoaded', function() {
         $window.ga('send', 'pageview', { page: $location.url() });
       });
-      statebag.currentPage.name = 'Students';
+      statebag.currentPage.name = 'Student List';
       $scope.showFilter=true;
 
       function retrieveHomePageData() {
