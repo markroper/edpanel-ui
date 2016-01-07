@@ -20,6 +20,17 @@
     </div>
 		<!-- THE MAIN STUDENT LIST BODY, INLUDING SEARCH BOX -->
     <div flex="grow"class="table-container">
+      <div ng-show="showFilter">
+        <div layout="row" layout-align="center center">
+          <md-button class="md-fab md-mini md-primary filter-toggler" hide-sm hide-xs ng-click="toggleFilters()">
+            <md-icon>filter_list</md-icon>
+            <md-tooltip>show/hide filters</md-tooltip>
+          </md-button>
+          <md-input-container md-no-float layout layout-align="center center">
+          <input class="search-name" ng-model="search.name" placeholder="Student name filter" tabindex="1">
+          </md-input-container>
+        </div>
+      </div>
       <div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!studentsData">
         <h3 flex="50">Loading...</h3>
         <br/>
@@ -27,13 +38,13 @@
       </div>
 			<div hide-sm hide-xs layout="row" style="font-size: 16px; width:100%;" ng-show="studentsData">
 				<div flex="{{::cellWidth}}" layout layout-align="center center" class="table-cell" ng-show="showFilter">
-          <md-button flex="none" class="md-fab md-mini md-primary filter-toggler" hide-sm hide-xs ng-click="toggleFilters()">
-            <md-icon>filter_list</md-icon>
-            <md-tooltip>show/hide filters</md-tooltip>
-          </md-button>
-          <md-input-container md-no-float layout layout-align="center center">
-            <input class="search-name" ng-model="search.name" placeholder="Student name filter" tabindex="1">
-          </md-input-container>
+          <!--<md-button flex="none" class="md-fab md-mini md-primary filter-toggler" hide-sm hide-xs ng-click="toggleFilters()">-->
+            <!--<md-icon>filter_list</md-icon>-->
+            <!--<md-tooltip>show/hide filters</md-tooltip>-->
+          <!--</md-button>-->
+          <!--<md-input-container md-no-float layout layout-align="center center">-->
+            <!--<input class="search-name" ng-model="search.name" placeholder="Student name filter" tabindex="1">-->
+          <!--</md-input-container>-->
         </div>
 				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'behavior')">
           <div layout layout-align="center center">
