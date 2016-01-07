@@ -27,6 +27,50 @@ angular.module('teacherdashboard')
         $scope.order = 'name';
         $scope.sortElement = null;
 
+        $scope.kpiTallies = {};
+        var RED_CLASS = '40-50';
+        var SECOND_RED_CLASS = '50-60';
+        var YELLOW_CLASS = '70-80';
+        var GREEN_CLASS = '90-100';
+        //$scope.$watchCollection('filteredStudentData', function(newStudentData) {
+        $scope.$watch('filteredStudentData', function(newStudentData) {
+          if(newStudentData && newStudentData.reduce) {
+            $scope.kpiTallies = newStudentData.reduce(function (returnObj, student) {
+                if (GREEN_CLASS === student.homeworkClass) {
+                  returnObj.homework[0]++;
+                } else if (YELLOW_CLASS === student.homeworkClass) {
+                  returnObj.homework[1]++;
+                } else if (RED_CLASS === student.homeworkClass) {
+                  returnObj.homework[2]++;
+                }
+                if (GREEN_CLASS === student.gpaClass) {
+                  returnObj.gpa[0]++;
+                } else if (YELLOW_CLASS === student.gpaClass) {
+                  returnObj.gpa[1]++;
+                } else if (SECOND_RED_CLASS === student.gpaClass) {
+                  returnObj.gpa[2]++;
+                }
+                if (GREEN_CLASS === student.behaviorClass) {
+                  returnObj.behavior[0]++;
+                } else if (YELLOW_CLASS === student.behaviorClass) {
+                  returnObj.behavior[1]++;
+                } else if (RED_CLASS === student.behaviorClass) {
+                  returnObj.behavior[2]++;
+                }
+                if (GREEN_CLASS === student.attendanceClass) {
+                  returnObj.attendance[0]++;
+                } else if (YELLOW_CLASS === student.attendanceClass) {
+                  returnObj.attendance[1]++;
+                } else if (RED_CLASS === student.attendanceClass) {
+                  returnObj.attendance[2]++;
+                }
+                return returnObj;
+              },
+              {behavior: [0, 0, 0], homework: [0, 0, 0], attendance: [0, 0, 0], gpa: [0, 0, 0]}
+            );
+          }
+        }, true);
+
         //FILTER RELATED
         $scope.showfilters = false;
         $scope.filter = null;
