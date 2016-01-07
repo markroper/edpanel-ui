@@ -1,0 +1,64 @@
+<div class="student-tray">
+	<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!studentsData">
+		<h3 flex="50">Loading...</h3>
+		<br/>
+		<md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
+	</div>
+	<section layout="row" layout-align="center center">
+		<div class="table-container" ng-show="studentsData">
+			<div class="table-row" hide-sm layout="row" style="font-size: 16px; width:100%;">
+				<div flex="{{::cellWidth}}" class="table-cell"></div>
+				<div flex="{{::cellWidth}}" class="table-cell">Demerits</div>
+				<div flex="{{::cellWidth}}" class="table-cell">HW Completion</div>
+				<div flex="{{::cellWidth}}" class="table-cell">Attendance</div>
+				<div flex="{{::cellWidth}}" class="table-cell">Grade</div>
+			</div>
+      <div class="table-row" layout="row" layout-wrap ng-repeat="student in studentsData | orderBy:'name' | filter:search:strict | limitTo: limit track by student.id">
+        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="100" >
+          <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+            <md-button md-no-ink class="md-primary" ng-click="goToStudent(student)">
+            {{student.name}}
+            <md-tooltip>Click for student dashboard</md-tooltip>
+          </md-button>
+          </section>
+        </div>
+        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showBehaviorTray($event, student)">
+          <div class="choropleth band-{{student.demeritClass || '0'}}" layout="row" layout-align="center center">
+            <span class="mobile-label md-subhead" hide-gt-sm>Demerits</span>
+            <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
+              <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
+            </div>
+            <md-tooltip>{{student.demerits}} demerits assigned</md-tooltip>
+          </div>
+        </div>
+        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showHomeworkTray($event, student)">
+          <div class="choropleth band-{{student.homeworkClass || '0'}}" layout="row" layout-align="center center">
+            <span class="mobile-label md-subhead" hide-gt-sm>Homework</span>
+            <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
+              <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
+            </div>
+            <md-tooltip>{{student.homework || '--'}}% annual completion</md-tooltip>
+          </div>
+        </div>
+        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showAttendanceTray($event, student)">
+          <div class="choropleth band-{{student.attendanceClass || '0'}}" layout="row" layout-align="center center">
+            <span class="mobile-label md-subhead" hide-gt-sm>Attendance</span>
+            <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
+              <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
+            </div>
+            <md-tooltip>{{student.attendance || 0}} absenses this {{::student.attendancePeriod || 'period'}}</md-tooltip>
+          </div>
+        </div>
+        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showGradeTray($event, student)">
+          <div class="choropleth band-{{student.gradeClass || '0'}}" layout="row" layout-align="center center">
+            <span class="mobile-label md-subhead" hide-gt-sm>Grade</span>
+            <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
+              <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
+            </div>
+            <md-tooltip>Current Grade: {{::student.grade || '-'}}</md-tooltip>
+          </div>
+        </div>
+      </div>
+		</div>
+	</section>
+</div>

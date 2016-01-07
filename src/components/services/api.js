@@ -69,13 +69,24 @@ angular.module('teacherdashboard')
         base + '/students/:studentId/behaviors',
         {},
         { 'get': { isArray: true }}),
+      studentDemerits: $resource(
+        base + '/ui/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId/teacher/:teacherId',
+        {},
+        { 'get': { 'isArray': true}}
+      ),
       studentPrepScores: $resource(base + '/students/:studentId/prepscores', {}, {'get': {isArray: true }}),
+      studentHistoricalGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectId/grades/students/:studId/weeks', {}, {'get':{isArray: false}}),
       studentHwRates: $resource(base + '/students/:studentId/homeworkrates', {}, {'get': {isArray: true }}),
+      studentSectionHwRates: $resource(base + '/students/:studentId/homeworkrates/sections/:sectionId', {}, {'get': {isArray: true }}),
       studentAttendance: $resource(base + '/schools/:schoolId/students/:studentId/attendance', {}, {'get': {isArray: true }}),
+      studentSectionAttendance: $resource(base + '/schools/:schoolId/students/:studentId/attendance/sections/:sectionId', {}, {'get': {isArray: true }}),
       studentsPrepScores: $resource(base + '/students/prepscores', {}, { 'get': { isArray: true }}),
       studentSectionsData: $resource(base + '/ui/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId', {}, { 'get': { isArray: true }}),
       //Other endpoints
       teacher: $resource(base + '/teachers/:teacherId'),
+      teacherSections: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/sections',
+        {},
+        {'get': {isArray:true}}),
       year: $resource(base + '/schools/:schoolId/years/:yearId'),
       term: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId'),
       terms: $resource(base + '/schools/:schoolId/years/:yearId/terms/',
@@ -93,6 +104,7 @@ angular.module('teacherdashboard')
         {},
         { 'get': { isArray: true }}),
       studentSectionGrade: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId'),
+      sectionGrades: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades',{}, {'get':{ isArray: true}}),
       studentSectionGradeProgression: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/sections/:sectionId/grades/students/:studentId/weeks'),
       //Query execution
       savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),

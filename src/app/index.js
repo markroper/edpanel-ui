@@ -51,6 +51,17 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
           ]
         }
       })
+      .state('app.teacherHome', {
+        url: 'schools/:schoolId/classes',
+        templateUrl: rootUrl + '/components/routecontrollers/teacherhome/teacherhome.html',
+        controller: 'TeacherHomeCtrl',
+        data: {
+          roles: [
+            roles.TEACHER,
+            roles.SUPER_ADMIN
+          ]
+        }
+      })
       .state('app.mySurveys', {
         url: 'mysurveys',
         templateUrl: rootUrl + '/components/routecontrollers/mysurveys/mySurveys.html',

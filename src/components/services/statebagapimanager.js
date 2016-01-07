@@ -72,6 +72,22 @@ angular.module('teacherdashboard')
         return statebag.currentYear.terms[statebag.currentYear.terms.length - 1];
       }
     },
+    resolveSectionGradeClass: function(sectionGrade) {
+      //What shoudl these values be?
+      var greenThreshold = 85;
+      var yellowThreshold = 70;
+      if(statebag.uiAttributes) {
+        greenThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.green;
+        yellowThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.yellow;
+      }
+      if(sectionGrade < yellowThreshold) {
+        return '40-50';
+      } else if(sectionGrade < greenThreshold) {
+        return '70-80';
+      } else {
+        return '90-100';
+      }
+    },
     retrieveAndCacheSchool: function(schoolId) {
       var that = this;
       return api.school.get(
@@ -87,6 +103,28 @@ angular.module('teacherdashboard')
             console.log('failed to resolve the school!');
       }).$promise;
     },
+    //TODO THIS IS ARBITARY I DONT KNOW WHAT THIS SHOULD BE
+    resolveBehaviorClass: function(behaviorScore) {
+    var greenThreshold = 7;
+    var yellowThreshold = 20;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.green;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.behavior.yellow;
+    }
+    if(behaviorScore > yellowThreshold) {
+      return '40-50';
+    } else if(behaviorScore > greenThreshold) {
+      return '70-80';
+    } else {
+      return '90-100';
+    }
+  },
+    resolveAttendanceClass: function(attendanceScore) {
+      return resolveAttendanceClass(attendanceScore);
+  },
+    resolveHomeworkClass: function(homeworkScore) {
+      return resolveHomeworkClass(homeworkScore);
+  },
     retrieveAndCacheStudentPerfData: function() {
       var deferred = $q.defer();
 
@@ -189,6 +227,37 @@ angular.module('teacherdashboard')
       return deferred.promise;
     }
   };
+  function resolveHomeworkClass(homeworkScore) {
+    var greenThreshold = 0.92;
+    var yellowThreshold = 0.89;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.homework.green/100;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.homework.yellow/100;
+    }
+    if(homeworkScore < yellowThreshold) {
+      return '40-50';
+    } else if(homeworkScore < greenThreshold) {
+      return '70-80';
+    } else {
+      return '90-100';
+    }
+  }
+   function resolveAttendanceClass(attendanceScore) {
+    var greenThreshold = 3;
+    var yellowThreshold = 6;
+    if(statebag.uiAttributes) {
+      greenThreshold = statebag.uiAttributes.attributes.jsonNode.attendance.green;
+      yellowThreshold = statebag.uiAttributes.attributes.jsonNode.attendance.yellow;
+    }
+    if(attendanceScore <= greenThreshold) {
+      return '90-100';
+    } else if(attendanceScore < yellowThreshold) {
+      return '70-80';
+    } else {
+      return '40-50';
+    }
+  }
+
 
   /*
    * Supported component types: 'attendance', 'behavior'
@@ -388,6 +457,8 @@ angular.module('teacherdashboard')
       };
     return query;
   }
+
+
   /*
    * Helper functions below
    */

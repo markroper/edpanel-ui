@@ -6,15 +6,39 @@ angular.module('teacherdashboard')
         dateTimeDataPromise: '=',
         slideClosed: '=',
         keyToX: '@',
-        keyToY: '@'
+        keyToY: '@',
+        objectField: '@',
+        yScalingFactor: '@',
+        yDataLabel: '@'
       },
       restrict: 'E',
-      templateUrl: api.basePrefix + '/components/directives/datelinechart/datelinechart.html',
+      templateUrl: api.basePrefix + '/components/directives/datetimechart/datetimechart.html',
       replace: true,
       link: function(scope, elem) {
         var elemToBindTo = elem.find('.datelinechart-container');
 
+
+
         scope.dateTimeDataPromise.then(function(theData){
+          //If we don't specify a label, just use the name of the data in the json
+          if (!scope.yDataLabel) {
+             scope.yDataLabel = scope.keyToY;
+          }
+          //If an object field is specified we need to remove all the other data and only care about the array on that object
+          if (scope.objectField) {
+            theData = theData[scope.objectField];
+          }
+
+          //If we don't multiple this data by some factor multiple it by 1
+          if (!scope.yScalingFactor) {
+            scope.yScalingFactor = 1;
+          }
+          //Less then ideal, but we need to scale data by a value because grades come back as .75
+          //We are also doing this so we can have custom labels on this thing
+          for (var i = 0; i < theData.length; i++) {
+            //Now we access data for plotting by [scope.yDataLabel]
+            theData[i][scope.yDataLabel] = theData[i][scope.keyToY] * scope.yScalingFactor;
+          }
           scope.chart = $window.c3.generate({
             bindto: elemToBindTo[0],
             data: {
@@ -22,7 +46,7 @@ angular.module('teacherdashboard')
               type: 'line',
               keys: {
                 x: scope.keyToX,
-                value:[scope.keyToY]
+                value:[scope.yDataLabel]
               }
             },
             grid: {
