@@ -30,6 +30,8 @@ angular.module('teacherdashboard')
           eventValue: resolveUserRole(statebag.role)
         });
       },
+
+      //Actions
       CHANGE_TERM: 'Change Term',
       CHANGE_BREAKDOWN: 'Change Breakdown',
       SHOW_STUDENTS: 'Show Students',
@@ -44,6 +46,8 @@ angular.module('teacherdashboard')
       EDIT_GOAL: 'Edit Goal',
       STUDENT_SORT: 'Student Sort',
       OPEN_STUDENT: 'Go to Student',
+
+      //Labels below here
       FAILURE_LABEL: 'FAILURE',
       ATTENDANCE_LABEL: 'ATTENDANCE',
       BEHAVIOR_LABEL: 'BEHAVIOR',
