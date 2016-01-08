@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window', 'consts',
-  function($state, statebag, api, $mdDialog, $compile, $timeout, $window, consts) {
+  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', 'analytics', 'consts','$window',
+  function($state, statebag, api, $mdDialog, $compile, $timeout, analytics, consts, $window) {
     return {
       scope: {
         studentsData: '=',
@@ -113,12 +113,14 @@ angular.module('teacherdashboard')
               eventAction: 'Add Filter',
               eventLabel: $scope.filter.toUpperCase()
             };
+            var label = $scope.filter.toUpperCase();
             if ($scope.filter === HOMEWORK_COMPLETION) {
-              analyticsObject.eventLabel = HOMEWORK_LABEL;
+              label = HOMEWORK_LABEL;
+
             } else if  ($scope.filter === ABSENCES) {
-              analyticsObject.eventLabel = ATTENDANCE_LABEL;
+              label = ATTENDANCE_LABEL;
             }
-            $window.ga('send', analyticsObject);
+            analytics.sendEvent(PAGENAME, 'Add Filter', label);
             //END ANALYTICS CODE
 
           }
@@ -203,12 +205,7 @@ angular.module('teacherdashboard')
 
         //SORT RELATED
         $scope.setOrder = function(ev, keyToUse) {
-          $window.ga('send', {
-            hitType: 'event',
-            eventCategory: PAGENAME,
-            eventAction: 'Admin Student Sort',
-            eventLabel: keyToUse.toUpperCase()
-          });
+          analytics.sendEvent(PAGENAME, 'Admin Student Sort', keyToUse.toUpperCase());
           var el = angular.element(ev.target);
           if($scope.sortElement) {
             $scope.sortElement.removeClass('desc');
@@ -237,12 +234,7 @@ angular.module('teacherdashboard')
         var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
-          $window.ga('send', {
-            hitType: 'event',
-            eventCategory: PAGENAME,
-            eventAction: 'Go to Student',
-            eventLabel: 'STUDENT'
-          });
+          analytics.sendEvent(PAGENAME, 'Go to Student', 'STUDENT');
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
         $scope.hideTray = function() {
@@ -303,39 +295,19 @@ angular.module('teacherdashboard')
           }
         };
         $scope.showBehaviorTray = function(ev, student) {
-          $window.ga('send', {
-            hitType: 'event',
-            eventCategory: PAGENAME,
-            eventAction: 'Show Behavior',
-            eventLabel: BEHAVIOR_LABEL
-          });
+          analytics.sendEvent(PAGENAME, 'Show Behavior', BEHAVIOR_LABEL);
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
         $scope.showHomeworkTray = function(ev, student) {
-          $window.ga('send', {
-            hitType: 'event',
-            eventCategory: PAGENAME,
-            eventAction: 'Show Homework',
-            eventLabel: HOMEWORK_LABEL
-          });
+          analytics.sendEvent(PAGENAME, 'Show Homework', HOMEWORK_LABEL);
           $scope.showTray(ev, student, hwCompletionChartHtml);
         };
         $scope.showGpaTray = function(ev, student) {
-          $window.ga('send', {
-            hitType: 'event',
-            eventCategory: PAGENAME,
-            eventAction: 'Show Gpa',
-            eventLabel: GPA_LABEL
-          });
+          analytics.sendEvent(PAGENAME, 'Show Gpa', GPA_LABEL);
           $scope.showTray(ev, student, gpaChartTemplate);
         };
         $scope.showAttendanceTray = function(ev, student) {
-          $window.ga('send', {
-            hitType: 'event',
-            eventCategory: PAGENAME,
-            eventAction: 'Show Attendance',
-            eventLabel: ATTENDANCE_LABEL
-          });
+          analytics.sendEvent(PAGENAME, 'Show Attendance', ATTENDANCE_LABEL);
           $scope.showTray(ev, student, attendanceTableHtml);
         };
       }

@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('sectionGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',
-  function($state, statebag, api, $mdDialog, $compile, $timeout, $window) {
+  .directive('sectionGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', 'analytics',
+  function($state, statebag, api, $mdDialog, $compile, $timeout, analytics) {
     return {
       scope: {
         section: '=',
@@ -21,12 +21,7 @@ angular.module('teacherdashboard')
         var SLIDE_CLOSED_CLASS = 'slide-closed-students';
 
         scope.showStudents = function() {
-            $window.ga('send', {
-              hitType: 'event',
-              eventCategory: 'Teacher Dashboard',
-              eventAction: 'Show Students',
-              eventLabel: 'Show Students'
-            });
+          analytics.sendEvent('Teacher Dashboard','Show Students','Show Students');
 
           $studentContainer.toggleClass(SLIDE_OPEN_CLASS);
           $studentContainer.toggleClass(SLIDE_CLOSED_CLASS);
