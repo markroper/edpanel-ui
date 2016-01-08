@@ -39,6 +39,7 @@ angular.module('teacherdashboard')
       SHOW_HOMEWORK: 'Show Homework',
       SHOW_GRADE: 'Show Grade',
       SHOW_GPA: 'Show GPA',
+      SAVE_CHANGES: 'Save Custom Changes',
       ADD_FILTER: 'Add Filter',
       EDIT_GOAL: 'Edit Goal',
       STUDENT_SORT: 'Student Sort',
@@ -51,6 +52,7 @@ angular.module('teacherdashboard')
       HOMEWORK_LABEL: 'HOMEWORK',
       STUDENT_LABEL: 'STUDENT',
       GPA_LABEL: 'GPA',
-      GRADE_LABEL: 'GRADE'
+      GRADE_LABEL: 'GRADE',
+      CUSTOMIZE_LABEL: 'CUSTOMIZE'
     }
   }]);

@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast', '$document', '$window', '$location',
-  function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document, $window, $location) {
+.controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast', '$document', '$window', 'analytics',
+  function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document, $window, analytics) {
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: "/ui/schools/*/admin" });
     });
@@ -60,12 +60,7 @@ angular.module('teacherdashboard')
       });
 
     $scope.saveSettingsChanges = function() {
-      $window.ga('send', {
-        hitType: 'event',
-        eventCategory: 'Administration',
-        eventAction: 'Save changes',
-        eventLabel: 'Save changes'
-      });
+      analytics.sendEvent("Administration",analytics.SAVE_CHANGES, analytics.CUSTOMIZE_LABEL);
       var updatedAttributes = {
         'school': {
           'id': statebag.school.id,
