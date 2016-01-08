@@ -20,10 +20,6 @@ angular.module('teacherdashboard')
         var RACE = 'Race';
         var ETHNICITY = 'Ethnicity';
         var ABSENCES = 'Absences';
-        var BEHAVIOR_LABEL = 'BEHAVIOR';
-        var ATTENDANCE_LABEL = 'ATTENDANCE';
-        var GPA_LABEL = 'GPA';
-        var HOMEWORK_LABEL = 'HOMEWORK';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" y-data-label="Homework Completion" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
@@ -107,20 +103,14 @@ angular.module('teacherdashboard')
             $scope.currentFilters[$scope.filter] = { type: $scope.filter };
 
             //Analytics code lives here
-            var analyticsObject = {
-              hitType: 'event',
-              eventCategory: PAGENAME,
-              eventAction: 'Add Filter',
-              eventLabel: $scope.filter.toUpperCase()
-            };
             var label = $scope.filter.toUpperCase();
             if ($scope.filter === HOMEWORK_COMPLETION) {
-              label = HOMEWORK_LABEL;
+              label = analytics.HOMEWORK_LABEL;
 
             } else if  ($scope.filter === ABSENCES) {
-              label = ATTENDANCE_LABEL;
+              label = analytics.ATTENDANCE_LABEL;
             }
-            analytics.sendEvent(PAGENAME, 'Add Filter', label);
+            analytics.sendEvent(PAGENAME, analytics.ADD_FILTER, label);
             //END ANALYTICS CODE
 
           }
@@ -205,7 +195,7 @@ angular.module('teacherdashboard')
 
         //SORT RELATED
         $scope.setOrder = function(ev, keyToUse) {
-          analytics.sendEvent(PAGENAME, 'Admin Student Sort', keyToUse.toUpperCase());
+          analytics.sendEvent(PAGENAME, analytics.STUDENT_SORT, keyToUse.toUpperCase());
           var el = angular.element(ev.target);
           if($scope.sortElement) {
             $scope.sortElement.removeClass('desc');
@@ -234,7 +224,7 @@ angular.module('teacherdashboard')
         var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
-          analytics.sendEvent(PAGENAME, 'Go to Student', 'STUDENT');
+          analytics.sendEvent(PAGENAME, analytics.OPEN_STUDENT, analytics.STUDENT_LABEL);
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
         $scope.hideTray = function() {
@@ -295,19 +285,19 @@ angular.module('teacherdashboard')
           }
         };
         $scope.showBehaviorTray = function(ev, student) {
-          analytics.sendEvent(PAGENAME, 'Show Behavior', BEHAVIOR_LABEL);
+          analytics.sendEvent(PAGENAME, analytics.SHOW_BEHAVIOR, analytics.BEHAVIOR_LABEL);
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
         $scope.showHomeworkTray = function(ev, student) {
-          analytics.sendEvent(PAGENAME, 'Show Homework', HOMEWORK_LABEL);
+          analytics.sendEvent(PAGENAME, analytics.SHOW_HOMEWORK, analytics.HOMEWORK_LABEL);
           $scope.showTray(ev, student, hwCompletionChartHtml);
         };
         $scope.showGpaTray = function(ev, student) {
-          analytics.sendEvent(PAGENAME, 'Show Gpa', GPA_LABEL);
+          analytics.sendEvent(PAGENAME, analytics.SHOW_GPA, analytics.GPA_LABEL);
           $scope.showTray(ev, student, gpaChartTemplate);
         };
         $scope.showAttendanceTray = function(ev, student) {
-          analytics.sendEvent(PAGENAME, 'Show Attendance', ATTENDANCE_LABEL);
+          analytics.sendEvent(PAGENAME, analytics.SHOW_ATTENDANCE, analytics.ATTENDANCE_LABEL);
           $scope.showTray(ev, student, attendanceTableHtml);
         };
       }

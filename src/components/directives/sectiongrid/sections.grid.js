@@ -13,6 +13,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/sectiongrid/sections.grid.html',
       replace: true,
       link: function(scope, elem) {
+        var GA_PAGE_NAME = 'Teacher Dashboard';
         var $studentContainer = angular.element(elem).find('.student-slide');
         var $studentArrowIcon = angular.element(elem).find('.arrow-icon');
         var ROTATE = 'rotate';
@@ -21,7 +22,7 @@ angular.module('teacherdashboard')
         var SLIDE_CLOSED_CLASS = 'slide-closed-students';
 
         scope.showStudents = function() {
-          analytics.sendEvent('Teacher Dashboard','Show Students','Show Students');
+          analytics.sendEvent(GA_PAGE_NAME,analytics.SHOW_STUDENTS,analytics.SHOW_STUDENTS);
 
           $studentContainer.toggleClass(SLIDE_OPEN_CLASS);
           $studentContainer.toggleClass(SLIDE_CLOSED_CLASS);

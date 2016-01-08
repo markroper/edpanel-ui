@@ -24,7 +24,7 @@ angular.module('teacherdashboard')
         var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
-          analytics.sendEvent(PAGE_NAME, 'Go to Student', 'STUDENT');
+          analytics.sendEvent(PAGE_NAME, analytics.OPEN_STUDENT, analytics.STUDENT_LABEL);
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
         $scope.showTray = function(ev, student, template) {
@@ -95,19 +95,19 @@ angular.module('teacherdashboard')
           }
         };
         $scope.showBehaviorTray = function(ev, student) {
-          analytics.sendEvent(PAGE_NAME, 'Show Behavior', 'BEHAVIOR');
+          analytics.sendEvent(PAGE_NAME, analytics.SHOW_BEHAVIOR, analytics.BEHAVIOR_LABEL);
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
         $scope.showHomeworkTray = function(ev, student) {
-          analytics.sendEvent(PAGE_NAME, 'Show Homework', 'HOMEWORK');
+          analytics.sendEvent(PAGE_NAME, analytics.SHOW_HOMEWORK, analytics.HOMEWORK_LABEL);
           $scope.showTray(ev, student, hwCompletionChartHtml);
         };
         $scope.showAttendanceTray = function(ev, student) {
-          analytics.sendEvent(PAGE_NAME, 'Show ATTENDANCE', 'ATTENDANCE');
+          analytics.sendEvent(PAGE_NAME, analytics.SHOW_ATTENDANCE, analytics.ATTENDANCE_LABEL);
           $scope.showTray(ev, student, attendanceTableHtml);
         };
         $scope.showGradeTray = function(ev, student) {
-          analytics.sendEvent(PAGE_NAME, 'Show Grade', 'GRADE');
+          analytics.sendEvent(PAGE_NAME, analytics.SHOW_GRADE, analytics.GRADE_LABEL);
           $scope.showTray(ev, student, gradeChartTemplate);
         };
 

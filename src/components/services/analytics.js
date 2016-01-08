@@ -29,6 +29,28 @@ angular.module('teacherdashboard')
           eventLabel: label,
           eventValue: resolveUserRole(statebag.role)
         });
-      }
+      },
+      CHANGE_TERM: 'Change Term',
+      CHANGE_BREAKDOWN: 'Change Breakdown',
+      SHOW_STUDENTS: 'Show Students',
+      SHOW_ASSIGNMENTS: 'Show Assignments',
+      SHOW_BEHAVIOR: 'Show Behavior',
+      SHOW_ATTENDANCE: 'Show Attendance',
+      SHOW_HOMEWORK: 'Show Homework',
+      SHOW_GRADE: 'Show Grade',
+      SHOW_GPA: 'Show GPA',
+      ADD_FILTER: 'Add Filter',
+      EDIT_GOAL: 'Edit Goal',
+      STUDENT_SORT: 'Student Sort',
+      OPEN_STUDENT: 'Go to Student',
+      FAILURE_LABEL: 'FAILURE',
+      ATTENDANCE_LABEL: 'ATTENDANCE',
+      BEHAVIOR_LABEL: 'BEHAVIOR',
+      GOAL_LABEL: 'GOAL',
+      ASSIGNMENT_LABEL: 'ASSIGNMENT',
+      HOMEWORK_LABEL: 'HOMEWORK',
+      STUDENT_LABEL: 'STUDENT',
+      GPA_LABEL: 'GPA',
+      GRADE_LABEL: 'GRADE'
     }
   }]);
