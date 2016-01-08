@@ -5,7 +5,7 @@ angular.module('teacherdashboard')
     function ($scope, api, $state, statebag, $window, $location, authentication, statebagapimanager, $compile) {
       statebag.currentPage.name = 'My Survey Responses';
       $scope.$on('$viewContentLoaded', function() {
-        $window.ga('send', 'pageview', { page: $location.url() });
+        $window.ga('send', 'pageview', { page: '/ui/mysurveyresponses' });
       });
       $scope.unansweredOnly = false;
       var filterValuesAdded = false;
