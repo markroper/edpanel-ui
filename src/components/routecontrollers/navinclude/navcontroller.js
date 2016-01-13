@@ -8,11 +8,14 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
     $scope.UAService = UAService;
 
     //TODO: make notification loading dynamic, with websocket?
-    $scope.notificationList = [
-      { title: 'Mark Roper - homework', type:'STUDENT', id:1, measure:'HOMEWORK', message:'Homework completion up 10% in the last 7 days', studentId: 1 },
-      { title: 'Mark Roper - pride score', type:'STUDENT', id:1, measure:'BEHAVIOR', message:'Mark Roper\'s pride score of 70 this week is 25% lower than his average', studentId: 1 },
-      { title: '9th Grade - GPA', type:'GRADE LEVEL', measure:'GPA', id: 2, schoolId: 1, gradeId: 2, message: 'Average 9th grade GPA at Excel declined 0.1 this quarter' }
-    ];
+    $scope.notificationList = [];
+
+    api.getTriggeredNotifications.get(
+      { userId: authentication.identity().id },
+      function(resp){
+        $scope.notificationList = resp;
+      });
+
     //This base state should always redirect home...
     if($state.current.name === 'app') {
       //TODO: for now we just grab the first school in the district. Need a better way

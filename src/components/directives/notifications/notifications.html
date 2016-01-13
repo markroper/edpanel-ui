@@ -12,15 +12,15 @@
       </div>
       <div layout layout-align="center center" class="md-title" style="color: red;">UNDER DEVELOPMENT</div>
       <md-list class="notification-list">
-        <md-list-item layout="column" layout-align="start start" ng-repeat="notification in notificationList">
-          <div flex class="notification md-list-item-text md-whiteframe-1dp" layout="column" layout-fill edpanel-click="toggleDetails(notification, $event)">
+        <md-list-item layout="column" layout-align="start start" ng-repeat="n in notificationList">
+          <div flex class="notification md-list-item-text md-whiteframe-1dp" layout="column" layout-fill edpanel-click="toggleDetails(n, $event)">
             <div edpanel-click="dismissNotification($index, $event)" aria-label="close" class="close-notification-details md-icon-button">
               <md-icon md-font-set="material-icons">close</md-icon>
             </div>
-            <div style="padding:15px;" layout="column" class="notification-desc">
-              <span class="md-subhead no-select">{{notification.title}}</span>
-              <span class="md-body-1">{{notification.type}} {{notification.measure}}</span>
-              <span class="md-body-1 notification-detail">{{notification.message}}</span>
+            <div style="padding:15px;" layout="column" class="notification-desc" layout-wrap>
+              <span class="md-subhead no-select">{{n.notification.name}}</span>
+              <span class="md-body-1">{{notificationTypes[n.notification.measure]}} for {{groupTypes(n)}}</span>
+              <span class="md-body-1 notification-detail">Notification limit of {{n.notification.triggerValue}} <span ng-show="summaryTypes[n.notification.subjects.type]">{{aggFunctions[n.notification.aggregateFunction] || '(sum) '}}</span>triggered with value {{n.valueWhenTriggered}} on {{n.triggeredDate}}.</span>
             </div>
             <div ng-show="notification.active" layout="column" layout-fill>
               <div class="detailed-content"ng-show="notification.active" layout layout-align="center center">DETAILED CONTENT HERE</div>

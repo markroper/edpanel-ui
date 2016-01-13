@@ -12,11 +12,19 @@ angular.module('teacherdashboard')
     return {
       login: $resource(base + '/login'),
       logout: $resource(base + '/logout'),
+      //Notifications
+      getTriggeredNotifications: $resource(base + '/notifications/users/:userId/triggerednotifications', {}, {
+        'get': { isArray: true }
+      }),
+      dismissTriggeredNotification: $resource(
+        base + '/notifications/:notificationId/triggerednotifications/:triggeredId/users/:userId', {}, {
+          'put': { method: 'PUT' }
+        }),
       //Survey
       survey: $resource(base + '/surveys/:surveyId', {},
         {
           'get': { isArray: true },
-          'getOne': { methos: 'GET' },
+          'getOne': { method: 'GET' },
           'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
           'delete': { method: 'DELETE' }
         }),
