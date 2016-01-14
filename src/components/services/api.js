@@ -20,6 +20,15 @@ angular.module('teacherdashboard')
         base + '/notifications/:notificationId/triggerednotifications/:triggeredId/users/:userId', {}, {
           'put': { method: 'PUT' }
         }),
+      notificationsForUser: $resource(base + '/notifications/users/:userId', {}, {
+        'get': { method: 'GET', isArray: true }
+      }),
+      notifications: $resource(base + '/notifications/:notificationId', {}, {
+        'getAll': { method: 'GET', isArray: true },
+        'get': { method: 'GET' },
+        'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
+        'delete': { method: 'DELETE' }
+      }),
       //Survey
       survey: $resource(base + '/surveys/:surveyId', {},
         {

@@ -1,0 +1,20 @@
+.notification-mgmt {
+  .notification {
+    button {
+      margin: 8px 8px;
+      background-color: #c9c9c9 !important;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .notification-table{ width: 550px; }
+}
+
+@media (min-width: 701px) and (max-width: 959px) {
+  .notification-table{ width: 650px; }
+}
+
+@media (min-width: 960px) {
+  .notification-table{ width: 900px; }
+}

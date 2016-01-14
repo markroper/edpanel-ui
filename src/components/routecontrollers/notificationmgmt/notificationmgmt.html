@@ -1,0 +1,38 @@
+<div class="notification-mgmt">
+  <div ng-show="notifications" flex="none" flex-lt-lg="100" layout="column" layout-align="center center" layout-wrap class="my-notifications">
+    <div layout layout-align="center center">
+      <h3 flex="none" class="md-headline" style="padding-right:25px;">My Notifications</h3>
+      <md-button class="md-fab md-primary" ng-click="createNewNotification()"><md-icon>add</md-icon><md-tooltip>create new notification</md-tooltip></md-button>
+    </div>
+    <div ng-if="currentNotification">
+      <create-notification notification="currentNotification"></create-notification>
+    </div>
+    <div class="notification-table">
+      <div layout layout-align="center center" class="survey md-subhead">
+        <div flex="none" style="width:56px;"></div>
+        <div flex="25">Name</div>
+        <div flex="15">Type</div>
+        <div flex="10">Trigger</div>
+        <div flex="10">Aggregate</div>
+        <div flex="10">Time</div>
+        <div flex="20">Subjects</div>
+        <div flex="15">Expires</div>
+      </div>
+      <div flex="none" layout layout-align="center center" class="notification" ng-class-odd="'odd'" ng-repeat="n in notifications | orderBy: n.createdDate">
+        <md-button flex="none" class="md-fab md-mini" aria-label="edit"  ng-click="editNotification(n)">
+          <md-icon>edit</md-icon>
+          <md-tooltip>view/edit</md-tooltip>
+        </md-button>
+        <div flex="20">
+          {{::n.name}}
+        </div>
+        <div flex="25">{{::n.measure}}</div>
+        <div flex="10">{{::n.triggerValue}}</div>
+        <div flex="10">{{::n.aggregateFunction}}</div>
+        <div flex="10">{{::n.window.window}}</div>
+        <div flex="20">{{::resolveSubjects(n.subjects)}}</div>
+        <div flex="15">{{::n.expiryDate}}</div>
+      </div>
+    </div>
+  </div>
+</div>

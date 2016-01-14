@@ -74,6 +74,20 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
           ]
         }
       })
+      .state('app.myNotifications', {
+        url: 'schools/:schoolId/notifications',
+        templateUrl: rootUrl + '/components/routecontrollers/notificationmgmt/notificationmgmt.html',
+        controller: 'NotificationMgmt',
+        data: {
+          roles: [
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.STUDENT,
+            roles.GUARDIAN,
+            roles.SUPER_ADMIN
+          ]
+        }
+      })
       .state('app.mySurveyResponses', {
         url: 'mysurveyresponses',
         templateUrl: rootUrl + '/components/routecontrollers/mysurveyresponses/mySurveyResponses.html',

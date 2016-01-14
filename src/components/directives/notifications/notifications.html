@@ -6,9 +6,9 @@
     </button>
     <md-menu-content width="6">
       <div layout layout-align="space-between center">
-        <md-icon class="material-icons md-24 notification-settings-icon">settings</md-icon>
+        <md-icon class="material-icons md-24 notification-settings-icon" ng-click="goToNotifications()">settings<md-tooltip>setup notifications</md-tooltip></md-icon>
         <span>EdPanel Notifications</span>
-        <md-icon class="material-icons md-24 notification-settings-icon" ng-click="dismissAll()">clear_all</md-icon>
+        <md-icon class="material-icons md-24 notification-settings-icon" ng-click="dismissAll()">clear_all<md-tooltip>dismiss all</md-tooltip></md-icon>
       </div>
       <md-list class="notification-list">
         <md-list-item layout="column" layout-align="start start" ng-repeat="n in notificationList">

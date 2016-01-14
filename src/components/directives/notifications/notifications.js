@@ -17,8 +17,8 @@ angular.module('teacherdashboard')
       }
     };
   })
-  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast',
-    function($window, statebagApiManager, api, authentication, $mdToast) {
+  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state',
+    function($window, statebagApiManager, api, authentication, $mdToast, $state) {
       return {
         scope: {
           notificationList: '='
@@ -141,6 +141,10 @@ angular.module('teacherdashboard')
               }
               $scope.notificationList = remaining;
             }
+          };
+
+          $scope.goToNotifications = function() {
+            $state.go('app.myNotifications', { schoolId: $state.params.schoolId });
           };
 
           $scope.toggleDetails = function(notification, $event) {
