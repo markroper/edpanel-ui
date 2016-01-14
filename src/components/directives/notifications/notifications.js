@@ -78,7 +78,9 @@ angular.module('teacherdashboard')
           };
 
           $scope.dismissNotification = function(index, $event, supressToast) {
-            $event.stopPropagation();
+            if($event) {
+              $event.stopPropagation();
+            }
             var n = $scope.notificationList[index];
             api.dismissTriggeredNotification.put(
               {
@@ -87,6 +89,7 @@ angular.module('teacherdashboard')
                 userId: authentication.identity().id
               },
               {},
+              //Success callback
               function(){
                 $scope.notificationList.splice(index, 1);
                 if(!supressToast) {
@@ -98,6 +101,7 @@ angular.module('teacherdashboard')
                   );
                 }
               },
+              //Error callback
               function() {
                 if(!supressToast) {
                   $mdToast.show(
@@ -111,7 +115,32 @@ angular.module('teacherdashboard')
           };
 
           $scope.dismissAll = function() {
-            $scope.notificationList = [];
+            if($scope.notificationList) {
+              var remaining = [];
+              for (var i = 0; i < $scope.notificationList.length; i++) {
+                var n = $scope.notificationList[i];
+                api.dismissTriggeredNotification.put(
+                  {
+                    notificationId: n.notification.id,
+                    triggeredId: n.id,
+                    userId: authentication.identity().id
+                  },
+                  {},
+                  //Success callback
+                  function(){},
+                  //Error callback
+                  function() {
+                    remaining.push(n);
+                    $mdToast.show(
+                      $mdToast.simple()
+                        .content('Failed to dismiss notification ' + n.name)
+                        .action('OK')
+                        .hideDelay(1500)
+                    );
+                  });
+              }
+              $scope.notificationList = remaining;
+            }
           };
 
           $scope.toggleDetails = function(notification, $event) {
