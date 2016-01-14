@@ -1,3 +1,16 @@
 .create-notification {
-
+  background-color: white;
+  padding: 25px;
+  min-width: 450px;
+  h4 {
+    margin: 15px 0px 0px 0px;
+  }
+  .notification-name {
+    margin: 0px 0px;
+    max-width: 200px;
+  }
+  .trigger-value {
+    margin: 0px 0px;
+    max-width:125px;
+  }
 }
