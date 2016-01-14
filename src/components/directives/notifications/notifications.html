@@ -10,7 +10,6 @@
         <span>EdPanel Notifications</span>
         <md-icon class="material-icons md-24 notification-settings-icon" ng-click="dismissAll()">clear_all</md-icon>
       </div>
-      <div layout layout-align="center center" class="md-title" style="color: red;">UNDER DEVELOPMENT</div>
       <md-list class="notification-list">
         <md-list-item layout="column" layout-align="start start" ng-repeat="n in notificationList">
           <div flex class="notification md-list-item-text md-whiteframe-1dp" layout="column" layout-fill edpanel-click="toggleDetails(n, $event)">
@@ -18,12 +17,12 @@
               <md-icon md-font-set="material-icons">close</md-icon>
             </div>
             <div style="padding:15px;" layout="column" class="notification-desc" layout-wrap>
-              <span class="md-subhead no-select">{{n.notification.name}}</span>
-              <span class="md-body-1">{{notificationTypes[n.notification.measure]}} for {{groupTypes(n)}}</span>
-              <span class="md-body-1 notification-detail">Notification limit of {{n.notification.triggerValue}} <span ng-show="summaryTypes[n.notification.subjects.type]">{{aggFunctions[n.notification.aggregateFunction] || '(sum) '}}</span>triggered with value {{n.valueWhenTriggered}} on {{n.triggeredDate}}.</span>
+              <span class="md-subhead no-select">{{::n.notification.name}}</span>
+              <span class="md-body-1">{{::notificationTypes[n.notification.measure]}} for {{::groupTypes(n)}}</span>
+              <span class="md-body-1 notification-detail">The notification threshold of {{::n.notification.triggerValue}} <span ng-show="summaryTypes[n.notification.subjects.type]">{{::aggFunctions[n.notification.aggregateFunction] || '(sum) '}}</span>was crossed on {{::n.triggeredDate}} with the value {{::formatNumber(n.valueWhenTriggered)}}.</span>
             </div>
-            <div ng-show="notification.active" layout="column" layout-fill>
-              <div class="detailed-content"ng-show="notification.active" layout layout-align="center center">DETAILED CONTENT HERE</div>
+            <div ng-show="n.active" layout="column" layout-fill>
+              <div class="detailed-content"ng-show="n.active" layout layout-align="center center">DETAILED CONTENT HERE</div>
               <div layout layout-align="center center">
                 <md-button class="notification-action">send message</md-button>
                 <md-button class="notification-action">set related goal</md-button>

@@ -17,8 +17,8 @@ angular.module('teacherdashboard')
       }
     };
   })
-  .directive('notifications', [ '$window', 'statebagApiManager', 'api',
-    function($window, statebagApiManager, api) {
+  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast',
+    function($window, statebagApiManager, api, authentication, $mdToast) {
       return {
         scope: {
           notificationList: '='
@@ -28,17 +28,16 @@ angular.module('teacherdashboard')
         replace: true,
         link: function ($scope) {
           var currentNotification;
-
           $scope.notificationTypes = {
             'GPA': 'GPA',
             'SECTION_GRADE': 'Class grade',
             'ASSIGNMENT_GRADE': 'Assignment grade',
             'BEHAVIOR_SCORE': 'Behavior score',
             'HOMEWORK_COMPLETION': 'Homework completion',
-            'SCHOOL_ABSENCE': 'Absence (daily)',
-            'SCHOOL_TARDY': 'Tardy (daily)',
-            'SECTION_ABSENCE': 'Absence (class)',
-            'SECTION_TARDY': 'Tardy (class)'
+            'SCHOOL_ABSENCE': 'Daily absences',
+            'SCHOOL_TARDY': 'Daily tardies',
+            'SECTION_ABSENCE': 'Class absences',
+            'SECTION_TARDY': 'Class tardies'
           };
           $scope.summaryTypes = {
             'SINGLE_STUDENT': false,
@@ -52,6 +51,9 @@ angular.module('teacherdashboard')
           $scope.aggFunctions = {
             'AVG':'(average) ',
             'SUM':'(sum) '
+          };
+          $scope.formatNumber = function(num) {
+              return Math.round(num * 100)/100;
           };
           $scope.groupTypes = function(n){
             var type = n.notification.subjects.type;
@@ -75,9 +77,37 @@ angular.module('teacherdashboard')
             }
           };
 
-          $scope.dismissNotification = function(index, $event) {
+          $scope.dismissNotification = function(index, $event, supressToast) {
             $event.stopPropagation();
-            $scope.notificationList.splice(index, 1);
+            var n = $scope.notificationList[index];
+            api.dismissTriggeredNotification.put(
+              {
+                notificationId: n.notification.id,
+                triggeredId: n.id,
+                userId: authentication.identity().id
+              },
+              {},
+              function(){
+                $scope.notificationList.splice(index, 1);
+                if(!supressToast) {
+                  $mdToast.show(
+                    $mdToast.simple()
+                      .content('Notification dismissed')
+                      .action('OK')
+                      .hideDelay(1500)
+                  );
+                }
+              },
+              function() {
+                if(!supressToast) {
+                  $mdToast.show(
+                    $mdToast.simple()
+                      .content('Failed to reach server :(')
+                      .action('OK')
+                      .hideDelay(1500)
+                  );
+                }
+              });
           };
 
           $scope.dismissAll = function() {
