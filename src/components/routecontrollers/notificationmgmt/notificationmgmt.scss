@@ -1,8 +1,13 @@
 .notification-mgmt {
+  text-align: center;
   .notification {
     button {
       margin: 8px 8px;
       background-color: #c9c9c9 !important;
+    }
+    button:hover {
+      margin: 8px 8px;
+      background-color: #b9b9b9 !important;
     }
   }
 }

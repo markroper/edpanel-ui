@@ -13,8 +13,8 @@
         <div flex="25">Name</div>
         <div flex="15">Type</div>
         <div flex="10">Trigger</div>
-        <div flex="10">Aggregate</div>
-        <div flex="10">Time</div>
+        <div flex="15">Aggregate</div>
+        <div flex="10">Window</div>
         <div flex="20">Subjects</div>
         <div flex="15">Expires</div>
       </div>
@@ -23,12 +23,12 @@
           <md-icon>edit</md-icon>
           <md-tooltip>view/edit</md-tooltip>
         </md-button>
-        <div flex="20">
+        <div flex="25">
           {{::n.name}}
         </div>
-        <div flex="25">{{::n.measure}}</div>
+        <div flex="15">{{::n.measure}}</div>
         <div flex="10">{{::n.triggerValue}}</div>
-        <div flex="10">{{::n.aggregateFunction}}</div>
+        <div flex="15">{{::n.aggregateFunction || 'INDIVIDUAL'}}</div>
         <div flex="10">{{::n.window.window}}</div>
         <div flex="20">{{::resolveSubjects(n.subjects)}}</div>
         <div flex="15">{{::n.expiryDate}}</div>
