@@ -17,6 +17,10 @@ angular.module('teacherdashboard')
       $scope.currentNotification = n;
     };
 
+    $scope.dismissNotification = function() {
+      $scope.currentNotification = null;
+    }
+
     $scope.resolveSubjects = function(subjects) {
       if(subjects) {
         if(subjects.type === 'SECTION_STUDENTS') {

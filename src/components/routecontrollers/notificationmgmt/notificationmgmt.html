@@ -5,7 +5,7 @@
       <md-button class="md-fab md-primary" ng-click="createNewNotification()"><md-icon>add</md-icon><md-tooltip>create new notification</md-tooltip></md-button>
     </div>
     <div ng-if="currentNotification">
-      <create-notification notification="currentNotification"></create-notification>
+      <create-notification notification="currentNotification" dismiss-notification="dismissNotification"></create-notification>
     </div>
     <div class="notification-table">
       <div layout layout-align="center center" class="survey md-subhead">

@@ -1,4 +1,11 @@
 .create-notification {
+  position:relative;
+  .dismiss-notification {
+    position:absolute;
+    top: 10px;
+    right:10px;
+    cursor:pointer;
+  }
   background-color: white;
   padding: 25px;
   min-width: 450px;
@@ -7,10 +14,13 @@
   }
   .notification-name {
     margin: 0px 0px;
-    max-width: 200px;
+    width: 250px;
   }
   .trigger-value {
     margin: 0px 0px;
-    max-width:125px;
+    max-width: 125px;
+  }
+  .md-caption {
+    color: gray;
   }
 }

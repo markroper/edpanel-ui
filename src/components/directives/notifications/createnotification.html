@@ -1,6 +1,9 @@
 <div class="create-notification md-whiteframe-1dp">
+  <md-icon class="dismiss-notification" md-font-set="material-icons" ng-click="dismissNotification()">
+    clear
+    <md-tooltip>Dismiss</md-tooltip>
+  </md-icon>
   <div layout="column" class="type-required">
-
     <div layout layout-align="center center">
       <md-input-container class="md-icon-float md-block notification-name">
         <label>Notification name</label>
@@ -37,6 +40,7 @@
         <md-input-container class="md-icon-float md-block trigger-value" ng-if="notificationDraft.measure">
           <label>Trigger value</label>
           <input ng-model="notificationDraft.triggerValue" type="number" step="0.1">
+          <div class="md-caption">The threshold value that will trigger the notification</div>
         </md-input-container>
       </div>
     </div>
@@ -47,8 +51,8 @@
         <label>Who to measure</label>
         <md-select ng-model="notificationDraft.subjects.type">
           <md-option value="SINGLE_STUDENT">A single student</md-option>
-          <md-option value="FILTERED_STUDENTS">A filtered list of students</md-option>
           <md-option value="SECTION_STUDENTS">Students in a section</md-option>
+          <md-option value="FILTERED_STUDENTS">A filtered list of students</md-option>
         </md-select>
       </md-input-container>
       <md-input-container ng-if="
@@ -57,7 +61,7 @@
         <label>Aggregate function</label>
         <md-select ng-model="notificationDraft.aggregateFunction">
           <md-option value="SINGLE_STUDENT">One alert per student</md-option>
-          <md-option value="FILTERED_STUDENTS">Average across students</md-option>
+          <md-option value="FILTERED_STUDENTS">Average student values</md-option>
           <md-option value="SECTION_STUDENTS">Sum of student values</md-option>
         </md-select>
       </md-input-container>
