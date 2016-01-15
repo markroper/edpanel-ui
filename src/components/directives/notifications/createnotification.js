@@ -12,33 +12,70 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/notifications/createnotification.html',
       replace: true,
       link: function ($scope) {
-        $scope.notificationDraft = {
-          measure: null,
-          subjects: {},
-          subscribers: {},
-          filters: {
+        //Reused constants
+        var DATE_FORMATTER = 'YYYY-MM-DD';
+        var SINGLE_STUDENT = 'SINGLE_STUDENT';
+        var SINGLE_TEACHER = 'SINGLE_TEACHER';
+        var SINGLE_ADMINISTRATOR = 'SINGLE_ADMINISTRATOR';
+        var FILTERED_STUDENTS = 'FILTERED_STUDENTS';
+        var SECTION_STUDENTS = 'SECTION_STUDENTS';
+        var SCHOOL_TEACHERS = 'SCHOOL_TEACHERS';
+        var SCHOOL_ADMINISTRATORS = 'SCHOOL_ADMINISTRATORS';
+        var SECTION_ABSENCE = 'SECTION_ABSENCE';
+        var SECTION_TARDY = 'SECTION_TARDY';
+        var BEHAVIOR_SCORE = 'BEHAVIOR_SCORE';
+        var SECTION_GRADE = 'SECTION_GRADE';
+        var GPA = 'GPA';
 
-          }
-        };
+        var ELL = 'ELL';
+        var NON_ELL = 'NON_ELL';
+        var SPED = 'SPED';
+        var TRUE = 'TRUE';
+        var FALSE = 'FALSE';
+        var NON_LATINO = 'NON_LATINO';
+        var NON_SPED = 'NON_SPED';
+        var ALERT_ME = 'ALERT_ME';
+        var SAME_AS_SUBJECTS = 'SAME_AS_SUBJECTS';
+        var ALERT_PER_STUDENT = 'ALERT_PER_STUDENT';
+        var ALL_SECTIONS = 'all sections';
+        var percent = 'percent';
+        var difference = 'difference';
+        var above = 'above';
+        var below = 'below';
 
-        if($scope.notification.id) {
+        /**
+         * Takes the scope notification and populates the draft form from it.
+         */
+        $scope.createDraftFromNotification = function () {
           var d = $scope.notificationDraft;
           d.measure = $scope.notification.measure;
           //deal with section
           d.name = $scope.notification.name;
           d.triggerValue = $scope.notification.triggerValue;
           if($scope.notification.triggerWhenGreaterThan) {
-            d.aboveBelow = 'above';
+            d.aboveBelow = above;
           } else {
-            d.aboveBelow = 'below';
+            d.aboveBelow = below;
           }
           d.subjects.type = $scope.notification.subjects.type;
           d.subjects.student = $scope.notification.subjects.student;
-          d.subjects.section = $scope.notification.subjects.section;
+          //Handle the section mapping
+          if($scope.notification.subjects.section) {
+            if($scope.sections.length > 1) {
+              for(var i = 0; i < $scope.sections.length; i++){
+                if($scope.sections[i].id === $scope.notification.subjects.section.id) {
+                  d.subjects.section = $scope.sections[i];
+                }
+              }
+            } else {
+              $scope.sections.push($scope.notification.subjects.section);
+              d.subjects.section = $scope.notification.subjects.section;
+            }
+          }
           d.subjects.teacherId = $scope.notification.subjects.teacherId;
           d.subjects.administratorId = $scope.notification.subjects.administratorId;
           d.aggregateFunction = $scope.notification.aggregateFunction;
-          if(d.subjects.type === 'FILTERED_STUDENTS') {
+          if(d.subjects.type === FILTERED_STUDENTS) {
             var filter = $scope.notification.subjects;
             if(filter.gender) {
               d.filters.genders = [ filter.gender ];
@@ -47,38 +84,38 @@ angular.module('teacherdashboard')
             d.ethnicities = filter.federalEthnicities;
             d.years = filter.projectedGraduationYears;
             if(filter.englishLanguageLearner === true) {
-              d.ell = 'ELL';
+              d.ell = ELL;
             } else if(filter.englishLanguageLearner === false) {
-              d.ell = 'NON_ELL';
+              d.ell = NON_ELL;
             }
             if(filter.specialEducationStudent === true) {
-              d.sped = 'SPED';
+              d.sped = SPED;
             } else if(filter.specialEducationStudent === false) {
-              d.sped = 'NON_SPED';
+              d.sped = NON_SPED;
             }
             d.districtEntryYears = filter.districtEntryYears;
             d.birthYears = filter.birthYears;
           }
           var n = $scope.notification;
           if(n.subscribers.type === n.subjects.type) {
-            d.subscribers = 'SAME_AS_SUBJECTS';
-          } if(n.subscribers.type === 'SINGLE_STUDENT'){
+            d.subscribers = SAME_AS_SUBJECTS;
+          } if(n.subscribers.type === SINGLE_STUDENT){
             if(authentication.identity().id === n.subscribers.student.id) {
-              d.subscribers = 'ALERT_ME';
+              d.subscribers = ALERT_ME;
             } else {
-              d.subscribers = 'SINGLE_STUDENT';
+              d.subscribers = SINGLE_STUDENT;
             }
-          } else if( n.subscribers.type === 'SINGLE_TEACHER') {
+          } else if( n.subscribers.type === SINGLE_TEACHER) {
             if(authentication.identity().id === n.subscribers.teacherId) {
-              d.subscribers = 'ALERT_ME';
+              d.subscribers = ALERT_ME;
             } else {
-              d.subscribers = 'SINGLE_TEACHER';
+              d.subscribers = SINGLE_TEACHER;
             }
-          } else if(n.subscribers.type === 'SINGLE_ADMINISTRATOR') {
+          } else if(n.subscribers.type === SINGLE_ADMINISTRATOR) {
             if(authentication.identity().id === n.subscribers.administratorId) {
-              d.subscribers = 'ALERT_ME';
+              d.subscribers = ALERT_ME;
             } else {
-              d.subscribers = 'SINGLE_ADMINISTRATOR';
+              d.subscribers = SINGLE_ADMINISTRATOR;
             }
           } else {
             d.subscribers = n.subscribers.type;
@@ -87,43 +124,12 @@ angular.module('teacherdashboard')
           if(n.window) {
             d.window = n.window.window;
             if(n.window.triggerIsPercent) {
-              d.triggerIsPercent = 'percent';
+              d.triggerIsPercent = percent;
             } else {
-              d.triggerIsPercent = 'difference';
+              d.triggerIsPercent = difference;
             }
           }
-        } else {
-          if($scope.notification.subjects) {
-            $scope.notificaiotn.subjects = {};
-          }
-          if($scope.notification.subscribers) {
-            $scope.notification.subscribers = {};
-          }
-        }
-
-
-        $scope.years = [];
-        var currYear = $window.moment().year();
-        for(var i = 0; i < 5; i++) {
-          $scope.years.push(currYear + i);
-        }
-        //RESOLVE SECTIONS, if needed
-        $scope.sections = [ {name: 'all sections'} ];
-        if(!statebag.currentSections || statebag.currentSections.length === 0) {
-          api.sections.get({
-            schoolId: statebag.school.id,
-            yearId: statebag.currentYear.id,
-            termId: statebag.currentTerm.id
-          },
-          function(resp) {
-            statebag.currentSections = resp;
-            $scope.sections = resp;
-            $scope.sections.unshift({ name: 'all sections' });
-          },
-          function() {
-            console.log('Unable to resolve sections');
-          })
-        }
+        };
 
         /**
          * Validates user input on the create notification form and returns a descriptive
@@ -140,9 +146,9 @@ angular.module('teacherdashboard')
           if(!draft.measure) {
             return 'Please select a notification type';
           }
-          if(!draft.section && (draft.measure === 'SECTION_GRADE' ||
-            draft.measure === 'SECTION_ABSENCE' ||
-            draft.measure === 'SECTION_TARDY')) {
+          if(!draft.section && (draft.measure === SECTION_GRADE ||
+            draft.measure === SECTION_ABSENCE ||
+            draft.measure === SECTION_TARDY)) {
             return 'The notification type requires that you select a section';
 
           }
@@ -152,10 +158,10 @@ angular.module('teacherdashboard')
           if(!draft.subjects.type) {
             return 'Please select subjects to be measured';
           }
-          if(draft.subjects.type === 'SECTION_STUDENTS' && !draft.subjects.section) {
+          if(draft.subjects.type === SECTION_STUDENTS && !draft.subjects.section) {
             return 'Please choose a section for the subject group \'students in a section\'';
           }
-          if(draft.subjects.type === 'SINGLE_STUDENT' && !draft.subjects.student) {
+          if(draft.subjects.type === SINGLE_STUDENT && !draft.subjects.student) {
             return 'Please choose a student to measure';
           }
           if(!draft.subscribers.length) {
@@ -209,15 +215,15 @@ angular.module('teacherdashboard')
           $scope.notification.name = draft.name;
           $scope.notification.measure = draft.measure;
           if(draft.section &&
-              (draft.measure === 'SECTION_GRADE' ||
-              draft.measure === 'SECTION_ABSENCE' ||
-              draft.measure === 'SECTION_TARDY')) {
-            if(draft.section.name != 'All sections') {
+              (draft.measure === SECTION_GRADE ||
+              draft.measure === SECTION_ABSENCE ||
+              draft.measure === SECTION_TARDY)) {
+            if(draft.section.name != ALL_SECTIONS) {
               $scope.notification.section = draft.section;
             }
           }
           $scope.notification.triggerValue = draft.triggerValue;
-          if(draft.aboveBelow && draft.aboveBelow === 'above') {
+          if(draft.aboveBelow && draft.aboveBelow === above) {
             $scope.notification.triggerWhenGreaterThan = true;
           } else {
             $scope.notification.triggerWhenGreaterThan = false;
@@ -240,11 +246,11 @@ angular.module('teacherdashboard')
             $scope.notification.subjects = {};
           }
           $scope.notification.subjects.type = draft.subjects.type;
-          if(draft.subjects.type === 'SECTION_STUDENTS') {
+          if(draft.subjects.type === SECTION_STUDENTS) {
             $scope.notification.subjects.section = draft.subjects.section;
-          } else if(draft.subjects.type === 'SINGLE_STUDENT') {
+          } else if(draft.subjects.type === SINGLE_STUDENT) {
             $scope.notification.subjects.student = draft.subjects.student;
-          } else if(draft.subjects.type === 'FILTERED_STUDENT' && draft.filters) {
+          } else if(draft.subjects.type === FILTERED_STUDENTS && draft.filters) {
             if(draft.filters.genders & draft.filters.genders.length === 1 ) {
               $scope.notification.subjects.gender = draft.filters.genders[0];
             }
@@ -252,9 +258,9 @@ angular.module('teacherdashboard')
               $scope.notification.subjects.federalRaces = draft.filters.races;
             }
             if(draft.filters.ethnicities && draft.filters.enthnicities.length === 1) {
-              var value = 'TRUE';
-                if(draft.filters.ethnicities[0] === 'NON_LATINO') {
-                  value = 'FALSE';
+              var value = TRUE;
+                if(draft.filters.ethnicities[0] === NON_LATINO) {
+                  value = FALSE;
                 }
               $scope.notification.subjects.federalEthnicities = [ value ];
             }
@@ -263,41 +269,47 @@ angular.module('teacherdashboard')
             }
             if(draft.filters.ell && draft.filters.ell.length === 1) {
               var value = true;
-              if(draft.filters.ell === 'NON_ELL') {
+              if(draft.filters.ell === NON_ELL) {
                 value = false;
               }
               $scope.notification.subjects.englishLanguageLearner = value;
             }
             if(draft.filters.sped && draft.filters.sped.length === 1) {
               var value = true;
-              if(draft.filters.sped === 'NON_SPED') {
+              if(draft.filters.sped === NON_SPED) {
                 value = false;
               }
               $scope.notification.subjects.specialEducationStudent = value;
             }
-            //Set the aggregate function if we're dealing with non-single student
-            if(draft.subjects.type !== 'SINGLE_STUDENT' && draft.aggregateFunction &&
-                draft.aggregateFunction !== 'ALERT_PER_STUDENT') {
-              $scope.notification.aggregateFunction = draft.aggregateFunction;
-            }
           }
+          //Set the aggregate function if we're dealing with non-single student
+          if(draft.subjects.type !== SINGLE_STUDENT && draft.aggregateFunction) {
+            if (draft.aggregateFunction !== ALERT_PER_STUDENT) {
+              $scope.notification.aggregateFunction = draft.aggregateFunction;
+            } else {
+              $scope.notification.aggregateFunction = null;
+            }
+          } else {
+            $scope.notification.aggregateFunction = null;
+          }
+          
           //SUBSCRIBERS
-          if(draft.subscribers === 'SAME_AS_SUBJECTS') {
+          if(draft.subscribers === SAME_AS_SUBJECTS) {
             var subscribers = angular.copy($scope.notification.subjects);
             subscribers.id = null;
             $scope.notification.subscribers = subscribers;
-          } else if(draft.subscribers === 'ALERT_ME') {
+          } else if(draft.subscribers === ALERT_ME) {
             var type = null;
             var userId = authentication.identity().id;
             var subscribers = {};
             if(statebag.userRole === 'Student') {
-              subscribers.type = 'SINGLE_STUDENT';
+              subscribers.type = SINGLE_STUDENT;
               subscribers.student = { id: userId };
             } else if(statebag.userRole === 'Teacher') {
-              subscribers.type = 'SINGLE_TEACHER';
+              subscribers.type = SINGLE_TEACHER;
               subscribers.teacherId = userId;
             } else if(statebag.userRole === 'Administrator' || statebag.userRole === 'Admin') {
-              subscribers.type = 'SINGLE_ADMINISTRATOR';
+              subscribers.type = SINGLE_ADMINISTRATOR;
               subscribers.administratorId = userId;
             }
             //TODO: error out if there is not supported user type
@@ -305,17 +317,17 @@ angular.module('teacherdashboard')
               $scope.notification.subscribers = subscribers;
             }
 
-          } else if(draft.subscribers === 'SCHOOL_TEACHERS' || draft.subscribers === 'SCHOOL_ADMINISTRATORS') {
+          } else if(draft.subscribers === SCHOOL_TEACHERS || draft.subscribers === SCHOOL_ADMINISTRATORS) {
             if($scope.notification.subscribers.type !== draft.subscribers) {
               $scope.notification.subscribers = { type: draft.subscribers };
             }
           }
 
           if(!$scope.notification.expiryDate) {
-            $scope.notification.expiryDate = $window.moment().add(6, 'M').format('YYYY-MM-DD');
+            $scope.notification.expiryDate = $window.moment().add(6, 'M').format(DATE_FORMATTER);
           }
           if(!$scope.notification.createdDate) {
-            $scope.notification.createdDate = $window.moment().format('YYYY-MM-DD');
+            $scope.notification.createdDate = $window.moment().format(DATE_FORMATTER);
           }
           if(!$scope.notification.owner) {
               $scope.notification.owner = { id: authentication.identity().id };
@@ -341,6 +353,50 @@ angular.module('teacherdashboard')
 
         $scope.selectedItemChange = function(item) {
         };
+
+        //The stuff that is called on load:
+        $scope.notificationDraft = {
+          measure: null,
+          subjects: {},
+          subscribers: {},
+          filters: {
+
+          }
+        };
+        if(!$scope.notification.id) {
+          if($scope.notification.subjects) {
+            $scope.notificaiotn.subjects = {};
+          }
+          if($scope.notification.subscribers) {
+            $scope.notification.subscribers = {};
+          }
+        }
+        $scope.years = [];
+        var currYear = $window.moment().year();
+        for(var i = 0; i < 5; i++) {
+          $scope.years.push(currYear + i);
+        }
+        //RESOLVE SECTIONS, if needed
+        $scope.sections = [ {name: ALL_SECTIONS } ];
+        if(!statebag.currentSections || statebag.currentSections.length === 0) {
+          api.sections.get({
+              schoolId: statebag.school.id,
+              yearId: statebag.currentYear.id,
+              termId: statebag.currentTerm.id
+            },
+            function(resp) {
+              statebag.currentSections = resp;
+              $scope.sections = resp;
+              $scope.sections.unshift({ name: ALL_SECTIONS });
+              $scope.createDraftFromNotification();
+            },
+            function() {
+              $scope.createDraftFromNotification();
+              console.log('Unable to resolve sections');
+            })
+        } else {
+          $scope.createDraftFromNotification();
+        }
       }
     }
   }]);

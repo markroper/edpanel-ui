@@ -33,7 +33,7 @@
             notificationDraft.measure === 'SECTION_TARDY'">
         <label>Choose section</label>
         <md-select ng-model="notificationDraft.section">
-          <md-option ng-repeat="section in sections" value="{{section}}">{{section.name}}</md-option>
+          <md-option ng-repeat="section in sections" ng-value="section">{{section.name}}</md-option>
         </md-select>
       </md-input-container>
     </div>
@@ -155,7 +155,7 @@
       <md-input-container flex="50" ng-if="notificationDraft.subjects.type === 'SECTION_STUDENTS'">
         <label>Choose section</label>
         <md-select ng-model="notificationDraft.subjects.section">
-          <md-option ng-repeat="section in sections" value="{{section}}">{{section.name}}</md-option>
+          <md-option ng-repeat="section in sections" ng-value="section">{{section.name}}</md-option>
         </md-select>
       </md-input-container>
       <md-autocomplete
