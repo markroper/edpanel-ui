@@ -16,7 +16,9 @@ angular.module('teacherdashboard')
     $scope.editNotification = function(n) {
       $scope.currentNotification = n;
     };
-
+    $scope.createNewNotification = function() {
+      $scope.currentNotification = {};
+    };
     $scope.dismissNotification = function() {
       $scope.currentNotification = null;
     };
