@@ -25,7 +25,6 @@ angular.module('teacherdashboard')
           var d = $scope.notificationDraft;
           d.measure = $scope.notification.measure;
           //deal with section
-
           d.name = $scope.notification.name;
           d.triggerValue = $scope.notification.triggerValue;
           if($scope.notification.triggerWhenGreaterThan) {
@@ -38,7 +37,7 @@ angular.module('teacherdashboard')
           d.subjects.section = $scope.notification.subjects.section;
           d.subjects.teacherId = $scope.notification.subjects.teacherId;
           d.subjects.administratorId = $scope.notification.subjects.administratorId;
-
+          d.aggregateFunction = $scope.notification.aggregateFunction;
           if(d.subjects.type === 'FILTERED_STUDENTS') {
             var filter = $scope.notification.subjects;
             if(filter.gender) {
@@ -60,7 +59,6 @@ angular.module('teacherdashboard')
             d.districtEntryYears = filter.districtEntryYears;
             d.birthYears = filter.birthYears;
           }
-
           var n = $scope.notification;
           if(n.subscribers.type === n.subjects.type) {
             d.subscribers = 'SAME_AS_SUBJECTS';
@@ -85,13 +83,15 @@ angular.module('teacherdashboard')
           } else {
             d.subscribers = n.subscribers.type;
           }
-
-          //deal with subscribers
-
           //deal with time window
-
-          //deal with aggregate function
-
+          if(n.window) {
+            d.window = n.window.window;
+            if(n.window.triggerIsPercent) {
+              d.triggerIsPercent = 'percent';
+            } else {
+              d.triggerIsPercent = 'difference';
+            }
+          }
         } else {
           if($scope.notification.subjects) {
             $scope.notificaiotn.subjects = {};
@@ -107,7 +107,6 @@ angular.module('teacherdashboard')
         for(var i = 0; i < 5; i++) {
           $scope.years.push(currYear + i);
         }
-
         //RESOLVE SECTIONS, if needed
         $scope.sections = [ {name: 'all sections'} ];
         if(!statebag.currentSections || statebag.currentSections.length === 0) {
@@ -165,12 +164,11 @@ angular.module('teacherdashboard')
 
         }
         /*
-          AS the user builds an alert, the following are required
+          AS the user builds an alert, the following are the attribuetes bound to the scope for the draft:
           {
             name:'',
             measure: 'GPA|SECTION_GRADE|ASSIGNMENT_GRADE|BEHAVIOR_SCORE|HOMEWORK_COMPLETION|SCHOOL_ABSENCE|SCHOOL_TARDY|SECTION_ABSENCE|SECTION_TARDY',
             section: {},
-
             //TRIGGER RELATED
             triggerValue: 0,
             aboveBelow: 'above|below',
@@ -178,7 +176,6 @@ angular.module('teacherdashboard')
             triggerOverTime: true|false,
             triggerIsPercent: percent|difference,
             window: 'DAY|WEEK|MONTH|TERM|YEAR',
-
             //SUBJECTS RELATED
             aggregateFunction: 'ALERT_PER_STUDENT|AVG|SUM', //only valid for non-single student subjects
             subjects: {
@@ -193,7 +190,6 @@ angular.module('teacherdashboard')
               ell: ['ELL', 'NON_ELL'],
               sped: ['SPED', NON_SPED];
             },
-
             //SUBSCRIBERS RELATED
             subscribers: 'SAME_AS_SUBJECTS|ALERT_ME|SCHOOL_TEACHERS|SCHOOL_ADMINISTRATORS'
           }
@@ -314,7 +310,7 @@ angular.module('teacherdashboard')
               $scope.notification.subscribers = { type: draft.subscribers };
             }
           }
-          
+
           if(!$scope.notification.expiryDate) {
             $scope.notification.expiryDate = $window.moment().add(6, 'M').format('YYYY-MM-DD');
           }
@@ -324,30 +320,26 @@ angular.module('teacherdashboard')
           if(!$scope.notification.owner) {
               $scope.notification.owner = { id: authentication.identity().id };
           }
-
-          console.log(JSON.stringify($scope.notification));
-          //TODO: enable the API call
-          //$scope.saveNotification();
+          $scope.saveNotification();
         };
 
+        /*
+         * Student list filter related
+         */
         function createFilterFor(query) {
           var lowercaseQuery = angular.lowercase(query);
           return function filterFn(student) {
             return (angular.lowercase(student.name).indexOf(lowercaseQuery) === 0);
           };
         }
-
         $scope.querySearch = function(query) {
           var results = query ? statebag.students.filter( createFilterFor(query) ) : statebag.students;
           return results;
         };
-
         $scope.searchTextChange = function(text) {
-          console.log('Text changed to ' + text);
         };
 
         $scope.selectedItemChange = function(item) {
-          console.log('Item changed to ' + JSON.stringify(item));
         };
       }
     }
