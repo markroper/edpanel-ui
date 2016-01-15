@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.directive('createNotification', [ '$window', 'statebagApiManager', 'statebag', 'api', 'authentication', '$mdToast', '$state',
-  function($window, statebagApiManager, statebag, api, authentication, $mdToast, $state) {
+.directive('createNotification', [ '$window', 'statebagApiManager', 'statebag', 'api', 'authentication',
+  function($window, statebagApiManager, statebag, api, authentication) {
     return {
       scope: {
         notification: '=',

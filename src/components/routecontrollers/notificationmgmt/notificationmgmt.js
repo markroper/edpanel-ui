@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('NotificationMgmt', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication',
-  function ($scope, api, $state, statebag, $window, $location, authentication) {
+.controller('NotificationMgmt', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication', '$mdToast',
+  function ($scope, api, $state, statebag, $window, $location, authentication, $mdToast) {
     statebag.currentPage.name = 'My Notifications';
     $scope.$on('$viewContentLoaded', function () {
       $window.ga('send', 'pageview', { page: $location.url() });
