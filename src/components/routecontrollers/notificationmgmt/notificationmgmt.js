@@ -45,31 +45,28 @@ angular.module('teacherdashboard')
                   .hideDelay(1500)
               );
             });
-
         } else {
           //create
-          if ($scope.currentNotification.id) {
-            //update
-            api.notifications.post(
-              {},
-              $scope.currentNotification,
-              function () {
-                $mdToast.show(
-                  $mdToast.simple()
-                    .content('Notification created')
-                    .action('OK')
-                    .hideDelay(1500)
-                );
-              },
-              function () {
-                $mdToast.show(
-                  $mdToast.simple()
-                    .content('Could not connect to server, request failed')
-                    .action('OK')
-                    .hideDelay(1500)
-                );
-              });
-          }
+          api.notifications.post(
+            {},
+            $scope.currentNotification,
+            function () {
+              $mdToast.show(
+                $mdToast.simple()
+                  .content('Notification created')
+                  .action('OK')
+                  .hideDelay(1500)
+              );
+            },
+            function () {
+              $mdToast.show(
+                $mdToast.simple()
+                  .content('Could not connect to server, request failed')
+                  .action('OK')
+                  .hideDelay(1500)
+              );
+            });
+
         }
       }
     };

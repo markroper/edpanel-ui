@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.directive('createNotification', [ '$window', 'statebagApiManager', 'statebag', 'api', 'authentication',
-  function($window, statebagApiManager, statebag, api, authentication) {
+.directive('createNotification', [ '$window', 'statebagApiManager', 'statebag', 'api', 'authentication', 'consts',
+  function($window, statebagApiManager, statebag, api, authentication, consts) {
     return {
       scope: {
         notification: '=',
@@ -12,6 +12,28 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/notifications/createnotification.html',
       replace: true,
       link: function ($scope) {
+        $scope.notificationDraft = {
+          measure: null,
+          subjects: {},
+          subscribers: {},
+          filters: {
+
+          }
+        };
+        if(!$scope.notification.id) {
+          if($scope.notification.subjects) {
+            $scope.notificaiotn.subjects = {};
+          }
+          if($scope.notification.subscribers) {
+            $scope.notification.subscribers = {};
+          }
+        }
+        $scope.years = [];
+        var currYear = $window.moment().year();
+        for(var i = 0; i < 5; i++) {
+          $scope.years.push(currYear + i);
+        }
+
         //Reused constants
         var DATE_FORMATTER = 'YYYY-MM-DD';
         var SINGLE_STUDENT = 'SINGLE_STUDENT';
@@ -47,6 +69,10 @@ angular.module('teacherdashboard')
          * Takes the scope notification and populates the draft form from it.
          */
         $scope.createDraftFromNotification = function () {
+          //If there is not a pre-existing notification, we build one from scratch
+          if(!$scope.notification.id) {
+            return;
+          }
           var d = $scope.notificationDraft;
           d.measure = $scope.notification.measure;
           //deal with section
@@ -219,7 +245,7 @@ angular.module('teacherdashboard')
               draft.measure === SECTION_ABSENCE ||
               draft.measure === SECTION_TARDY)) {
             if(draft.section.name != ALL_SECTIONS) {
-              $scope.notification.section = draft.section;
+              $scope.notification.section = { id: draft.section.id };
             }
           }
           $scope.notification.triggerValue = draft.triggerValue;
@@ -247,7 +273,13 @@ angular.module('teacherdashboard')
           }
           $scope.notification.subjects.type = draft.subjects.type;
           if(draft.subjects.type === SECTION_STUDENTS) {
-            $scope.notification.subjects.section = draft.subjects.section;
+            if(draft.subjects.section && draft.subjects.section.id) {
+              var sec = {
+                id: draft.subjects.section.id
+              };
+              $scope.notification.subjects.section = sec;
+            }
+
           } else if(draft.subjects.type === SINGLE_STUDENT) {
             $scope.notification.subjects.student = draft.subjects.student;
           } else if(draft.subjects.type === FILTERED_STUDENTS && draft.filters) {
@@ -292,7 +324,7 @@ angular.module('teacherdashboard')
           } else {
             $scope.notification.aggregateFunction = null;
           }
-          
+
           //SUBSCRIBERS
           if(draft.subscribers === SAME_AS_SUBJECTS) {
             var subscribers = angular.copy($scope.notification.subjects);
@@ -322,7 +354,9 @@ angular.module('teacherdashboard')
               $scope.notification.subscribers = { type: draft.subscribers };
             }
           }
-
+          if(!$scope.notification.schoolId){
+            $scope.notification.schoolId = statebag.school.id;
+          }
           if(!$scope.notification.expiryDate) {
             $scope.notification.expiryDate = $window.moment().add(6, 'M').format(DATE_FORMATTER);
           }
@@ -331,6 +365,13 @@ angular.module('teacherdashboard')
           }
           if(!$scope.notification.owner) {
               $scope.notification.owner = { id: authentication.identity().id };
+              if(statebag.userRole === 'Student') {
+                $scope.notification.owner.type = consts.roles.STUDENT;
+              } else if(statebag.userRole === 'Teacher') {
+                $scope.notification.owner.type = consts.roles.TEACHER;
+              } else if(statebag.userRole === 'Administrator' || statebag.userRole === 'Admin') {
+                $scope.notification.owner.type = consts.roles.ADMIN;
+              }
           }
           $scope.saveNotification();
         };
@@ -355,28 +396,6 @@ angular.module('teacherdashboard')
         };
 
         //The stuff that is called on load:
-        $scope.notificationDraft = {
-          measure: null,
-          subjects: {},
-          subscribers: {},
-          filters: {
-
-          }
-        };
-        if(!$scope.notification.id) {
-          if($scope.notification.subjects) {
-            $scope.notificaiotn.subjects = {};
-          }
-          if($scope.notification.subscribers) {
-            $scope.notification.subscribers = {};
-          }
-        }
-        $scope.years = [];
-        var currYear = $window.moment().year();
-        for(var i = 0; i < 5; i++) {
-          $scope.years.push(currYear + i);
-        }
-        //RESOLVE SECTIONS, if needed
         $scope.sections = [ {name: ALL_SECTIONS } ];
         if(!statebag.currentSections || statebag.currentSections.length === 0) {
           api.sections.get({
@@ -395,6 +414,7 @@ angular.module('teacherdashboard')
               console.log('Unable to resolve sections');
             })
         } else {
+          $scope.sections = statebag.currentSections;
           $scope.createDraftFromNotification();
         }
       }
