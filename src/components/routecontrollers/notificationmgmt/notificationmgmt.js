@@ -19,8 +19,58 @@ angular.module('teacherdashboard')
 
     $scope.dismissNotification = function() {
       $scope.currentNotification = null;
-    }
+    };
+    $scope.saveNotification = function() {
+      if ($scope.currentNotification) {
+        if ($scope.currentNotification.id) {
+          //update
+          api.notifications.put(
+            {notificationId: $scope.currentNotification.id},
+            $scope.currentNotification,
+            function () {
+              $mdToast.show(
+                $mdToast.simple()
+                  .content('Notification updated')
+                  .action('OK')
+                  .hideDelay(1500)
+              );
+            },
+            function () {
+              $mdToast.show(
+                $mdToast.simple()
+                  .content('Could not connect to server, update failed')
+                  .action('OK')
+                  .hideDelay(1500)
+              );
+            });
 
+        } else {
+          //create
+          if ($scope.currentNotification.id) {
+            //update
+            api.notifications.post(
+              {},
+              $scope.currentNotification,
+              function () {
+                $mdToast.show(
+                  $mdToast.simple()
+                    .content('Notification created')
+                    .action('OK')
+                    .hideDelay(1500)
+                );
+              },
+              function () {
+                $mdToast.show(
+                  $mdToast.simple()
+                    .content('Could not connect to server, request failed')
+                    .action('OK')
+                    .hideDelay(1500)
+                );
+              });
+          }
+        }
+      }
+    };
     $scope.resolveSubjects = function(subjects) {
       if(subjects) {
         if(subjects.type === 'SECTION_STUDENTS') {

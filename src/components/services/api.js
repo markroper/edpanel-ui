@@ -27,6 +27,7 @@ angular.module('teacherdashboard')
         'getAll': { method: 'GET', isArray: true },
         'get': { method: 'GET' },
         'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
+        'put': { method: 'PUT', headers: {'Content-Type': 'application/json' }},
         'delete': { method: 'DELETE' }
       }),
       //Survey

@@ -5,7 +5,8 @@ angular.module('teacherdashboard')
     return {
       scope: {
         notification: '=',
-        dismissNotification: '='
+        dismissNotification: '=',
+        saveNotification: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/notifications/createnotification.html',
@@ -17,8 +18,24 @@ angular.module('teacherdashboard')
           $scope.years.push(currYear + i);
         }
 
-        //TODO: resolve sections
-        $scope.sections = [ {name: 'all sections'}, { name: 'section one'}, { name: 'section two'}, {name: 'section three'} ];
+        //RESOLVE SECTIONS, if needed
+        $scope.sections = [ {name: 'all sections'} ];
+        if(!statebag.currentSections || statebag.currentSections.length === 0) {
+          api.sections.get({
+            schoolId: statebag.school.id,
+            yearId: statebag.currentYear.id,
+            termId: statebag.currentTerm.id
+          },
+          function(resp) {
+            statebag.currentSections = resp;
+            $scope.sections = resp;
+            $scope.sections.unshift({ name: 'all sections' });
+          },
+          function() {
+            console.log('Unable to resolve sections');
+          })
+        }
+
         $scope.notificationDraft = {
           measure: null,
           subjects: {},
@@ -28,14 +45,204 @@ angular.module('teacherdashboard')
           }
         };
 
-        //TODO: Add isPositive/isNegative
+        /**
+         * Validates user input on the create notification form and returns a descriptive
+         * error message if the input is invalid.  If the input is valid, null is returned;
+         * @param draft
+         * @returns {*}
+         */
+        function validateUserInputs(draft) {
+          //no name
+          if(!draft.name || draft.name.length > 255) {
+            return 'Please create a name that is less than 255 characters';
+          }
+          //no measure
+          if(!draft.measure) {
+            return 'Please select a notification type';
+          }
+          if(!draft.section && (draft.measure === 'SECTION_GRADE' ||
+            draft.measure === 'SECTION_ABSENCE' ||
+            draft.measure === 'SECTION_TARDY')) {
+            return 'The notification type requires that you select a section';
 
-        //TODO: Add support for notification window
+          }
+          if(!draft.triggerValue) {
+            return 'Please enter a trigger value';
+          }
+          if(!draft.subjects.type) {
+            return 'Please select subjects to be measured';
+          }
+          if(draft.subjects.type === 'SECTION_STUDENTS' && !draft.subjects.section) {
+            return 'Please choose a section for the subject group \'students in a section\'';
+          }
+          if(draft.subjects.type === 'SINGLE_STUDENT' && !draft.subjects.student) {
+            return 'Please choose a student to measure';
+          }
+          if(!draft.subscribers.length) {
+            return 'Please select who to notify';
+          }
 
-        //TODO: hide 'create notification' button when a notification is shown
+        }
+        /*
+          AS the user builds an alert, the following are required
+          {
+            name:'',
+            measure: 'GPA|SECTION_GRADE|ASSIGNMENT_GRADE|BEHAVIOR_SCORE|HOMEWORK_COMPLETION|SCHOOL_ABSENCE|SCHOOL_TARDY|SECTION_ABSENCE|SECTION_TARDY',
+            section: {},
 
-        $scope.saveNotification = function() {
-          //TODO: merge state with notification and call POST/PUT
+            //TRIGGER RELATED
+            triggerValue: 0,
+            aboveBelow: 'above|below',
+            //TRIGGER TIME WINDOW RELATED
+            triggerOverTime: true|false,
+            triggerIsPercent: percent|difference,
+            window: 'DAY|WEEK|MONTH|TERM|YEAR',
+
+            //SUBJECTS RELATED
+            aggregateFunction: 'ALERT_PER_STUDENT|AVG|SUM', //only valid for non-single student subjects
+            subjects: {
+              type: 'SINGLE_STUDENT|SECTION_STUDENTS|FILTERED_STUDENTS',
+              section: {} //only valid for section students type of subjects
+            },
+            filters: {
+              genders: ['MALE','FEMALE'],
+              races: ['BLACK', 'ASIAN', 'WHITE', 'AMERICAN_INDIAN', 'PACIFIC_ISLANDER'],
+              ethnicities: ['LATINO', 'NON_LATINO'],
+              years: [], //proj graduation year
+              ell: ['ELL', 'NON_ELL'],
+              sped: ['SPED', NON_SPED];
+            },
+
+            //SUBSCRIBERS RELATED
+            subscribers: 'SAME_AS_SUBJECTS|ALERT_ME|SCHOOL_TEACHERS|SCHOOL_ADMINISTRATORS'
+          }
+         */
+        $scope.prepareAndSave = function() {
+          var draft = $scope.notificationDraft;
+
+          //Check if the users input is valid
+          $scope.errorMessage = null;
+          var errorMessage = validateUserInputs(draft);
+          if(errorMessage) {
+            $scope.errorMessage = errorMessage;
+            return;
+          }
+          //Input is valis, prepare & save the object!
+          $scope.notification.name = draft.name;
+          $scope.notification.measure = draft.measure;
+          if(draft.section &&
+              (draft.measure === 'SECTION_GRADE' ||
+              draft.measure === 'SECTION_ABSENCE' ||
+              draft.measure === 'SECTION_TARDY')) {
+            if(draft.section.name != 'All sections') {
+              $scope.notification.section = draft.section;
+            }
+          }
+          $scope.notification.triggerValue = draft.triggerValue;
+          if(draft.aboveBelow && draft.aboveBelow === 'above') {
+            $scope.notification.triggeWhenGreaterThan = true;
+          } else {
+            $scope.notification.triggeWhenGreaterThan = false;
+          }
+          //Set up trigger window, if any
+          if(draft.triggerOverTime && draft.window) {
+            var isPercent = false;
+            if(draft.triggerIsPercent) {
+              isPercent = true;
+            }
+            var window = {
+              triggerIsPercent: isPercent,
+              window: draft.window
+            };
+            $scope.notification.window = window;
+          }
+
+          //SUBJECTS
+          if(!$scope.notification.subjects) {
+            $scope.notification.subjects = {};
+          }
+          $scope.notification.subjects.type = draft.subjects.type;
+          if(draft.subjects.type === 'SECTION_STUDENTS') {
+            $scope.notification.subjects.section = draft.subjects.section;
+          } else if(draft.subjects.type === 'SINGLE_STUDENT') {
+            $scope.notification.subjects.student = draft.subjects.student;
+          } else if(draft.subjects.type === 'FILTERED_STUDENT' && draft.filters) {
+            if(draft.filters.genders & draft.filters.genders.length === 1 ) {
+              $scope.notification.subjects.gender = draft.filters.genders[0];
+            }
+            if(draft.filters.races) {
+              $scope.notification.subjects.federalRaces = draft.filters.races;
+            }
+            if(draft.filters.ethnicities && draft.filters.enthnicities.length === 1) {
+              var value = 'TRUE';
+                if(draft.filters.ethnicities[0] === 'NON_LATINO') {
+                  value = 'FALSE';
+                }
+              $scope.notification.subjects.federalEthnicities = [ value ];
+            }
+            if(draft.filters.years) {
+              $scope.notification.subjects.projectedGraduationYears = draft.filters.years;
+            }
+            if(draft.filters.ell && draft.filters.ell.length === 1) {
+              var value = true;
+              if(draft.filters.ell === 'NON_ELL') {
+                value = false;
+              }
+              $scope.notification.subjects.englishLanguageLearner = value;
+            }
+            if(draft.filters.sped && draft.filters.sped.length === 1) {
+              var value = true;
+              if(draft.filters.sped === 'NON_SPED') {
+                value = false;
+              }
+              $scope.notification.subjects.specialEducationStudent = value;
+            }
+            //Set the aggregate function if we're dealing with non-single student
+            if(draft.subjects.type !== 'SINGLE_STUDENT' && draft.aggregateFunction &&
+                draft.aggregateFunction !== 'ALERT_PER_STUDENT') {
+              $scope.notification.aggregateFunction = draft.aggregateFunction;
+            }
+            //SUBSCRIBERS
+            if(draft.subscribers === 'SAME_AS_SUBJECTS') {
+              var subscribers = angular.copy($scope.notification.subjects);
+              subscribers.id = null;
+              $scope.notification.subscribers = subscribers;
+            } else if(draft.sibscribers === 'ALERT_ME') {
+              var type = null;
+              var userId = authentication.identity().id;
+              var subscribers = {};
+              if(statebag.userRole === 'Student') {
+                subscribers.type = 'SINGLE_STUDENT';
+                subscribers.student = { id: userId };
+              } else if(statebag.userRole === 'Teacher') {
+                subscribers.type = 'SINGLE_TEACHER';
+                subscribers.teacherId = userId;
+              } else if(statebag.userRole === 'Administrator' || statebag.userRole === 'Admin') {
+                subscribers.type = 'SINGLE_ADMINISTRATOR';
+                subscribers.administratorId = userId;
+              }
+              //TODO: error out if there is not supported user type
+              if(subscribers.type) {
+                $scope.notification.subscribers = subscribers;
+              }
+
+            } else if(draft.subscribers === 'SCHOOL_TEACHERS' || draft.subscribers === 'SCHOOL_ADMINISTRATORS') {
+              $scope.notification.subscribers = { type: draft.subscribers};
+            }
+          }
+          if(!$scope.notification.expiryDate) {
+            $scope.notification.expiryDate = $window.moment().add(6, 'M').format('YYYY-MM-DD');
+          }
+          if(!$scope.notification.createdDate) {
+            $scope.notification.createdDate = $window.moment().format('YYYY-MM-DD');
+          }
+          if(!$scope.notification.owner) {
+              $scope.notification.owner = { id: authentication.identity().id };
+          }
+
+          console.log(JSON.stringify($scope.notification));
+          //TODO: enable the API call
+          //$scope.saveNotification();
         };
 
         function createFilterFor(query) {
