@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('NotificationMgmt', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication', '$mdToast',
-  function ($scope, api, $state, statebag, $window, $location, authentication, $mdToast) {
+.controller('NotificationMgmt', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication', '$mdToast', 'consts',
+  function ($scope, api, $state, statebag, $window, $location, authentication, $mdToast, consts) {
     statebag.currentPage.name = 'My Notifications';
     $scope.$on('$viewContentLoaded', function () {
       $window.ga('send', 'pageview', { page: $location.url() });
@@ -21,6 +21,35 @@ angular.module('teacherdashboard')
     };
     $scope.dismissNotification = function() {
       $scope.currentNotification = null;
+    };
+    $scope.notificationTypeToReadableString = function(type) {
+      return consts.notificationTypes[type];
+    };
+    $scope.deleteNotification = function(n) {
+      api.notifications.delete(
+        { notificationId: n.id },
+        function(){
+          var idx = 0;
+          for(var i = 0; i < $scope.notifications.length; i++) {
+            if(n.id = $scope.notifications[i].id) {
+              break;
+            }
+            idx++;
+          }
+          $scope.notifications.splice(idx, 1);
+          $mdToast.show(
+            $mdToast.simple()
+              .content('Notification deleted')
+              .action('OK')
+              .hideDelay(1500)
+          );
+        },
+        function(){
+          $mdToast.simple()
+            .content('Notification deletion failed')
+            .action('OK')
+            .hideDelay(1500)
+        });
     };
     $scope.saveNotification = function() {
       if ($scope.currentNotification) {

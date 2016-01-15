@@ -244,6 +244,17 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
     return {
       $get: function () {
         return {
+          notificationTypes: {
+            'GPA': 'GPA',
+            'SECTION_GRADE': 'Class grade',
+            'ASSIGNMENT_GRADE': 'Assignment grade',
+            'BEHAVIOR_SCORE': 'Behavior score',
+            'HOMEWORK_COMPLETION': 'Homework completion',
+            'SCHOOL_ABSENCE': 'Daily absences',
+            'SCHOOL_TARDY': 'Daily tardies',
+            'SECTION_ABSENCE': 'Class absences',
+            'SECTION_TARDY': 'Class tardies'
+          },
           roles: {
             ADMIN:'ADMINISTRATOR',
             TEACHER: 'TEACHER',

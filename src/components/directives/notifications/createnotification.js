@@ -344,11 +344,9 @@ angular.module('teacherdashboard')
               subscribers.type = SINGLE_ADMINISTRATOR;
               subscribers.administratorId = userId;
             }
-            //TODO: error out if there is not supported user type
             if(subscribers.type) {
               $scope.notification.subscribers = subscribers;
             }
-
           } else if(draft.subscribers === SCHOOL_TEACHERS || draft.subscribers === SCHOOL_ADMINISTRATORS) {
             if($scope.notification.subscribers.type !== draft.subscribers) {
               $scope.notification.subscribers = { type: draft.subscribers };
@@ -375,7 +373,6 @@ angular.module('teacherdashboard')
           }
           $scope.saveNotification();
         };
-
         /*
          * Student list filter related
          */
@@ -394,7 +391,6 @@ angular.module('teacherdashboard')
 
         $scope.selectedItemChange = function(item) {
         };
-
         //The stuff that is called on load:
         $scope.sections = [ {name: ALL_SECTIONS } ];
         if(!statebag.currentSections || statebag.currentSections.length === 0) {

@@ -17,8 +17,8 @@ angular.module('teacherdashboard')
       }
     };
   })
-  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state',
-    function($window, statebagApiManager, api, authentication, $mdToast, $state) {
+  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts',
+    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts) {
       return {
         scope: {
           notificationList: '='
@@ -28,17 +28,7 @@ angular.module('teacherdashboard')
         replace: true,
         link: function ($scope) {
           var currentNotification;
-          $scope.notificationTypes = {
-            'GPA': 'GPA',
-            'SECTION_GRADE': 'Class grade',
-            'ASSIGNMENT_GRADE': 'Assignment grade',
-            'BEHAVIOR_SCORE': 'Behavior score',
-            'HOMEWORK_COMPLETION': 'Homework completion',
-            'SCHOOL_ABSENCE': 'Daily absences',
-            'SCHOOL_TARDY': 'Daily tardies',
-            'SECTION_ABSENCE': 'Class absences',
-            'SECTION_TARDY': 'Class tardies'
-          };
+          $scope.notificationTypes = consts.notifcationTypes;
           $scope.summaryTypes = {
             'SINGLE_STUDENT': false,
             'SINGLE_TEACHER': false,
