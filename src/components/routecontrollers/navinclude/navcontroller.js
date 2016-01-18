@@ -54,19 +54,14 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
       $mdSidenav(SIDE_NAV_NAME).toggle();
     };
 
-    $scope.goToHome = function() {
-      //Go to the correct home page for each person
-      switch ($scope.userRole.toUpperCase()) {
-        case consts.roles.TEACHER:
-          $state.go('app.teacherHome', {schoolId: statebag.school.id});
-          break;
-        default:
-          $state.go('app.home', { schoolId: $state.params.schoolId });
-          break;
-      }
-
+    $scope.goToStudentList = function() {
+      $state.go('app.home', { schoolId: $state.params.schoolId });
       $scope.closeSizeNav();
     };
+  $scope.goToTeacherClasses = function() {
+    $state.go('app.teacherHome', {schoolId: statebag.school.id});
+    $scope.closeSizeNav();
+  }
     $scope.goToMySurveys = function() {
       $state.go('app.mySurveys', {});
       $scope.closeSizeNav();

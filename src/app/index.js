@@ -58,7 +58,8 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         data: {
           roles: [
             roles.TEACHER,
-            roles.SUPER_ADMIN
+            roles.SUPER_ADMIN,
+            roles.ADMIN
           ]
         }
       })

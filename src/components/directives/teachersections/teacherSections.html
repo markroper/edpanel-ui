@@ -4,5 +4,8 @@
     <br/>
     <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
   </div>
-  <section-grid ng-repeat="section in sections" section="section" promise="hwPromise" students="section.enrolledStudents"></section-grid>
+  <section-grid ng-show="!isNotTeacher" ng-repeat="section in sections" section="section" promise="hwPromise" students="section.enrolledStudents"></section-grid>
+  <div ng-show="isNotTeacher">
+    Sorry, it appears you don't teach any classes.
+  </div>
 </div>

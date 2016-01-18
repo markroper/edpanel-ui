@@ -1,24 +1,29 @@
 <div class="section-grid">
   <md-card>
     <md-card-content>
-      <h2 class="md-headline">
-        {{section.course.name}}
-        <md-tooltip>{{::section.name}}</md-tooltip>
-      </h2>
-      <div layout="row" layout-wrap layout-align="center start">
-        <div flex="33" class="grade-goal" style="position: relative">
-          <h3 class="md-subhead">Class Average</h3>
-          <span class="temp-Display">{{::section.aveGrade ? section.aveGrade + "%" : '--'}}</span>
+      <div layout="row" layout-wrap layout-align="center center">
+        <div flex="20" class="section-name">
+          <h3 class="md-subhead">Class Name</h3>
+          {{section.course.name}}
+          <md-tooltip>{{::section.name}}</md-tooltip>
         </div>
-        <div flex="33" class="grade-item">
-          <h3 class="md-subhead">Homework Completion</h3>
-          <span class="temp-Display">{{::section.HomeworkCompletion ? section.HomeworkCompletion + "%" : '--'}}</span>
-        </div>
-        <div flex="33" class="component-grades grade-item">
-          <h3 class="md-subhead">Average Absences</h3>
-          <span class="temp-Display">{{::section.Attendance ? section.Attendance  : '0'}}</span>
+        <div layout="row" layout-wrap layout-align="center start" flex="80">
+          <div ng-show="section.aveGrade" flex="33" style="position: relative">
+            <h3 class="md-subhead">Class Average</h3>
+            <span class="temp-Display">{{::section.aveGrade ? section.aveGrade + "%" : '--'}}</span>
+          </div>
+          <div flex="33">
+            <h3 class="md-subhead">Average Absences</h3>
+            <span class="temp-Display">{{::section.Attendance ? section.Attendance  : '0'}}</span>
+          </div>
+          <div ng-show="section.aveGrade" flex="33">
+            <h3 class="md-subhead">Homework Completion</h3>
+            <span class="temp-Display">{{::section.HomeworkCompletion ? section.HomeworkCompletion + "%" : '--'}}</span>
+          </div>
+
         </div>
       </div>
+
       </md-card-content>
 
     <md-button class="md-raised md-button-toggle md-ink-ripple assignment-toggler" ng-click="showStudents()">

@@ -11,7 +11,7 @@ angular.module('teacherdashboard')
         templateUrl: api.basePrefix + '/components/directives/teachersections/teacherSections.html',
         replace: true,
         link: function(scope) {
-          statebag.currentPage.name = 'Sections';
+          statebag.currentPage.name = 'My Sections';
 
           if(!statebag.school) {
             statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(function() {
@@ -189,13 +189,23 @@ angular.module('teacherdashboard')
               },
               //Success callback
               function(data){
-                statebag.currentSections = data;
+                if (data.length === 0) {
+                  scope.isNotTeacher = true;
+                }
+                else {
+                  statebag.currentSections = data;
+                  scope.isNotTeacher = false;
+                }
+
 
 
               },
               //Error callback
               function(){
                 console.log('failed to resolve the sections!');
+                scope.isNotTeacher = true;
+                //This was the loading bar goes away
+                scope.sections = true;
               }).$promise;
 
           }
