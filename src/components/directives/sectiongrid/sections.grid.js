@@ -24,7 +24,6 @@ angular.module('teacherdashboard')
           $window.ga('send', 'event', 'StudentSection', 'ShowAssignments', 'Show Assignments');
           $studentContainer.toggleClass(SLIDE_OPEN_CLASS);
           $studentContainer.toggleClass(SLIDE_CLOSED_CLASS);
-
           if($studentArrowIcon.hasClass(ROTATE)) {
             $studentArrowIcon.removeClass(ROTATE);
             $studentArrowIcon.addClass(ROTATE_COUNTERWISE);
