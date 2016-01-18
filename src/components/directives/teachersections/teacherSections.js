@@ -12,6 +12,13 @@ angular.module('teacherdashboard')
         replace: true,
         link: function(scope) {
           statebag.currentPage.name = 'Sections';
+
+          if(!statebag.school) {
+            statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(function() {
+                retrieveTeacherHomeData();
+            });
+          }
+
           scope.showFilter=true;
           scope.hwPromise= {};
           retrieveTeacherHomeData();
