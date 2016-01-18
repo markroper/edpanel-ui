@@ -19,13 +19,9 @@ angular.module('teacherdashboard')
         var ROTATE_COUNTERWISE = 'rotateCounterwise';
         var SLIDE_OPEN_CLASS = 'slide-open-students';
         var SLIDE_CLOSED_CLASS = 'slide-closed-students';
-        var SLIDE_OPEN_CLASS_MARGIN = 'slide-open-margin';
-        var SLIDE_CLOSED_CLASS_MARGIN = 'slide-closed-margin';
 
         scope.showStudents = function() {
           $window.ga('send', 'event', 'StudentSection', 'ShowAssignments', 'Show Assignments');
-          $studentContainer.toggleClass(SLIDE_CLOSED_CLASS_MARGIN);
-          $studentContainer.toggleClass(SLIDE_OPEN_CLASS_MARGIN);
           $studentContainer.toggleClass(SLIDE_OPEN_CLASS);
           $studentContainer.toggleClass(SLIDE_CLOSED_CLASS);
 
