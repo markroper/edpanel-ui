@@ -19,6 +19,9 @@ angular.module('teacherdashboard')
         $scope.newMessage = function() {
           //TODO: implement me
         };
+        $scope.dismissAll = function() {
+          //TODO: implement me
+        };
         $scope.sendMessage = function(m) {
           if(!n.subjectUserId) {
             $mdToast.show(
@@ -73,43 +76,6 @@ angular.module('teacherdashboard')
                   .action('OK')
                   .hideDelay(1500)
               );
-            });
-        };
-
-        $scope.dismissNotification = function(index, $event, supressToast) {
-          if($event) {
-            $event.stopPropagation();
-          }
-          var n = $scope.messageList[index];
-          api.dismissTriggeredNotification.put(
-            {
-              notificationId: n.notification.id,
-              triggeredId: n.id,
-              userId: authentication.identity().id
-            },
-            {},
-            //Success callback
-            function(){
-              $scope.messageList.splice(index, 1);
-              if(!supressToast) {
-                $mdToast.show(
-                  $mdToast.simple()
-                    .content('Notification dismissed')
-                    .action('OK')
-                    .hideDelay(1500)
-                );
-              }
-            },
-            //Error callback
-            function() {
-              if(!supressToast) {
-                $mdToast.show(
-                  $mdToast.simple()
-                    .content('Failed to reach server :(')
-                    .action('OK')
-                    .hideDelay(1500)
-                );
-              }
             });
         };
 
