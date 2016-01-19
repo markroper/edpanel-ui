@@ -30,6 +30,14 @@ angular.module('teacherdashboard')
         'put': { method: 'PUT', headers: {'Content-Type': 'application/json' }},
         'delete': { method: 'DELETE' }
       }),
+      messageThreads: $resource(base + '/messagethreads/:threadId', {}, {
+        'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
+        'delete': { method: 'DELETE' }
+      }),
+      messages: $resource(base + '/messagethreads/:threadId/messages/:messageId', {}, {
+        'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
+        'delete': { method: 'DELETE' }
+      }),
       //Survey
       survey: $resource(base + '/surveys/:surveyId', {},
         {

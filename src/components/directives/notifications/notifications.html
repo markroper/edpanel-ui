@@ -1,36 +1,16 @@
 <md-menu-bar class="notifications-menu">
   <md-menu>
-    <button ng-click="$mdOpenMenu($event)" layout layout-align="center center" aria-label="Notifications" class="notifications-circle" ng-class="{ 'active': notificationList.length}">
+    <button ng-click="$mdOpenMenu($event);renderNotifications();" layout layout-align="center center" aria-label="Notifications" class="notifications-circle" ng-class="{ 'active': notificationList.length}">
       <md-icon class="material-icons md-24">notifications</md-icon>
       <md-tooltip>notifications</md-tooltip>
     </button>
     <md-menu-content width="6">
-      <div layout layout-align="space-between center">
+      <div layout layout-align="space-between center" class="notification-list-header">
         <md-icon class="material-icons md-24 notification-settings-icon" ng-click="goToNotifications()">settings<md-tooltip>setup notifications</md-tooltip></md-icon>
         <span>EdPanel Notifications</span>
         <md-icon class="material-icons md-24 notification-settings-icon" ng-click="dismissAll()">clear_all<md-tooltip>dismiss all</md-tooltip></md-icon>
       </div>
-      <md-list class="notification-list">
-        <md-list-item layout="column" layout-align="start start" ng-repeat="n in notificationList">
-          <div flex class="notification md-list-item-text md-whiteframe-1dp" layout="column" layout-fill edpanel-click="toggleDetails(n, $event)">
-            <div edpanel-click="dismissNotification($index, $event)" aria-label="close" class="close-notification-details md-icon-button">
-              <md-icon md-font-set="material-icons">close</md-icon>
-            </div>
-            <div style="padding:15px;" layout="column" class="notification-desc" layout-wrap>
-              <span class="md-subhead no-select">{{::n.notification.name}}</span>
-              <span class="md-body-1">{{::notificationTypes[n.notification.measure]}} for {{::groupTypes(n)}}</span>
-              <span class="md-body-1 notification-detail">The notification threshold of {{::n.notification.triggerValue}} <span ng-show="summaryTypes[n.notification.subjects.type]">{{::aggFunctions[n.notification.aggregateFunction]}}</span>was crossed on {{::n.triggeredDate}} with the value {{::formatNumber(n.valueWhenTriggered)}}.</span>
-            </div>
-            <div ng-show="n.active" layout="column" layout-fill>
-              <div class="detailed-content"ng-show="n.active" layout layout-align="center center">DETAILED CONTENT HERE</div>
-              <div layout layout-align="center center">
-                <md-button class="notification-action">send message</md-button>
-                <md-button class="notification-action">set related goal</md-button>
-              </div>
-            </div>
-          </div>
-        </md-list-item>
-      </md-list>
+      <md-list class="notification-list"></md-list>
     </md-menu-content>
   </md-menu>
 </md-menu-bar>

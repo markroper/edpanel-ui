@@ -19,6 +19,10 @@
 }
 .notification {
   margin-bottom: 10px;
+  .message-container {
+    padding: 0px 20px;
+    background-color: $light-gray-color;
+  }
 }
 .notification-detail {
   color: rgba(0,0,0,0.54);
@@ -45,6 +49,9 @@
 }
 .notification-desc {
   cursor:pointer;
+}
+.notification-list-header {
+  width:500px;
 }
 .notification-list {
   padding-left:10px;
