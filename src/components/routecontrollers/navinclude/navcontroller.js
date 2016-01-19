@@ -1,6 +1,6 @@
 'use strict';
-angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager', 'authentication', 'UAService',
-function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authentication, UAService) {
+angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager', 'authentication', 'UAService', '$interval',
+function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authentication, UAService, $interval) {
     $scope.statebag = statebag;
     $scope.userRole = statebag.userRole;
     $scope.currentPage = statebag.currentPage;
@@ -9,12 +9,24 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
 
     //TODO: make notification loading dynamic, with websocket?
     $scope.notificationList = [];
+    $scope.messageList = [];
 
     api.getTriggeredNotifications.get(
       { userId: authentication.identity().id },
       function(resp){
         $scope.notificationList = resp;
       });
+    $interval(function(){
+      api.getTriggeredNotifications.get(
+        { userId: authentication.identity().id },
+        function(resp){
+          //If there are no notifications or the number cached is different than the number returned
+          //Reset the collection.
+          if(!$scope.notificationList || $scope.notificationList.length != resp.length) {
+            $scope.notificationList = resp;
+          }
+        });
+    }, 30000);
 
     //This base state should always redirect home...
     if($state.current.name === 'app') {

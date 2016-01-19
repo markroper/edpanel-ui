@@ -17,8 +17,8 @@ angular.module('teacherdashboard')
       }
     };
   })
-  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile', '$templateCache',
-    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile, $templateCache) {
+  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile',
+    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile) {
       return {
         scope: {
           notificationList: '='

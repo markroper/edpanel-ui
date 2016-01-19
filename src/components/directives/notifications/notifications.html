@@ -1,7 +1,8 @@
-<md-menu-bar class="notifications-menu">
+<md-menu-bar class="notifications-menu" style="padding:0px 10px;">
   <md-menu>
     <button ng-click="$mdOpenMenu($event);renderNotifications();" layout layout-align="center center" aria-label="Notifications" class="notifications-circle" ng-class="{ 'active': notificationList.length}">
-      <md-icon class="material-icons md-24">notifications</md-icon>
+      <md-icon class="material-icons md-24" ng-show="notificationList.length === 0">notifications</md-icon>
+      <div class="md-title" style="color:white; text-shadow: #000 .05em .05em .05em;" ng-show="notificationList.length > 0">{{notificationList.length > 9 ? '9+': notificationList.length }}</div>
       <md-tooltip>notifications</md-tooltip>
     </button>
     <md-menu-content width="6">

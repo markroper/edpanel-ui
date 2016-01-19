@@ -1,0 +1,63 @@
+.messages-menu {
+  .messages-circle {
+    height: 32px !important;
+    width: 32px !important;
+    border-radius: 16px !important;
+    background-color: transparent !important;
+    padding: 0px;
+    md-icon {
+      margin: 0 0 0 0;
+    }
+  }
+  .messages-circle.active {
+    background-color: $red-color !important;
+  }
+}
+.message-settings-icon {
+  margin: 0px 25px !important;
+  cursor: pointer;
+}
+.message {
+  margin-bottom: 10px;
+  .message-container {
+    padding: 0px 20px;
+    background-color: $light-gray-color;
+  }
+}
+.message-detail {
+  color: rgba(0,0,0,0.54);
+  max-width:500px;
+}
+.detailed-content {
+  padding:75px;
+  background-color: $light-gray-color;
+}
+.message-action {
+  span {
+    text-align: center;
+  }
+}
+.close-message-details {
+  cursor:pointer;
+  z-index: 200;
+  padding: 0px;
+  margin: 0px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 100;
+}
+.message-desc {
+  cursor:pointer;
+}
+.message-list-header {
+  width:500px;
+}
+.message-list {
+  padding-left:10px;
+  padding-right:10px;
+}
+.md-open-menu-container {
+  max-height:95%;
+  overflow:auto;
+}
