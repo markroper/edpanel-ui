@@ -44,6 +44,22 @@ angular.module('teacherdashboard')
         var lastYearToday = $window.moment().subtract(1, 'years');
         var currentYear = currentDate.year();
 
+        /**
+         * Expects input to be raw, which is one indexed not zero indexed
+         *
+         * @param month
+         * @returns {*}
+         */
+        function resolveMonthPosition(month) {
+          var returnVal;
+          if(month.getMonth() > currentDate.month()) {
+            returnVal = month.getMonth() - currentDate.month() - 1;
+          } else {
+            returnVal = 11 - currentDate.month() + month.getMonth();
+          }
+          return returnVal;
+        }
+
         var svg = d3.select(elem.find(CHORO_CONTAINER_SELECTOR)[0]).selectAll('svg')
             .data(d3.range(currentYear - 1, currentYear))
           .enter().append('svg')
@@ -61,12 +77,13 @@ angular.module('teacherdashboard')
             .attr('width', cellSize)
             .attr('height', cellSize)
             .attr('x', function(d) {
-              var monthPadding = 1.2 * cellSize*7 * ((month(d)-1) % (noMonthsInARow));
+            //CHANGE ME:
+              var monthPadding = 1.2 * cellSize*7 * (resolveMonthPosition(d) % (noMonthsInARow));
               return day(d) * cellSize + monthPadding;
             })
             .attr('y', function(d) {
-              var weekDiff = week(d) - week(new Date(year(d), month(d)-1, 1) );
-              var rowLevel = Math.ceil(month(d) / (noMonthsInARow));
+              var weekDiff = week(d) - week(new Date(year(d), month(d) - 1, 1) );
+              var rowLevel = Math.ceil((month(d)) / (noMonthsInARow));
               return (weekDiff*cellSize) + rowLevel*cellSize*8 - cellSize/2 - shiftUp;
             })
             .datum(format);
@@ -78,11 +95,11 @@ angular.module('teacherdashboard')
             .enter().append('text')
               .text(monthTitle)
               .attr('x', function(d) {
-                var monthPadding = 1.2 * cellSize*7* ((month(d)-1) % (noMonthsInARow));
+                var monthPadding = 1.2 * cellSize*7* ((resolveMonthPosition(d)) % (noMonthsInARow));
                 return monthPadding;
               })
               .attr('y', function(d) {
-                var weekDiff = week(d) - week(new Date(year(d), month(d)-1, 1) );
+                var weekDiff = week(d) - week(new Date(year(d), month(d) - 1, 1) );
                 var rowLevel = Math.ceil(month(d) / (noMonthsInARow));
                 return (weekDiff*cellSize) + rowLevel*cellSize*8 - cellSize - shiftUp;
               })
@@ -113,10 +130,15 @@ angular.module('teacherdashboard')
           });
           rect.attr('class', function(d) {
             var weekday = $window.moment(d).weekday();
+            var month = $window.moment(d).month();
+            var dayOfMonth = $window.moment(d).date();
             var colorVal = '11';
             //Only evaluate wekdays
             if(weekday !== 0 && weekday !== 6) {
-              if(behaviorByDate[d]) {
+              var now = $window.moment();
+              if(month === now.month() && dayOfMonth > now.date()) {
+                colorVal = '8';
+              } else if(behaviorByDate[d]) {
                 var size = behaviorByDate[d].length;
                 if(size >= scope.yellowToRed){
                   //multiple behavior events in one day is red
