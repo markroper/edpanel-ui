@@ -3,7 +3,7 @@ angular.module('teacherdashboard')
 .controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll',
   function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll) {
     $scope.$on('$viewContentLoaded', function() {
-      $window.ga('send', 'pageview', { page: $location.url() });
+      $window.ga('send', 'pageview', { page: "/ui/schools/*/student/*" });
     });
     $scope.showFilter=false;
     $scope.students = [];

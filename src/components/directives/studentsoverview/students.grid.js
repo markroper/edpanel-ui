@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window', 'consts',
-  function($state, statebag, api, $mdDialog, $compile, $timeout, $window, consts) {
+  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', 'analytics', 'consts','$window',
+  function($state, statebag, api, $mdDialog, $compile, $timeout, analytics, consts, $window) {
     return {
       scope: {
         studentsData: '=',
@@ -12,6 +12,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/studentsoverview/students.grid.html',
       replace: true,
       controller: function($scope) {
+        var PAGENAME = 'Student List';
         var GPA = 'GPA';
         var BEHAVIOR = 'Behavior';
         var HOMEWORK_COMPLETION = 'Homework Completion';
@@ -100,7 +101,18 @@ angular.module('teacherdashboard')
         $scope.addFilter = function() {
           if(!$scope.currentFilters[$scope.filter] && $scope.filter) {
             $scope.currentFilters[$scope.filter] = { type: $scope.filter };
-            $window.ga('send', 'event', 'Home', 'FilterStudents', 'Adds an advanced filter');
+
+            //Analytics code lives here
+            var label = $scope.filter.toUpperCase();
+            if ($scope.filter === HOMEWORK_COMPLETION) {
+              label = analytics.HOMEWORK_LABEL;
+
+            } else if  ($scope.filter === ABSENCES) {
+              label = analytics.ATTENDANCE_LABEL;
+            }
+            analytics.sendEvent(PAGENAME, analytics.ADD_FILTER, label);
+            //END ANALYTICS CODE
+
           }
         };
         var genderMapping = {
@@ -183,6 +195,7 @@ angular.module('teacherdashboard')
 
         //SORT RELATED
         $scope.setOrder = function(ev, keyToUse) {
+          analytics.sendEvent(PAGENAME, analytics.STUDENT_SORT, keyToUse.toUpperCase());
           var el = angular.element(ev.target);
           if($scope.sortElement) {
             $scope.sortElement.removeClass('desc');
@@ -211,6 +224,7 @@ angular.module('teacherdashboard')
         var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
+          analytics.sendEvent(PAGENAME, analytics.OPEN_STUDENT, analytics.STUDENT_LABEL);
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
         $scope.hideTray = function() {
@@ -271,19 +285,19 @@ angular.module('teacherdashboard')
           }
         };
         $scope.showBehaviorTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowBehavior', 'Open Behavior Tray');
+          analytics.sendEvent(PAGENAME, analytics.SHOW_BEHAVIOR, analytics.BEHAVIOR_LABEL);
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
         $scope.showHomeworkTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowHomework', 'Open HW Completion Tray');
+          analytics.sendEvent(PAGENAME, analytics.SHOW_HOMEWORK, analytics.HOMEWORK_LABEL);
           $scope.showTray(ev, student, hwCompletionChartHtml);
         };
         $scope.showGpaTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowGpa', 'Open GPA Tray');
+          analytics.sendEvent(PAGENAME, analytics.SHOW_GPA, analytics.GPA_LABEL);
           $scope.showTray(ev, student, gpaChartTemplate);
         };
         $scope.showAttendanceTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowAttendance', 'Open Attendance Tray');
+          analytics.sendEvent(PAGENAME, analytics.SHOW_ATTENDANCE, analytics.ATTENDANCE_LABEL);
           $scope.showTray(ev, student, attendanceTableHtml);
         };
       }
