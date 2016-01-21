@@ -1,11 +1,26 @@
 'use strict';
-angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager', 'authentication', 'UAService', '$interval',
-function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authentication, UAService, $interval) {
+angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager', 'authentication', 'UAService', 'consts', '$interval',
+function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authentication, UAService, consts, $interval) {
     $scope.statebag = statebag;
     $scope.userRole = statebag.userRole;
     $scope.currentPage = statebag.currentPage;
     $scope.theme = statebag.theme;
     $scope.UAService = UAService;
+
+    switch ($scope.userRole.toUpperCase()) {
+      case consts.roles.ADMIN:
+        $scope.homePageName = "Student List";
+        break;
+      case consts.roles.TEACHER:
+        $scope.homePageName = "Section List";
+        break;
+      case consts.roles.SUPER_ADMIN:
+        $scope.homePageName = "Student List";
+        break;
+      default:
+        $scope.homePageName = "Student List";
+        break;
+    }
 
     //TODO: make notification loading dynamic, with websocket?
     $scope.notificationList = [];
@@ -54,10 +69,14 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
       $mdSidenav(SIDE_NAV_NAME).toggle();
     };
 
-    $scope.goToHome = function() {
+    $scope.goToStudentList = function() {
       $state.go('app.home', { schoolId: $state.params.schoolId });
       $scope.closeSizeNav();
     };
+  $scope.goToTeacherClasses = function() {
+    $state.go('app.teacherHome', {schoolId: statebag.school.id});
+    $scope.closeSizeNav();
+  }
     $scope.goToMySurveys = function() {
       $state.go('app.mySurveys', {});
       $scope.closeSizeNav();

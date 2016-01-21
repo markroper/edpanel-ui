@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentsection', [ '$window','statebagApiManager' , 'api', '$compile','$timeout', '$mdToast',
-  function($window, statebagApiManager, api, $compile, $timeout, mdToast) {
+  .directive('studentsection', [ 'analytics','statebagApiManager' , 'api', '$compile','$timeout', '$mdToast','$window',
+  function(analytics, statebagApiManager, api, $compile, $timeout, mdToast, $window) {
     return {
       scope: {
         section: '=',
@@ -12,6 +12,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/studentsection/studentsection.html',
       replace: true,
       link: function(scope, elem) {
+        var GA_PAGE_NAME = 'StudentSection';
         var scatterPlotHtml = '<scatterplot chart-data-promise="section.assignmentsPromise" section="section"></scatterplot>';
         var $assignmentsContainer = angular.element(elem).find('.assignment-scores');
         var $assignmentArrowIcon = angular.element(elem).find('.arrow-icon');
@@ -32,7 +33,7 @@ angular.module('teacherdashboard')
         };
         scope.editGoal = function(section) {
           //Call api to edit the goal
-          $window.ga('send', 'event', 'Goal', 'EditGoal', 'Edit Goal');
+          analytics.sendEvent(GA_PAGE_NAME,analytics.EDIT_GOAL, analytics.GOAL_LABEL);
           section.editActive = true;
 
         };
@@ -69,7 +70,7 @@ angular.module('teacherdashboard')
         };
 
         scope.showAssignments = function() {
-          $window.ga('send', 'event', 'StudentSection', 'ShowAssignments', 'Show Assignments');
+          analytics.sendEvent(GA_PAGE_NAME, analytics.SHOW_ASSIGNMENTS, analytics.ASSIGNMENT_LABEL);
           if($assignmentsContainer.children().length === 0) {
             $assignmentsContainer.append($compile(scatterPlotHtml)(scope));
           }

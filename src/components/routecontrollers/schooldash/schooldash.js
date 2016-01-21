@@ -1,11 +1,12 @@
 'use strict';
 angular.module('teacherdashboard')
-  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', '$location',
-    function ($scope, api, statebag, $q, $window, $location) {
+  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', 'analytics',
+    function ($scope, api, statebag, $q, $window, analytics) {
       $scope.$on('$viewContentLoaded', function() {
-        $window.ga('send', 'pageview', { page: $location.url() });
+        $window.ga('send', 'pageview', { page: "/ui/schools/*/dashboard" });
       });
       statebag.currentPage.name = 'School Dashboard';
+      var GA_PAGE_NAME = 'School Dashboard';
       var min = $window.moment(statebag.currentTerm.startDate).valueOf();
       var max = $window.moment(statebag.currentTerm.endDate).valueOf();
       var teacherBehaviorDataDeferred = $q.defer();
@@ -41,6 +42,7 @@ angular.module('teacherdashboard')
       };
 
       $scope.updateDemeritTerm = function() {
+        analytics.sendEvent(GA_PAGE_NAME, analytics.CHANGE_TERM, analytics.BEHAVIOR_LABEL);
         var meritDemeritsPromises = [];
         makeMeritDemeritRequests(meritDemeritsPromises);
 
@@ -120,7 +122,6 @@ angular.module('teacherdashboard')
       };
 
       $scope.changeFailingBreakdown = function() {
-
         var failingPromises = [];
 
         makeFailureRequests(failingPromises, hackyMap[$scope.failingTerm.id]);
@@ -471,5 +472,23 @@ angular.module('teacherdashboard')
 
         return personQuery;
       }
+
+      //ALL BELOW HERE LIVES ANALYTICS
+      $scope.$watch('failingTerm', function() {
+        analytics.sendEvent(GA_PAGE_NAME,analytics.CHANGE_TERM, analytics.FAILURE_LABEL);
+      });
+
+      $scope.$watch('failingBreakdown', function() {
+        analytics.sendEvent(GA_PAGE_NAME, analytics.CHANGE_BREAKDOWN, analytics.FAILURE_LABEL);
+      });
+
+      $scope.$watch('attendanceTerm', function() {
+        analytics.sendEvent(GA_PAGE_NAME, analytics.CHANGE_TERM, analytics.ATTENDANCE_LABEL);
+      });
+
+      $scope.$watch('attendanceBreakdown', function() {
+        analytics.sendEvent(GA_PAGE_NAME, analytics.CHANGE_BREAKDOWN, analytics.ATTENDANCE_LABEL);
+      });
+
 
     }]);

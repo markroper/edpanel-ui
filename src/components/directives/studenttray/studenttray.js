@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentTray', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window','authentication',
-  function($state, statebag, api, $mdDialog, $compile, $timeout, $window, authentication) {
+  .directive('studentTray', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', 'analytics','authentication',
+  function($state, statebag, api, $mdDialog, $compile, $timeout, analytics, authentication) {
     return {
       scope: {
         studentsData: '=',
@@ -13,6 +13,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/studenttray/studenttray.html',
       replace: true,
       controller: function($scope) {
+        var PAGE_NAME = 'Teacher Dashboard';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" y-data-label="Homework Completion" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
@@ -23,6 +24,7 @@ angular.module('teacherdashboard')
         var cell;
         $scope.goToStudent = function(student) {
           statebag.currentStudent = student;
+          analytics.sendEvent(PAGE_NAME, analytics.OPEN_STUDENT, analytics.STUDENT_LABEL);
           $state.go('app.student', { schoolId: $state.params.schoolId, studentId: student.id });
         };
         $scope.showTray = function(ev, student, template) {
@@ -93,20 +95,19 @@ angular.module('teacherdashboard')
           }
         };
         $scope.showBehaviorTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowBehavior', 'Open Behavior Tray');
+          analytics.sendEvent(PAGE_NAME, analytics.SHOW_BEHAVIOR, analytics.BEHAVIOR_LABEL);
           $scope.showTray(ev, student, behaviorCalendarHtml);
         };
         $scope.showHomeworkTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowHomework', 'Open HW Completion Tray');
+          analytics.sendEvent(PAGE_NAME, analytics.SHOW_HOMEWORK, analytics.HOMEWORK_LABEL);
           $scope.showTray(ev, student, hwCompletionChartHtml);
         };
         $scope.showAttendanceTray = function(ev, student) {
-          $window.ga('send', 'event', 'Home', 'ShowAttendance', 'Open Attendance Tray');
+          analytics.sendEvent(PAGE_NAME, analytics.SHOW_ATTENDANCE, analytics.ATTENDANCE_LABEL);
           $scope.showTray(ev, student, attendanceTableHtml);
         };
         $scope.showGradeTray = function(ev, student) {
-          //TODO Change this analytics event
-          $window.ga('send', 'event', 'Home', 'ShowGpa', 'Open GPA Tray');
+          analytics.sendEvent(PAGE_NAME, analytics.SHOW_GRADE, analytics.GRADE_LABEL);
           $scope.showTray(ev, student, gradeChartTemplate);
         };
 

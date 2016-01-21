@@ -4,7 +4,7 @@ angular.module('teacherdashboard')
   function ($scope, api, $state, statebag, $window, $location, authentication, $compile, $mdToast, statebagapimanager) {
     statebag.currentPage.name = 'My Surveys';
     $scope.$on('$viewContentLoaded', function() {
-      $window.ga('send', 'pageview', { page: $location.url() });
+      $window.ga('send', 'pageview', { page: "/ui/mysurveys" });
     });
     var surveyBuilderDirective = '<survey-builder survey="survey" survey-type="surveyType" school="school" sections="sections" dismiss="dismissSurveyResults"></survey-builder>';
     //We need student ID, school, currentYear, currentTerm in order to proceed

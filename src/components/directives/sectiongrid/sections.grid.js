@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('sectionGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', '$window',
-  function($state, statebag, api, $mdDialog, $compile, $timeout, $window) {
+  .directive('sectionGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', 'analytics',
+  function($state, statebag, api, $mdDialog, $compile, $timeout, analytics) {
     return {
       scope: {
         section: '=',
@@ -13,6 +13,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/sectiongrid/sections.grid.html',
       replace: true,
       link: function(scope, elem) {
+        var GA_PAGE_NAME = 'Teacher Dashboard';
         var $studentContainer = angular.element(elem).find('.student-slide');
         var $studentArrowIcon = angular.element(elem).find('.arrow-icon');
         var ROTATE = 'rotate';
@@ -21,7 +22,8 @@ angular.module('teacherdashboard')
         var SLIDE_CLOSED_CLASS = 'slide-closed-students';
 
         scope.showStudents = function() {
-          $window.ga('send', 'event', 'StudentSection', 'ShowAssignments', 'Show Assignments');
+          analytics.sendEvent(GA_PAGE_NAME,analytics.SHOW_STUDENTS,analytics.SHOW_STUDENTS);
+
           $studentContainer.toggleClass(SLIDE_OPEN_CLASS);
           $studentContainer.toggleClass(SLIDE_CLOSED_CLASS);
           if($studentArrowIcon.hasClass(ROTATE)) {
