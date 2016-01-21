@@ -1,7 +1,7 @@
 <md-toolbar layout="row" md-theme="{{theme}}">
   <md-icon md-ink-ripple md-font-set="material-icons" ng-click="toggleSideNav()" class="material-icons md-24 arrow-icon"> menu </md-icon>
   <div style="outline:none;" class="md-toolbar-tools no-select" tabindex="0">
-    <span flex="none" class="no-select" style="outline:none; cursor:pointer;" ng-click="goToHome()">
+    <span flex="none" class="no-select" style="outline:none; cursor:pointer;" ng-click="goToStudentList()">
       {{ statebag.school.name.substring(0, 14) || 'District' }}
       <md-tooltip ng-show="statebag.school && statebag.school.name.length > 14  ">{{statebag.school.name}}</md-tooltip>
     </span>
