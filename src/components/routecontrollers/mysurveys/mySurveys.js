@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('teacherdashboard')
 .controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication','$compile', '$mdToast', 'statebagApiManager',
   function ($scope, api, $state, statebag, $window, $location, authentication, $compile, $mdToast, statebagapimanager) {

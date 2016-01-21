@@ -1,0 +1,200 @@
+<div class="create-notification md-whiteframe-1dp">
+  <md-icon class="dismiss-notification" md-font-set="material-icons" ng-click="dismissNotification()">
+    clear
+    <md-tooltip>Dismiss</md-tooltip>
+  </md-icon>
+  <div layout="column" class="type-required">
+    <div style="padding-bottom: 20px;" flex="none" class="md-headline" style="padding-right:25px;">Create/Edit Notification</div>
+    <div layout layout-align="center center">
+      <md-input-container class="md-icon-float md-block notification-name">
+        <label>Notification name</label>
+        <input ng-model="notificationDraft.name" type="text">
+      </md-input-container>
+    </div>
+
+    <div class="create-section">
+      <h4 class="md-title">Notification type</h4>
+      <md-input-container>
+        <label>Choose type</label>
+        <md-select ng-model="notificationDraft.measure">
+          <md-option value="GPA">GPA</md-option>
+          <md-option value="SECTION_GRADE">Section grade</md-option>
+          <md-option value="ASSIGNMENT_GRADE">Assignment grade</md-option>
+          <md-option value="BEHAVIOR_SCORE">Behavior score</md-option>
+          <md-option value="HOMEWORK_COMPLETION">Homework completion</md-option>
+          <md-option value="SCHOOL_ABSENCE">Daily absenses</md-option>
+          <md-option value="SCHOOL_TARDY">Daily tardies</md-option>
+          <md-option value="SECTION_ABSENCE">Section absences</md-option>
+          <md-option value="SECTION_TARDY">Section tardies</md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container
+          ng-if="notificationDraft.measure === 'SECTION_GRADE' ||
+            notificationDraft.measure === 'SECTION_ABSENCE' ||
+            notificationDraft.measure === 'SECTION_TARDY'">
+        <label>Choose section</label>
+        <md-select ng-model="notificationDraft.section">
+          <md-option ng-repeat="section in sections" ng-value="section">{{section.name}}</md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+
+    <div class="create-section" ng-if="notificationDraft.measure">
+      <h4 class="md-title">Trigger value</h4>
+      <div layout layout-align="center center">
+        <md-input-container class="md-icon-float md-block trigger-value">
+          <label>Set trigger value</label>
+          <input ng-model="notificationDraft.triggerValue" type="number" step="0.1">
+          <div class="md-caption">Value that triggers notification</div>
+        </md-input-container>
+        <div  layout="column" layout-align="center center">
+          <md-radio-group ng-model="notificationDraft.aboveBelow" class="above-below">
+            <md-radio-button value="above">Notify when above trigger</md-radio-button>
+            <md-radio-button value="below">Notify when below trigger</md-radio-button>
+          </md-radio-group>
+        </div>
+      </div>
+      <div layout layout-align="center center" layout-wrap>
+        <md-checkbox style="margin-top: 10px;" ng-model="notificationDraft.triggerOverTime" aria-label="time window">
+          Trigger on change over time
+        </md-checkbox>
+        <div flex="100" layout layout-align="space-around center" ng-if="notificationDraft.triggerOverTime" style="padding: 15px; background: #F7F7F7;">
+          <md-radio-group ng-model="notificationDraft.triggerIsPercent" class="above-below">
+            <md-radio-button value="percent">Trigger value represents % change</md-radio-button>
+            <md-radio-button value="difference">Trigger value represents difference</md-radio-button>
+          </md-radio-group>
+          <md-input-container>
+            <label>Choose time window</label>
+            <md-select ng-model="notificationDraft.window">
+              <md-option value="DAY">Day</md-option>
+              <md-option value="WEEK">Week</md-option>
+              <md-option value="MONTH">Month</md-option>
+              <md-option value="TERM">School term</md-option>
+              <md-option value="YEAR">School year</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="create-section">
+      <h4 class="md-title">Student(s) to measure</h4>
+      <md-input-container>
+        <label>Who to measure</label>
+        <md-select ng-model="notificationDraft.subjects.type">
+          <md-option value="SINGLE_STUDENT">A single student</md-option>
+          <md-option value="SECTION_STUDENTS">Students in a section</md-option>
+          <md-option value="FILTERED_STUDENTS">A filtered list of students</md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container ng-if="
+            notificationDraft.subjects.type === 'FILTERED_STUDENTS' ||
+            notificationDraft.subjects.type === 'SECTION_STUDENTS'">
+        <label>Aggregate function</label>
+        <md-select ng-model="notificationDraft.aggregateFunction">
+          <md-option value="ALERT_PER_STUDENT">One alert per student</md-option>
+          <md-option value="AVG">Average student values</md-option>
+          <md-option value="SUM">Sum of student values</md-option>
+        </md-select>
+      </md-input-container>
+      <div flex="100" ng-show="notificationDraft.subjects.type === 'FILTERED_STUDENTS'" layout="column" style="padding:15px; background:#F7F7F7;">
+        <div class="md-body-2">Student List Filters</div>
+        <div class="md-caption" style="max-width:600px;">
+          Each select menu allows you to make none or many selections from that menu. Only students matching
+          at least one choice from each filter menu (where a at least one selection is chosen) will be included in
+          the filtered group. For example choosing black and asian for race and also 'english language learner'
+          defines the group of students who are black or asian and who are also english language learners.</div>
+        <div layout>
+          <md-input-container flex="50">
+            <label>Gender filters</label>
+            <md-select multiple ng-model="notificationDraft.filters.genders">
+              <md-option value="MALE">male</md-option>
+              <md-option value="FEMALE">female</md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container flex="50">
+            <label>Race filters</label>
+            <md-select multiple ng-model="notificationDraft.filters.races">
+              <md-option value="B">Black</md-option>
+              <md-option value="W">White</md-option>
+              <md-option value="A">Asian</md-option>
+              <md-option value="I">American Indian</md-option>
+              <md-option value="P">Pacific Islander</md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container flex="50">
+            <label>Ethnicity filters</label>
+            <md-select multiple ng-model="notificationDraft.filters.ethnicities">
+              <md-option value="lATINO">latino</md-option>
+              <md-option value="NON_LATINO">not latino</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <div>
+          <md-input-container flex="50">
+            <label>Graduation year filters</label>
+            <md-select multiple ng-model="notificationDraft.filters.years">
+              <md-option ng-repeat="year in years" value="{{year}}">{{year}}</md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container flex="50">
+            <label>English language learners filters</label>
+            <md-select multiple ng-model="notificationDraft.filters.ell">
+              <md-option value="ELL">ELL</md-option>
+              <md-option value="NON_ELL">Not ELL</md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container flex="50">
+            <label>Special education filters</label>
+            <md-select multiple ng-model="notificationDraft.filters.sped">
+              <md-option value="SPED">Special Education</md-option>
+              <md-option value="NON_SPED">Not Special Education</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </div>
+      <md-input-container flex="50" ng-if="notificationDraft.subjects.type === 'SECTION_STUDENTS'">
+        <label>Choose section</label>
+        <md-select ng-model="notificationDraft.subjects.section">
+          <md-option ng-repeat="section in sections" ng-value="section">{{section.name}}</md-option>
+        </md-select>
+      </md-input-container>
+      <md-autocomplete
+        ng-if="notificationDraft.subjects.type === 'SINGLE_STUDENT'"
+        md-selected-item="notificationDraft.subjects.student"
+        md-search-text-change="searchTextChange(ctrl.searchText)"
+        md-search-text="searchText"
+        md-selected-item-change="selectedItemChange(item)"
+        md-items="item in querySearch(searchText)"
+        md-item-text="item.name"
+        md-min-length="0"
+        placeholder="Choose student">
+        <md-item-template>
+          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
+        </md-item-template>
+        <md-not-found>
+          No students matching "{{searchText}}" were found.
+        </md-not-found>
+      </md-autocomplete>
+    </div>
+
+    <div class="create-section">
+      <h4 class="md-title">Who to notify</h4>
+      <md-input-container flex="50">
+        <label>Who to notify</label>
+        <md-select ng-model="notificationDraft.subscribers">
+          <md-option value="SAME_AS_SUBJECTS">Alert the students</md-option>
+          <md-option value="ALERT_ME">Alert me</md-option>
+          <md-option value="SCHOOL_TEACHERS">Alert all teachers</md-option>
+          <md-option value="SCHOOL_ADMINISTRATORS">Alert all administrators</md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+
+    <div ng-show="errorMessage" style="color:red;">{{errorMessage}}</div>
+    <div class="create-section">
+      <md-button class="md-raised md-primary" ng-click="prepareAndSave()">Submit</md-button>
+      <md-button class="md-raised" ng-click="dismissNotification()">cancel</md-button>
+    </div>
+  </div>
+</div>

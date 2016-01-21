@@ -1,30 +1,30 @@
-.notifications-menu {
-  .notifications-circle {
+.messages-menu {
+  .messages-circle {
     height: 32px !important;
     width: 32px !important;
     border-radius: 16px !important;
-    background-color: $gray-headline !important;
+    background-color: transparent !important;
     padding: 0px;
     md-icon {
       margin: 0 0 0 0;
     }
   }
-  .notifications-circle.active {
+  .messages-circle.active {
     background-color: $red-color !important;
   }
 }
-.notification-settings-icon {
+.message-settings-icon {
   margin: 0px 25px !important;
   cursor: pointer;
 }
-.notification {
+.message {
   margin-bottom: 10px;
   .message-container {
     padding: 0px 20px;
     background-color: $light-gray-color;
   }
 }
-.notification-detail {
+.message-detail {
   color: rgba(0,0,0,0.54);
   max-width:500px;
 }
@@ -32,12 +32,12 @@
   padding:75px;
   background-color: $light-gray-color;
 }
-.notification-action {
+.message-action {
   span {
     text-align: center;
   }
 }
-.close-notification-details {
+.close-message-details {
   cursor:pointer;
   z-index: 200;
   padding: 0px;
@@ -47,13 +47,13 @@
   right: 5px;
   z-index: 100;
 }
-.notification-desc {
+.message-desc {
   cursor:pointer;
 }
-.notification-list-header {
+.message-list-header {
   width:500px;
 }
-.notification-list {
+.message-list {
   padding-left:10px;
   padding-right:10px;
 }

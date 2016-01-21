@@ -1,37 +1,17 @@
-<md-menu-bar class="notifications-menu">
+<md-menu-bar class="notifications-menu" style="padding:0px 10px;">
   <md-menu>
-    <button ng-click="$mdOpenMenu($event)" layout layout-align="center center" aria-label="Notifications" class="notifications-circle" ng-class="{ 'active': notificationList.length}">
-      <md-icon class="material-icons md-24">notifications</md-icon>
+    <button ng-click="$mdOpenMenu($event);renderNotifications();" layout layout-align="center center" aria-label="Notifications" class="notifications-circle" ng-class="{ 'active': notificationList.length}">
+      <md-icon class="material-icons md-24" ng-show="notificationList.length === 0">notifications</md-icon>
+      <div class="md-title" style="color:white; text-shadow: #000 .05em .05em .05em;" ng-show="notificationList.length > 0">{{notificationList.length > 9 ? '9+': notificationList.length }}</div>
       <md-tooltip>notifications</md-tooltip>
     </button>
     <md-menu-content width="6">
-      <div layout layout-align="space-between center">
-        <md-icon class="material-icons md-24 notification-settings-icon">settings</md-icon>
+      <div layout layout-align="space-between center" class="notification-list-header">
+        <md-icon class="material-icons md-24 notification-settings-icon" ng-click="goToNotifications()">settings<md-tooltip>setup notifications</md-tooltip></md-icon>
         <span>EdPanel Notifications</span>
-        <md-icon class="material-icons md-24 notification-settings-icon" ng-click="dismissAll()">clear_all</md-icon>
+        <md-icon class="material-icons md-24 notification-settings-icon" ng-click="dismissAll()">clear_all<md-tooltip>dismiss all</md-tooltip></md-icon>
       </div>
-      <div layout layout-align="center center" class="md-title" style="color: red;">UNDER DEVELOPMENT</div>
-      <md-list class="notification-list">
-        <md-list-item layout="column" layout-align="start start" ng-repeat="notification in notificationList">
-          <div flex class="notification md-list-item-text md-whiteframe-1dp" layout="column" layout-fill edpanel-click="toggleDetails(notification, $event)">
-            <div edpanel-click="dismissNotification($index, $event)" aria-label="close" class="close-notification-details md-icon-button">
-              <md-icon md-font-set="material-icons">close</md-icon>
-            </div>
-            <div style="padding:15px;" layout="column" class="notification-desc">
-              <span class="md-subhead no-select">{{notification.title}}</span>
-              <span class="md-body-1">{{notification.type}} {{notification.measure}}</span>
-              <span class="md-body-1 notification-detail">{{notification.message}}</span>
-            </div>
-            <div ng-show="notification.active" layout="column" layout-fill>
-              <div class="detailed-content"ng-show="notification.active" layout layout-align="center center">DETAILED CONTENT HERE</div>
-              <div layout layout-align="center center">
-                <md-button class="notification-action">send message</md-button>
-                <md-button class="notification-action">set related goal</md-button>
-              </div>
-            </div>
-          </div>
-        </md-list-item>
-      </md-list>
+      <md-list class="notification-list"></md-list>
     </md-menu-content>
   </md-menu>
 </md-menu-bar>

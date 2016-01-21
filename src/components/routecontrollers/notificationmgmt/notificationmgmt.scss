@@ -1,0 +1,42 @@
+.notification-mgmt {
+  .notification-table > div.odd {
+    background: white;
+  }
+  .notification-table > div.odd {
+    background: $row-gray;
+  }
+
+  text-align: center;
+  .notification {
+    .edit-btn {
+      background-color: #c9c9c9 !important;
+    }
+    .edit-btn:hover {
+      background-color: #A3A3A3 !important;
+    }
+    .delete-btn {
+      background-color: #FFA68A !important;
+    }
+    .delete-btn:hover {
+      background-color: #FF5C29 !important;
+    }
+    button {
+      margin: 8px 8px;
+    }
+    button:hover {
+      margin: 8px 8px;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .notification-table{ width: 550px; }
+}
+
+@media (min-width: 701px) and (max-width: 959px) {
+  .notification-table{ width: 650px; }
+}
+
+@media (min-width: 960px) {
+  .notification-table{ width: 900px; }
+}

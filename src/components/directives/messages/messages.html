@@ -1,0 +1,19 @@
+<md-menu-bar class="messages-menu" style="padding:0px 10px;">
+  <md-menu>
+    <button ng-click="$mdOpenMenu($event);renderMessages();" layout layout-align="center center" aria-label="Messages" class="messages-circle" ng-class="{ 'active': messageList.length}">
+      <md-icon class="material-icons md-24" ng-show="messageList.length === 0"> chat_bubble </md-icon>
+      <div class="md-title" style="color:white; text-shadow: #000 .05em .05em .05em;" ng-show="messageList.length > 0">{{messageList.length > 9 ? '9+': messageList.length }}</div>
+      <md-tooltip>messages</md-tooltip>
+    </button>
+    <md-menu-content width="6">
+      <div layout layout-align="space-between center" class="message-list-header">
+        <md-icon class="material-icons md-24 message-settings-icon" ng-click="newMessage()">add<md-tooltip>new conversation</md-tooltip></md-icon>
+        <span>Messages</span>
+        <md-icon class="material-icons md-24 message-settings-icon" ng-click="dismissAll()">clear_all<md-tooltip>mark all as read</md-tooltip></md-icon>
+      </div>
+      <md-list class="message-list">
+        <md-list-item>Under construction</md-list-item>
+      </md-list>
+    </md-menu-content>
+  </md-menu>
+</md-menu-bar>

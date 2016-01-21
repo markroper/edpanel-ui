@@ -75,6 +75,20 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
           ]
         }
       })
+      .state('app.myNotifications', {
+        url: 'schools/:schoolId/notifications',
+        templateUrl: rootUrl + '/components/routecontrollers/notificationmgmt/notificationmgmt.html',
+        controller: 'NotificationMgmt',
+        data: {
+          roles: [
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.STUDENT,
+            roles.GUARDIAN,
+            roles.SUPER_ADMIN
+          ]
+        }
+      })
       .state('app.mySurveyResponses', {
         url: 'mysurveyresponses',
         templateUrl: rootUrl + '/components/routecontrollers/mysurveyresponses/mySurveyResponses.html',
@@ -231,6 +245,17 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
     return {
       $get: function () {
         return {
+          notificationTypes: {
+            'GPA': 'GPA',
+            'SECTION_GRADE': 'Class grade',
+            'ASSIGNMENT_GRADE': 'Assignment grade',
+            'BEHAVIOR_SCORE': 'Behavior score',
+            'HOMEWORK_COMPLETION': 'Homework completion',
+            'SCHOOL_ABSENCE': 'Daily absences',
+            'SCHOOL_TARDY': 'Daily tardies',
+            'SECTION_ABSENCE': 'Class absences',
+            'SECTION_TARDY': 'Class tardies'
+          },
           roles: {
             ADMIN:'ADMINISTRATOR',
             TEACHER: 'TEACHER',

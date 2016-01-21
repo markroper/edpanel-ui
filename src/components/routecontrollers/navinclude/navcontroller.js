@@ -1,6 +1,6 @@
 'use strict';
-angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager', 'authentication', 'UAService', 'consts',
-function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authentication, UAService, consts) {
+angular.module('teacherdashboard').controller('NavCtrl', ['$scope', '$state', '$mdSidenav', 'api', 'statebag', 'statebagApiManager', 'authentication', 'UAService', 'consts', '$interval',
+function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authentication, UAService, consts, $interval) {
     $scope.statebag = statebag;
     $scope.userRole = statebag.userRole;
     $scope.currentPage = statebag.currentPage;
@@ -23,11 +23,26 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
     }
 
     //TODO: make notification loading dynamic, with websocket?
-    $scope.notificationList = [
-      { title: 'Mark Roper - homework', type:'STUDENT', id:1, measure:'HOMEWORK', message:'Homework completion up 10% in the last 7 days', studentId: 1 },
-      { title: 'Mark Roper - pride score', type:'STUDENT', id:1, measure:'BEHAVIOR', message:'Mark Roper\'s pride score of 70 this week is 25% lower than his average', studentId: 1 },
-      { title: '9th Grade - GPA', type:'GRADE LEVEL', measure:'GPA', id: 2, schoolId: 1, gradeId: 2, message: 'Average 9th grade GPA at Excel declined 0.1 this quarter' }
-    ];
+    $scope.notificationList = [];
+    $scope.messageList = [];
+
+    api.getTriggeredNotifications.get(
+      { userId: authentication.identity().id },
+      function(resp){
+        $scope.notificationList = resp;
+      });
+    $interval(function(){
+      api.getTriggeredNotifications.get(
+        { userId: authentication.identity().id },
+        function(resp){
+          //If there are no notifications or the number cached is different than the number returned
+          //Reset the collection.
+          if(!$scope.notificationList || $scope.notificationList.length != resp.length) {
+            $scope.notificationList = resp;
+          }
+        });
+    }, 30000);
+
     //This base state should always redirect home...
     if($state.current.name === 'app') {
       //TODO: for now we just grab the first school in the district. Need a better way
@@ -72,6 +87,10 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
     };
     $scope.goToSchoolDash = function() {
       $state.go('app.schoolDash', { schoolId: $state.params.schoolId });
+      $scope.closeSizeNav();
+    };
+    $scope.goToNotifications = function() {
+      $state.go('app.myNotifications', { schoolId: $state.params.schoolId });
       $scope.closeSizeNav();
     };
     $scope.goToAdmin = function() {

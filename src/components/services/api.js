@@ -12,11 +12,37 @@ angular.module('teacherdashboard')
     return {
       login: $resource(base + '/login'),
       logout: $resource(base + '/logout'),
+      //Notifications
+      getTriggeredNotifications: $resource(base + '/notifications/users/:userId/triggerednotifications', {}, {
+        'get': { isArray: true }
+      }),
+      dismissTriggeredNotification: $resource(
+        base + '/notifications/:notificationId/triggerednotifications/:triggeredId/users/:userId', {}, {
+          'put': { method: 'PUT' }
+        }),
+      notificationsForUser: $resource(base + '/notifications/users/:userId', {}, {
+        'get': { method: 'GET', isArray: true }
+      }),
+      notifications: $resource(base + '/notifications/:notificationId', {}, {
+        'getAll': { method: 'GET', isArray: true },
+        'get': { method: 'GET' },
+        'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
+        'put': { method: 'PUT', headers: {'Content-Type': 'application/json' }},
+        'delete': { method: 'DELETE' }
+      }),
+      messageThreads: $resource(base + '/messagethreads/:threadId', {}, {
+        'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
+        'delete': { method: 'DELETE' }
+      }),
+      messages: $resource(base + '/messagethreads/:threadId/messages/:messageId', {}, {
+        'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
+        'delete': { method: 'DELETE' }
+      }),
       //Survey
       survey: $resource(base + '/surveys/:surveyId', {},
         {
           'get': { isArray: true },
-          'getOne': { methos: 'GET' },
+          'getOne': { method: 'GET' },
           'post': { method: 'POST', headers: {'Content-Type': 'application/json' }},
           'delete': { method: 'DELETE' }
         }),
