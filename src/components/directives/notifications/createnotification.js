@@ -91,6 +91,7 @@ angular.module('teacherdashboard')
               for(var i = 0; i < $scope.sections.length; i++){
                 if($scope.sections[i].id === $scope.notification.subjects.section.id) {
                   d.subjects.section = $scope.sections[i];
+                  break;
                 }
               }
             } else {
@@ -125,7 +126,7 @@ angular.module('teacherdashboard')
           var n = $scope.notification;
           if(n.subscribers.type === n.subjects.type) {
             d.subscribers = SAME_AS_SUBJECTS;
-          } if(n.subscribers.type === SINGLE_STUDENT){
+          } else if(n.subscribers.type === SINGLE_STUDENT){
             if(authentication.identity().id === n.subscribers.student.id) {
               d.subscribers = ALERT_ME;
             } else {
@@ -148,6 +149,7 @@ angular.module('teacherdashboard')
           }
           //deal with time window
           if(n.window) {
+            d.triggerOverTime = true;
             d.window = n.window.window;
             if(n.window.triggerIsPercent) {
               d.triggerIsPercent = percent;
@@ -283,7 +285,7 @@ angular.module('teacherdashboard')
           } else if(draft.subjects.type === SINGLE_STUDENT) {
             $scope.notification.subjects.student = draft.subjects.student;
           } else if(draft.subjects.type === FILTERED_STUDENTS && draft.filters) {
-            if(draft.filters.genders & draft.filters.genders.length === 1 ) {
+            if(draft.filters.genders && draft.filters.genders.length === 1 ) {
               $scope.notification.subjects.gender = draft.filters.genders[0];
             }
             if(draft.filters.races) {
