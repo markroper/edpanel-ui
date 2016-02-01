@@ -76,7 +76,7 @@
         </div>
 			</div>
       <div class="table-row" layout="row" layout-wrap ng-repeat="student in (filteredStudentData = (studentsData | orderBy:order | filter:search:strict | filter:filterStudents) | limitTo: limit) track by student.id">
-        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="100" ng-show="showFilter">
+        <div class="table-cell" flex="20" flex-sm="100" ng-show="showFilter">
           <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
             <md-button md-no-ink class="md-primary student-name" ng-click="goToStudent(student)">
             {{::student.name}}
