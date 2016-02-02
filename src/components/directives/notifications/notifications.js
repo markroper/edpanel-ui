@@ -42,8 +42,12 @@ angular.module('teacherdashboard')
             'AVG':'(average) ',
             'SUM':'(sum) '
           };
-          $scope.formatNumber = function(num) {
-              return Math.round(num * 100)/100;
+          $scope.formatNumber = function(num, n) {
+            var returnVal = Math.round(num * 10)/10;
+            if(n.notification.window && n.notification.window.triggerIsPercent) {
+              returnVal = returnVal + '%';
+            }
+            return returnVal;
           };
           $scope.message = { body: '' };
           var listMarkup = '<md-list-item layout="column" layout-align="start start" ng-repeat="n in notificationList">'+
@@ -54,7 +58,7 @@ angular.module('teacherdashboard')
           '<div style="padding:15px;" layout="column" class="notification-desc" layout-wrap>' +
           '<span class="md-subhead no-select">{{::n.notification.name}}</span>' +
           '<span class="md-body-1">{{::notificationTypes[n.notification.measure]}} for {{::groupTypes(n)}}</span>' +
-          '<span class="md-body-1 notification-detail">The notification threshold of {{::n.notification.triggerValue}} <span ng-show="summaryTypes[n.notification.subjects.type]">{{::aggFunctions[n.notification.aggregateFunction]}}</span>was crossed on {{::n.triggeredDate}} with the value {{::formatNumber(n.valueWhenTriggered)}}.</span>'+
+          '<span class="md-body-1 notification-detail">The notification threshold of {{::formatNumber(n.notification.triggerValue, n)}} <span ng-show="summaryTypes[n.notification.subjects.type]">{{::aggFunctions[n.notification.aggregateFunction]}}</span>was crossed on {{::n.triggeredDate}} with the value {{::formatNumber(n.valueWhenTriggered, n)}}.</span>'+
           '</div>' +
           '<div ng-if="n.active" layout="column" layout-fill>' +
             '<div class="message-container">' +
