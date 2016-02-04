@@ -96,6 +96,7 @@ angular.module('teacherdashboard')
           delete $scope.currentFilters[filter];
         };
         $scope.toggleFilters = function() {
+          analytics.sendEvent(PAGENAME, analytics.TOGGLE_FILTER, analytics.FILTER);
           $scope.showFilters = !$scope.showFilters;
         };
         $scope.addFilter = function() {
