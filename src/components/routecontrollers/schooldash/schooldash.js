@@ -14,6 +14,7 @@ angular.module('teacherdashboard')
       var failingClassesDeferred = $q.defer();
       var studentGpaDataDeferred = $q.defer();
       var termsDeferred = $q.defer();
+      var referralDeferred = $q.defer();
 
 
       $scope.gpaDataPromise = studentGpaDataDeferred.promise;
@@ -21,6 +22,7 @@ angular.module('teacherdashboard')
       $scope.studentAttendancePromise = studentAbsesnseAndTardyDeferred.promise;
       $scope.failingClassesPromise = failingClassesDeferred.promise;
       $scope.termsPromise = termsDeferred.promise;
+      $scope.referralPromise = referralDeferred.promise;
 
 
       $scope.failingBreakdown = 'GENDER';
@@ -28,6 +30,7 @@ angular.module('teacherdashboard')
       $scope.attendanceTerm = statebag.currentTerm ;
       $scope.failingTerm = statebag.currentTerm ;
       $scope.demeritTerm = statebag.currentTerm;
+      $scope.referralTerm = statebag.currentTerm;
       //TODO We can't change GPA terms yet
       //$scope.gpaTerm = statebag.currentTerm;
       $scope.gpaTerm = '2015-2016';
@@ -40,7 +43,38 @@ angular.module('teacherdashboard')
       $scope.demeritControl = {
 
       };
+      $scope.referralControl = {
 
+      };
+
+      $scope.resolveReferralData = function() {
+        api.query.save(
+          { schoolId: statebag.school.id },
+          getReferralQuery($scope.referralTerm.startDate, $scope.referralTerm.endDate, statebag.school.id),
+          function(results){
+            var chartData = [
+              [ 'Students' ],
+              [ 'Referrals' ]
+            ];
+            var lastIndex = -1;
+            for (var i = 0; i < results.records.length; i++) {
+              var row = results.records[i].values;
+              while(lastIndex + 1 !== row[1]) {
+                lastIndex++;
+                chartData[0].push(0); //count of students
+                chartData[1].push(lastIndex); //num referrals
+              }
+              chartData[0].push(row[0]); //count of students
+              chartData[1].push(row[1]); //num referrals
+              lastIndex = row[1];
+
+            }
+            referralDeferred.resolve(chartData);
+          }
+        );
+      };
+
+      $scope.resolveReferralData();
       $scope.updateDemeritTerm = function() {
         analytics.sendEvent(GA_PAGE_NAME, analytics.CHANGE_TERM, analytics.BEHAVIOR_LABEL);
         var meritDemeritsPromises = [];
@@ -322,6 +356,80 @@ angular.module('teacherdashboard')
             termId: termId,
             breakdownKey: $scope.failingBreakdown
           }).$promise);
+      }
+
+      function getReferralQuery(startDate, endDate, schoolId) {
+        var referralQuery = {
+          'aggregateMeasures': [{
+            'measure': 'REFERRAL',
+            'aggregation': 'SUM'
+          }],
+          'fields': [{
+            'dimension': 'STUDENT',
+            'field': 'ID'
+          }],
+          'subqueryColumnsByPosition': [{
+            'position': -1,
+            'function': 'COUNT'
+          }, {
+            'position': 1
+          }],
+          'filter': {
+            'type': 'EXPRESSION',
+            //'leftHandSide': {
+            'leftHandSide': {
+              'type': 'EXPRESSION',
+              'leftHandSide': {
+                'type': 'DIMENSION',
+                'value': {
+                  'dimension': 'STUDENT',
+                  'field': 'School'
+                }
+              },
+              'operator': 'EQUAL',
+              'rightHandSide': {
+                'type': 'NUMERIC',
+                'value': schoolId
+              }
+            },
+            'operator': 'AND',
+            'rightHandSide': {
+              'type': 'EXPRESSION',
+              'leftHandSide': {
+                'type': 'EXPRESSION',
+                'leftHandSide': {
+                  'type': 'MEASURE',
+                  'value': {
+                    'measure': 'REFERRAL',
+                    'field': 'Behavior Date'
+                  }
+                },
+                'operator': 'GREATER_THAN_OR_EQUAL',
+                'rightHandSide': {
+                  'type': 'DATE',
+                  'value': startDate
+                }
+              },
+              'operator': 'AND',
+              'rightHandSide': {
+                'type': 'EXPRESSION',
+                'leftHandSide': {
+                  'type': 'MEASURE',
+                  'value': {
+                    'measure': 'REFERRAL',
+                    'field': 'Behavior Date'
+                  }
+                },
+                'operator': 'LESS_THAN_OR_EQUAL',
+                'rightHandSide': {
+                  'type': 'DATE',
+                  'value': endDate
+                }
+              }
+            }
+          }
+        };
+        return referralQuery;
       }
 
       function getAbsenseAndTardyCount(startDate, endDate, schoolId) {
