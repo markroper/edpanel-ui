@@ -95,23 +95,40 @@
     </div>
   </div>
 
-  <div layout="row" layout-align="center center" layout-wrap>
-    <div flex="100" flex-gt-md="100">
-      <md-card flex>
-        <md-card-content class="graph">
-          <div class="md-headline">Demerit & Merit Counts by Staff</div>
-          <div class="md-subhead">
-            <md-input-container>
-              <md-select ng-model="demeritTerm" ng-change="updateDemeritTerm()" ng-model-options="{trackBy: '$value.name'}">
-                <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
-              </md-select>
-            </md-input-container>
-          </div>
-          <stackedbar control="demeritControl" columns-promise="teacherBehaviorPromise"></stackedbar>
-        </md-card-content>
-      </md-card>
+    <div layout="row" layout-align="center center" layout-wrap>
+      <div flex="100" flex-gt-md="100">
+        <md-card flex>
+          <md-card-content class="graph">
+            <div class="md-headline">Demerit & Merit Counts by Staff</div>
+            <div class="md-subhead">
+              <md-input-container>
+                <md-select ng-model="demeritTerm" ng-change="updateDemeritTerm()" ng-model-options="{trackBy: '$value.name'}">
+                  <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+                </md-select>
+              </md-input-container>
+            </div>
+            <stackedbar control="demeritControl" columns-promise="teacherBehaviorPromise"></stackedbar>
+          </md-card-content>
+        </md-card>
+      </div>
     </div>
-  </div>
+    <div layout="row" layout-align="center center" layout-wrap>
+      <div flex="100" flex-gt-md="100">
+        <md-card flex>
+          <md-card-content class="graph">
+            <div class="md-headline">Number of Students by Referral Count</div>
+            <div class="md-subhead">
+              <md-input-container>
+                <md-select ng-model="referralTerm" ng-change="resolveReferralData()" ng-model-options="{trackBy: '$value.name'}">
+                  <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+                </md-select>
+              </md-input-container>
+            </div>
+            <stackedbar control="referralControl" columns-promise="referralPromise"></stackedbar>
+          </md-card-content>
+        </md-card>
+      </div>
+    </div>
   </div>
 
 </div>
