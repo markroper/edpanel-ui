@@ -1,10 +1,11 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll',
-  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll) {
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll','analytics',
+  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll, analytics) {
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: "/ui/schools/*/student/*" });
     });
+    var GA_PAGE_NAME = 'StudentSection';
     $scope.showFilter=false;
     $scope.students = [];
     $scope.sections = [];
@@ -48,6 +49,7 @@ angular.module('teacherdashboard')
       }
       $scope.$watch('currentTerm', function(newValue, oldValue) {
         if(newValue !== oldValue) {
+          analytics.sendEvent(GA_PAGE_NAME, analytics.CHANGE_TERM, analytics.GRADE_LABEL);
           resolveStudentSectionData();
         }
       });
@@ -160,7 +162,7 @@ angular.module('teacherdashboard')
           studentId: statebag.currentStudent.id,
           schoolId: statebag.school.id,
           yearId: statebag.currentYear.id,
-          termId: termId,
+          termId: termId
         }, function(studentSectionDashData) {
           var sections = [];
           for(var i = 0; i < studentSectionDashData.length; i++) {
