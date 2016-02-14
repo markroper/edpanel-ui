@@ -249,7 +249,6 @@ angular.module('teacherdashboard')
                 if (isGradedClass) {
 
                   statebag.currentSections[index].aveGrade = Math.round(total/data.length);
-                  console.log(statebag.currentSections);
                 }
 
 
