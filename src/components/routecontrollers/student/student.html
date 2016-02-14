@@ -7,6 +7,16 @@
             <div class="grade-summary-title md-body-1">GPA</div>
             <h2 class="grade-summary-grade md-headline">{{gpa.score || '--'}}</h2>
           </div>
+          <div class="grade-summary" layout="column" layout-align="center center">
+            <md-input-container>
+              <label>Grades term</label>
+              <md-select ng-model="currentTerm" ng-model-options="{trackBy: '$value.id'}">
+                <md-option ng-repeat="term in terms" ng-value="term">
+                  {{term.name}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+          </div>
 				  <div ng-repeat="section in sections" class="grade-summary no-select" layout="column" layout-align="center center">
 				  	<div class="grade-summary-title md-body-1" ng-click="scrollToCard(section.course.name)">{{::section.course.name}}
 							<md-tooltip>{{::section.name}}</md-tooltip>
