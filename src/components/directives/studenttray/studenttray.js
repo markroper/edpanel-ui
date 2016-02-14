@@ -32,7 +32,6 @@ angular.module('teacherdashboard')
             //Hide other dialog, if shown...
             $scope.hideTray(ev, student);
             $scope.student = student;
-            console.log($scope.student);
             $scope.currTemplate = template;
             $scope.choroScope = $scope.$new(true);
             if(template === behaviorCalendarHtml) {
