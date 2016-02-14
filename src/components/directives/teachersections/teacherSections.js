@@ -196,9 +196,6 @@ angular.module('teacherdashboard')
                   statebag.currentSections = data;
                   scope.isNotTeacher = false;
                 }
-
-
-
               },
               //Error callback
               function(){
@@ -238,11 +235,13 @@ angular.module('teacherdashboard')
                 for (var i = 0; i < data.length; i++) {
 
                   //If this is a graded class
-                  if ( typeof data[i].grade !== 'undefined') {
+                  if ( typeof data[i].overallGrade !== 'undefined') {
                     isGradedClass = true;
-                    total += data[i].grade;
-                    statebag.currentSections[index].enrolledStudents[i].grade = data[i].grade;
-                    statebag.currentSections[index].enrolledStudents[i].gradeClass = statebagApiManager.resolveSectionGradeClass(data[i].grade);
+                    total += data[i].overallGrade.score;
+                    if (typeof statebag.currentSections[index].enrolledStudents[i] !== 'undefined') {
+                      statebag.currentSections[index].enrolledStudents[i].grade = data[i].overallGrade.score;
+                      statebag.currentSections[index].enrolledStudents[i].gradeClass = statebagApiManager.resolveSectionGradeClass(data[i].overallGrade.score);
+                    }
 
                   }
 
