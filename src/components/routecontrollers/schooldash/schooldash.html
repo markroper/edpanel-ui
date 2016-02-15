@@ -112,7 +112,7 @@
         </md-card>
       </div>
     </div>
-    <div layout="row" layout-align="center center" layout-wrap>
+    <div class="report-container" layout="row" layout-align="center center" layout-wrap>
       <div flex="100" flex-gt-md="100">
         <md-card flex>
           <md-card-content class="graph">
@@ -124,10 +124,11 @@
                 </md-select>
               </md-input-container>
             </div>
-            <stackedbar control="referralControl" columns-promise="referralPromise"></stackedbar>
+            <stackedbar control="referralControl" columns-promise="referralPromise" on-click-callback="referralCallback"></stackedbar>
           </md-card-content>
         </md-card>
       </div>
+      <div class="details-table" flex="100"></div>
     </div>
   </div>
 

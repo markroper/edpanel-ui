@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', 'analytics',
-    function ($scope, api, statebag, $q, $window, analytics) {
+  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', 'analytics', '$compile',
+    function ($scope, api, statebag, $q, $window, analytics, $compile) {
       $scope.$on('$viewContentLoaded', function() {
         $window.ga('send', 'pageview', { page: "/ui/schools/*/dashboard" });
       });
@@ -358,6 +358,139 @@ angular.module('teacherdashboard')
           }).$promise);
       }
 
+      /*
+        Ok the dashboard controller can always try to chartQuery.replace(), for each of the supported replace variables
+        {
+          'chartQuery': '',
+          'clickQuery': ''
+          'columnDefs': [
+            { field: 'values[1]', displayName: 'name' },
+            { field: 'values[2]', displayName: 'referrals' }
+          ]
+        }
+
+       */
+      function returnReferralFilter(schoolId, startDate, endDate) {
+        var referralFilter = {
+          'type': 'EXPRESSION',
+          //'leftHandSide': {
+          'leftHandSide': {
+            'type': 'EXPRESSION',
+            'leftHandSide': {
+              'type': 'DIMENSION',
+              'value': {
+                'dimension': 'STUDENT',
+                'field': 'School'
+              }
+            },
+            'operator': 'EQUAL',
+            'rightHandSide': {
+              'type': 'NUMERIC',
+              'value': schoolId
+            }
+          },
+          'operator': 'AND',
+          'rightHandSide': {
+            'type': 'EXPRESSION',
+            'leftHandSide': {
+              'type': 'EXPRESSION',
+              'leftHandSide': {
+                'type': 'MEASURE',
+                'value': {
+                  'measure': 'REFERRAL',
+                  'field': 'Behavior Date'
+                }
+              },
+              'operator': 'GREATER_THAN_OR_EQUAL',
+              'rightHandSide': {
+                'type': 'DATE',
+                'value': startDate
+              }
+            },
+            'operator': 'AND',
+            'rightHandSide': {
+              'type': 'EXPRESSION',
+              'leftHandSide': {
+                'type': 'MEASURE',
+                'value': {
+                  'measure': 'REFERRAL',
+                  'field': 'Behavior Date'
+                }
+              },
+              'operator': 'LESS_THAN_OR_EQUAL',
+              'rightHandSide': {
+                'type': 'DATE',
+                'value': endDate
+              }
+            }
+          }
+        };
+        return referralFilter;
+      }
+
+      $scope.referralCallback = function(d, element) {
+        var referralStudentsQuery = {
+          'aggregateMeasures': [{
+            'measure': 'REFERRAL',
+            'aggregation': 'SUM'
+          }],
+          'fields': [
+            {
+              'dimension': 'STUDENT',
+              'field': 'ID'
+            },
+            {
+              'dimension': 'STUDENT',
+              'field': 'Name'
+            }
+          ],
+          'filter': returnReferralFilter(statebag.school.id, $scope.referralTerm.startDate, $scope.referralTerm.endDate),
+          'having': {
+            'type': 'EXPRESSION',
+            'leftHandSide': {
+              'type': 'MEASURE',
+              'value': {
+                'measure':'REFERRAL',
+                'field': 'SUM'
+              }
+            },
+            'operator': 'EQUAL',
+            'rightHandSide': {
+              'type': 'NUMERIC',
+              'value': d.index
+            }
+          }
+        };
+        api.query.save(
+          { schoolId: statebag.school.id },
+          referralStudentsQuery,
+          function(results){
+            var container = angular.element(element).closest(".report-container");
+            var tableContainer = container.find(".details-table");
+            var html = '<div ui-grid="tableConfig" ui-grid-pagination class=""></div>';
+            if($scope.referralDetailScope) {
+              $scope.referralDetailScope.$destroy();
+            }
+            tableContainer.empty();
+            $scope.referralDetailScope = $scope.$new();
+            $scope.referralDetailScope.referralsData = results.records;
+            $scope.referralDetailScope.tableConfig = {
+              data: 'referralsData',
+              enableColumnMenus: false,
+              paginationPageSize: 8,
+              paginationPageSizes: [8, 20, 50, 100],
+              enablePaginationControls: true,
+              columnDefs: [
+                { field: 'values[1]', displayName: 'name' },
+                { field: 'values[2]', displayName: 'referrals' }
+              ]
+            };
+            var compiledHtml = $compile(html)($scope.referralDetailScope);
+            tableContainer.append(compiledHtml);
+          }
+        );
+      };
+
       function getReferralQuery(startDate, endDate, schoolId) {
         var referralQuery = {
           'aggregateMeasures': [{
@@ -374,60 +507,7 @@ angular.module('teacherdashboard')
           }, {
             'position': 1
           }],
-          'filter': {
-            'type': 'EXPRESSION',
-            //'leftHandSide': {
-            'leftHandSide': {
-              'type': 'EXPRESSION',
-              'leftHandSide': {
-                'type': 'DIMENSION',
-                'value': {
-                  'dimension': 'STUDENT',
-                  'field': 'School'
-                }
-              },
-              'operator': 'EQUAL',
-              'rightHandSide': {
-                'type': 'NUMERIC',
-                'value': schoolId
-              }
-            },
-            'operator': 'AND',
-            'rightHandSide': {
-              'type': 'EXPRESSION',
-              'leftHandSide': {
-                'type': 'EXPRESSION',
-                'leftHandSide': {
-                  'type': 'MEASURE',
-                  'value': {
-                    'measure': 'REFERRAL',
-                    'field': 'Behavior Date'
-                  }
-                },
-                'operator': 'GREATER_THAN_OR_EQUAL',
-                'rightHandSide': {
-                  'type': 'DATE',
-                  'value': startDate
-                }
-              },
-              'operator': 'AND',
-              'rightHandSide': {
-                'type': 'EXPRESSION',
-                'leftHandSide': {
-                  'type': 'MEASURE',
-                  'value': {
-                    'measure': 'REFERRAL',
-                    'field': 'Behavior Date'
-                  }
-                },
-                'operator': 'LESS_THAN_OR_EQUAL',
-                'rightHandSide': {
-                  'type': 'DATE',
-                  'value': endDate
-                }
-              }
-            }
-          }
+          'filter': returnReferralFilter(schoolId, startDate, endDate)
         };
         return referralQuery;
       }

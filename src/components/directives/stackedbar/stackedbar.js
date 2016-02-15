@@ -14,7 +14,8 @@ angular.module('teacherdashboard')
     return {
       scope: {
         columnsPromise: '=',
-        control: '='
+        control: '=',
+        onClickCallback: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/stackedbar/stackedbar.html',
@@ -48,7 +49,12 @@ angular.module('teacherdashboard')
               columns: theData.slice(0, theData.length -1),
               type: 'bar',
               groups: [ groups ],
-              order: 'desc'
+              order: 'desc',
+              onclick: function(d, element) {
+                if(scope.onClickCallback) {
+                  scope.onClickCallback(d, element);
+                }
+              }
             },
             legend: {
               position: 'inset',
