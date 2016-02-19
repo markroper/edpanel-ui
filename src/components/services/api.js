@@ -135,6 +135,13 @@ angular.module('teacherdashboard')
       //Query execution
       savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
+      dashboard: $resource(base + '/schools/:schoolId/dashboards/:dashboardId',
+        {},
+        {
+          'get': { method: 'GET' },
+          'put': { method:'PUT', headers: {'Content-Type': 'application/json'} },
+          'post': { method:'POST', headers: {'Content-Type': 'application/json'} }
+        }),
       //GPA
       gpa: $resource(base + '/schools/:schoolId/gpas'),
       gpasInSchool: $resource(base + '/gpas', {}, { 'get': { isArray: true } }),

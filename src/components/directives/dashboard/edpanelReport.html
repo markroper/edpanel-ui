@@ -1,0 +1,16 @@
+<div layout="row" layout-wrap>
+  <div flex="100" flex-gt-md="100">
+    <md-card flex="100" >
+      <md-card-content class="graph">
+        <div class="md-headline">{{report.name}}</div>
+        <div class="md-subhead">
+          <md-input-container>
+            <md-select ng-model="currTerm" ng-change="updateTerm()" ng-model-options="{trackBy: '$value.name'}">
+              <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <stackedbar sb-legend-pos="top-left" columns-promise="dataDeferred.promise"></stackedbar>
+      </md-card-content>
+    </md-card>
+  </div>
