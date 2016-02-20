@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('edpanelReport', [ '$window', 'api', 'statebag', '$q', function($window, api, statebag, $q) {
+  .directive('edpanelReport', [ '$window', 'api', 'statebag', '$q', '$compile', function($window, api, statebag, $q, $compile) {
     return {
       scope: {
         report: '=',
@@ -16,8 +16,11 @@ angular.module('teacherdashboard')
         var regexValues = {
           '${schoolId}': statebag.school.id,
           '${startDate}': statebag.currentYear.startDate,
-          '${endDate}': statebag.currentYear.endDate
-        }
+          '${endDate}': statebag.currentYear.endDate,
+          '${clickValue}': null,
+          '${clickValueMin}': null,
+          '${clickValueMax}': null
+        };
 
         var replacePlaceholders = function(exp) {
           if(exp.leftHandSide.type === 'EXPRESSION') {
@@ -109,7 +112,64 @@ angular.module('teacherdashboard')
           }
         );
 
-        //Click callback...
+        var resolveRegexReplaceValues = function(d) {
+          var index = d.index;
+          var xVal = scope.chartData[scope.chartData.length - 1][index + 1];
+          //you're always looking to define the grouped by field
+          if(typeof xVal === 'string' &&
+              scope.usableQuery.aggregateMeasures &&
+              scope.usableQuery.aggregateMeasures[0].buckets) {
+            //resolve the min & max for the bucket and set it
+            regexValues['${clickValueMin}'] = scope.usableQuery.aggregateMeasures[0].buckets[index].start;
+            regexValues['${clickValueMax}'] = scope.usableQuery.aggregateMeasures[0].buckets[index].end;
+            regexValues['${clickValue}'] = null;
+          } else {
+            regexValues['${clickValue}'] = d.value;
+            regexValues['${clickValueMin}'] = null;
+            regexValues['${clickValueMax}'] = null;
+          }
+        };
+
+        scope.clickCallback = function(d, element) {
+          if(scope.report.clickTableQuery) {
+            var clickQuery = angular.copy(scope.report.clickTableQuery);
+            resolveRegexReplaceValues(d);
+            if(clickQuery.filter) {
+              replacePlaceholders(clickQuery.filter);
+            }
+            if(clickQuery.having) {
+              replacePlaceholders(clickQuery.having);
+            }
+            api.query.save(
+              { schoolId: statebag.school.id },
+              clickQuery,
+              function(results){
+                var container = angular.element(element).closest('.report-container');
+                var tableContainer = container.find('.details-table');
+                var html = '<div ui-grid="tableConfig" ui-grid-pagination class=""></div>';
+                if(scope.referralDetailScope) {
+                  scope.referralDetailScope.$destroy();
+                }
+                tableContainer.empty();
+                scope.referralDetailScope = scope.$new();
+                scope.referralDetailScope.referralsData = results.records;
+                scope.referralDetailScope.tableConfig = {
+                  data: 'referralsData',
+                  enableColumnMenus: false,
+                  paginationPageSize: 8,
+                  paginationPageSizes: [8, 20, 50, 100],
+                  enablePaginationControls: true,
+                  columnDefs: [
+                    { field: 'values[1]', displayName: 'name' },
+                    { field: 'values[2]', displayName: 'referrals' }
+                  ]
+                };
+                var compiledHtml = $compile(html)(scope.referralDetailScope);
+                tableContainer.append(compiledHtml);
+              }
+            );
+          }
+        };
 
       }
     };

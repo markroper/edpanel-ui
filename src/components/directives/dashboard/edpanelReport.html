@@ -1,4 +1,4 @@
-<div layout="row" layout-wrap>
+<div layout="row" layout-wrap class="report-container">
   <div flex="100" flex-gt-md="100">
     <md-card flex="100" >
       <md-card-content class="graph">
@@ -10,8 +10,9 @@
             </md-select>
           </md-input-container>
         </div>
-        <stackedbar sb-legend-pos="top-left" columns-promise="dataDeferred.promise"></stackedbar>
+        <stackedbar sb-legend-pos="top-left" columns-promise="dataDeferred.promise" on-click-callback="clickCallback"></stackedbar>
       </md-card-content>
     </md-card>
   </div>
+  <div class="details-table" flex="100"></div>
 </div>
