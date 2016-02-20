@@ -48,16 +48,18 @@ angular.module('teacherdashboard')
           replacePlaceholders(scope.usableQuery.filter);
         }
         scope.chartData = [];
-
         if(scope.usableQuery.aggregateMeasures) {
           for(var i = 0; i < scope.usableQuery.aggregateMeasures.length; i++) {
-            scope.chartData.push([ scope.usableQuery.aggregateMeasures[i].measure.toLowerCase() ]);
+            var meas = scope.usableQuery.aggregateMeasures[i];
+            scope.chartData.push([ meas.measure.toLowerCase() + 's' ]);
+            if(meas.buckets) {
+              scope.chartData.push([ meas.aggregation.toLowerCase() + ' ' + meas.measure.toLowerCase() + 's' ]);
+            }
           }
         }
-
         if(scope.usableQuery.fields) {
           for(var i = 0; i < scope.usableQuery.fields.length; i++) {
-            scope.chartData.push([ scope.usableQuery.fields[i].dimension.toLowerCase() ]);
+            scope.chartData.push([ scope.usableQuery.fields[i].dimension.toLowerCase() + 's' ]);
           }
         }
 
@@ -77,8 +79,30 @@ angular.module('teacherdashboard')
                   scope.chartData[j - 1].push(row[j]);
                 }
               }
-              //lastIndex = row[1];
-
+            }
+            //If the first array contains strings, we're dealing with a bucketed query and need to swap positions
+            if(typeof scope.chartData[0][scope.chartData[0].length - 1] === 'string') {
+              scope.chartData.reverse();
+            }
+            //Deal with subquery columns, if any
+            if(scope.usableQuery.subqueryColumnsByPosition) {
+              var newChartData = [];
+              var bucketOffset = 0;
+              for(var j = 0; j < scope.usableQuery.aggregateMeasures.length; j++) {
+                if(scope.usableQuery.aggregateMeasures[j].buckets) {
+                  bucketOffset++;
+                }
+              }
+              for(var i = 0; i < scope.usableQuery.subqueryColumnsByPosition.length; i++) {
+                var pos = scope.usableQuery.subqueryColumnsByPosition[i].position;
+                if(pos === -1) {
+                  newChartData.unshift(scope.chartData[0]);
+                } else {
+                  pos = pos - bucketOffset;
+                  newChartData.unshift(scope.chartData[pos]);
+                }
+              }
+              scope.chartData = newChartData;
             }
             scope.dataDeferred.resolve(scope.chartData);
 
