@@ -14,8 +14,8 @@ angular.module('teacherdashboard')
     return {
       scope: {
         columnsPromise: '=',
-        control: '=',
-        onClickCallback: '='
+        onClickCallback: '=',
+        newData: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/stackedbar/stackedbar.html',
@@ -25,17 +25,22 @@ angular.module('teacherdashboard')
         if(typeof insetPosition === 'undefined') {
           insetPosition = 'top-left';
         }
-        scope.internalControl = scope.control || {};
-        scope.internalControl.updateChart = function(newData) {
-          //While this is not ideal I am recreating the chart because c3 could not regenerate
-          // the groups correctly
-          createChart(newData);
-        };
-        $timeout(function(){
-          scope.columnsPromise.then(function(theData){
-            createChart(theData);
-          });
-        }, 50);
+        //scope.internalControl = scope.control || {};
+        //scope.internalControl.updateChart = function(newData) {
+        //  //While this is not ideal I am recreating the chart because c3 could not regenerate
+        //  // the groups correctly
+        //  createChart(newData);
+        //};
+        scope.$watch('newData', function(newValue, oldValue) {
+          if(newValue && !angular.equals(newValue, oldValue)) {
+            createChart(newValue);
+          }
+        });
+        //$timeout(function(){
+        //  scope.columnsPromise.then(function(theData){
+        //    createChart(theData);
+        //  });
+        //}, 50);
         var createChart = function(theData) {
           var groups = [];
           var xTickValues = theData[theData.length - 1].slice(1);

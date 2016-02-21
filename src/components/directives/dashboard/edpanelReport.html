@@ -4,13 +4,14 @@
       <md-card-content class="graph">
         <div class="md-headline">{{report.name}}</div>
         <div class="md-subhead">
-          <md-input-container>
-            <md-select ng-model="currTerm" ng-change="updateTerm()" ng-model-options="{trackBy: '$value.name'}">
-              <md-option ng-repeat="term in terms" ng-value="term">{{term.name}}</md-option>
+          <md-input-container ng-show="report.supportDateFilter">
+            <md-select ng-model="currentTerm" ng-model-options="{trackBy: '$value.name'}">
+              <md-option ng-value="term" ng-repeat="term in terms">{{term.name}}</md-option>
             </md-select>
           </md-input-container>
+          <div class="static-term" ng-if="!report.supportDateFilter">{{currTerm.name}}</div>
         </div>
-        <stackedbar sb-legend-pos="top-left" columns-promise="dataPromise" on-click-callback="clickCallback"></stackedbar>
+        <stackedbar new-data="newData" sb-legend-pos="top-left" on-click-callback="clickCallback"></stackedbar>
         <div class="details-table" flex="100"></div>
       </md-card-content>
     </md-card>

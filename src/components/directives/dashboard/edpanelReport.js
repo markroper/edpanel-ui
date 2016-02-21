@@ -10,11 +10,15 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/dashboard/edpanelReport.html',
       replace: true,
       link: function(scope, elem) {
+        scope.failureControl = {};
         scope.dataDeferred = $q.defer();
         scope.dataPromise = scope.dataDeferred.promise;
-        scope.currTerm = scope.terms[0];
+        scope.currentTerm = scope.terms[0];
+        var isFirst = true;
+        scope.$watch('currentTerm', function(oldVal, newVal) {
+          scope.retrieveChartquery();
+        });
         //Transform the query, replaceing any schoolId and date variables, if any
-        scope.usableQuery = angular.copy(scope.report.chartQuery);
         var regexValues = {
           '${schoolId}': statebag.school.id,
           '${startDate}': statebag.currentYear.startDate,
@@ -27,12 +31,13 @@ angular.module('teacherdashboard')
         /**
          * makes the initial request for data and resolves the promise with the chart data
          */
-        scope.retrieveChartquery = function() {
+        scope.retrieveChartquery = function(isUpdate) {
+          scope.usableQuery = angular.copy(scope.report.chartQuery);
           scope.dataDeferred = $q.defer();
           scope.dataPromise = scope.dataDeferred.promise;
 
-          regexValues['${startDate}'] = scope.currTerm.startDate;
-          regexValues['${endDate}'] = scope.currTerm.endDate;
+          regexValues['${startDate}'] = scope.currentTerm.startDate;
+          regexValues['${endDate}'] = scope.currentTerm.endDate;
           if(scope.usableQuery.filter) {
             scope.replacePlaceholders(scope.usableQuery.filter);
           }
@@ -92,7 +97,8 @@ angular.module('teacherdashboard')
                 }
                 scope.chartData = newChartData;
               }
-              scope.dataDeferred.resolve(scope.chartData);
+              scope.newData = scope.chartData;
+
 
             }
           );
@@ -196,8 +202,8 @@ angular.module('teacherdashboard')
             );
           }
         };
-        //Initial load
-        scope.retrieveChartquery();
+        ////Initial load
+        //scope.retrieveChartquery();
       }
     };
   }]);
