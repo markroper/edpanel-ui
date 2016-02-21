@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .controller('NewSchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', 'analytics', '$compile', 'authentication',
+  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', 'analytics', '$compile', 'authentication',
     function ($scope, api, statebag, $q, $window, analytics, $compile, authentication) {
       $scope.$on('$viewContentLoaded', function () {
         $window.ga('send', 'pageview', {page: "/ui/schools/*/dashboard"});
