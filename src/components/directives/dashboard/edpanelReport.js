@@ -124,7 +124,7 @@ angular.module('teacherdashboard')
             regexValues['${clickValueMax}'] = scope.usableQuery.aggregateMeasures[0].buckets[index].end;
             regexValues['${clickValue}'] = null;
           } else {
-            regexValues['${clickValue}'] = d.value;
+            regexValues['${clickValue}'] = xVal;
             regexValues['${clickValueMin}'] = null;
             regexValues['${clickValueMax}'] = null;
           }
@@ -159,10 +159,7 @@ angular.module('teacherdashboard')
                   paginationPageSize: 8,
                   paginationPageSizes: [8, 20, 50, 100],
                   enablePaginationControls: true,
-                  columnDefs: [
-                    { field: 'values[1]', displayName: 'name' },
-                    { field: 'values[2]', displayName: 'referrals' }
-                  ]
+                  columnDefs: scope.report.columnDefs
                 };
                 var compiledHtml = $compile(html)(scope.referralDetailScope);
                 tableContainer.append(compiledHtml);
