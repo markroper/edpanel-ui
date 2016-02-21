@@ -1,0 +1,11 @@
+.report-container {
+  .details-table {
+    position:relative;
+  }
+  .close-cal {
+    z-index: 10;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+}

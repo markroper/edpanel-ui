@@ -126,6 +126,12 @@ angular.module('teacherdashboard')
             regexValues['${clickValueMax}'] = null;
           }
         };
+        scope.slideClosed = function() {
+          if(scope.referralDetailScope) {
+            scope.referralDetailScope.$destroy();
+          }
+          scope.tableContainer.empty();
+        };
         scope.clickCallback = function(d, element) {
           if(scope.report.clickTableQuery) {
             var clickQuery = angular.copy(scope.report.clickTableQuery);
@@ -141,12 +147,12 @@ angular.module('teacherdashboard')
               clickQuery,
               function(results){
                 var container = angular.element(element).closest('.report-container');
-                var tableContainer = container.find('.details-table');
-                var html = '<div ui-grid="tableConfig" ui-grid-pagination class=""></div>';
-                if(scope.referralDetailScope) {
-                  scope.referralDetailScope.$destroy();
-                }
-                tableContainer.empty();
+                scope.tableContainer = container.find('.details-table');
+                var html = '<md-button ng-click="slideClosed()" aria-label="close" class="close-cal md-icon-button">' +
+                  '<md-icon md-font-set="material-icons">close</md-icon>' +
+                  '</md-button>' +
+                  '<div ui-grid="tableConfig" ui-grid-pagination class=""></div>';
+                scope.slideClosed();
                 scope.referralDetailScope = scope.$new();
                 scope.referralDetailScope.referralsData = results.records;
                 scope.referralDetailScope.tableConfig = {
@@ -158,7 +164,7 @@ angular.module('teacherdashboard')
                   columnDefs: scope.report.columnDefs
                 };
                 var compiledHtml = $compile(html)(scope.referralDetailScope);
-                tableContainer.append(compiledHtml);
+                scope.tableContainer.append(compiledHtml);
               }
             );
           }
