@@ -12,6 +12,7 @@ angular.module('teacherdashboard')
       link: function(scope, elem) {
         scope.dataDeferred = $q.defer();
         scope.dataPromise = scope.dataDeferred.promise;
+        scope.currTerm = scope.terms[0];
         //Transform the query, replaceing any schoolId and date variables, if any
         scope.usableQuery = angular.copy(scope.report.chartQuery);
         var regexValues = {
@@ -22,12 +23,91 @@ angular.module('teacherdashboard')
           '${clickValueMin}': null,
           '${clickValueMax}': null
         };
-        var replacePlaceholders = function(exp) {
+
+        /**
+         * makes the initial request for data and resolves the promise with the chart data
+         */
+        scope.retrieveChartquery = function() {
+          scope.dataDeferred = $q.defer();
+          scope.dataPromise = scope.dataDeferred.promise;
+
+          regexValues['${startDate}'] = scope.currTerm.startDate;
+          regexValues['${endDate}'] = scope.currTerm.endDate;
+          if(scope.usableQuery.filter) {
+            scope.replacePlaceholders(scope.usableQuery.filter);
+          }
+          scope.chartData = [];
+          if(scope.usableQuery.aggregateMeasures) {
+            for(var i = 0; i < scope.usableQuery.aggregateMeasures.length; i++) {
+              var meas = scope.usableQuery.aggregateMeasures[i];
+              scope.chartData.push([ meas.measure.toLowerCase() + 's' ]);
+              if(meas.buckets) {
+                scope.chartData.push([ meas.aggregation.toLowerCase() + ' ' + meas.measure.toLowerCase() + 's' ]);
+              }
+            }
+          }
+          if(scope.usableQuery.fields) {
+            for(var i = 0; i < scope.usableQuery.fields.length; i++) {
+              scope.chartData.push([ scope.usableQuery.fields[i].dimension.toLowerCase() + 's' ]);
+            }
+          }
+          //Fire off the initial chart query
+          api.query.save(
+            { schoolId: statebag.school.id },
+            scope.usableQuery,
+            function(results) {
+              scope.initialResults = results;
+              for (var i = 0; i < results.records.length; i++) {
+                var row = results.records[i].values;
+                var len = scope.chartData.length;
+                for(var j = 0; j < len; j++) {
+                  if(j === 0) {
+                    scope.chartData[len - 1].push(row[0]);
+                  } else {
+                    scope.chartData[j - 1].push(row[j]);
+                  }
+                }
+              }
+              //If the first array contains strings, we're dealing with a bucketed query and need to swap positions
+              if(typeof scope.chartData[0][scope.chartData[0].length - 1] === 'string') {
+                scope.chartData.reverse();
+              }
+              //Deal with subquery columns, if any
+              if(scope.usableQuery.subqueryColumnsByPosition) {
+                var newChartData = [];
+                var bucketOffset = 0;
+                for(var j = 0; j < scope.usableQuery.aggregateMeasures.length; j++) {
+                  if(scope.usableQuery.aggregateMeasures[j].buckets) {
+                    bucketOffset++;
+                  }
+                }
+                for(var i = 0; i < scope.usableQuery.subqueryColumnsByPosition.length; i++) {
+                  var pos = scope.usableQuery.subqueryColumnsByPosition[i].position;
+                  if(pos === -1) {
+                    newChartData.unshift(scope.chartData[0]);
+                  } else {
+                    pos = pos - bucketOffset;
+                    newChartData.unshift(scope.chartData[pos]);
+                  }
+                }
+                scope.chartData = newChartData;
+              }
+              scope.dataDeferred.resolve(scope.chartData);
+
+            }
+          );
+        };
+        /**
+         * Replaces placeholder operands in a query expression with the literal operand
+         * using the current state values.
+         * @param exp
+         */
+        scope.replacePlaceholders = function(exp) {
           if(exp.leftHandSide.type === 'EXPRESSION') {
-            replacePlaceholders(exp.leftHandSide);
+            scope.replacePlaceholders(exp.leftHandSide);
           }
           if(exp.rightHandSide.type === 'EXPRESSION'){
-            replacePlaceholders(exp.rightHandSide);
+            scope.replacePlaceholders(exp.rightHandSide);
           }
           //LHS
           if(exp.leftHandSide.type === 'PLACEHOLDER_NUMERIC') {
@@ -46,69 +126,7 @@ angular.module('teacherdashboard')
             exp.rightHandSide = { 'type': 'DATE', 'value': regexValues[exp.rightHandSide.value] }
           }
         }
-        if(scope.usableQuery.filter) {
-          replacePlaceholders(scope.usableQuery.filter);
-        }
-        scope.chartData = [];
-        if(scope.usableQuery.aggregateMeasures) {
-          for(var i = 0; i < scope.usableQuery.aggregateMeasures.length; i++) {
-            var meas = scope.usableQuery.aggregateMeasures[i];
-            scope.chartData.push([ meas.measure.toLowerCase() + 's' ]);
-            if(meas.buckets) {
-              scope.chartData.push([ meas.aggregation.toLowerCase() + ' ' + meas.measure.toLowerCase() + 's' ]);
-            }
-          }
-        }
-        if(scope.usableQuery.fields) {
-          for(var i = 0; i < scope.usableQuery.fields.length; i++) {
-            scope.chartData.push([ scope.usableQuery.fields[i].dimension.toLowerCase() + 's' ]);
-          }
-        }
-        //Fire off the initial chart query
-        api.query.save(
-          { schoolId: statebag.school.id },
-          scope.usableQuery,
-          function(results) {
-            scope.initialResults = results;
-            for (var i = 0; i < results.records.length; i++) {
-              var row = results.records[i].values;
-              var len = scope.chartData.length;
-              for(var j = 0; j < len; j++) {
-                if(j === 0) {
-                  scope.chartData[len - 1].push(row[0]);
-                } else {
-                  scope.chartData[j - 1].push(row[j]);
-                }
-              }
-            }
-            //If the first array contains strings, we're dealing with a bucketed query and need to swap positions
-            if(typeof scope.chartData[0][scope.chartData[0].length - 1] === 'string') {
-              scope.chartData.reverse();
-            }
-            //Deal with subquery columns, if any
-            if(scope.usableQuery.subqueryColumnsByPosition) {
-              var newChartData = [];
-              var bucketOffset = 0;
-              for(var j = 0; j < scope.usableQuery.aggregateMeasures.length; j++) {
-                if(scope.usableQuery.aggregateMeasures[j].buckets) {
-                  bucketOffset++;
-                }
-              }
-              for(var i = 0; i < scope.usableQuery.subqueryColumnsByPosition.length; i++) {
-                var pos = scope.usableQuery.subqueryColumnsByPosition[i].position;
-                if(pos === -1) {
-                  newChartData.unshift(scope.chartData[0]);
-                } else {
-                  pos = pos - bucketOffset;
-                  newChartData.unshift(scope.chartData[pos]);
-                }
-              }
-              scope.chartData = newChartData;
-            }
-            scope.dataDeferred.resolve(scope.chartData);
 
-          }
-        );
         var resolveRegexReplaceValues = function(d) {
           var index = d.index;
           var xVal = scope.chartData[scope.chartData.length - 1][index + 1];
@@ -126,21 +144,30 @@ angular.module('teacherdashboard')
             regexValues['${clickValueMax}'] = null;
           }
         };
+        /**
+         * Closes a detail table view on the chart, if any
+         */
         scope.slideClosed = function() {
           if(scope.referralDetailScope) {
             scope.referralDetailScope.$destroy();
           }
           scope.tableContainer.empty();
         };
+        /**
+         * When a chart secetion is clicked, this callback is called.  A new query for granular
+         * data is fired off to the server and then rendered onto the page as a table view.
+         * @param d
+         * @param element
+         */
         scope.clickCallback = function(d, element) {
           if(scope.report.clickTableQuery) {
             var clickQuery = angular.copy(scope.report.clickTableQuery);
             resolveRegexReplaceValues(d);
             if(clickQuery.filter) {
-              replacePlaceholders(clickQuery.filter);
+              scope.replacePlaceholders(clickQuery.filter);
             }
             if(clickQuery.having) {
-              replacePlaceholders(clickQuery.having);
+              scope.replacePlaceholders(clickQuery.having);
             }
             api.query.save(
               { schoolId: statebag.school.id },
@@ -169,6 +196,8 @@ angular.module('teacherdashboard')
             );
           }
         };
+        //Initial load
+        scope.retrieveChartquery();
       }
     };
   }]);
