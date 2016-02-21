@@ -11,6 +11,7 @@ angular.module('teacherdashboard')
       replace: true,
       link: function(scope, elem) {
         scope.dataDeferred = $q.defer();
+        scope.dataPromise = scope.dataDeferred.promise;
         //Transform the query, replaceing any schoolId and date variables, if any
         scope.usableQuery = angular.copy(scope.report.chartQuery);
         var regexValues = {
@@ -21,7 +22,6 @@ angular.module('teacherdashboard')
           '${clickValueMin}': null,
           '${clickValueMax}': null
         };
-
         var replacePlaceholders = function(exp) {
           if(exp.leftHandSide.type === 'EXPRESSION') {
             replacePlaceholders(exp.leftHandSide);
@@ -46,7 +46,6 @@ angular.module('teacherdashboard')
             exp.rightHandSide = { 'type': 'DATE', 'value': regexValues[exp.rightHandSide.value] }
           }
         }
-
         if(scope.usableQuery.filter) {
           replacePlaceholders(scope.usableQuery.filter);
         }
@@ -65,8 +64,7 @@ angular.module('teacherdashboard')
             scope.chartData.push([ scope.usableQuery.fields[i].dimension.toLowerCase() + 's' ]);
           }
         }
-
-        //Fire off the query.
+        //Fire off the initial chart query
         api.query.save(
           { schoolId: statebag.school.id },
           scope.usableQuery,
@@ -111,7 +109,6 @@ angular.module('teacherdashboard')
 
           }
         );
-
         var resolveRegexReplaceValues = function(d) {
           var index = d.index;
           var xVal = scope.chartData[scope.chartData.length - 1][index + 1];
@@ -129,7 +126,6 @@ angular.module('teacherdashboard')
             regexValues['${clickValueMax}'] = null;
           }
         };
-
         scope.clickCallback = function(d, element) {
           if(scope.report.clickTableQuery) {
             var clickQuery = angular.copy(scope.report.clickTableQuery);
@@ -167,7 +163,6 @@ angular.module('teacherdashboard')
             );
           }
         };
-
       }
     };
   }]);

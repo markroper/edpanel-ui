@@ -10,7 +10,7 @@
    ]
  */
 angular.module('teacherdashboard')
-  .directive('stackedbar', [ '$window', 'api', function($window, api) {
+  .directive('stackedbar', [ '$window', 'api', '$timeout', function($window, api, $timeout) {
     return {
       scope: {
         columnsPromise: '=',
@@ -30,14 +30,13 @@ angular.module('teacherdashboard')
           //While this is not ideal I am recreating the chart because c3 could not regenerate
           // the groups correctly
           createChart(newData);
-
         };
-        scope.columnsPromise.then(function(theData){
-          createChart(theData);
-        });
-
+        $timeout(function(){
+          scope.columnsPromise.then(function(theData){
+            createChart(theData);
+          });
+        }, 50);
         var createChart = function(theData) {
-
           var groups = [];
           var xTickValues = theData[theData.length - 1].slice(1);
           for(var i = 0; i < theData.length - 1; i++) {
