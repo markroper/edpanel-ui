@@ -1,5 +1,5 @@
 <div layout="row" layout-wrap class="report-container">
-  <div flex="100" flex-gt-md="100">
+  <div flex="100" flex-gt-md="100" class="demographic-parent">
     <md-card flex="100" >
       <md-card-content class="graph">
         <div class="md-headline">{{report.name}}</div>
@@ -9,7 +9,7 @@
               <md-option ng-value="term" ng-repeat="term in terms">{{term.name}}</md-option>
             </md-select>
           </md-input-container>
-          <div class="static-term" ng-if="!report.supportDateFilter">{{currTerm.name}}</div>
+          <div class="static-term" ng-show="!report.supportDateFilter">{{currentTerm.name}}</div>
         </div>
         <stackedbar new-data="newData" sb-legend-pos="top-left" on-click-callback="clickCallback"></stackedbar>
         <div class="details-table" flex="100"></div>

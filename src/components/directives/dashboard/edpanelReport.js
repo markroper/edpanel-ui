@@ -14,6 +14,33 @@ angular.module('teacherdashboard')
         scope.dataDeferred = $q.defer();
         scope.dataPromise = scope.dataDeferred.promise;
         scope.currentTerm = scope.terms[0];
+        scope.showDemoMenu = false;
+        var speedDial =
+          '<md-fab-speed-dial class="demographics" class="md-fab-bottom-right md-scale" md-direction="left" >' +
+          '  <md-fab-trigger>' +
+          '  <md-button aria-label="menu" class="md-icon-button">' +
+          ' <md-icon md-font-set="material-icons">settings</md-icon>' +
+          '  <md-tooltip>chart settings</md-tooltip>' +
+          '</md-button>' +
+          '</md-fab-trigger>' +
+          '<md-fab-actions>' +
+          '<div class="row">' +
+          '  <span>View breakdown by</span>' +
+          '<md-input-container style="margin-right: 10px;">' +
+          '  <md-select ng-model="demographic">' +
+          '  <md-option  value="Race">Race</md-option>' +
+          '  <md-option  value="Gender">Gender</md-option>' +
+          '  <md-option ng-disabled value="Ell">ELL</md-option>' +
+          '  <md-option ng-disabled value="Sped">Special Ed</md-option>' +
+          '</md-select>' +
+          '</md-input-container>' +
+          '</div>' +
+          '</md-fab-actions>' +
+          '</md-fab-speed-dial>';
+        var compiledDial = $compile(speedDial)(scope);
+        //TODO: get this to work
+        //angular.element(elem).find('.demographic-parent').append(compiledDial);
+
         var isFirst = true;
         scope.$watch('currentTerm', function(oldVal, newVal) {
           scope.retrieveChartquery();
@@ -28,6 +55,32 @@ angular.module('teacherdashboard')
           '${clickValueMax}': null
         };
 
+        scope.demographic = null;
+        var RACE_DIM = {
+          dimension: 'STUDENT',
+          field: 'Race'
+        };
+
+        var GENDER_DIM = {
+          dimension: 'STUDENT',
+          field: 'Gender'
+        };
+
+        var ETHNICITY_DIM = {
+          dimension: 'STUDENT',
+          field: 'Ethnicity'
+        };
+        var DEMOGRAPHIC_TO_DIM = {
+          'Race': RACE_DIM,
+          'Gender': GENDER_DIM,
+          'Ethnicity': ETHNICITY_DIM
+        };
+
+        var transformResultsForDemographic = function(resultSet) {
+          //TODO: implement
+          return resultSet;
+        }
+
         /**
          * makes the initial request for data and resolves the promise with the chart data
          */
@@ -38,8 +91,16 @@ angular.module('teacherdashboard')
 
           regexValues['${startDate}'] = scope.currentTerm.startDate;
           regexValues['${endDate}'] = scope.currentTerm.endDate;
+          //Replace placeholders with state values, if any
           if(scope.usableQuery.filter) {
             scope.replacePlaceholders(scope.usableQuery.filter);
+          }
+          //If there is a demographic selected on the chart, add that to the query dimensions
+          if(scope.demographic) {
+            var demographicDim = DEMOGRAPHIC_TO_DIM[scope.demographic];
+            if(demographicDim) {
+              scope.usableQuery.fields.push(DEMOGRAPHIC_TO_DIM[scope.demographic]);
+            }
           }
           scope.chartData = [];
           if(scope.usableQuery.aggregateMeasures) {
@@ -56,12 +117,16 @@ angular.module('teacherdashboard')
               scope.chartData.push([ scope.usableQuery.fields[i].dimension.toLowerCase() + 's' ]);
             }
           }
+
           //Fire off the initial chart query
           api.query.save(
             { schoolId: statebag.school.id },
             scope.usableQuery,
             function(results) {
               scope.initialResults = results;
+              if(scope.demographic) {
+                scope.initialResults = transformResultsForDemographic(scope.initialResults);
+              }
               for (var i = 0; i < results.records.length; i++) {
                 var row = results.records[i].values;
                 var len = scope.chartData.length;
