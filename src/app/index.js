@@ -138,7 +138,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
       })
       .state('app.schoolDash', {
         url: 'schools/:schoolId/dashboard',
-        templateUrl: rootUrl + '/components/routecontrollers/schooldash/schooldash.html',
+        templateUrl: rootUrl + '/components/routecontrollers/schooldash/schoolDash.html',
         controller: 'SchoolDash',
         data: {
           roles: [

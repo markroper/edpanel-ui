@@ -180,8 +180,8 @@ span.name {
 }
 
 // injector
-@import '../components/directives/behaviorgraph/behaviorgraph.scss';
 @import '../components/directives/attendancetable/attendancetable.scss';
+@import '../components/directives/behaviorgraph/behaviorgraph.scss';
 @import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/chorocalendar/chorocalendar.scss';
 @import '../components/directives/dashboard/edpanelReport.scss';
@@ -192,8 +192,8 @@ span.name {
 @import '../components/directives/messages/messages.scss';
 @import '../components/directives/notifications/createnotification.scss';
 @import '../components/directives/notifications/notifications.scss';
-@import '../components/directives/scatterplot/scatterplot.scss';
 @import '../components/directives/sectiongrid/sections.grid.scss';
+@import '../components/directives/scatterplot/scatterplot.scss';
 @import '../components/directives/settingscard/settingscard.scss';
 @import '../components/directives/stackedbar/stackedbar.scss';
 @import '../components/directives/studentsection/studentsetion.scss';
