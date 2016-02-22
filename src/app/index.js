@@ -235,10 +235,10 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         .alwaysWatchTheme(true);
   })
   .provider('consts', function(){
-    var BLACK = 'Black or African American';
+    var BLACK = 'Black';
     var ASIAN = 'Asian';
-    var PACIFIC_ISLANDER = 'Native Hawaiian or Pacific Islander';
-    var AM_INDIAN = 'American Indian or Alaska Native';
+    var PACIFIC_ISLANDER = 'Pacific Islander';
+    var AM_INDIAN = 'American Indian';
     var WHITE = 'White';
     var LATINO_HISPANIC = 'Hispanic or Latino';
     var NON_LATINO = 'Not Hispanic or Latino';

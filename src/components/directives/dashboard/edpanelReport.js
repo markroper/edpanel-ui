@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('edpanelReport', [ '$window', 'api', 'statebag', '$q', '$compile', function($window, api, statebag, $q, $compile) {
+  .directive('edpanelReport', [ '$window', 'api', 'statebag', '$q', '$compile', 'consts', function($window, api, statebag, $q, $compile, consts) {
     return {
       scope: {
         report: '=',
@@ -14,36 +14,21 @@ angular.module('teacherdashboard')
         scope.dataDeferred = $q.defer();
         scope.dataPromise = scope.dataDeferred.promise;
         scope.currentTerm = scope.terms[0];
-        scope.showDemoMenu = false;
-        var speedDial =
-          '<md-fab-speed-dial class="demographics" class="md-fab-bottom-right md-scale" md-direction="left" >' +
-          '  <md-fab-trigger>' +
-          '  <md-button aria-label="menu" class="md-icon-button">' +
-          ' <md-icon md-font-set="material-icons">settings</md-icon>' +
-          '  <md-tooltip>chart settings</md-tooltip>' +
-          '</md-button>' +
-          '</md-fab-trigger>' +
-          '<md-fab-actions>' +
-          '<div class="row">' +
-          '  <span>View breakdown by</span>' +
-          '<md-input-container style="margin-right: 10px;">' +
-          '  <md-select ng-model="demographic">' +
-          '  <md-option  value="Race">Race</md-option>' +
-          '  <md-option  value="Gender">Gender</md-option>' +
-          '  <md-option ng-disabled value="Ell">ELL</md-option>' +
-          '  <md-option ng-disabled value="Sped">Special Ed</md-option>' +
-          '</md-select>' +
-          '</md-input-container>' +
-          '</div>' +
-          '</md-fab-actions>' +
-          '</md-fab-speed-dial>';
-        var compiledDial = $compile(speedDial)(scope);
-        //TODO: get this to work
-        //angular.element(elem).find('.demographic-parent').append(compiledDial);
-
-        var isFirst = true;
-        scope.$watch('currentTerm', function(oldVal, newVal) {
+        scope.showFilter = false;
+        scope.demographic = null;
+        scope.toggleFilters = function() {
+          scope.showFilter = !scope.showFilter;
+        };
+        scope.$watch('currentTerm', function() {
           scope.retrieveChartquery();
+        });
+        var isFirst = true;
+        scope.$watch('demographic', function(newVal, oldVal) {
+          if(isFirst) {
+            isFirst = false;
+          } else {
+            scope.retrieveChartquery();
+          }
         });
         //Transform the query, replaceing any schoolId and date variables, if any
         var regexValues = {
@@ -54,8 +39,6 @@ angular.module('teacherdashboard')
           '${clickValueMin}': null,
           '${clickValueMax}': null
         };
-
-        scope.demographic = null;
         var RACE_DIM = {
           dimension: 'STUDENT',
           field: 'Race'
@@ -78,7 +61,86 @@ angular.module('teacherdashboard')
 
         var transformResultsForDemographic = function(resultSet) {
           //TODO: implement
-          return resultSet;
+          // [count(*), race|gender, aggVal] -> [['counts'],[],[]...]
+          var resultsObject = {};
+          var xAxis = ['counts'];
+          var demoPosition = 0;
+          var aggPosition = 1;
+          if(scope.usableQuery.subqueryColumnsByPosition) {
+            demoPosition = 1;
+            aggPosition = 0;
+          }
+          if(scope.usableQuery.aggregateMeasures && scope.usableQuery.aggregateMeasures[0].buckets) {
+            for(var i = 0; i < scope.usableQuery.aggregateMeasures[0].buckets.length; i++) {
+              xAxis.push(scope.usableQuery.aggregateMeasures[0].buckets[i].label);
+            }
+            for (var i = 0; i < resultSet.records.length; i++) {
+              var singleRow = resultSet.records[i].values;
+              if (!resultsObject[singleRow[demoPosition]]) {
+                resultsObject[singleRow[demoPosition]] = [];
+                while(resultsObject[singleRow[demoPosition]].length < xAxis.length) {
+                  resultsObject[singleRow[demoPosition]].push(0);
+                }
+              }
+              var bucketPos = xAxis.indexOf(singleRow[2]) - 1;
+              resultsObject[singleRow[demoPosition]][bucketPos] = singleRow[aggPosition];
+            }
+          } else {
+            for (var i = 0; i < resultSet.records.length; i++) {
+              //If the query has buckets, resolve the x-axis array
+              var singleRow = resultSet.records[i].values;
+              if (!resultsObject[singleRow[demoPosition]]) {
+                resultsObject[singleRow[demoPosition]] = [];
+              }
+              while (xAxis.length <= singleRow[2] + 1) {
+                xAxis.push(xAxis.length - 1);
+              }
+              while (resultsObject[singleRow[demoPosition]].length < singleRow[2]) {
+                resultsObject[singleRow[demoPosition]].push(0);
+              }
+              resultsObject[singleRow[demoPosition]][singleRow[2]] = singleRow[aggPosition];
+            }
+          }
+
+
+          var resultsArray = [];
+          if(scope.demographic === 'Race') {
+            angular.forEach(resultsObject, function(value, key) {
+              var currArray = [];
+              var raceString = consts.raceMap[key];
+              if(!raceString) {
+                raceString = 'Unknown';
+              }
+              currArray.push(raceString);
+              currArray = currArray.concat(value);
+              while(currArray.length < xAxis.length) {
+                currArray.push(0);
+              }
+              resultsArray.push(currArray);
+            });
+          } else if(scope.demographic === 'Gender') {
+            angular.forEach(resultsObject, function(value, key) {
+              var currArray = [];
+              if(key == 0) {
+                currArray.push('Male');
+              } else if( key == 1) {
+                currArray.push('Female');
+              } else if(key == 2) {
+                currArray.push('Unknown');
+              }
+              currArray = currArray.concat(value);
+              while(currArray.length < xAxis.length) {
+                currArray.push(0);
+              }
+              resultsArray.push(currArray);
+            });
+          } else if(scope.demographic === 'Ell') {
+            //TODO:impl
+          } else if(scope.demographic === 'Sped') {
+            //TODO:impl
+          }
+          resultsArray.push(xAxis);
+          return resultsArray;
         }
 
         /**
@@ -99,7 +161,15 @@ angular.module('teacherdashboard')
           if(scope.demographic) {
             var demographicDim = DEMOGRAPHIC_TO_DIM[scope.demographic];
             if(demographicDim) {
+              if(!scope.usableQuery.fields) {
+                scope.usableQuery.fields = [];
+              }
               scope.usableQuery.fields.push(DEMOGRAPHIC_TO_DIM[scope.demographic]);
+              var colsByPos = scope.usableQuery.subqueryColumnsByPosition;
+              if(colsByPos) {
+                var lastCol = colsByPos[colsByPos.length - 1];
+                scope.usableQuery.subqueryColumnsByPosition.push({position: lastCol.position + 1});
+              }
             }
           }
           scope.chartData = [];
@@ -124,43 +194,44 @@ angular.module('teacherdashboard')
             scope.usableQuery,
             function(results) {
               scope.initialResults = results;
-              if(scope.demographic) {
-                scope.initialResults = transformResultsForDemographic(scope.initialResults);
-              }
-              for (var i = 0; i < results.records.length; i++) {
-                var row = results.records[i].values;
-                var len = scope.chartData.length;
-                for(var j = 0; j < len; j++) {
-                  if(j === 0) {
-                    scope.chartData[len - 1].push(row[0]);
-                  } else {
-                    scope.chartData[j - 1].push(row[j]);
+              if (scope.demographic) {
+                scope.chartData = scope.initialResults = transformResultsForDemographic(scope.initialResults);
+              } else {
+                for (var i = 0; i < results.records.length; i++) {
+                  var row = results.records[i].values;
+                  var len = scope.chartData.length;
+                  for (var j = 0; j < len; j++) {
+                    if (j === 0) {
+                      scope.chartData[len - 1].push(row[0]);
+                    } else {
+                      scope.chartData[j - 1].push(row[j]);
+                    }
                   }
                 }
-              }
-              //If the first array contains strings, we're dealing with a bucketed query and need to swap positions
-              if(typeof scope.chartData[0][scope.chartData[0].length - 1] === 'string') {
-                scope.chartData.reverse();
-              }
-              //Deal with subquery columns, if any
-              if(scope.usableQuery.subqueryColumnsByPosition) {
-                var newChartData = [];
-                var bucketOffset = 0;
-                for(var j = 0; j < scope.usableQuery.aggregateMeasures.length; j++) {
-                  if(scope.usableQuery.aggregateMeasures[j].buckets) {
-                    bucketOffset++;
-                  }
+                //If the first array contains strings, we're dealing with a bucketed query and need to swap positions
+                if (typeof scope.chartData[0][scope.chartData[0].length - 1] === 'string') {
+                  scope.chartData.reverse();
                 }
-                for(var i = 0; i < scope.usableQuery.subqueryColumnsByPosition.length; i++) {
-                  var pos = scope.usableQuery.subqueryColumnsByPosition[i].position;
-                  if(pos === -1) {
-                    newChartData.unshift(scope.chartData[0]);
-                  } else {
-                    pos = pos - bucketOffset;
-                    newChartData.unshift(scope.chartData[pos]);
+                //Deal with subquery columns, if any
+                if (scope.usableQuery.subqueryColumnsByPosition) {
+                  var newChartData = [];
+                  var bucketOffset = 0;
+                  for (var j = 0; j < scope.usableQuery.aggregateMeasures.length; j++) {
+                    if (scope.usableQuery.aggregateMeasures[j].buckets) {
+                      bucketOffset++;
+                    }
                   }
+                  for (var i = 0; i < scope.usableQuery.subqueryColumnsByPosition.length; i++) {
+                    var pos = scope.usableQuery.subqueryColumnsByPosition[i].position;
+                    if (pos === -1) {
+                      newChartData.unshift(scope.chartData[0]);
+                    } else {
+                      pos = pos - bucketOffset;
+                      newChartData.unshift(scope.chartData[pos]);
+                    }
+                  }
+                  scope.chartData = newChartData;
                 }
-                scope.chartData = newChartData;
               }
               scope.newData = scope.chartData;
 
@@ -267,8 +338,6 @@ angular.module('teacherdashboard')
             );
           }
         };
-        ////Initial load
-        //scope.retrieveChartquery();
       }
     };
   }]);

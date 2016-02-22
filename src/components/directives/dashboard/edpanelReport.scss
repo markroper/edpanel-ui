@@ -2,8 +2,15 @@
   .demographic-parent {
     position:relative;
   }
-  .demographics {
-    bottom:0px;
+  .demographic-button {
+    position: absolute;
+    bottom: 8px;
+    right: 5px;
+  }
+  .chart-filters {
+    position:absolute;
+    bottom: 8px;
+    right: 75px;
   }
   .static-term {
     margin-top: 6px;
