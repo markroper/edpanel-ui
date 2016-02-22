@@ -7,7 +7,7 @@
       <h3 class="question md-headline">{{q.question.question}}</h3>
       <div class="summary" ng-class="{ openresponse: q.question.type==='OPEN_RESPONSE' }">Question type: {{q.question.type}}. Total responses: {{q.respondents}}.</div>
       <div class="multiple-choice-results" ng-if="q.question.type === 'MULTIPLE_CHOICE' || q.question.type === 'TRUE_FALSE'">
-        <stackedbar columns-promise="q.chartDataPromise"></stackedbar>
+        <stackedbar new-data="newData"></stackedbar>
       </div>
       </div>
     </div>

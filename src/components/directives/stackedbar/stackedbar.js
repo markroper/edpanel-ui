@@ -10,11 +10,12 @@
    ]
  */
 angular.module('teacherdashboard')
-  .directive('stackedbar', [ '$window', 'api', function($window, api) {
+  .directive('stackedbar', [ '$window', 'api', '$timeout', function($window, api, $timeout) {
     return {
       scope: {
         columnsPromise: '=',
-        control: '='
+        onClickCallback: '=',
+        newData: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/stackedbar/stackedbar.html',
@@ -24,19 +25,12 @@ angular.module('teacherdashboard')
         if(typeof insetPosition === 'undefined') {
           insetPosition = 'top-left';
         }
-        scope.internalControl = scope.control || {};
-        scope.internalControl.updateChart = function(newData) {
-          //While this is not ideal I am recreating the chart because c3 could not regenerate
-          // the groups correctly
-          createChart(newData);
-
-        };
-        scope.columnsPromise.then(function(theData){
-          createChart(theData);
+        scope.$watch('newData', function(newValue, oldValue) {
+          if(newValue && !angular.equals(newValue, oldValue)) {
+            createChart(newValue);
+          }
         });
-
         var createChart = function(theData) {
-
           var groups = [];
           var xTickValues = theData[theData.length - 1].slice(1);
           for(var i = 0; i < theData.length - 1; i++) {
@@ -48,7 +42,12 @@ angular.module('teacherdashboard')
               columns: theData.slice(0, theData.length -1),
               type: 'bar',
               groups: [ groups ],
-              order: 'desc'
+              order: 'desc',
+              onclick: function(d, element) {
+                if(scope.onClickCallback) {
+                  scope.onClickCallback(d, element);
+                }
+              }
             },
             legend: {
               position: 'inset',

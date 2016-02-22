@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('surveyAggregate', [ '$window', 'api', '$rootScope', '$state', '$mdToast', 'authentication', '$q',
-    function($window, api, $rootScope, $state, $mdToast, authentication, $q) {
+  .directive('surveyAggregate', [ '$window', 'api', '$rootScope', '$state', '$mdToast', 'authentication',
+    function($window, api, $rootScope, $state, $mdToast, authentication) {
       return {
         scope: {
           aggregateSurvey: '=',
@@ -13,17 +13,15 @@ angular.module('teacherdashboard')
         link: function($scope) {
           $scope.surveyAggregates.questions.forEach(function(q){
             if(q.question.type === 'MULTIPLE_CHOICE' || q.question.type === 'TRUE_FALSE') {
-              var d = $q.defer();
-              q.chartDataPromise = d.promise;
               var results = q.results;
               if (q.question.type === 'MULTIPLE_CHOICE') {
                 var choices = q.question.choices;
                 choices.unshift('choices');
                 results.unshift('responses');
-                d.resolve([results, choices ]);
+                $scope.newData = [results, choices];
               } else if (q.question.type === 'TRUE_FALSE') {
                 results.unshift('responses');
-                d.resolve([ results, ['choices', 'true', 'false']]);
+                $scope.newData = [ results, ['choices', 'true', 'false']];
               }
             }
           });

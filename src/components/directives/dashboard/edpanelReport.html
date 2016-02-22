@@ -1,0 +1,33 @@
+<div layout="row" layout-wrap class="report-container">
+  <div flex="100" flex-gt-md="100" class="demographic-parent">
+    <md-card flex="100" >
+      <md-card-content class="graph">
+        <div class="md-headline">{{report.name}}</div>
+        <div class="md-subhead">
+          <md-input-container ng-show="report.supportDateFilter">
+            <md-select ng-model="currentTerm" ng-model-options="{trackBy: '$value.name'}">
+              <md-option ng-value="term" ng-repeat="term in terms">{{term.name}}</md-option>
+            </md-select>
+          </md-input-container>
+          <div class="static-term" ng-show="!report.supportDateFilter">{{currentTerm.name}}</div>
+        </div>
+        <stackedbar new-data="newData" sb-legend-pos="top-left" on-click-callback="clickCallback"></stackedbar>
+        <div class="details-table" flex="100"></div>
+      </md-card-content>
+    </md-card>
+    <md-button ng-show="report.supportDemographicFilter" aria-label="menu" class="demographic-button md-icon-button" ng-click="toggleFilters()">
+       <md-icon md-font-set="material-icons">settings</md-icon>
+       <md-tooltip>chart filters</md-tooltip>
+    </md-button>
+    <div class="chart-filters" ng-show="showFilter">
+     <md-input-container>
+        <md-select ng-model="demographic" placeholder="Select a filter">
+             <md-option  value="Race">Race</md-option>
+             <md-option  value="Gender">Gender</md-option>
+             <md-option ng-disabled value="Ell">ELL</md-option>
+             <md-option ng-disabled value="Sped">Special Ed</md-option>
+           </md-select>
+       </md-input-container>
+    </div>
+  </div>
+</div>
