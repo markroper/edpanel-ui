@@ -1,15 +1,15 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll',
-  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll) {
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll','analytics',
+  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll, analytics) {
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: "/ui/schools/*/student/*" });
     });
+    var GA_PAGE_NAME = 'StudentSection';
     $scope.showFilter=false;
     $scope.students = [];
     $scope.sections = [];
     $scope.goals = [];
-
     if(!statebag.school || !statebag.currentStudent) {
       //Resolve the school then resolve the student
       statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
@@ -38,7 +38,21 @@ angular.module('teacherdashboard')
       $location.hash('section-card-' + idName);
       $anchorScroll();
     };
+
     function resolveAllData() {
+      $scope.terms = statebag.currentYear.terms;
+      for(var i = 0; i < $scope.terms.length; i++) {
+        if($scope.terms[i].id === statebag.currentTerm.id) {
+          $scope.currentTerm = $scope.terms[i];
+          break;
+        }
+      }
+      $scope.$watch('currentTerm', function(newValue, oldValue) {
+        if(newValue !== oldValue) {
+          analytics.sendEvent(GA_PAGE_NAME, analytics.CHANGE_TERM, analytics.GRADE_LABEL);
+          resolveStudentSectionData();
+        }
+      });
       resolveStudentSectionData();
       resolveBehaviorData();
       resolveStudentGpa();
@@ -138,12 +152,17 @@ angular.module('teacherdashboard')
       $scope.students.push(statebag.currentStudent);
       var sectionDataDeferred = $q.defer();
       statebag.studentSectionsPromise = sectionDataDeferred.promise;
+      var termId = statebag.currentTerm.id;
+      var currTerm = $scope.currentTerm;
+      if(currTerm) {
+        termId = currTerm.id;
+      }
       api.studentSectionsData.get(
         {
           studentId: statebag.currentStudent.id,
           schoolId: statebag.school.id,
           yearId: statebag.currentYear.id,
-          termId: statebag.currentTerm.id,
+          termId: termId
         }, function(studentSectionDashData) {
           var sections = [];
           for(var i = 0; i < studentSectionDashData.length; i++) {
@@ -189,7 +208,16 @@ angular.module('teacherdashboard')
             section.gradeFormula.assignmentTypeWeights = arrayWeights;
             //Weekly grade progression:
             var gradeResults = studentSectionDashData[i].gradeProgression;
-            section.grade = statebagApiManager.resolveGrade(gradeResults.currentOverallGrade);
+            for (var grade in section.termGrades) {
+              if (section.termGrades[grade].startDate === currTerm.startDate &&
+                  section.termGrades[grade].endDate === currTerm.endDate) {
+                section.grade = section.termGrades[grade].letterGrade;
+                break;
+              }
+            }
+            if(!section.grade) {
+              section.grade = statebagApiManager.resolveGrade(gradeResults.currentOverallGrade);
+            }
 
             section.gradeProgression = gradeResults.weeklyGradeProgression;
             section.currentCategoryGrades = gradeResults.currentCategoryGrades;

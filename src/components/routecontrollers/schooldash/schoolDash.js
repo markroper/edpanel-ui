@@ -6,7 +6,6 @@ angular.module('teacherdashboard')
         $window.ga('send', 'pageview', {page: "/ui/schools/*/dashboard"});
       });
       statebag.currentPage.name = 'School Dashboard';
-
       $scope.terms = [];
       api.terms.get(
         {
@@ -16,7 +15,6 @@ angular.module('teacherdashboard')
         function(results) {
           $scope.terms = results;
         });
-
       //get the dashboard
       api.dashboard.get(
         { schoolId: statebag.school.id, userId: authentication.identity().id },
