@@ -1,0 +1,32 @@
+.report-container {
+  .demographic-parent {
+    position:relative;
+  }
+  .demographic-button {
+    position: absolute;
+    bottom: 8px;
+    right: 5px;
+  }
+  .chart-filters {
+    position:absolute;
+    bottom: 8px;
+    right: 75px;
+  }
+  .static-term {
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+  md-input-container {
+    margin-top:0px;
+    margin-bottom:0px;
+  }
+  .details-table {
+    position:relative;
+  }
+  .close-cal {
+    z-index: 10;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+}
