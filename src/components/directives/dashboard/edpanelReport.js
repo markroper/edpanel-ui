@@ -59,9 +59,28 @@ angular.module('teacherdashboard')
           'Ethnicity': ETHNICITY_DIM
         };
 
+        /**
+         * Results come back in the form:
+         * [
+         *  [3, 'black', 3],
+         *  [2, 'asian', 2],
+         *  [3, 'white', 3],
+         *  ...
+         * ]
+         *
+         * and need to br transformed into the chart ready format:
+         * [
+         *  ['black', 0, 0, 3 ...],
+         *  ['asian' 0, 0, 2 ...],
+         *  ['white', 0, 0, 3 ...],
+         *  ['count', 0, 1, 2, 3]
+         * ]
+         * This method does that.
+         * 
+         * @param resultSet
+         * @returns {Array}
+         */
         var transformResultsForDemographic = function(resultSet) {
-          //TODO: implement
-          // [count(*), race|gender, aggVal] -> [['counts'],[],[]...]
           var resultsObject = {};
           var xAxis = ['counts'];
           var demoPosition = 0;
