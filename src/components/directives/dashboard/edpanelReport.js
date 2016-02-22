@@ -13,7 +13,7 @@ angular.module('teacherdashboard')
         scope.failureControl = {};
         scope.dataDeferred = $q.defer();
         scope.dataPromise = scope.dataDeferred.promise;
-        scope.currentTerm = scope.terms[0];
+        scope.currentTerm = statebag.currentTerm;
         scope.showFilter = false;
         scope.demographic = null;
         scope.toggleFilters = function() {
@@ -76,7 +76,7 @@ angular.module('teacherdashboard')
          *  ['count', 0, 1, 2, 3]
          * ]
          * This method does that.
-         * 
+         *
          * @param resultSet
          * @returns {Array}
          */
