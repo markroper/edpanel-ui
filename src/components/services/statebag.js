@@ -17,6 +17,7 @@ angular.module('teacherdashboard')
     currentStudentGpa : null,
     studentsPerformanceSummary : [],
     lastFullRefresh : null,
+    studentSectionsPromises: null,
     goals : [],
     sections : [],
     currentPage: {},

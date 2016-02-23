@@ -9,7 +9,13 @@ angular.module('teacherdashboard')
     $scope.showFilter=false;
     $scope.students = [];
     $scope.sections = [];
-    $scope.goals = [];
+    $scope.createGoal = false;
+    console.log("Page loading");
+    $scope.goalTypes = [
+      {"uiName":"Behavior"},
+      {"uiName":"Class Grade"},
+      {"uiName":"Assignment"},
+      {"uiName":"Other"}];
     if(!statebag.school || !statebag.currentStudent) {
       //Resolve the school then resolve the student
       statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
@@ -37,6 +43,15 @@ angular.module('teacherdashboard')
     $scope.scrollToCard = function(idName) {
       $location.hash('section-card-' + idName);
       $anchorScroll();
+    };
+
+    $scope.openCreateGoal = function() {
+      $scope.createGoal = true;
+    };
+
+    $scope.submitCreateGoal = function() {
+      $scope.createGoal = false;
+      //Actually submit goal here
     };
 
     function resolveAllData() {
@@ -147,6 +162,7 @@ angular.module('teacherdashboard')
       return returnGrades;
     }
 
+
     function resolveStudentSectionData() {
       statebag.currentPage.name = statebag.currentStudent.name;
       $scope.students.push(statebag.currentStudent);
@@ -222,12 +238,15 @@ angular.module('teacherdashboard')
             section.gradeProgression = gradeResults.weeklyGradeProgression;
             section.currentCategoryGrades = gradeResults.currentCategoryGrades;
             section.goal = studentSectionDashData[i].gradeGoal;
+            console.log(studentSectionDashData[i].gradeGoal);
+
             section.goal.proposedValue = section.goal.desiredValue;
             section.goal.nameId = section.course.name.replace(/\s/g, '-') + '-' + section.id;
             sections.push(section);
           }
 
           $scope.sections = sections;
+          console.log($scope.sections);
           statebag.sections = $scope.sections;
           sectionDataDeferred.resolve(sections);
         });

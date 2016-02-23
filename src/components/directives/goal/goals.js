@@ -1,10 +1,10 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goals', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document',
-    function($state, statebag, api, $q, mdToast, $mdDialog, $document) {
+  .directive('goals', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
+    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
     return {
       scope: {
-        goals: '='
+        goals: '=',
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/goal/goals.html',
@@ -23,18 +23,6 @@ angular.module('teacherdashboard')
         $scope.sectionsResolved = false;
         $scope.clearGoal = angular.extend({},$scope.tempGoal);
         $scope.behaviorTypes = ['DEMERIT','MERIT'];
-
-
-        statebag.studentSectionsPromise.then(function() {
-          $q.all(statebag.sectionGradePromises).then(function(){
-            $scope.sectionNameMap = {};
-            $scope.sections = statebag.sections;
-            $scope.sections.forEach(function (section) {
-              $scope.sectionNameMap[section.course.name] = section.id;
-            });
-            $scope.sectionsResolved = true;
-          });
-        });
 
         var showSimpleToast = function(msg) {
           mdToast.show(
@@ -157,8 +145,9 @@ angular.module('teacherdashboard')
         $scope.resolveGoalDataAndDisplay = function() {
           resolveStudentGoals()
             .then(function() {
-              $scope.goals = statebag.goals;
+              $scope.goals = statebag.goals.slice(0,2);
               $scope.resolveGoalDisplay();
+
             });
         };
 
@@ -177,6 +166,22 @@ angular.module('teacherdashboard')
         $scope.resolveGoalDisplay = function() {
           for (var i = 0; i < $scope.goals.length; i++) {
             var goal = $scope.goals[i];
+            $timeout(function() {
+              $scope.gage = new $window.JustGage({
+                id: 'gauge-'+ goal.id,
+                value: goal.calculatedValue,
+                min: 0,
+                max: goal.desiredValue,
+                textRenderer: statebagApiManager.resolveGrade,
+                valueMinFontSize: 50,
+                hideMinMax: true,
+                levelColors: [
+                  '#F44366',
+                  '#FFEB3B',
+                  '#4CAF50'
+                ]
+              });
+            }, 50);
 
 
 
@@ -265,5 +270,9 @@ angular.module('teacherdashboard')
 
         $scope.resolveGoalDataAndDisplay();
       }
+
+
     };
+
+
   }]);
