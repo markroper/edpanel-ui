@@ -1,7 +1,6 @@
 
-<div class="goals">
-  <div layout="row" class="goals-container">
-    <md-card class="student-goal" ng-repeat="goal in goals">
+<div class="goal">
+    <md-card class="student-goal">
       <md-card-content>
         <div class="row"><div class="goal-title">Biology Grade Goal</div></div>
         <div id="gauge-{{::goal.id}}" class="goal-gauge" style="height: 175px"></div>
@@ -9,9 +8,6 @@
           <span flex><span>67</span></span>
           <span flex>Class average: <span class="goal-value">85</span></span>
         </div>
-
-
       </md-card-content>
     </md-card>
-  </div>
 </div>

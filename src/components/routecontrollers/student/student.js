@@ -9,6 +9,7 @@ angular.module('teacherdashboard')
     $scope.showFilter=false;
     $scope.students = [];
     $scope.sections = [];
+    $scope.goals = [];
     $scope.createGoal = false;
     console.log("Page loading");
     $scope.goalTypes = [
@@ -239,6 +240,7 @@ angular.module('teacherdashboard')
             section.currentCategoryGrades = gradeResults.currentCategoryGrades;
             section.goal = studentSectionDashData[i].gradeGoal;
             console.log(studentSectionDashData[i].gradeGoal);
+            $scope.goals.push(studentSectionDashData[i].gradeGoal);
 
             section.goal.proposedValue = section.goal.desiredValue;
             section.goal.nameId = section.course.name.replace(/\s/g, '-') + '-' + section.id;

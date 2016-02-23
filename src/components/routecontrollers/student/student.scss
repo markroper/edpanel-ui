@@ -1,3 +1,9 @@
+.goals-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 .student-detail {
   .table-and-choro-wrapper {
     background-color: white;

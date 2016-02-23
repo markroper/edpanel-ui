@@ -1,13 +1,13 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goals', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
+  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
     function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
     return {
       scope: {
-        goals: '=',
+        goal: '='
       },
       restrict: 'E',
-      templateUrl: api.basePrefix + '/components/directives/goal/goals.html',
+      templateUrl: api.basePrefix + '/components/directives/goal/goal.html',
       replace: true,
       controller: function($scope) {
 
@@ -142,30 +142,9 @@ angular.module('teacherdashboard')
         };
       },
       link: function($scope) {
-        $scope.resolveGoalDataAndDisplay = function() {
-          resolveStudentGoals()
-            .then(function() {
-              $scope.goals = statebag.goals.slice(0,2);
-              $scope.resolveGoalDisplay();
 
-            });
-        };
-
-        function resolveStudentGoals() {
-          var deferred = $q.defer();
-
-          var studentGoalsPromises = api.studentGoals.get( {
-            studentId: $state.params.studentId }).$promise;
-
-          studentGoalsPromises.then(function (response) {
-            statebag.goals = response;
-            deferred.resolve(statebag.goals);
-          });
-          return deferred.promise;
-        }
         $scope.resolveGoalDisplay = function() {
-          for (var i = 0; i < $scope.goals.length; i++) {
-            var goal = $scope.goals[i];
+            var goal = $scope.goal;
             $timeout(function() {
               $scope.gage = new $window.JustGage({
                 id: 'gauge-'+ goal.id,
@@ -223,8 +202,6 @@ angular.module('teacherdashboard')
                 //TODO this needs to be some function of number of days of school in that goal period
                 break;
             }
-            $scope.goals[i] = goal;
-          }
         };
 
         function evaluateWidth(goal) {
@@ -267,8 +244,7 @@ angular.module('teacherdashboard')
             return performanceClasses[2];
           }
         }
-
-        $scope.resolveGoalDataAndDisplay();
+  $scope.resolveGoalDisplay();
       }
 
 

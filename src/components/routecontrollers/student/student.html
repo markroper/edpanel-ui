@@ -158,7 +158,10 @@
             <div layout="column" layout-align="center center">
               <md-headline style="margin-bottom: 10px;font-size: 30px">Present Goals</md-headline>
             </div>
-            <goals></goals>
+            <div layout="row" class="goals-container">
+              <goal ng-repeat="goal in goals" goal="goal"></goal>
+            </div>
+
           </md-card-content>
         </md-card>
       </div>
