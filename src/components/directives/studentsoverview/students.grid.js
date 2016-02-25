@@ -35,6 +35,7 @@ angular.module('teacherdashboard')
         var GREEN_CLASS = '90-100';
         //$scope.$watchCollection('filteredStudentData', function(newStudentData) {
         $scope.$watch('filteredStudentData', function(newStudentData) {
+          console.log("TEST");
           if(newStudentData && newStudentData.reduce) {
             $scope.kpiTallies = newStudentData.reduce(function (returnObj, student) {
                 if (GREEN_CLASS === student.homeworkClass) {

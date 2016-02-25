@@ -145,25 +145,6 @@ angular.module('teacherdashboard')
 
         $scope.resolveGoalDisplay = function() {
             var goal = $scope.goal;
-            $timeout(function() {
-              $scope.gage = new $window.JustGage({
-                id: 'gauge-'+ goal.id,
-                value: goal.calculatedValue,
-                min: 0,
-                max: goal.desiredValue,
-                textRenderer: statebagApiManager.resolveGrade,
-                valueMinFontSize: 50,
-                hideMinMax: true,
-                levelColors: [
-                  '#F44366',
-                  '#FFEB3B',
-                  '#4CAF50'
-                ]
-              });
-            }, 50);
-
-
-
             goal.title = goal.name ;
             goal.max = goal.desiredValue;
             goal.width = evaluateWidth(goal);
@@ -188,7 +169,8 @@ angular.module('teacherdashboard')
                 //TODO Set the maxPossible for a goal to be a school property (GPA)
                 goal.maxPossible = '50' ;
                 break;
-              case 'CUMULATIVE_GRADE':
+              case 'SECTION_GRADE':
+                goal.title = goal.section.course.name + " Grade Goal";
                 goal.maxDisplay = goal.desiredValue + '%';
                 goal.progressText = 'Your grade: ' + goal.calculatedValue + '%';
                 goal.aveValue = '83%';
@@ -202,6 +184,30 @@ angular.module('teacherdashboard')
                 //TODO this needs to be some function of number of days of school in that goal period
                 break;
             }
+          var renderFunction = function(value) {
+            if(isNaN(value)) {
+              return '--';
+            } else {
+              return Math.round(value);
+            }
+          }
+          $timeout(function() {
+            $scope.gage = new $window.JustGage({
+              id: 'gauge-'+ goal.id,
+              value: goal.calculatedValue,
+              min: 0,
+              max: goal.desiredValue,
+              minTxt:0,
+              maxTest:100,
+              valueMinFontSize: 50,
+              textRenderer: renderFunction,
+              levelColors: [
+                '#F44366',
+                '#FFEB3B',
+                '#4CAF50'
+              ]
+            });
+          }, 50);
         };
 
         function evaluateWidth(goal) {
@@ -249,6 +255,5 @@ angular.module('teacherdashboard')
 
 
     };
-
 
   }]);

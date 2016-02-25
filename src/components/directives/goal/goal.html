@@ -1,13 +1,18 @@
 
 <div class="goal">
-    <md-card class="student-goal">
+    <md-card style="max-width: 350px" class="student-goal">
       <md-card-content>
-        <div class="row"><div class="goal-title">Biology Grade Goal</div></div>
-        <div id="gauge-{{::goal.id}}" class="goal-gauge" style="height: 175px"></div>
-        <div layout="row" layout-align="center center">
-          <span flex><span>67</span></span>
-          <span flex>Class average: <span class="goal-value">85</span></span>
+        <div layout="column" layout-align="center center">
+          <div class="goal-title">{{goal.title}}</div>
+          <div id="gauge-{{::goal.id}}" class="goal-gauge" style="height: 175px"></div>
+          <md-headline class="woop-heading">Plan</md-headline>
+          <div class="woop-text">{{goal.plan}}</div>
+          <md-headline class="woop-heading">Obstacles</md-headline>
+          <div class="woop-text">{{goal.obstacles}}</div>
+          <md-headline class="woop-heading">Outcome</md-headline>
+          <div class="woop-text">{{goal.outcome}}</div>
         </div>
+
       </md-card-content>
     </md-card>
 </div>
