@@ -6,6 +6,9 @@
 }
 .goals-container{
   md-card-content {
+    .menu-button{
+      margin-top: 40px;
+    }
     position:relative;
     md-fab-speed-dial.md-fab-top-right {
       position:absolute;

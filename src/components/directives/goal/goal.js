@@ -73,42 +73,9 @@ angular.module('teacherdashboard')
           goal.editActive = true;
 
         };
-        $scope.createGoal = function() {
-          $scope.goalToCreate = {};
-          $scope.goalToCreate.goalType = $scope.tempGoal.goalType;
-          $scope.goalToCreate.name = $scope.tempGoal.name;
-          $scope.goalToCreate.student = {'id': statebag.currentStudent.id,
-            'type': 'STUDENT'};
-          //TODO This needs to be not hardcoded in
-          $scope.goalToCreate.teacher = {'id':'4',
-            'type': 'TEACHER'};
-          $scope.goalToCreate.approved = 'false';
-          $scope.goalToCreate.desiredValue = $scope.tempGoal.desiredValue;
-          switch ($scope.tempGoal.goalType) {
-            case ('BEHAVIOR') :
-              $scope.goalToCreate.startDate = $scope.tempGoal.startDate;
-              $scope.goalToCreate.endDate = $scope.tempGoal.endDate;
-              $scope.goalToCreate.behaviorCategory = $scope.tempGoal.behaviorType;
-              break;
-            case ('CUMULATIVE_GRADE') :
-              $scope.goalToCreate.parentId = $scope.sectionNameMap[$scope.tempGoal.sectionName];
-              break;
-          }
-          api.studentGoals.post(
-            { studentId: statebag.currentStudent.id},
-            $scope.goalToCreate,
-            function() {
-              $scope.resolveGoalDataAndDisplay();
-              showSimpleToast('Goal created successfully');
-            },
-            function() {
-              showSimpleToast('There was a problem creating the goal');
-
-            });
-          $scope.clearDialog();
-        };
 
         $scope.proposeEdit = function(goal) {
+          console.log(goal);
           goal.editActive = false;
           var datifyGoal = function(goal) {
             var apiGoal = angular.extend({}, goal);
@@ -125,14 +92,13 @@ angular.module('teacherdashboard')
             delete apiGoal.editActive;
             return apiGoal;
           };
-          goal.desiredValue = goal.proposedValue;
           var apiGoal = datifyGoal(goal);
           api.editStudentGoal.patch(
             { studentId: goal.student.id,
               goalId: goal.id},
            apiGoal,
             function() {
-              $scope.resolveGoalDisplay();
+              $scope.resolveGoalDisplay(true);
               showSimpleToast('Goal changed successfully');
             },
             function() {
@@ -143,56 +109,18 @@ angular.module('teacherdashboard')
       },
       link: function($scope) {
 
-        $scope.resolveGoalDisplay = function() {
-            var goal = $scope.goal;
-            goal.title = goal.name ;
-            goal.max = goal.desiredValue;
-            goal.width = evaluateWidth(goal);
-            goal.colorClass = evaluateColorClass(goal);
-            goal.proposedValue = goal.desiredValue;
-
-            switch(goal.goalType) {
-              case 'ASSIGNMENT':
-                goal.maxDisplay = goal.desiredValue + '%';
-                goal.progressText = 'Your score: ' + goal.calculatedValue + '%';
-                if (goal.calculatedValue === -1) {
-                  goal.progressText = 'Your score: Not Graded';
-                }
-                goal.maxPossible = '100' ;
-                goal.aveValue = '75%';
-
-                break;
-              case 'BEHAVIOR':
-                goal.maxDisplay = goal.desiredValue;
-                goal.progressText = 'Incidents: ' + goal.calculatedValue;
-                goal.aveValue = '3';
-                //TODO Set the maxPossible for a goal to be a school property (GPA)
-                goal.maxPossible = '50' ;
-                break;
-              case 'SECTION_GRADE':
-                goal.title = goal.section.course.name + " Grade Goal";
-                console.log(goal);
-                goal.maxDisplay = goal.desiredValue + '%';
-                goal.progressText = 'Your grade: ' + goal.calculatedValue + '%';
-                goal.aveValue = '83%';
-                goal.maxPossible = '100' ;
-                break;
-              case 'ATTENDANCE':
-                goal.maxDisplay = goal.desiredValue;
-                goal.progressText = 'Your absences: ' + goal.calculatedValue;
-                goal.aveValue = '3';
-                goal.maxPossible = '50' ;
-                //TODO this needs to be some function of number of days of school in that goal period
-                break;
-            }
+        $scope.resolveGoalDisplay = function(refresh) {
           var renderFunction = function(value) {
             if(isNaN(value)) {
               return '--';
             } else {
               return Math.round(value);
             }
-          }
-          $timeout(function() {
+          };
+          var goal = $scope.goal;
+
+          if (refresh) {
+            angular.element(document).find('#gauge-'+ goal.id).empty();
             $scope.gage = new $window.JustGage({
               id: 'gauge-'+ goal.id,
               value: goal.calculatedValue,
@@ -208,50 +136,32 @@ angular.module('teacherdashboard')
                 '#4CAF50'
               ]
             });
-          }, 50);
+          }
+
+            goal.title = goal.name ;
+          if (!refresh) {
+            $timeout(function() {
+              $scope.gage = new $window.JustGage({
+                id: 'gauge-'+ goal.id,
+                value: goal.calculatedValue,
+                min: 0,
+                max: goal.desiredValue,
+                minTxt:0,
+                maxTest:100,
+                valueMinFontSize: 50,
+                textRenderer: renderFunction,
+                levelColors: [
+                  '#F44366',
+                  '#FFEB3B',
+                  '#4CAF50'
+                ]
+              });
+            }, 50);
+          }
+
         };
 
-        function evaluateWidth(goal) {
-          if (goal.calculatedValue === -1) {
-            return '100';
-          } else {
-            var width = goal.calculatedValue / goal.max * 100;
-            if (width > 100) {
-              return 100;
-            } else {
-              if (width === 0) {
-                return 2;
-              }
-              return width;
-            }
-          }
-        }
-
-        function evaluateColorClass(goal) {
-          var danger = 'goal-danger';
-          var warning = 'goal-warning';
-          var success = 'goal-success';
-          var unknown = 'goal-unknown';
-          var performanceClasses = [danger, warning, success];
-
-          //Extend this to work for all negative goal types
-          if (goal.behaviorCategory === 'DEMERIT' || goal.goalType === 'ATTENDANCE') {
-            performanceClasses.reverse();
-          }
-
-          if (goal.calculatedValue === -1) {
-            return unknown;
-          }
-
-          if (goal.width < 33) {
-            return performanceClasses[0];
-          } else if (goal.width >= 33 && goal.width <= 67) {
-            return performanceClasses[1];
-          } else {
-            return performanceClasses[2];
-          }
-        }
-  $scope.resolveGoalDisplay();
+  $scope.resolveGoalDisplay(false);
       }
 
 
