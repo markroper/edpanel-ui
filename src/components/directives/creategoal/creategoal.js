@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
-    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
+  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast',
+    function($state, statebag, api, $q, mdToast) {
       return {
         scope: {
           sections: '=',
@@ -14,10 +14,10 @@ angular.module('teacherdashboard')
           $scope.createGoal = false;
           $scope.goal = {};
           $scope.goalTypes = [
-            {"uiName":"Behavior"},
-            {"uiName":"Class Grade"},
-            {"uiName":"Assignment"},
-            {"uiName":"Other"}];
+            {'uiName':'Behavior'},
+            {'uiName':'Class Grade'},
+            {'uiName':'Assignment'},
+            {'uiName':'Other'}];
 
           $scope.behaviorCategories = [
             {
@@ -46,9 +46,9 @@ angular.module('teacherdashboard')
             }
           ];
           var uiNamesToApi = {
-            "Behavior":"BEHAVIOR",
-            "Class Grade":"SECTION_GRADE",
-            "Assignment":"ASSIGNMENT",
+            'Behavior':'BEHAVIOR',
+            'Class Grade':'SECTION_GRADE',
+            'Assignment':'ASSIGNMENT',
             'Merit':'MERIT',
             'Demerit':'DEMERIT',
             'Detention':'DETENTION',
@@ -88,15 +88,15 @@ angular.module('teacherdashboard')
 
             };
             if ($scope.goal.createType === 'Assignment') {
-              goalToMake['name'] = $scope.goal.assignment + " Goal";
+              goalToMake['name'] = $scope.goal.assignment + ' Goal';
               goalToMake['section'] = {id:$scope.goal.class};
             } else if ($scope.goal.createType === 'Behavior') {
               var today = new Date();
-              goalToMake['name'] = $scope.goal.behaviorCat + " Goal";
+              goalToMake['name'] = $scope.goal.behaviorCat + ' Goal';
               goalToMake['behaviorCategory'] = uiNamesToApi[$scope.goal.behaviorCat];
               goalToMake['startDate'] = today.getFullYear() + '-' +today.getMonth()+1 +'-'+today.getDate();
             } else if ($scope.goal.createType === 'Class Grade') {
-              goalToMake['name'] = $scope.goal.class.name + " Grade Goal";
+              goalToMake['name'] = $scope.goal.class.name + ' Grade Goal';
               var sectionName;
 
               for (var i = 0; i < $scope.sections.length; i ++) {
@@ -104,7 +104,7 @@ angular.module('teacherdashboard')
                   sectionName = $scope.sections[i].course.name;
                 }
               }
-              goalToMake['name'] = sectionName + " Grade Goal";
+              goalToMake['name'] = sectionName + ' Grade Goal';
               goalToMake['section'] = {
                 id:$scope.goal.class,
                 course:{
@@ -114,7 +114,7 @@ angular.module('teacherdashboard')
             }
             else if ($scope.goal.createType === 'Other') {
               //THis field can't be null so we set it to 0
-              goalToMake['desiredValue'] = 0,
+              goalToMake['desiredValue'] = 0;
               goalToMake['name'] = 'Custom Goal';
               goalToMake['message'] = $scope.goal.message;
             }

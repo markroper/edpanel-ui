@@ -46,27 +46,11 @@ angular.module('teacherdashboard')
         };
 
         $scope.proposeEdit = function(goal) {
-          goal.editActive = false;
-          var datifyGoal = function(goal) {
-            var apiGoal = angular.extend({}, goal);
-
-            delete apiGoal.colorClass;
-            delete apiGoal.maxDisplay;
-            delete apiGoal.maxPossible;
-            delete apiGoal.progressText;
-            delete apiGoal.proposedValue;
-            delete apiGoal.title;
-            delete apiGoal.max;
-            delete apiGoal.width;
-            delete apiGoal.aveValue;
-            delete apiGoal.editActive;
-            return apiGoal;
-          };
-          var apiGoal = datifyGoal(goal);
+          delete goal.editActive;
           api.editStudentGoal.patch(
             { studentId: goal.student.id,
               goalId: goal.id},
-           apiGoal,
+           goal,
             function() {
               $scope.resolveGoalDisplay(true);
               showSimpleToast('Goal changed successfully');
@@ -108,7 +92,6 @@ angular.module('teacherdashboard')
             });
           }
 
-            goal.title = goal.name ;
           if (!refresh) {
             $timeout(function() {
               $scope.gage = new $window.JustGage({
