@@ -1,0 +1,146 @@
+<div class="creategoal">
+  <md-card>
+    <md-card-content>
+      <div layout="column">
+        <div layout="row" layout-align="center center">
+          <md-headline style="margin-bottom: 10px;font-size: 30px; margin-right: 20px">Create a Goal</md-headline>
+          <md-button class="md-fab" aria-label="Create Goal" ng-show="!createGoal" ng-click="openCreateGoal()">
+            <md-icon>add</md-icon>
+          </md-button>
+        </div>
+        <div layout="column" ng-show="createGoal">
+          <div layout="row" layout-align="center center">
+            <div flex="25">
+              <div layout="column" layout-align="start center">
+                <md-headline flex>Select Goal Type</md-headline>
+                <md-input-container flex class="md-block">
+                  <label>Goal Type</label>
+                  <md-select ng-model="goal.createType">
+                    <md-option ng-repeat="type in goalTypes" value="{{type.uiName}}">
+                      {{type.uiName}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+              </div>
+            </div>
+            <div flex="75" layout="row" ng-show="goal.createType == 'Assignment'">
+              <div flex="33">
+                <div layout="column" layout-align="start center">
+                  <md-headline flex>For what class?</md-headline>
+                  <md-input-container flex>
+                    <md-select ng-model="goal.class">
+                      <md-option ng-repeat="section in sections" value="{{section.id}}">
+                        {{section.course.name}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
+                </div>
+              </div>
+              <div flex="33">
+                <div layout="column" layout-align="start center">
+                  <md-headline flex>What Assignment?</md-headline>
+                  <md-input-container flex>
+                    <input name="assignment" ng-model="goal.assignment" placeholder="Assignment">
+                  </md-input-container>
+                </div>
+              </div>
+              <div flex="33">
+                <div layout="column" layout-align="start center">
+                  <md-headline flex>What grade would you like to get?</md-headline>
+                  <md-input-container flex>
+                    <input required name="Grade" type="number" step="1" ng-model="goal.desiredGrade"
+                           max="100">
+                  </md-input-container>
+                </div>
+              </div>
+            </div>
+            <div flex="75" layout="row" ng-show="goal.createType == 'Behavior'">
+              <div flex="33">
+                <div layout="column" layout-align="start center">
+                  <md-headline flex>What behavior category?</md-headline>
+                  <md-input-container flex>
+                    <md-select ng-model="goal.behaviorCat">
+                      <md-option ng-repeat="cat in behaviorCategories" value="{{cat.uiName}}">
+                        {{cat.uiName}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
+                </div>
+              </div>
+              <div flex="33">
+                <div layout="column" layout-align="start center">
+                  <md-headline flex>How many would you like to get?</md-headline>
+                  <md-input-container flex>
+                    <input required name="Grade" type="number" step="1" ng-model="goal.desiredGrade"
+                           max="1000">
+                  </md-input-container>
+                </div>
+              </div>
+            </div>
+            <div flex="75" layout="row" ng-show="goal.createType == 'Class Grade'">
+              <div flex="33">
+                <div layout="column" layout-align="start center">
+                  <md-headline flex>What class?</md-headline>
+                  <md-input-container flex>
+                    <md-select ng-model="goal.class">
+                      <md-option ng-repeat="section in sections" value="{{section.id}}">
+                        {{section.course.name}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
+                </div>
+              </div>
+              <div flex="33">
+                <div layout="column" layout-align="start center">
+                  <md-headline flex>What grade would you like to get?</md-headline>
+                  <md-input-container flex>
+                    <input required name="Grade" type="number" step="1" ng-model="goal.desiredGrade"
+                           max="100">
+                  </md-input-container>
+                </div>
+              </div>
+            </div>
+            <div flex="75" layout="row" ng-show="goal.createType == 'Other'">
+              <div flex="85">
+                <div layout="column" layout-align="start center">
+                  <div layout="column">
+                    <md-headline> What is your goal?</md-headline>
+                    <md-input-container>
+                      <label>Goal</label>
+                      <textarea ng-model="goal.message"rows="5" md-select-on-focus></textarea>
+                    </md-input-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div layout="column">
+            <md-headline> What obstacles do you face in meeting this goal?</md-headline>
+            <md-input-container>
+              <label>Obstacles</label>
+              <textarea ng-model="goal.obstacle"rows="5" md-select-on-focus></textarea>
+            </md-input-container>
+          </div>
+          <div layout="column">
+            <md-headline> How do you plan to accomplish this goal?</md-headline>
+            <md-input-container>
+              <label>Plan</label>
+              <textarea ng-model="goal.plan"rows="5" md-select-on-focus></textarea>
+            </md-input-container>
+          </div>
+          <div layout="column">
+            <md-headline> What will happen if you meet this goal?</md-headline>
+            <md-input-container>
+              <label>Outcome</label>
+              <textarea ng-model="goal.outcome"rows="5" md-select-on-focus></textarea>
+            </md-input-container>
+          </div>
+          <md-button class="md-fab" aria-label="Eat cake" ng-click="submitCreateGoal()">
+            <md-icon>done</md-icon>
+          </md-button>
+        </div>
+      </div>
+    </md-card-content>
+  </md-card>
+</div>

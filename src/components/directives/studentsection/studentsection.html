@@ -8,32 +8,7 @@
         <div layout="row" layout-wrap layout-align="center start" class="grade-container">
           <div flex="none" class="grade-goal" style="position: relative">
             <h3 class="md-subhead">Current Grade</h3>
-            <md-button aria-label="menu" class="md-icon-button edit-goal-button">
-              <md-icon md-font-set="material-icons" ng-click="editGoal(section)">mode_edit</md-icon>
-              <md-tooltip>edit grade goal</md-tooltip>
-            </md-button>
-            <div id="gauge-{{::section.goal.nameId}}" class="goal-gauge" style="height: 175px"></div>
-            <div ng-show="section.editActive" class="editSlider">
-              <md-content>
-                <div layout>
-                  <md-slider test-drag-end ng-model="section.goal.proposedValue" flex= min="0" max="100" aria-label="red" id="red-slider" class="">
-                  </md-slider>
-                  <div flex="20" layout layout-align="center center">
-                    <input type="number" ng-model="section.goal.proposedValue" aria-label="red" aria-controls="red-slider">
-                  </div>
-                </div>
-                <div layout>
-                  <md-button ng-click="proposeEdit(section)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
-                    <md-icon md-font-set="material-icons">check</md-icon>
-                    <md-tooltip>save changes</md-tooltip>
-                  </md-button>
-                  <md-button ng-click="section.editActive = false" aria-label="menu" class="md-fab md-warn md-raised md-mini">
-                    <md-icon md-font-set="material-icons">close</md-icon>
-                    <md-tooltip>discard changes</md-tooltip>
-                  </md-button>
-                </div>
-              </md-content>
-            </div>
+            <div id="gauge-{{::section.id}}" class="goal-gauge" style="height: 175px"></div>
             <div layout="row" flex="none" class="current-grade grade-item">
               <div ng-repeat="termGrade in section.termGrades" flex layout="column">
                 <div class="md-subhead">{{::termGrade.name}}</div>

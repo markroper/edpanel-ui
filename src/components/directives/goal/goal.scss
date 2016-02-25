@@ -6,6 +6,9 @@
 }
 .goals-container{
   md-card-content {
+    .menu-button{
+      margin-top: 40px;
+    }
     position:relative;
     md-fab-speed-dial.md-fab-top-right {
       position:absolute;
@@ -17,14 +20,21 @@
   flex-wrap: wrap;
   justify-content: center;
   .student-goal{
+    .woop-heading {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+    .woop-text {
+      text-align: center;
+      margin-bottom: 10px;
+    }
     .progress {
       height: 30px;
       border-radius:0px;
     }
-    min-width: 350px;
+    min-width: 300px;
     .goal-title {
-      font-size: 16px;
-      margin-bottom: 5px;
+      font-size: 20px;
       text-align: center;
     }
     .goal-danger {
