@@ -21,10 +21,20 @@
         <div layout="column" layout-align="center center">
 
           <div class="goal-title" flex="85">{{goal.title}}</div>
-          <div id="gauge-{{::goal.id}}" class="goal-gauge" style="height: 175px"></div>
+          <div ng-show="goal.goalType != 'OPEN'" id="gauge-{{::goal.id}}" class="goal-gauge" style="height: 175px"></div>
+          <div ng-show="goal.goalType == 'OPEN'" layout='column' style="margin-top:30px;min-height:120px">
+            <md-headline ng-show="!goal.editActive" style="font-size: 30px; margin-bottom: 15px">Goal</md-headline>
+            <div style="font-size: 18px; margin-bottom: 20px" ng-show="!goal.editActive">{{goal.message}}</div>
+            <div layout="column" ng-show="goal.editActive">
+              <md-headline> What is your goal?</md-headline>
+              <md-input-container>
+                <textarea ng-model="goal.message"rows="5" md-select-on-focus></textarea>
+              </md-input-container>
+            </div>
+          </div>
           <div layout="column" ng-show="goal.editActive">
-            <md-headline>Desired Value?</md-headline>
-            <md-input-container>
+            <md-headline ng-show="goal.goalType != 'OPEN'">Desired Value?</md-headline>
+            <md-input-container ng-show="goal.goalType != 'OPEN'">
               <input required name="Grade" type="number" step="1" ng-model="goal.desiredValue"
                      max="100">
             </md-input-container>

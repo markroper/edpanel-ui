@@ -248,7 +248,6 @@ angular.module('teacherdashboard')
           }
 
           $scope.sections = sections;
-          console.log($scope.sections);
           statebag.sections = $scope.sections;
           sectionDataDeferred.resolve(sections);
         });

@@ -40,7 +40,7 @@
                 <div layout="column" layout-align="start center">
                   <md-headline flex>What Assignment?</md-headline>
                   <md-input-container flex>
-                    <input name="assignment" ng-model="goal.assignment" placeholder="Unit 3 Test">
+                    <input name="assignment" ng-model="goal.assignment" placeholder="Assignment">
                   </md-input-container>
                 </div>
               </div>
@@ -97,6 +97,19 @@
                     <input required name="Grade" type="number" step="1" ng-model="goal.desiredGrade"
                            max="100">
                   </md-input-container>
+                </div>
+              </div>
+            </div>
+            <div flex="75" layout="row" ng-show="goal.createType == 'Other'">
+              <div flex="85">
+                <div layout="column" layout-align="start center">
+                  <div layout="column">
+                    <md-headline> What is your goal?</md-headline>
+                    <md-input-container>
+                      <label>Goal</label>
+                      <textarea ng-model="goal.message"rows="5" md-select-on-focus></textarea>
+                    </md-input-container>
+                  </div>
                 </div>
               </div>
             </div>

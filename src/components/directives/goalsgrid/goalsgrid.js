@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goalsgrid', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
-    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
+  .directive('goalsgrid', ['$state', 'statebag', 'api',
+    function($state, statebag, api) {
       return {
         scope: {
           approvedGoals: '=',
@@ -13,7 +13,6 @@ angular.module('teacherdashboard')
         templateUrl: api.basePrefix + '/components/directives/goalsgrid/goalsgrid.html',
         replace: true,
         controller: function ($scope) {
-          console.log($scope.approvedGoals);
 
 
         }

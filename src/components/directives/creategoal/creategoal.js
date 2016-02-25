@@ -54,7 +54,8 @@ angular.module('teacherdashboard')
             'Detention':'DETENTION',
             'Out of School Suspension':'OUT_OF_SCHOOL_SUSPENSION',
             'In School Suspension': 'IN_SCHOOL_SUSPENSION',
-            'Referral':'REFERRAL'
+            'Referral':'REFERRAL',
+            'Other':'OPEN'
           };
           var showSimpleToast = function(msg) {
             mdToast.show(
@@ -71,7 +72,6 @@ angular.module('teacherdashboard')
 
           $scope.submitCreateGoal = function() {
             $scope.createGoal = false;
-            console.log($scope.goal.class);
             var goalToMake = {
               'goalType':uiNamesToApi[$scope.goal.createType],
               'staff':statebag.currentStudent.student.advisor,
@@ -96,11 +96,8 @@ angular.module('teacherdashboard')
               goalToMake['behaviorCategory'] = uiNamesToApi[$scope.goal.behaviorCat];
               goalToMake['startDate'] = today.getFullYear() + '-' +today.getMonth()+1 +'-'+today.getDate();
             } else if ($scope.goal.createType === 'Class Grade') {
-              console.log("HERE");
-              console.log($scope.goal.class.name);
               goalToMake['name'] = $scope.goal.class.name + " Grade Goal";
               var sectionName;
-              console.log($scope.goal.class);
 
               for (var i = 0; i < $scope.sections.length; i ++) {
                 if ($scope.sections[i].id == $scope.goal.class) {
@@ -115,11 +112,16 @@ angular.module('teacherdashboard')
                 }
               };
             }
+            else if ($scope.goal.createType === 'Other') {
+              //THis field can't be null so we set it to 0
+              goalToMake['desiredValue'] = 0,
+              goalToMake['name'] = 'Custom Goal';
+              goalToMake['message'] = $scope.goal.message;
+            }
             api.studentGoals.post(
               { studentId: statebag.currentStudent.id},
               goalToMake,
               function(results) {
-                console.log(results);
                 goalToMake['id'] = results.id;
                 showSimpleToast('Goal created successfully');
                 $scope.pendingGoals.push(goalToMake);

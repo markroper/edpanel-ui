@@ -46,7 +46,6 @@ angular.module('teacherdashboard')
         };
 
         $scope.proposeEdit = function(goal) {
-          console.log(goal);
           goal.editActive = false;
           var datifyGoal = function(goal) {
             var apiGoal = angular.extend({}, goal);
