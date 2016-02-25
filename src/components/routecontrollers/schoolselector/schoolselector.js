@@ -13,7 +13,7 @@ angular.module('teacherdashboard').
       if (statebag.userRole === 'TEACHER') {
         $state.go('app.teacherHome', {schoolId: statebag.school.id});
       } else {
-        $state.go('app.home', { schoolId: statebag.school.id });
+        $state.go('app.schoolDash', { schoolId: statebag.school.id });
       }
 
     };

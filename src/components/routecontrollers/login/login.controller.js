@@ -79,6 +79,22 @@ angular.module('teacherdashboard')
                     $scope.mode = '';
                   });
 
+              } else if(data.type === consts.roles.ADMIN){
+                api.school.get(
+                  {schoolId: data.currentSchoolId},
+                  //Success callback
+                  function (schoolData) {
+                    statebag.school = schoolData;
+                    statebag.currentYear = statebagapimanager.resolveCurrentYear();
+                    statebag.currentTerm = statebagapimanager.resolveCurrentTerm();
+                    statebag.lastFullRefresh = null;
+                    $state.go('app.schoolDash', {schoolId: statebag.school.id});
+                  },
+                  //Error callback
+                  function () {
+                    $scope.showErrorMsg = true;
+                    $scope.mode = '';
+                  });
               } else {
                 api.school.get(
                   {schoolId: data.currentSchoolId},
