@@ -100,19 +100,29 @@ angular.module('teacherdashboard')
               console.log($scope.goal.class.name);
               goalToMake['name'] = $scope.goal.class.name + " Grade Goal";
               var sectionName;
+              console.log($scope.goal.class);
+
               for (var i = 0; i < $scope.sections.length; i ++) {
-                if ($scope.sections[i].id === $scope.goal.class) {
+                if ($scope.sections[i].id == $scope.goal.class) {
                   sectionName = $scope.sections[i].course.name;
                 }
               }
               goalToMake['name'] = sectionName + " Grade Goal";
-              goalToMake['section'] = {id:$scope.goal.class};
+              goalToMake['section'] = {
+                id:$scope.goal.class,
+                course:{
+                  name:sectionName
+                }
+              };
             }
             api.studentGoals.post(
               { studentId: statebag.currentStudent.id},
               goalToMake,
-              function() {
+              function(results) {
+                console.log(results);
+                goalToMake['id'] = results.id;
                 showSimpleToast('Goal created successfully');
+                $scope.pendingGoals.push(goalToMake);
               },
               function() {
                 showSimpleToast('There was a problem creating the goal');

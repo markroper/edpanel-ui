@@ -171,6 +171,7 @@ angular.module('teacherdashboard')
                 break;
               case 'SECTION_GRADE':
                 goal.title = goal.section.course.name + " Grade Goal";
+                console.log(goal);
                 goal.maxDisplay = goal.desiredValue + '%';
                 goal.progressText = 'Your grade: ' + goal.calculatedValue + '%';
                 goal.aveValue = '83%';
