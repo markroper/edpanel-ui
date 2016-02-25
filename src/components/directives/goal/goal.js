@@ -4,25 +4,16 @@ angular.module('teacherdashboard')
     function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
     return {
       scope: {
-        goal: '='
+        goal: '=',
+        pendingGoals: '=',
+        editable: '@'
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/goal/goal.html',
       replace: true,
       controller: function($scope) {
 
-        $scope.tempGoal = {
-          name: '',
-          behaviorType: '',
-          desiredValue: '100',
-          goalType: '',
-          startDate: '',
-          endDate: '',
-          sectionName: ''
-        };
         $scope.sectionsResolved = false;
-        $scope.clearGoal = angular.extend({},$scope.tempGoal);
-        $scope.behaviorTypes = ['DEMERIT','MERIT'];
 
         var showSimpleToast = function(msg) {
           mdToast.show(
@@ -33,35 +24,15 @@ angular.module('teacherdashboard')
           );
         };
 
-        $scope.clearDialog = function() {
-          $mdDialog.hide();
-          $scope.tempGoal = angular.extend({},$scope.clearGoal);
-        };
-
-        $scope.handleCreateGoalClick = function(ev)  {
-          $scope.sections = statebag.sections;
-          $mdDialog.show({
-            scope: $scope.$new(),
-            student: statebag.currentStudent,
-            templateUrl: api.basePrefix + '/components/directives/goal/goalCreate.html',
-            parent: angular.element($document.prop( 'body' )),
-            targetEvent: ev,
-            clickOutsideToClose:true
-          });
-        };
-
-        $scope.setGoalType = function(goalType) {
-          $scope.tempGoal = angular.extend({},$scope.clearGoal);
-          $scope.tempGoal.goalType = goalType;
-        };
 
         $scope.deleteGoal = function(goal) {
           api.editStudentGoal.delete(
             { studentId: goal.student.id,
               goalId: goal.id},
             function() {
-              var index = $scope.goals.indexOf(goal);
-              $scope.goals.splice(index,1);
+              var index = $scope.pendingGoals.indexOf(goal);
+              $scope.pendingGoals.splice(index,1);
+              showSimpleToast('Goal successfully deleted');
             },
             function() {
               showSimpleToast('Goal could not be deleted');

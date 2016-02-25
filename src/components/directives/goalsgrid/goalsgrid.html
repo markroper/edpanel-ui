@@ -6,7 +6,7 @@
         <md-headline style="margin-bottom: 10px;font-size: 30px">Pending Goals</md-headline>
       </div>
       <div layout="row" class="goals-container">
-        <goal ng-repeat="pgoal in pgoals" goal="pgoal"></goal>
+        <goal ng-repeat="pgoal in pgoals" goal="pgoal" pending-goals="pgoals" editable="true"></goal>
       </div>
     </md-card-content>
   </md-card>

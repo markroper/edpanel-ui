@@ -31,43 +31,6 @@ angular.module('teacherdashboard')
           currentGrade: scope.section.grade,
           components: componentGrades
         };
-        scope.editGoal = function(section) {
-          //Call api to edit the goal
-          analytics.sendEvent(GA_PAGE_NAME,analytics.EDIT_GOAL, analytics.GOAL_LABEL);
-          section.editActive = true;
-
-        };
-        scope.proposeEdit = function(section) {
-          section.goal.desiredValue = section.goal.proposedValue;
-          var datifyGoal = function(goal) {
-            var apiGoal = angular.extend({}, goal);
-            delete apiGoal.proposedValue;
-            delete apiGoal.nameId;
-            return apiGoal;
-          };
-          var showSimpleToast = function(msg) {
-            mdToast.show(
-              mdToast.simple()
-                .content(msg)
-                .action('OK')
-                .hideDelay(2000)
-            );
-          };
-          var goal = datifyGoal(section.goal);
-          section.editActive = false;
-          goal.desiredValue = section.goal.proposedValue;
-          api.editStudentGoal.patch(
-            { studentId: goal.student.id,
-              goalId: goal.id},
-            goal,
-            function() {
-              scope.gage.refresh(goal.calculatedValue, goal.desiredValue);
-              showSimpleToast('Goal updated');
-            },
-            function() {
-              showSimpleToast('There was a problem modifying the goal');
-            });
-        };
 
         scope.showAssignments = function() {
           analytics.sendEvent(GA_PAGE_NAME, analytics.SHOW_ASSIGNMENTS, analytics.ASSIGNMENT_LABEL);
@@ -89,10 +52,10 @@ angular.module('teacherdashboard')
 
         $timeout(function() {
           scope.gage = new $window.JustGage({
-            id: 'gauge-'+ scope.section.goal.nameId,
+            id: 'gauge-'+ scope.section.id,
             value: scope.section.goal.calculatedValue,
             min: 0,
-            max: scope.section.goal.desiredValue,
+            max: 100,
             textRenderer: statebagApiManager.resolveGrade,
             valueMinFontSize: 50,
             hideMinMax: true,
