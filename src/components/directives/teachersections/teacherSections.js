@@ -342,7 +342,7 @@ angular.module('teacherdashboard')
                   'leftHandSide':{
                     'type': 'DIMENSION',
                     'value': {
-                      'dimension':'USER',
+                      'dimension':'STAFF',
                       'field':'ID'
                     }
                   },
