@@ -2,8 +2,8 @@
   <div flex="100" flex-gt-md="50">
     <md-card>
       <md-card-content>
-        <div layout="column" layout-align="center center">
-          <md-headline style="margin-bottom: 10px;font-size: 30px">Proposed Goals</md-headline>
+        <div layout="column" flex="100"layout-align="center center">
+          <creategoal pending-goals="pgoals" sections="sections"></creategoal>
         </div>
         <div layout="row" class="goals-container">
           <goal ng-repeat="pgoal in pgoals" goal="pgoal" pending-goals="pgoals" approved-goals="agoals" editable="true"></goal>
