@@ -88,15 +88,15 @@ angular.module('teacherdashboard')
 
             };
             if ($scope.goal.createType === 'Assignment') {
-              goalToMake['name'] = $scope.goal.assignment + ' Goal';
-              goalToMake['section'] = {id:$scope.goal.class};
+              goalToMake.name = $scope.goal.assignment + ' Goal';
+              goalToMake.section = {id:$scope.goal.class};
             } else if ($scope.goal.createType === 'Behavior') {
               var today = new Date();
-              goalToMake['name'] = $scope.goal.behaviorCat + ' Goal';
-              goalToMake['behaviorCategory'] = uiNamesToApi[$scope.goal.behaviorCat];
-              goalToMake['startDate'] = today.getFullYear() + '-' +today.getMonth()+1 +'-'+today.getDate();
+              goalToMake.name = $scope.goal.behaviorCat + ' Goal';
+              goalToMake.behaviorCategory = uiNamesToApi[$scope.goal.behaviorCat];
+              goalToMake.startDate = today.getFullYear() + '-' +today.getMonth()+1 +'-'+today.getDate();
             } else if ($scope.goal.createType === 'Class Grade') {
-              goalToMake['name'] = $scope.goal.class.name + ' Grade Goal';
+              goalToMake.name = $scope.goal.class.name + ' Grade Goal';
               var sectionName;
 
               for (var i = 0; i < $scope.sections.length; i ++) {
@@ -104,8 +104,8 @@ angular.module('teacherdashboard')
                   sectionName = $scope.sections[i].course.name;
                 }
               }
-              goalToMake['name'] = sectionName + ' Grade Goal';
-              goalToMake['section'] = {
+              goalToMake.name = sectionName + ' Grade Goal';
+              goalToMake.section = {
                 id:$scope.goal.class,
                 course:{
                   name:sectionName
@@ -114,15 +114,15 @@ angular.module('teacherdashboard')
             }
             else if ($scope.goal.createType === 'Other') {
               //THis field can't be null so we set it to 0
-              goalToMake['desiredValue'] = 0;
-              goalToMake['name'] = 'Custom Goal';
-              goalToMake['message'] = $scope.goal.message;
+              goalToMake.desiredValue = 0;
+              goalToMake.name = 'Custom Goal';
+              goalToMake.message = $scope.goal.message;
             }
             api.studentGoals.post(
               { studentId: statebag.currentStudent.id},
               goalToMake,
               function(results) {
-                goalToMake['id'] = results.id;
+                goalToMake.id = results.id;
                 showSimpleToast('Goal created successfully');
                 $scope.pendingGoals.push(goalToMake);
               },
@@ -132,9 +132,6 @@ angular.module('teacherdashboard')
               });
             //Actually submit goal here
           };
-
         }
-
-
-      }
+      };
     }]);

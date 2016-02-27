@@ -180,19 +180,6 @@ span.name {
 }
 
 // injector
-@import '../components/routecontrollers/administration/administration.scss';
-@import '../components/routecontrollers/home/home.scss';
-@import '../components/routecontrollers/login/login.scss';
-@import '../components/routecontrollers/mysurveyresponses/mySurveyResponses.scss';
-@import '../components/routecontrollers/mysurveys/mySurveys.scss';
-@import '../components/routecontrollers/navinclude/navinclude.scss';
-@import '../components/routecontrollers/notificationmgmt/notificationmgmt.scss';
-@import '../components/routecontrollers/resetpassword/resetpassword.scss';
-@import '../components/routecontrollers/schooldash/schooldash.scss';
-@import '../components/routecontrollers/schoolselector/schoolselector.scss';
-@import '../components/routecontrollers/student/student.scss';
-@import '../components/routecontrollers/surveyresults/surveyResults.scss';
-@import '../components/routecontrollers/teacherhome/teacherhome.scss';
 @import '../components/directives/attendancetable/attendancetable.scss';
 @import '../components/directives/behaviorgraph/behaviorgraph.scss';
 @import '../components/directives/behaviortable/behaviortable.scss';
@@ -218,4 +205,17 @@ span.name {
 @import '../components/directives/survey/surveyQuestionBuilder.scss';
 @import '../components/directives/survey/surveyResponse.scss';
 @import '../components/directives/teachersections/teacherSections.scss';
+@import '../components/routecontrollers/administration/administration.scss';
+@import '../components/routecontrollers/home/home.scss';
+@import '../components/routecontrollers/login/login.scss';
+@import '../components/routecontrollers/mysurveyresponses/mySurveyResponses.scss';
+@import '../components/routecontrollers/mysurveys/mySurveys.scss';
+@import '../components/routecontrollers/navinclude/navinclude.scss';
+@import '../components/routecontrollers/notificationmgmt/notificationmgmt.scss';
+@import '../components/routecontrollers/resetpassword/resetpassword.scss';
+@import '../components/routecontrollers/schooldash/schooldash.scss';
+@import '../components/routecontrollers/schoolselector/schoolselector.scss';
+@import '../components/routecontrollers/student/student.scss';
+@import '../components/routecontrollers/surveyresults/surveyResults.scss';
+@import '../components/routecontrollers/teacherhome/teacherhome.scss';
 // endinjector

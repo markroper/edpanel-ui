@@ -13,13 +13,20 @@
     md-fab-speed-dial.md-fab-top-right {
       position:absolute;
       top:0px;
+      right:0px;
     }
+  }
+  .goal-gauge > svg {
+    margin-top: -20px;
   }
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   .student-goal{
+    md-fab-speed-dial {
+      margin-top: 0px;
+    }
     .woop-heading {
       font-size: 30px;
       margin-bottom: 10px;

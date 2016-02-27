@@ -1,24 +1,26 @@
-<div class="goalsgrid">
-
-  <md-card>
-    <md-card-content>
-      <div layout="column" layout-align="center center">
-        <md-headline style="margin-bottom: 10px;font-size: 30px">Pending Goals</md-headline>
-      </div>
-      <div layout="row" class="goals-container">
-        <goal ng-repeat="pgoal in pgoals" goal="pgoal" pending-goals="pgoals" editable="true"></goal>
-      </div>
-    </md-card-content>
-  </md-card>
-
-  <md-card>
-    <md-card-content>
-      <div layout="column" layout-align="center center">
-        <md-headline style="margin-bottom: 10px;font-size: 30px">Approved Goals</md-headline>
-      </div>
-      <div layout="row" class="goals-container">
-        <goal ng-repeat="agoal in agoals" goal="agoal"></goal>
-      </div>
-    </md-card-content>
-  </md-card>
+<div class="goalsgrid" layout="row" layout-wrap>
+  <div flex="100" flex-gt-md="50">
+    <md-card>
+      <md-card-content>
+        <div layout="column" layout-align="center center">
+          <md-headline style="margin-bottom: 10px;font-size: 30px">Proposed Goals</md-headline>
+        </div>
+        <div layout="row" class="goals-container">
+          <goal ng-repeat="pgoal in pgoals" goal="pgoal" pending-goals="pgoals" approved-goals="agoals" editable="true"></goal>
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
+  <div flex="100" flex-gt-md="50">
+    <md-card>
+      <md-card-content>
+        <div layout="column" layout-align="center center">
+          <md-headline style="margin-bottom: 10px;font-size: 30px">Approved Goals</md-headline>
+        </div>
+        <div layout="row" class="goals-container">
+          <goal ng-repeat="agoal in agoals" goal="agoal"></goal>
+        </div>
+      </md-card-content>
+    </md-card>
+  </div>
 </div>
