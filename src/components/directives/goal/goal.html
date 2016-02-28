@@ -50,11 +50,6 @@
                      max="100">
             </md-input-container>
           </div>
-          <md-headline class="woop-heading">Plan</md-headline>
-          <div class="woop-text" ng-show="!goal.editActive">{{goal.plan}}</div>
-          <md-input-container ng-show="goal.editActive">
-            <textarea ng-model="goal.plan"rows="5" md-select-on-focus></textarea>
-          </md-input-container>
           <md-headline class="woop-heading">Obstacles</md-headline>
           <div class="woop-text" ng-show="!goal.editActive">{{goal.obstacles}}</div>
           <md-input-container ng-show="goal.editActive">
@@ -63,6 +58,11 @@
           <md-headline class="woop-heading">Outcome</md-headline>
           <div class="woop-text" ng-show="!goal.editActive">{{goal.outcome}}
           </div>
+          <md-headline class="woop-heading">Plan</md-headline>
+          <div class="woop-text" ng-show="!goal.editActive">{{goal.plan}}</div>
+          <md-input-container ng-show="goal.editActive">
+            <textarea ng-model="goal.plan"rows="5" md-select-on-focus></textarea>
+          </md-input-container>
           <md-input-container ng-show="goal.editActive">
             <textarea ng-model="goal.outcome"rows="5" md-select-on-focus></textarea>
           </md-input-container>
