@@ -70,6 +70,10 @@ angular.module('teacherdashboard')
             $scope.createGoal = true;
           };
 
+          $scope.cancelGoal = function() {
+            $scope.createGoal = false;
+          };
+
           $scope.submitCreateGoal = function() {
             $scope.createGoal = false;
             var goalToMake = {

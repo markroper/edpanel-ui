@@ -1,10 +1,7 @@
 <div class="creategoal" style="width:100%">
   <div layout="column">
     <div layout="row" layout-align="center center">
-      <md-headline style="margin-bottom: 10px;font-size: 30px; margin-right: 20px">Proposed Goals</md-headline>
-      <md-button class="md-fab" aria-label="Create Goal" ng-show="!createGoal" ng-click="openCreateGoal()">
-        <md-icon>add</md-icon>
-      </md-button>
+      <md-headline ng-show="createGoal" style="margin-bottom: 10px;font-size: 30px; margin-right: 20px">Create Goal</md-headline>
     </div>
     <div layout="column" ng-show="createGoal">
       <div layout="row" layout-align="center center">
@@ -134,8 +131,22 @@
           <textarea ng-model="goal.outcome"rows="5" md-select-on-focus></textarea>
         </md-input-container>
       </div>
-      <md-button class="md-fab" aria-label="Eat cake" ng-click="submitCreateGoal()">
-        <md-icon>done</md-icon>
+      <div layout="row">
+        <md-button class="md-fab md-warn" aria-label="Eat cake" ng-click="cancelGoal()">
+          <md-icon>clear</md-icon>
+          <md-tooltip>cancel</md-tooltip>
+        </md-button>
+        <md-button class="md-fab md-primary" aria-label="Eat cake" ng-click="submitCreateGoal()">
+          <md-icon>done</md-icon>
+          <md-tooltip>save goal</md-tooltip>
+        </md-button>
+      </div>
+    </div>
+    <div layout="row" layout-align="center center">
+      <md-headline style="margin-bottom: 10px;font-size: 30px; margin-right: 20px">Proposed Goals</md-headline>
+      <md-button class="md-fab" aria-label="Create Goal" ng-show="!createGoal" ng-click="openCreateGoal()">
+        <md-icon>add</md-icon>
+        <md-tooltip>new goal</md-tooltip>
       </md-button>
     </div>
   </div>
