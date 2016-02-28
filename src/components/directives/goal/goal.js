@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
-    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
+  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','$compile',
+    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, $compile) {
     return {
       scope: {
         goal: '=',
@@ -12,6 +12,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/goal/goal.html',
       replace: true,
       controller: function($scope) {
+
 
         $scope.sectionsResolved = false;
 
@@ -61,7 +62,28 @@ angular.module('teacherdashboard')
             });
         };
       },
-      link: function($scope) {
+      link: function($scope,elem) {
+        var $woopContainer = angular.element(elem).find('.woop-container');
+        var SLIDE_OPEN_CLASS = 'slide-open-woop';
+        var SLIDE_CLOSED_CLASS = 'slide-closed-woop';
+        var $woopArrowIcon = angular.element(elem).find('.arrow-icon');
+        var ROTATE = 'rotate';
+        var ROTATE_COUNTERWISE = 'rotateCounterwise';
+
+        $scope.showWoop = function() {
+          console.log("WOOP");
+
+          $woopContainer.toggleClass(SLIDE_OPEN_CLASS);
+          $woopContainer.toggleClass(SLIDE_CLOSED_CLASS);
+          if($woopArrowIcon.hasClass(ROTATE)) {
+            $woopArrowIcon.removeClass(ROTATE);
+            $woopArrowIcon.addClass(ROTATE_COUNTERWISE);
+          } else {
+            $woopArrowIcon.removeClass(ROTATE_COUNTERWISE);
+            $woopArrowIcon.addClass(ROTATE);
+          }
+
+        };
 
         $scope.resolveGoalDisplay = function(refresh) {
           var renderFunction = function(value) {

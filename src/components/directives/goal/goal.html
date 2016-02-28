@@ -39,34 +39,48 @@
                      max="100">
             </md-input-container>
           </div>
-          <md-headline class="woop-heading">Plan</md-headline>
-          <div class="woop-text" ng-show="!goal.editActive">{{goal.plan}}</div>
-          <md-input-container ng-show="goal.editActive">
-            <textarea ng-model="goal.plan"rows="5" md-select-on-focus></textarea>
-          </md-input-container>
-          <md-headline class="woop-heading">Obstacles</md-headline>
-          <div class="woop-text" ng-show="!goal.editActive">{{goal.obstacles}}</div>
-          <md-input-container ng-show="goal.editActive">
-            <textarea ng-model="goal.obstacles"rows="5" md-select-on-focus></textarea>
-          </md-input-container>
-          <md-headline class="woop-heading">Outcome</md-headline>
-          <div class="woop-text" ng-show="!goal.editActive">{{goal.outcome}}
-          </div>
-          <md-input-container ng-show="goal.editActive">
-            <textarea ng-model="goal.outcome"rows="5" md-select-on-focus></textarea>
-          </md-input-container>
-          <div layout="row">
-            <md-button ng-show="goal.editActive" ng-click="proposeEdit(goal)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
-              <md-icon md-font-set="material-icons">check</md-icon>
-            </md-button>
-            <md-button ng-show="goal.editActive" ng-click="goal.editActive = false" aria-label="menu" class="md-fab md-warn md-raised md-mini">
-              <md-icon md-font-set="material-icons">close</md-icon>
-            </md-button>
-          </div>
+
+
 
 
         </div>
 
       </md-card-content>
+      <md-button class="md-raised md-button-toggle md-ink-ripple woop-toggler" ng-click="showWoop()">
+        <div layout="row" layout-align="center center">
+          <div class="md-subhead">WOOP</div>
+          <div style="width:40px;"></div>
+          <div class="toggle-icon-wrapper">
+            <md-icon md-font-set="material-icons" class="material-icons md-36 arrow-icon"> keyboard_arrow_down </md-icon>
+          </div>
+        </div>
+      </md-button>
+      <div layout="column" class="woop-container slide-closed-woop" layout-align="center center">
+        <md-headline class="woop-heading">Plan</md-headline>
+        <div class="woop-text" ng-show="!goal.editActive">{{goal.plan}}</div>
+        <md-input-container ng-show="goal.editActive">
+          <textarea ng-model="goal.plan"rows="5" md-select-on-focus></textarea>
+        </md-input-container>
+        <md-headline class="woop-heading">Obstacles</md-headline>
+        <div class="woop-text" ng-show="!goal.editActive">{{goal.obstacles}}</div>
+        <md-input-container ng-show="goal.editActive">
+          <textarea ng-model="goal.obstacles"rows="5" md-select-on-focus></textarea>
+        </md-input-container>
+        <md-headline class="woop-heading">Outcome</md-headline>
+        <div class="woop-text" ng-show="!goal.editActive">{{goal.outcome}}
+        </div>
+        <md-input-container ng-show="goal.editActive">
+          <textarea ng-model="goal.outcome"rows="5" md-select-on-focus></textarea>
+        </md-input-container>
+        <div layout="row">
+          <md-button ng-show="goal.editActive" ng-click="proposeEdit(goal)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
+            <md-icon md-font-set="material-icons">check</md-icon>
+          </md-button>
+          <md-button ng-show="goal.editActive" ng-click="goal.editActive = false" aria-label="menu" class="md-fab md-warn md-raised md-mini">
+            <md-icon md-font-set="material-icons">close</md-icon>
+          </md-button>
+        </div>
+      </div>
     </md-card>
+
 </div>
