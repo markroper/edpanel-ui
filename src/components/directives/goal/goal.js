@@ -25,6 +25,14 @@ angular.module('teacherdashboard')
           );
         };
 
+        $scope.markAchieved = function(goal) {
+          goal.goalProgress = 'MET';
+          $scope.proposeEdit(goal, false, true);
+        };
+        $scope.markFailed = function(goal) {
+          goal.goalProgress = 'UNMET';
+          $scope.proposeEdit(goal, false, true);
+        };
         $scope.deleteGoal = function(goal) {
           api.editStudentGoal.delete(
             { studentId: goal.student.id,
@@ -50,7 +58,7 @@ angular.module('teacherdashboard')
           $scope.proposeEdit(goal, true);
         };
 
-        $scope.proposeEdit = function(goal, moveToApproved) {
+        $scope.proposeEdit = function(goal, moveToApproved, removeFromActive) {
           delete goal.editActive;
           api.editStudentGoal.patch(
             { studentId: goal.student.id,
@@ -65,6 +73,9 @@ angular.module('teacherdashboard')
                   $scope.approvedGoals = [];
                 }
                 $scope.approvedGoals.push(goal);
+              } else if(removeFromActive) {
+                var index = $scope.approvedGoals.indexOf(goal);
+                $scope.approvedGoals.splice(index, 1);
               }
               showSimpleToast('Goal changed successfully');
             },
