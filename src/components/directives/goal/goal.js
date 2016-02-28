@@ -1,18 +1,19 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
-    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
+  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window',
+    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window) {
     return {
       scope: {
         goal: '=',
         pendingGoals: '=',
+        approvedGoals:'=',
         editable: '@'
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/goal/goal.html',
       replace: true,
       controller: function($scope) {
-
+        $scope.userRole = statebag.userRole;
         $scope.sectionsResolved = false;
 
         var showSimpleToast = function(msg) {
@@ -24,7 +25,14 @@ angular.module('teacherdashboard')
           );
         };
 
-
+        $scope.markAchieved = function(goal) {
+          goal.goalProgress = 'MET';
+          $scope.proposeEdit(goal, false, true);
+        };
+        $scope.markFailed = function(goal) {
+          goal.goalProgress = 'UNMET';
+          $scope.proposeEdit(goal, false, true);
+        };
         $scope.deleteGoal = function(goal) {
           api.editStudentGoal.delete(
             { studentId: goal.student.id,
@@ -45,7 +53,12 @@ angular.module('teacherdashboard')
 
         };
 
-        $scope.proposeEdit = function(goal) {
+        $scope.approveGoal = function(goal) {
+          goal.approved = true;
+          $scope.proposeEdit(goal, true);
+        };
+
+        $scope.proposeEdit = function(goal, moveToApproved, removeFromActive) {
           delete goal.editActive;
           api.editStudentGoal.patch(
             { studentId: goal.student.id,
@@ -53,6 +66,17 @@ angular.module('teacherdashboard')
            goal,
             function() {
               $scope.resolveGoalDisplay(true);
+              if(moveToApproved) {
+                var index = $scope.pendingGoals.indexOf(goal);
+                $scope.pendingGoals.splice(index, 1);
+                if(!$scope.approvedGoals) {
+                  $scope.approvedGoals = [];
+                }
+                $scope.approvedGoals.push(goal);
+              } else if(removeFromActive) {
+                var index = $scope.approvedGoals.indexOf(goal);
+                $scope.approvedGoals.splice(index, 1);
+              }
               showSimpleToast('Goal changed successfully');
             },
             function() {
@@ -62,7 +86,6 @@ angular.module('teacherdashboard')
         };
       },
       link: function($scope) {
-
         $scope.resolveGoalDisplay = function(refresh) {
           var renderFunction = function(value) {
             if(isNaN(value)) {
@@ -84,6 +107,9 @@ angular.module('teacherdashboard')
               maxTest:100,
               valueMinFontSize: 50,
               textRenderer: renderFunction,
+              minLabelMinFontSize: 14,
+              maxLabelMinFontSize: 18,
+              labelFontColor: '#303030',
               levelColors: [
                 '#F44366',
                 '#FFEB3B',
@@ -103,6 +129,9 @@ angular.module('teacherdashboard')
                 maxTest:100,
                 valueMinFontSize: 50,
                 textRenderer: renderFunction,
+                minLabelMinFontSize: 14,
+                maxLabelMinFontSize: 18,
+                labelFontColor: '#303030',
                 levelColors: [
                   '#F44366',
                   '#FFEB3B',
