@@ -4,22 +4,31 @@
 .goals {
   min-height:300px;
 }
+
+.menu-button{
+  margin-top: 50px;
+}
 .goals-container{
   md-card-content {
-    .menu-button{
-      margin-top: 40px;
-    }
+
     position:relative;
     md-fab-speed-dial.md-fab-top-right {
       position:absolute;
       top:0px;
+      right:0px;
     }
+  }
+  .goal-gauge > svg {
+    margin-top: -20px;
   }
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   .student-goal{
+    md-fab-speed-dial {
+      margin-top: 0px;
+    }
     .woop-heading {
       font-size: 30px;
       margin-bottom: 10px;
@@ -39,6 +48,8 @@
     .goal-title {
       font-size: 20px;
       text-align: center;
+      margin-right:20px;
+      margin-left: 20px;
     }
     .goal-danger {
       background-color: $red-color;

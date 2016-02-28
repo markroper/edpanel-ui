@@ -1,29 +1,40 @@
-
 <div class="goal">
-    <md-card style="max-width: 350px" class="student-goal">
+    <md-card style="max-width: 380px" class="student-goal">
       <md-card-content>
         <md-fab-speed-dial  md-open="demo.isOpen" md-direction="left" class="md-scale md-fab-top-right menu-button">
           <md-fab-trigger>
-            <md-button ng-show="editable" aria-label="menu" class="goal-menu md-icon-button">
+            <md-button aria-label="menu" class="goal-menu md-icon-button">
               <md-icon md-font-set="material-icons">more_vert</md-icon>
             </md-button>
           </md-fab-trigger>
           <md-fab-actions>
-            <md-button ng-click="editGoal(goal)" class="md-fab md-primary md-raised md-mini">
-              <md-icon md-font-set="material-icons"> mode_edit </md-icon>
+            <md-button ng-show="editable && userRole !== 'Student'" ng-click="approveGoal(goal)" class="md-fab md-primary md-raised md-mini">
+              <md-icon md-font-set="material-icons"> check </md-icon>
+              <md-tooltip>approve goal</md-tooltip>
             </md-button>
-            <md-button ng-click="deleteGoal(goal)" class="md-fab md-warn md-raised md-mini">
+            <md-button ng-show="editable" ng-click="editGoal(goal)" class="md-fab md-primary md-raised md-mini">
+              <md-icon md-font-set="material-icons"> mode_edit </md-icon>
+              <md-tooltip>edit goal</md-tooltip>
+            </md-button>
+            <md-button ng-show="editable" ng-click="deleteGoal(goal)" class="md-fab md-warn md-raised md-mini">
               <md-icon md-font-set="material-icons"> delete </md-icon>
+              <md-tooltip>delete goal</md-tooltip>
+            </md-button>
+            <md-button ng-show="!editable && userRole !== 'Student'" ng-click="markAchieved(goal)" class="md-fab md-primary md-raised md-mini">
+              <md-icon md-font-set="material-icons"> thumb_up </md-icon>
+              <md-tooltip>mark goal achieved</md-tooltip>
+            </md-button>
+            <md-button ng-show="!editable && userRole !== 'Student'" ng-click="markFailed(goal)" class="md-fab md-warn md-raised md-mini">
+              <md-icon md-font-set="material-icons"> thumb_down </md-icon>
+              <md-tooltip>mark goal failed</md-tooltip>
             </md-button>
           </md-fab-actions>
         </md-fab-speed-dial>
 
         <div layout="column" layout-align="center center">
-
           <div class="goal-title" flex="85">{{goal.name}}</div>
-          <div ng-show="goal.goalType != 'OPEN'" id="gauge-{{::goal.id}}" class="goal-gauge" style="height: 175px"></div>
-          <div ng-show="goal.goalType == 'OPEN'" layout='column' style="margin-top:30px;min-height:120px">
-            <md-headline ng-show="!goal.editActive" style="font-size: 30px; margin-bottom: 15px">Goal</md-headline>
+          <div ng-show="goal.goalType != 'OPEN'" id="gauge-{{::goal.id}}" class="goal-gauge" style="height: 160px"></div>
+          <div ng-show="goal.goalType == 'OPEN'" layout='column' layout-align="center center" style="min-height:160px">
             <div style="font-size: 18px; margin-bottom: 20px" ng-show="!goal.editActive">{{goal.message}}</div>
             <div layout="column" ng-show="goal.editActive">
               <md-headline> What is your goal?</md-headline>

@@ -53,10 +53,21 @@ angular.module('teacherdashboard')
           dimension: 'STUDENT',
           field: 'Ethnicity'
         };
+
+        var ELL_DIM = {
+          dimension: 'STUDENT',
+          field: 'ELL'
+        };
+        var SPED_DIM = {
+          dimension: 'STUDENT',
+          field: 'Special Ed.'
+        };
         var DEMOGRAPHIC_TO_DIM = {
           'Race': RACE_DIM,
           'Gender': GENDER_DIM,
-          'Ethnicity': ETHNICITY_DIM
+          'Ethnicity': ETHNICITY_DIM,
+          'ELL': ELL_DIM,
+          'SPED': SPED_DIM
         };
 
         /**
@@ -75,7 +86,8 @@ angular.module('teacherdashboard')
          *  ['white', 0, 0, 3 ...],
          *  ['count', 0, 1, 2, 3]
          * ]
-         * This method does that.
+         *
+         * This method does the transformation.
          *
          * @param resultSet
          * @returns {Array}
@@ -121,7 +133,6 @@ angular.module('teacherdashboard')
             }
           }
 
-
           var resultsArray = [];
           if(scope.demographic === 'Race') {
             angular.forEach(resultsObject, function(value, key) {
@@ -153,10 +164,38 @@ angular.module('teacherdashboard')
               }
               resultsArray.push(currArray);
             });
-          } else if(scope.demographic === 'Ell') {
-            //TODO:impl
-          } else if(scope.demographic === 'Sped') {
-            //TODO:impl
+          } else if(scope.demographic === 'ELL') {
+            angular.forEach(resultsObject, function(value, key) {
+              var currArray = [];
+              if(key === 'false') {
+                currArray.push('Non-ELL');
+              } else if( key === 'true') {
+                currArray.push('ELL');
+              } else {
+                currArray.push('Unknown');
+              }
+              currArray = currArray.concat(value);
+              while(currArray.length < xAxis.length) {
+                currArray.push(0);
+              }
+              resultsArray.push(currArray);
+            });
+          } else if(scope.demographic === 'SPED') {
+            angular.forEach(resultsObject, function(value, key) {
+              var currArray = [];
+              if(key === 'false') {
+                currArray.push('Non-SPED');
+              } else if( key === 'true') {
+                currArray.push('SPED');
+              } else {
+                currArray.push('Unknown');
+              }
+              currArray = currArray.concat(value);
+              while(currArray.length < xAxis.length) {
+                currArray.push(0);
+              }
+              resultsArray.push(currArray);
+            });
           }
           resultsArray.push(xAxis);
           return resultsArray;

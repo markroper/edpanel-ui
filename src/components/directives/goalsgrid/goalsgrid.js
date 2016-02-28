@@ -7,7 +7,8 @@ angular.module('teacherdashboard')
           approvedGoals: '=',
           pendingGoals: '=',
           pgoals: '=',
-          agoals: '='
+          agoals: '=',
+          sections: '='
         },
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/goalsgrid/goalsgrid.html',
