@@ -62,7 +62,7 @@
             <div class="kpi-tally band-70-80" layout layout-align="center center">{{kpiTallies.attendance[1]}}</div>
             <div class="kpi-tally band-0-10" layout layout-align="center center">{{kpiTallies.attendance[2]}}</div>
           </div>
-          <span class="md-title">Attendance</span>
+          <span class="md-title">Absences</span>
           <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
         </div>
 				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'gpa')">
@@ -75,6 +75,7 @@
           <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
         </div>
 			</div>
+
       <div class="table-row" layout="row" layout-wrap ng-repeat="student in (filteredStudentData = (studentsData | orderBy:order | filter:search:strict | filter:filterStudents) | limitTo: limit) track by student.id">
         <div class="table-cell" flex="20" flex-sm="100" ng-show="showFilter">
           <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
@@ -91,6 +92,7 @@
               <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
             </div>
             <md-tooltip>{{::student.behaviorPeriod || 'period'}}'s prep score: {{::student.behavior || 90}}</md-tooltip>
+            <span class="choro-label md-title">{{::student.behavior || 90}}</span>
           </div>
         </div>
         <div hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showHomeworkTray($event, student)">
@@ -100,15 +102,17 @@
               <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
             </div>
             <md-tooltip>{{::student.homework || 0}}% annual completion</md-tooltip>
+            <span class="choro-label md-title">{{::student.homework || 0}}%</span>
           </div>
         </div>
         <div hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showAttendanceTray($event, student)">
           <div class="choropleth band-{{::student.attendanceClass}}" layout="row" layout-align="center center">
-            <span class="mobile-label md-subhead" hide-gt-sm>Attendance</span>
+            <span class="mobile-label md-subhead" hide-gt-sm>Absences</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
               <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
             </div>
-            <md-tooltip>{{::student.attendance || 0}} absenses this {{::student.attendancePeriod || 'period'}}</md-tooltip>
+            <md-tooltip>{{::student.attendance || 0}} absences this {{::student.attendancePeriod || 'period'}}</md-tooltip>
+            <span class="choro-label md-title">{{::student.attendance || 0}}</span>
           </div>
         </div>
         <div hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showGpaTray($event, student)">
@@ -118,6 +122,7 @@
               <md-icon md-font-set="material-icons" class="material-icons md-48 arrow-icon"> keyboard_arrow_down </md-icon>
             </div>
             <md-tooltip>Current GPA: {{::student.gpa || '-'}}</md-tooltip>
+            <span class="choro-label md-title">{{::student.gpa || '-'}}</span>
           </div>
         </div>
       </div>
