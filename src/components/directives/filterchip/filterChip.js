@@ -61,7 +61,9 @@ angular.module('teacherdashboard')
             'Ethnicity': [consts.ethnicity.LATINO, consts.ethnicity.NON_LATINO],
             'Race': [consts.race.BLACK, consts.race.ASIAN, consts.race.PACIFIC_ISLANDER,
               consts.race.AM_INDIAN, consts.race.WHITE],
-            'Grade Level': [ '5', '6', '7', '8', '9', '10', '11', '12' ]
+            'Grade Level': [ '5', '6', '7', '8', '9', '10', '11', '12' ],
+            'ELL': ['Non-ELL', 'ELL' ],
+            'SPED': [ 'Non-SPED', 'SPED']
           };
           var rangeFilters = {
             'GPA': { min: 0, max: 5 },

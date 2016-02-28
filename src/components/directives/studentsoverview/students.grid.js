@@ -20,6 +20,8 @@ angular.module('teacherdashboard')
         var RACE = 'Race';
         var ETHNICITY = 'Ethnicity';
         var ABSENCES = 'Absences';
+        var ELL = 'ELL';
+        var SPED = 'SPED';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" y-data-label="Homework Completion" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
@@ -76,7 +78,7 @@ angular.module('teacherdashboard')
         $scope.showfilters = false;
         $scope.filter = null;
         $scope.filters = [GPA, BEHAVIOR, HOMEWORK_COMPLETION,
-          GENDER, RACE, ETHNICITY, ABSENCES];
+          GENDER, RACE, ETHNICITY, ELL, SPED, ABSENCES];
         $scope.currentFilters = {};
         /**
          * When a user types in values for a filter, this method is called back to update
@@ -119,6 +121,18 @@ angular.module('teacherdashboard')
         var genderMapping = {
           'MALE': 'Male',
           'FEMALE': 'Female'
+        };
+
+        var ellMapping = {
+          true: 'ELL',
+          false: 'Non-ELL',
+          null: 'Unknown'
+        };
+
+        var spedMapping = {
+          true: 'SPED',
+          false: 'Non-SPED',
+          null: 'Unknown'
         };
 
         /**
@@ -186,6 +200,10 @@ angular.module('teacherdashboard')
                 evalListCondition(value.values, consts.raceMap[student.student.federalRace]);
               } else if (key === ETHNICITY) {
                 evalListCondition(value.values, consts.ethnicityMap[student.student.federalEthnicity]);
+              } else if(key === ELL) {
+                evalListCondition(value.values, ellMapping[student.student.ell]);
+              } else if(key === SPED) {
+                evalListCondition(value.values, spedMapping[student.student.sped]);
               }
             });
           } catch (e) {
