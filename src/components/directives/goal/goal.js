@@ -92,9 +92,26 @@ angular.module('teacherdashboard')
         var $woopArrowIcon = angular.element(elem).find('.arrow-icon');
         var ROTATE = 'rotate';
         var ROTATE_COUNTERWISE = 'rotateCounterwise';
+        var BEHAVIOR = 'BEHAVIOR';
+        var negBehaviors = ['DEMERIT','DETENTION', 'OUT_OF_SCHOOL_SUSPENSION','IN_SCHOOL_SUSPENSION','REFERRAL'];
+
+        var evaluateGaugeColor = function(goal) {
+          var posColors = ['#FF3333', '#FFEB3B', '#4CAF50'];
+          var negColors = [ '#4CAF50', '#FFEB3B','#FF3333'];
+
+          if (goal.goalType === 'BEHAVIOR') {
+            if (negBehaviors.indexOf(goal.behaviorCategory) >= 0) {
+              //We have a negative behavior goal here.
+              return negColors;
+            }
+            return posColors;
+          } else {
+            return posColors;
+          }
+
+        };
 
         $scope.showWoop = function() {
-          console.log("WOOP");
 
           $woopContainer.toggleClass(SLIDE_OPEN_CLASS);
           $woopContainer.toggleClass(SLIDE_CLOSED_CLASS);
@@ -117,6 +134,7 @@ angular.module('teacherdashboard')
             }
           };
           var goal = $scope.goal;
+          console.log(goal);
 
           if (refresh) {
             angular.element(document).find('#gauge-'+ goal.id).empty();
@@ -132,11 +150,7 @@ angular.module('teacherdashboard')
               minLabelMinFontSize: 14,
               maxLabelMinFontSize: 18,
               labelFontColor: '#303030',
-              levelColors: [
-                '#F44366',
-                '#FFEB3B',
-                '#4CAF50'
-              ]
+              levelColors: evaluateGaugeColor(goal)
             });
           }
 
@@ -154,11 +168,7 @@ angular.module('teacherdashboard')
                 minLabelMinFontSize: 14,
                 maxLabelMinFontSize: 18,
                 labelFontColor: '#303030',
-                levelColors: [
-                  '#F44366',
-                  '#FFEB3B',
-                  '#4CAF50'
-                ]
+                levelColors: evaluateGaugeColor(goal)
               });
             }, 50);
           }

@@ -74,6 +74,18 @@ angular.module('teacherdashboard')
             $scope.createGoal = false;
           };
 
+          var resolveDate = function() {
+            var today = new Date();
+            var month = today.getMonth()+1;
+            var day = today.getDate();
+            var year = today.getFullYear();
+            month = month + "";
+            if (month.length < 2) {
+              month = "0" + month;
+            }
+            return year + '-' + month +'-'+day;
+          };
+
           $scope.submitCreateGoal = function() {
             $scope.createGoal = false;
             var goalToMake = {
@@ -95,10 +107,9 @@ angular.module('teacherdashboard')
               goalToMake.name = $scope.goal.assignment + ' Goal';
               goalToMake.section = {id:$scope.goal.class};
             } else if ($scope.goal.createType === 'Behavior') {
-              var today = new Date();
               goalToMake.name = $scope.goal.behaviorCat + ' Goal';
               goalToMake.behaviorCategory = uiNamesToApi[$scope.goal.behaviorCat];
-              goalToMake.startDate = today.getFullYear() + '-' +today.getMonth()+1 +'-'+today.getDate();
+              goalToMake.startDate = resolveDate();
             } else if ($scope.goal.createType === 'Class Grade') {
               goalToMake.name = $scope.goal.class.name + ' Grade Goal';
               var sectionName;
@@ -122,6 +133,7 @@ angular.module('teacherdashboard')
               goalToMake.name = 'Custom Goal';
               goalToMake.message = $scope.goal.message;
             }
+            console.log(goalToMake);
             api.studentGoals.post(
               { studentId: statebag.currentStudent.id},
               goalToMake,
