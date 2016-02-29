@@ -110,6 +110,7 @@ angular.module('teacherdashboard')
                 for (i = 0; i < statebag.currentSections.length; i++) {
                   sectId = statebag.currentSections[i].id;
                   var numStudentsEnrolled = statebag.currentSections[i].enrolledStudents.length;
+                  console.log("Size of enrolled students: " + numStudentsEnrolled);
 
                   //Some classes don't have grades. Only if it does should we add overall homework completion
                   if (typeof hwCompletions[sectId] !== 'undefined' ) {
@@ -117,7 +118,7 @@ angular.module('teacherdashboard')
                         hwCompletions[sectId].total / hwCompletions[sectId].count * 10) / 10;
                   }
                   //Overall average of attendance
-                  //IF there was enver an absense in this class, this will be null
+                  //IF there was never an absence in this class, this will be null
                   if (!attendanceMap[sectId]) {
                     totalAbsence = 0;
                   } else {
@@ -127,6 +128,7 @@ angular.module('teacherdashboard')
 
                   //FOr each section, iterate over all the students
                   for (j = 0; j < numStudentsEnrolled; j++) {
+
                     studId = statebag.currentSections[i].enrolledStudents[j].id;
                     //If the section doesn't have grades don't populate the average homework for that grade
                     if (typeof hwCompletions[sectId] !== 'undefined' && hwCompletions[sectId].total !== 0) {
@@ -357,6 +359,29 @@ angular.module('teacherdashboard')
             return personQuery;
           }
 
+          function getWithdrawalQuery(sectionIds) {
+            return {
+              'type': 'EXPRESSION',
+              'leftHandSide': getSectionIdsExpression(sectionIds),
+              'operator': 'AND',
+              'rightHandSide': {
+                'type': 'EXPRESSION',
+                'leftHandSide': {
+                  'type': 'DIMENSION',
+                  'value': {
+                    'dimension': 'STUDENT',
+                    'field': 'Withdrawal Date'
+                  }
+                },
+                'operator': 'IS_NULL',
+                'rightHandSide': {
+                  'type': 'DATE',
+                  'value': null
+                }
+              }
+            };
+          }
+
           function getSectionIdsExpression(sectionIds) {
             return {
               'type': 'EXPRESSION',
@@ -393,7 +418,7 @@ angular.module('teacherdashboard')
                   'field': 'ID'
                 }
               ],
-              'filter': getSectionIdsExpression(sectionIds)
+              'filter': getWithdrawalQuery(sectionIds)
             };
           }
 
