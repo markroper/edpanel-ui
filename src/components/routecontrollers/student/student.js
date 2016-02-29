@@ -5,6 +5,10 @@ angular.module('teacherdashboard')
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: "/ui/schools/*/student/*" });
     });
+    $scope.behaviorDeferred = $q.defer();
+    $scope.behaviorDataPromise = $scope.behaviorDeferred.promise;
+    $scope.prepScoreDeferred = $q.defer();
+    $scope.prepScorePromise = $scope.prepScoreDeferred.promise;
     var GA_PAGE_NAME = 'StudentSection';
     $scope.showFilter=false;
     $scope.students = [];
@@ -96,14 +100,19 @@ angular.module('teacherdashboard')
      */
     function resolveBehaviorData() {
       //Cache the isolated scope variables needed for the chorocalendar directive
-      $scope.behaviorDataPromise =
-        api.studentBehaviors.get({ studentId: statebag.currentStudent.id }).$promise;
-      $scope.prepScorePromise =
+        api.studentBehaviors.get(
+          { studentId: statebag.currentStudent.id },
+          function(results){
+            $scope.behaviorDeferred.resolve(results);
+          });
         api.studentsPrepScores.get({
           studentId: [ statebag.currentStudent.id ],
           startDate: $window.moment(statebag.currentYear.startDate).format('YYYY-MM-DD'),
           endDate: $window.moment().format('YYYY-MM-DD')
-        }).$promise;
+        },
+          function(results){
+            $scope.prepScoreDeferred.resolve(results);
+        });
     }
     /*
     * Given a section grade formula, recurse to find the leaf node formulas.
