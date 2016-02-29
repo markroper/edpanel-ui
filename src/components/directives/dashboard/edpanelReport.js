@@ -268,23 +268,27 @@ angular.module('teacherdashboard')
                 }
                 //If the first array contains strings, we're dealing with a bucketed query and need to swap positions
                 if (typeof scope.chartData[0][scope.chartData[0].length - 1] === 'string') {
+                  var bucks = scope.usableQuery.aggregateMeasures[0].buckets;
+                  if(bucks && bucks.length !== scope.chartData[0].length -1) {
+                    for(var z = 0; z < bucks.length; z++) {
+                      if(bucks[z].label !== scope.chartData[0][z+1]) {
+                        scope.chartData[0].splice(z + 1, 0, bucks[z].label);
+                        for(var y = 1; y < scope.chartData.length; y++) {
+                          scope.chartData[y].splice(z + 1, 0, 0);
+                        }
+                      }
+                    }
+                  }
                   scope.chartData.reverse();
                 }
                 //Deal with subquery columns, if any
                 if (scope.usableQuery.subqueryColumnsByPosition) {
                   var newChartData = [];
-                  var bucketOffset = 0;
-                  for (var j = 0; j < scope.usableQuery.aggregateMeasures.length; j++) {
-                    if (scope.usableQuery.aggregateMeasures[j].buckets) {
-                      bucketOffset++;
-                    }
-                  }
                   for (var i = 0; i < scope.usableQuery.subqueryColumnsByPosition.length; i++) {
                     var pos = scope.usableQuery.subqueryColumnsByPosition[i].position;
                     if (pos === -1) {
                       newChartData.unshift(scope.chartData[0]);
                     } else {
-                      pos = pos - bucketOffset;
                       newChartData.unshift(scope.chartData[pos]);
                     }
                   }
