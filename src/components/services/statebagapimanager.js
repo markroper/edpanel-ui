@@ -43,6 +43,17 @@ angular.module('teacherdashboard')
       }
       return 'F';
     },
+    resolveCurrentDate:function() {
+      var today = new Date();
+      var month = today.getMonth()+1;
+      var day = today.getDate();
+      var year = today.getFullYear();
+      month = month + "";
+      if (month.length < 2) {
+        month = "0" + month;
+      }
+      return year + '-' + month +'-'+day;
+    },
     resolveCurrentTerm: function() {
       var fullYearTerms = [];
       var currentTime = new Date().getTime();

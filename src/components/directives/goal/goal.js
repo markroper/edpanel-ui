@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window',
-    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window) {
+  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
+    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
     return {
       scope: {
         goal: '=',
@@ -27,10 +27,14 @@ angular.module('teacherdashboard')
 
         $scope.markAchieved = function(goal) {
           goal.goalProgress = 'MET';
+          goal.endDate = statebagApiManager.resolveCurrentDate();
+          goal.finalValue = goal.calculatedValue;
           $scope.proposeEdit(goal, false, true);
         };
         $scope.markFailed = function(goal) {
           goal.goalProgress = 'UNMET';
+          goal.endDate = statebagApiManager.resolveCurrentDate();
+          goal.finalValue = goal.calculatedValue;
           $scope.proposeEdit(goal, false, true);
         };
         $scope.deleteGoal = function(goal) {
@@ -54,7 +58,7 @@ angular.module('teacherdashboard')
         };
 
         $scope.approveGoal = function(goal) {
-          goal.approved = true;
+          goal.approved = statebagApiManager.resolveCurrentDate();
           $scope.proposeEdit(goal, true);
         };
 

@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast',
-    function($state, statebag, api, $q, mdToast) {
+  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast','statebagApiManager',
+    function($state, statebag, api, $q, mdToast, statebagApiManager) {
       return {
         scope: {
           sections: '=',
@@ -74,17 +74,7 @@ angular.module('teacherdashboard')
             $scope.createGoal = false;
           };
 
-          var resolveDate = function() {
-            var today = new Date();
-            var month = today.getMonth()+1;
-            var day = today.getDate();
-            var year = today.getFullYear();
-            month = month + "";
-            if (month.length < 2) {
-              month = "0" + month;
-            }
-            return year + '-' + month +'-'+day;
-          };
+
 
           $scope.submitCreateGoal = function() {
             $scope.createGoal = false;
@@ -96,8 +86,6 @@ angular.module('teacherdashboard')
               'plan':$scope.goal.plan,
               'outcome':$scope.goal.outcome,
               'student':statebag.currentStudent.student,
-              'approved':false,
-              'teacherFollowup':false,
               //TODO this should be a school setting
               'autocomplete':false
               //ONLY IF ITS NECESSARY
@@ -109,7 +97,7 @@ angular.module('teacherdashboard')
             } else if ($scope.goal.createType === 'Behavior') {
               goalToMake.name = $scope.goal.behaviorCat + ' Goal';
               goalToMake.behaviorCategory = uiNamesToApi[$scope.goal.behaviorCat];
-              goalToMake.startDate = resolveDate();
+              goalToMake.startDate = statebagApiManager.resolveCurrentDate();
             } else if ($scope.goal.createType === 'Class Grade') {
               goalToMake.name = $scope.goal.class.name + ' Grade Goal';
               var sectionName;
@@ -133,7 +121,6 @@ angular.module('teacherdashboard')
               goalToMake.name = 'Custom Goal';
               goalToMake.message = $scope.goal.message;
             }
-            console.log(goalToMake);
             api.studentGoals.post(
               { studentId: statebag.currentStudent.id},
               goalToMake,
