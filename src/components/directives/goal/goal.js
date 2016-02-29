@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window',
-    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window) {
+  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
+    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
     return {
       scope: {
         goal: '=',
@@ -27,10 +27,14 @@ angular.module('teacherdashboard')
 
         $scope.markAchieved = function(goal) {
           goal.goalProgress = 'MET';
+          goal.endDate = statebagApiManager.resolveCurrentDate();
+          goal.finalValue = goal.calculatedValue;
           $scope.proposeEdit(goal, false, true);
         };
         $scope.markFailed = function(goal) {
           goal.goalProgress = 'UNMET';
+          goal.endDate = statebagApiManager.resolveCurrentDate();
+          goal.finalValue = goal.calculatedValue;
           $scope.proposeEdit(goal, false, true);
         };
         $scope.deleteGoal = function(goal) {
@@ -54,7 +58,7 @@ angular.module('teacherdashboard')
         };
 
         $scope.approveGoal = function(goal) {
-          goal.approved = true;
+          goal.approved = statebagApiManager.resolveCurrentDate();
           $scope.proposeEdit(goal, true);
         };
 
@@ -85,7 +89,46 @@ angular.module('teacherdashboard')
             });
         };
       },
-      link: function($scope) {
+      link: function($scope,elem) {
+        var $woopContainer = angular.element(elem).find('.woop-container');
+        var SLIDE_OPEN_CLASS = 'slide-open-woop';
+        var SLIDE_CLOSED_CLASS = 'slide-closed-woop';
+        var $woopArrowIcon = angular.element(elem).find('.arrow-icon');
+        var ROTATE = 'rotate';
+        var ROTATE_COUNTERWISE = 'rotateCounterwise';
+        var BEHAVIOR = 'BEHAVIOR';
+        var negBehaviors = ['DEMERIT','DETENTION', 'OUT_OF_SCHOOL_SUSPENSION','IN_SCHOOL_SUSPENSION','REFERRAL'];
+
+        var evaluateGaugeColor = function(goal) {
+          var posColors = ['#FF3333', '#FFEB3B', '#4CAF50'];
+          var negColors = [ '#4CAF50', '#FFEB3B','#FF3333'];
+
+          if (goal.goalType === 'BEHAVIOR') {
+            if (negBehaviors.indexOf(goal.behaviorCategory) >= 0) {
+              //We have a negative behavior goal here.
+              return negColors;
+            }
+            return posColors;
+          } else {
+            return posColors;
+          }
+
+        };
+
+        $scope.showWoop = function() {
+
+          $woopContainer.toggleClass(SLIDE_OPEN_CLASS);
+          $woopContainer.toggleClass(SLIDE_CLOSED_CLASS);
+          if($woopArrowIcon.hasClass(ROTATE)) {
+            $woopArrowIcon.removeClass(ROTATE);
+            $woopArrowIcon.addClass(ROTATE_COUNTERWISE);
+          } else {
+            $woopArrowIcon.removeClass(ROTATE_COUNTERWISE);
+            $woopArrowIcon.addClass(ROTATE);
+          }
+
+        };
+
         $scope.resolveGoalDisplay = function(refresh) {
           var renderFunction = function(value) {
             if(isNaN(value)) {
@@ -95,7 +138,6 @@ angular.module('teacherdashboard')
             }
           };
           var goal = $scope.goal;
-
           if (refresh) {
             angular.element(document).find('#gauge-'+ goal.id).empty();
             $scope.gage = new $window.JustGage({
@@ -110,11 +152,7 @@ angular.module('teacherdashboard')
               minLabelMinFontSize: 14,
               maxLabelMinFontSize: 18,
               labelFontColor: '#303030',
-              levelColors: [
-                '#F44366',
-                '#FFEB3B',
-                '#4CAF50'
-              ]
+              levelColors: evaluateGaugeColor(goal)
             });
           }
 
@@ -132,11 +170,7 @@ angular.module('teacherdashboard')
                 minLabelMinFontSize: 14,
                 maxLabelMinFontSize: 18,
                 labelFontColor: '#303030',
-                levelColors: [
-                  '#F44366',
-                  '#FFEB3B',
-                  '#4CAF50'
-                ]
+                levelColors: evaluateGaugeColor(goal)
               });
             }, 50);
           }

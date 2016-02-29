@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast',
-    function($state, statebag, api, $q, mdToast) {
+  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast','statebagApiManager',
+    function($state, statebag, api, $q, mdToast, statebagApiManager) {
       return {
         scope: {
           sections: '=',
@@ -74,6 +74,8 @@ angular.module('teacherdashboard')
             $scope.createGoal = false;
           };
 
+
+
           $scope.submitCreateGoal = function() {
             $scope.createGoal = false;
             var goalToMake = {
@@ -84,8 +86,6 @@ angular.module('teacherdashboard')
               'plan':$scope.goal.plan,
               'outcome':$scope.goal.outcome,
               'student':statebag.currentStudent.student,
-              'approved':false,
-              'teacherFollowup':false,
               //TODO this should be a school setting
               'autocomplete':false
               //ONLY IF ITS NECESSARY
@@ -95,10 +95,9 @@ angular.module('teacherdashboard')
               goalToMake.name = $scope.goal.assignment + ' Goal';
               goalToMake.section = {id:$scope.goal.class};
             } else if ($scope.goal.createType === 'Behavior') {
-              var today = new Date();
               goalToMake.name = $scope.goal.behaviorCat + ' Goal';
               goalToMake.behaviorCategory = uiNamesToApi[$scope.goal.behaviorCat];
-              goalToMake.startDate = today.getFullYear() + '-' +today.getMonth()+1 +'-'+today.getDate();
+              goalToMake.startDate = statebagApiManager.resolveCurrentDate();
             } else if ($scope.goal.createType === 'Class Grade') {
               goalToMake.name = $scope.goal.class.name + ' Grade Goal';
               var sectionName;
