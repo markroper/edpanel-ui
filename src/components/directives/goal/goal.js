@@ -138,8 +138,6 @@ angular.module('teacherdashboard')
             }
           };
           var goal = $scope.goal;
-          console.log(goal);
-
           if (refresh) {
             angular.element(document).find('#gauge-'+ goal.id).empty();
             $scope.gage = new $window.JustGage({

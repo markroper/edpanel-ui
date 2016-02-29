@@ -66,10 +66,14 @@ angular.module('teacherdashboard')
         {studentId: statebag.currentStudent.id},
         function(results) {
           for (var i = 0; i < results.length; i++) {
-            if (results[i].approved) {
-              $scope.approved.push(results[i]);
+            if (results[i].goalProgress === 'IN_PROGRESS') {
+              if (results[i].approved) {
+                $scope.approved.push(results[i]);
+              } else {
+                $scope.pending.push(results[i]);
+              }
             } else {
-              $scope.pending.push(results[i]);
+              //TODO how do we display completed goals
             }
           }
         });
