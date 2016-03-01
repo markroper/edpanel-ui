@@ -95,41 +95,45 @@ angular.module('teacherdashboard')
         var transformResultsForDemographic = function(resultSet) {
           var resultsObject = {};
           var xAxis = ['counts'];
-          var demoPosition = 0;
+          var demographicPosition = 0;
           var aggPosition = 1;
+          var xPosition = 2;
           if(scope.usableQuery.subqueryColumnsByPosition) {
-            demoPosition = 1;
             aggPosition = 0;
+            demographicPosition = 2;
+            xPosition = 1;
           }
-          if(scope.usableQuery.aggregateMeasures && scope.usableQuery.aggregateMeasures[0].buckets) {
+          if(scope.usableQuery.aggregateMeasures &&
+              scope.usableQuery.aggregateMeasures[0].buckets &&
+              !scope.usableQuery.aggregateMeasures[0].bucketAggregation) {
             for(var i = 0; i < scope.usableQuery.aggregateMeasures[0].buckets.length; i++) {
               xAxis.push(scope.usableQuery.aggregateMeasures[0].buckets[i].label);
             }
             for (var i = 0; i < resultSet.records.length; i++) {
               var singleRow = resultSet.records[i].values;
-              if (!resultsObject[singleRow[demoPosition]]) {
-                resultsObject[singleRow[demoPosition]] = [];
-                while(resultsObject[singleRow[demoPosition]].length < xAxis.length) {
-                  resultsObject[singleRow[demoPosition]].push(0);
+              if (!resultsObject[singleRow[demographicPosition]]) {
+                resultsObject[singleRow[demographicPosition]] = [];
+                while(resultsObject[singleRow[demographicPosition]].length < xAxis.length) {
+                  resultsObject[singleRow[demographicPosition]].push(0);
                 }
               }
               var bucketPos = xAxis.indexOf(singleRow[2]) - 1;
-              resultsObject[singleRow[demoPosition]][bucketPos] = singleRow[aggPosition];
+              resultsObject[singleRow[demographicPosition]][bucketPos] = singleRow[aggPosition];
             }
           } else {
             for (var i = 0; i < resultSet.records.length; i++) {
               //If the query has buckets, resolve the x-axis array
               var singleRow = resultSet.records[i].values;
-              if (!resultsObject[singleRow[demoPosition]]) {
-                resultsObject[singleRow[demoPosition]] = [];
+              if (!resultsObject[singleRow[demographicPosition]]) {
+                resultsObject[singleRow[demographicPosition]] = [];
               }
-              while (xAxis.length <= singleRow[2] + 1) {
+              while (xAxis.length <= singleRow[xPosition] + 1) {
                 xAxis.push(xAxis.length - 1);
               }
-              while (resultsObject[singleRow[demoPosition]].length < singleRow[2]) {
-                resultsObject[singleRow[demoPosition]].push(0);
+              while (resultsObject[singleRow[demographicPosition]].length < singleRow[xPosition]) {
+                resultsObject[singleRow[demographicPosition]].push(0);
               }
-              resultsObject[singleRow[demoPosition]][singleRow[2]] = singleRow[aggPosition];
+              resultsObject[singleRow[demographicPosition]][singleRow[xPosition]] = singleRow[aggPosition];
             }
           }
 
@@ -225,8 +229,12 @@ angular.module('teacherdashboard')
               scope.usableQuery.fields.push(DEMOGRAPHIC_TO_DIM[scope.demographic]);
               var colsByPos = scope.usableQuery.subqueryColumnsByPosition;
               if(colsByPos) {
-                var lastCol = colsByPos[colsByPos.length - 1];
-                scope.usableQuery.subqueryColumnsByPosition.push({position: lastCol.position + 1});
+                for(var q = 0; q < colsByPos.length; q++) {
+                  if(colsByPos[q].position >= scope.usableQuery.fields.length - 1) {
+                    colsByPos[q].position++;
+                  }
+                }
+                scope.usableQuery.subqueryColumnsByPosition.push({position: scope.usableQuery.fields.length - 1});
               }
             }
           }
@@ -284,12 +292,19 @@ angular.module('teacherdashboard')
                 //Deal with subquery columns, if any
                 if (scope.usableQuery.subqueryColumnsByPosition) {
                   var newChartData = [];
+                  var bucketOffset = 0;
+                  for (var j = 0; j < scope.usableQuery.aggregateMeasures.length; j++) {
+                    if (scope.usableQuery.aggregateMeasures[j].buckets &&
+                        !scope.usableQuery.aggregateMeasures[j].bucketAggregation) {
+                      bucketOffset++;
+                    }
+                  }
                   for (var i = 0; i < scope.usableQuery.subqueryColumnsByPosition.length; i++) {
                     var pos = scope.usableQuery.subqueryColumnsByPosition[i].position;
                     if (pos === -1) {
                       newChartData.unshift(scope.chartData[0]);
                     } else {
-                      newChartData.unshift(scope.chartData[pos]);
+                      newChartData.unshift(scope.chartData[pos - bucketOffset]);
                     }
                   }
                   scope.chartData = newChartData;
