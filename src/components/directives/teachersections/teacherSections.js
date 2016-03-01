@@ -272,11 +272,6 @@ angular.module('teacherdashboard')
                     }
 
                   }
-                  if (statebag.currentSections[index].id == 779) {
-                    console.log("TOAL");
-                    console.log(total);
-                    console.log(data[i].overallGrade);
-                  }
 
                 }
                 if (isGradedClass) {
