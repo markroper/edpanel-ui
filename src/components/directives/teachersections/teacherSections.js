@@ -399,10 +399,9 @@ angular.module('teacherdashboard')
                     'field': 'Withdrawal Date'
                   }
                 },
-                'operator': 'IS_NULL',
+                'operator': 'IS',
                 'rightHandSide': {
-                  'type': 'DATE',
-                  'value': null
+                  'type': 'NULL'
                 }
               }
             };
