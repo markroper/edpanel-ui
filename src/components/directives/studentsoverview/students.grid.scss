@@ -54,22 +54,8 @@
       transition: 250ms ease all;
     }
   }
-  .choropleth {
-    .choro-label {
-      text-shadow: #3d3d3d .025em .025em .025em;
-      color:white;
-      display:block;
-    }
-    md-icon {
-      width: 0px;
-    }
-  }
   .choropleth:hover {
-    .choro-label {
-      display: none;
-    }
     md-icon {
-      width: 48px;
       visibility: visible;
       opacity: 1;
       color:rgb(255,64,129);
