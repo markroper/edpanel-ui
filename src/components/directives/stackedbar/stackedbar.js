@@ -15,12 +15,18 @@ angular.module('teacherdashboard')
       scope: {
         columnsPromise: '=',
         onClickCallback: '=',
+        chartType: '=',
         newData: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/stackedbar/stackedbar.html',
       replace: true,
       link: function(scope, elem, attrs){
+        if(!scope.chartType) {
+          scope.chartType = 'bar';
+        } else {
+          scope.chartType = scope.chartType.toLowerCase();
+        }
         var insetPosition = attrs.sbLegendPos;
         if(typeof insetPosition === 'undefined') {
           insetPosition = 'top-left';
@@ -40,7 +46,7 @@ angular.module('teacherdashboard')
             bindto: elem.find('.svg-container')[0],
             data: {
               columns: theData.slice(0, theData.length -1),
-              type: 'bar',
+              type: scope.chartType,
               groups: [ groups ],
               order: 'desc',
               onclick: function(d, element) {

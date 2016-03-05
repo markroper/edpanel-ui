@@ -11,7 +11,7 @@
           </md-input-container>
           <div class="static-term" ng-show="!report.supportDateFilter">{{currentTerm.name}}</div>
         </div>
-        <stackedbar new-data="newData" sb-legend-pos="top-left" on-click-callback="clickCallback"></stackedbar>
+        <stackedbar chart-type="report.type" new-data="newData" sb-legend-pos="top-left" on-click-callback="clickCallback"></stackedbar>
         <div class="details-table" flex="100"></div>
       </md-card-content>
     </md-card>
