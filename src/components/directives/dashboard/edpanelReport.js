@@ -151,7 +151,7 @@ angular.module('teacherdashboard')
 
         scope.yearWeekToDateString = function(yearWeek) {
           var year = Math.round(yearWeek/100);
-          var week = yearWeek.toString().substring(4);
+          var week = Number(yearWeek.toString().substring(4)) + 1;
           var dt = $window.moment().year(year).week(week).format('YYYY-MM-DD');
           console.log('week ' + dt);
           return dt;
