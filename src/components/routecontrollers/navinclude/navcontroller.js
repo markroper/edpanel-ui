@@ -113,6 +113,7 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
         api.logout.save(
           {},
           function(){
+            statebag.clearState();
             $state.go('login');
           });
     };

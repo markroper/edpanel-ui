@@ -23,6 +23,7 @@ angular.module('teacherdashboard')
       $scope.$on('$viewContentLoaded', function() {
         $window.ga('send', 'pageview', { page: '/ui/login' });
       });
+      statebag.clearState();
       statebag.currentPage.name = 'Login';
 	    $scope.inputEmail = '';
       $scope.password = '';
