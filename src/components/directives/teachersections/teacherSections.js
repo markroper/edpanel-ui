@@ -58,8 +58,7 @@ angular.module('teacherdashboard')
                 var demeritMap = {};
                 var sectId;
                 var studId;
-                var totalAbsence;
-                var absences;
+
                 var i;
                 var j;
                 //responses[0] is the demerit query
@@ -107,60 +106,9 @@ angular.module('teacherdashboard')
                   attendanceMap[result[1]].count += 1;
                 }
 
-                for (i = 0; i < statebag.currentSections.length; i++) {
-                  sectId = statebag.currentSections[i].id;
-                  var numStudentsEnrolled = statebag.currentSections[i].enrolledStudents.length;
+                resolvedSectionStudentInfo(hwCompletions, attendanceMap, demeritMap);
 
-                  //Some classes don't have grades. Only if it does should we add overall homework completion
-                  if (typeof hwCompletions[sectId] !== 'undefined' ) {
-                    statebag.currentSections[i].HomeworkCompletion = Math.round(
-                        hwCompletions[sectId].total / hwCompletions[sectId].count * 10) / 10;
-                  }
-                  //Overall average of attendance
-                  //IF there was enver an absense in this class, this will be null
-                  if (!attendanceMap[sectId]) {
-                    totalAbsence = 0;
-                  } else {
-                    totalAbsence = attendanceMap[sectId].total
-                  }
-                  statebag.currentSections[i].Attendance = parseFloat((totalAbsence / numStudentsEnrolled).toFixed(1));
 
-                  //FOr each section, iterate over all the students
-                  for (j = 0; j < numStudentsEnrolled; j++) {
-                    studId = statebag.currentSections[i].enrolledStudents[j].id;
-                    //If the section doesn't have grades don't populate the average homework for that grade
-                    if (typeof hwCompletions[sectId] !== 'undefined' && hwCompletions[sectId].total !== 0) {
-                      statebag.currentSections[i].enrolledStudents[j].homework = hwCompletions[sectId].students[studId];
-                      statebag.currentSections[i].enrolledStudents[j].homeworkClass = statebagApiManager.resolveHomeworkClass(
-                        hwCompletions[sectId].students[studId]/100.0);
-                    }
-
-                    //If there is a class no one has ever been absent in.
-                    if (!attendanceMap[sectId]) {
-                      absences = 0;
-                    } else {
-                      absences = attendanceMap[sectId][studId];
-                    }
-                    //If it is undefined it means nothing came back from the query so we have zero absences
-                    if (!absences) {
-                      absences = 0;
-                    }
-                    statebag.currentSections[i].enrolledStudents[j].attendance = absences;
-                    statebag.currentSections[i].enrolledStudents[j].attendanceClass = statebagApiManager.resolveAttendanceClass(
-                      absences);
-
-                    //If its undefined this teacher has given them no demerits so we say they have 0
-                    var studentDemerits = demeritMap[studId];
-                    if (!studentDemerits) {
-                      studentDemerits = 0;
-
-                    }
-                    statebag.currentSections[i].enrolledStudents[j].demerits = studentDemerits;
-                    statebag.currentSections[i].enrolledStudents[j].demeritClass = statebagApiManager.resolveBehaviorClass(studentDemerits);
-
-                  }
-
-                }
               });
 
               //Put it on the statebag
@@ -169,6 +117,78 @@ angular.module('teacherdashboard')
               });
 
             });
+
+          }
+
+          /**
+           * This method takes in the maps for sections and students and sets the attributes
+           * on those students by
+           * @param hwCompletions
+           * @param attendanceMap
+           * @param demeritMap
+             */
+          function resolvedSectionStudentInfo(hwCompletions, attendanceMap, demeritMap) {
+            var totalAbsence;
+            var absences;
+            var sectId;
+            var studId;
+            var i;
+            var j;
+            for (i = 0; i < statebag.currentSections.length; i++) {
+              sectId = statebag.currentSections[i].id;
+              var numStudentsEnrolled = statebag.currentSections[i].enrolledStudents.length;
+
+              //Some classes don't have grades. Only if it does should we add overall homework completion
+              if (typeof hwCompletions[sectId] !== 'undefined' ) {
+                statebag.currentSections[i].HomeworkCompletion = Math.round(
+                    hwCompletions[sectId].total / numStudentsEnrolled * 10) / 10;
+              }
+              //Overall average of attendance
+              //IF there was never an absence in this class, this will be null
+              if (!attendanceMap[sectId]) {
+                totalAbsence = 0;
+              } else {
+                totalAbsence = attendanceMap[sectId].total
+              }
+              statebag.currentSections[i].Attendance = parseFloat((totalAbsence / numStudentsEnrolled).toFixed(1));
+
+              //FOr each section, iterate over all the students
+              for (j = 0; j < numStudentsEnrolled; j++) {
+
+                studId = statebag.currentSections[i].enrolledStudents[j].id;
+                //If the section doesn't have grades don't populate the average homework for that grade
+                if (typeof hwCompletions[sectId] !== 'undefined' && hwCompletions[sectId].total !== 0) {
+                  statebag.currentSections[i].enrolledStudents[j].homework = hwCompletions[sectId].students[studId];
+                  statebag.currentSections[i].enrolledStudents[j].homeworkClass = statebagApiManager.resolveHomeworkClass(
+                    hwCompletions[sectId].students[studId]/100.0);
+                }
+
+                //If there is a class no one has ever been absent in.
+                if (!attendanceMap[sectId]) {
+                  absences = 0;
+                } else {
+                  absences = attendanceMap[sectId][studId];
+                }
+                //If it is undefined it means nothing came back from the query so we have zero absences
+                if (!absences) {
+                  absences = 0;
+                }
+                statebag.currentSections[i].enrolledStudents[j].attendance = absences;
+                statebag.currentSections[i].enrolledStudents[j].attendanceClass = statebagApiManager.resolveAttendanceClass(
+                  absences);
+
+                //If its undefined this teacher has given them no demerits so we say they have 0
+                var studentDemerits = demeritMap[studId];
+                if (!studentDemerits) {
+                  studentDemerits = 0;
+
+                }
+                statebag.currentSections[i].enrolledStudents[j].demerits = studentDemerits;
+                statebag.currentSections[i].enrolledStudents[j].demeritClass = statebagApiManager.resolveBehaviorClass(studentDemerits);
+
+              }
+
+            }
 
           }
 
@@ -225,6 +245,7 @@ angular.module('teacherdashboard')
               function(data){
                 statebag.currentSections[index].grades = data;
                 var total = 0;
+                var validCount = 0;
                 data.sort(function(grade) {
                   return grade.student.id;
                 });
@@ -232,12 +253,19 @@ angular.module('teacherdashboard')
                   return student.id;
                 });
                 var isGradedClass = false;
+
                 for (var i = 0; i < data.length; i++) {
 
                   //If this is a graded class
+
+
                   if ( typeof data[i].overallGrade !== 'undefined') {
                     isGradedClass = true;
-                    total += data[i].overallGrade.score;
+                    if (typeof data[i].overallGrade.score !== 'undefined') {
+                      total += data[i].overallGrade.score;
+                      validCount += 1;
+                    }
+
                     if (typeof statebag.currentSections[index].enrolledStudents[i] !== 'undefined') {
                       statebag.currentSections[index].enrolledStudents[i].grade = data[i].overallGrade.score;
                       statebag.currentSections[index].enrolledStudents[i].gradeClass = statebagApiManager.resolveSectionGradeClass(data[i].overallGrade.score);
@@ -248,7 +276,7 @@ angular.module('teacherdashboard')
                 }
                 if (isGradedClass) {
 
-                  statebag.currentSections[index].aveGrade = Math.round(total/data.length);
+                  statebag.currentSections[index].aveGrade = Math.round(total/validCount);
                 }
 
 
@@ -357,6 +385,28 @@ angular.module('teacherdashboard')
             return personQuery;
           }
 
+          function getWithdrawalQuery(sectionIds) {
+            return {
+              'type': 'EXPRESSION',
+              'leftHandSide': getSectionIdsExpression(sectionIds),
+              'operator': 'AND',
+              'rightHandSide': {
+                'type': 'EXPRESSION',
+                'leftHandSide': {
+                  'type': 'DIMENSION',
+                  'value': {
+                    'dimension': 'STUDENT',
+                    'field': 'Withdrawal Date'
+                  }
+                },
+                'operator': 'IS',
+                'rightHandSide': {
+                  'type': 'NULL'
+                }
+              }
+            };
+          }
+
           function getSectionIdsExpression(sectionIds) {
             return {
               'type': 'EXPRESSION',
@@ -393,7 +443,7 @@ angular.module('teacherdashboard')
                   'field': 'ID'
                 }
               ],
-              'filter': getSectionIdsExpression(sectionIds)
+              'filter': getWithdrawalQuery(sectionIds)
             };
           }
 
