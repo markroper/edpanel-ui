@@ -27,13 +27,13 @@ angular.module('teacherdashboard')
 
         $scope.markAchieved = function(goal) {
           goal.goalProgress = 'MET';
-          goal.endDate = statebagApiManager.resolveCurrentDate();
+          goal.endDate = $window.moment().format('YYYY-MM-DD');
           goal.finalValue = goal.calculatedValue;
           $scope.proposeEdit(goal, false, true);
         };
         $scope.markFailed = function(goal) {
           goal.goalProgress = 'UNMET';
-          goal.endDate = statebagApiManager.resolveCurrentDate();
+          goal.endDate = $window.moment().format('YYYY-MM-DD');
           goal.finalValue = goal.calculatedValue;
           $scope.proposeEdit(goal, false, true);
         };

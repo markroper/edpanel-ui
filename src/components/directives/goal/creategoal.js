@@ -1,14 +1,14 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast','statebagApiManager',
-    function($state, statebag, api, $q, mdToast, statebagApiManager) {
+  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast','statebagApiManager', '$window',
+    function($state, statebag, api, $q, mdToast, statebagApiManager, $window) {
       return {
         scope: {
           sections: '=',
           pendingGoals: '='
         },
         restrict: 'E',
-        templateUrl: api.basePrefix + '/components/directives/creategoal/creategoal.html',
+        templateUrl: api.basePrefix + '/components/directives/goal/creategoal.html',
         replace: true,
         controller: function ($scope) {
           $scope.createGoal = false;
@@ -87,9 +87,9 @@ angular.module('teacherdashboard')
               'outcome':$scope.goal.outcome,
               'student':statebag.currentStudent.student,
               //TODO this should be a school setting
-              'autocomplete':false
+              'autocomplete':false,
+              'startDate': $window.moment().format('YYYY-MM-DD')
               //ONLY IF ITS NECESSARY
-
             };
             if ($scope.goal.createType === 'Assignment') {
               goalToMake.name = $scope.goal.assignment + ' Goal';
