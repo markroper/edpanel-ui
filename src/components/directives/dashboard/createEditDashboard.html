@@ -1,0 +1,20 @@
+<div class="create-edit-dashboard">
+  <md-input-container>
+    <label>Dashboard name</label>
+    <input ng-model="dashboard.name">
+  </md-input-container>
+
+  <div ng-repeat="row in dashboard.rows" class="row" layout="row" layout-wrap>
+    <div ng-repeat="report in row.reports" class="report" layout="row" layout-wrap flex="100" flex-gt-md="{{flexSize(row)}}">
+      <md-card flex="100" >
+        <md-card-content class="graph">
+          <div class="md-headline">{{report.name}}</div>
+          <div>Choose chart type</div>
+          <!-- when you click on the pane, should edit mode fill the screen or occur inplace? what about when there are 3 charts on a row?-->
+          <div class="viz-placeholder"></div>
+        </md-card-content>
+      </md-card>
+    </div>
+  </div>
+
+</div>
