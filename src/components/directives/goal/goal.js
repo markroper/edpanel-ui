@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$mdDialog', '$document','$timeout','$window','statebagApiManager',
-    function($state, statebag, api, $q, mdToast, $mdDialog, $document, $timeout,$window, statebagApiManager) {
+  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$document','$timeout','$window','statebagApiManager',
+    function($state, statebag, api, $q, mdToast, $document, $timeout,$window, statebagApiManager) {
     return {
       scope: {
         goal: '=',

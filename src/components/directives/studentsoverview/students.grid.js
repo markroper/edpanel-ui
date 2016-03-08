@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api', '$mdDialog','$compile', '$timeout', 'analytics', 'consts','$window',
-  function($state, statebag, api, $mdDialog, $compile, $timeout, analytics, consts, $window) {
+  .directive('studentGrid', ['$state', 'statebag', 'api','$compile', '$timeout', 'analytics', 'consts','$window',
+  function($state, statebag, api, $compile, $timeout, analytics, consts, $window) {
     return {
       scope: {
         studentsData: '=',
