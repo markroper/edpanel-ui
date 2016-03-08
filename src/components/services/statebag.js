@@ -24,6 +24,27 @@ angular.module('teacherdashboard')
     //User UI related caches
     userRole : '',
     theme : 'indigo',
+    clearState: function() {
+      this.school = null;
+      this.currentYear = null;
+      this.currentTerm = null;
+      this.currentSection = null;
+      this.currentSections = [];
+      this.students = [];
+      this.studentPerfData = null;
+      this.currentStudent = null;
+      this.currentStudentSectionAssignments = null;
+      this.currentStudentBehaviorEvents = [];
+      this.currentStudentGpa = null;
+      this.studentsPerformanceSummary = [];
+      this.lastFullRefresh = null;
+      this.studentSectionsPromise = null;
+      this.goals = [];
+      this.sections = [];
+      this.currentPage = {};
+      this.userRole = '';
+      this.theme = 'indigo';
+    },
     resolveTheme: function(inputString) {
       if(inputString === consts.roles.ADMIN) {
         return 'blue-grey';
