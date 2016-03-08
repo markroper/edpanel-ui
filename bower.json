@@ -13,6 +13,7 @@
     "angular-ui-router": "0.2.x",
     "angular-ui-grid":"3.0.x",
     "angular-sortable-view":"0.0.13",
+    "angular-gridster":"0.13.5",
     "c3": "~0.4.10",
     "d3": "~3.5.x",
     "material-design-icons": "~2.0.0",
