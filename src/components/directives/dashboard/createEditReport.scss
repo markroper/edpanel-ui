@@ -1,3 +1,65 @@
 .report-builder {
+  md-select {
+    max-width:250px;
+  }
+  .report-name {
+    margin-bottom: -10px;
+  }
+  .builder-container {
+    padding: 0px 30px 0px 30px;
+  }
+  ul {
+    text-align:center;
+    list-style:none;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    width:100%;
+  }
+  .chart-types li:hover {
+    background-color: #F0F0F0;
+  }
+  .chart-types li {
+    display:inline-block;
+    width: 125px;
+    height: 50px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 3px;
+    cursor:pointer;
+    transition: background-color 0.5s ease;
+  }
+  li.bar {
+    background-image: url("../../../assets/images/bar.svg");
+    background-size: 120px;
+  }
+  li.spline {
+    background-image: url("../../../assets/images/line.svg");
+    background-size: 60px;
+  }
+  li.pie {
+    background-image: url("../../../assets/images/pie.svg");
+    background-size: 50px;
+  }
+  li.scatterplot {
+    background-image: url("../../../assets/images/scatter.svg");
+    background-size: 50px;
+  }
 
+  .svg-container {
+    width:100%;
+    height: 175px;
+    background-color:#FAFAFA;
+    border-left: 3px solid #696969;
+    border-bottom: 3px solid #696969;
+    border-bottom-left-radius: 3px;
+  }
+  .x-container {
+    max-width: 700px;
+  }
+  .y-axis {
+    .md-subhead, md-input-container {
+      margin-right:30px;
+    }
+  }
 }
