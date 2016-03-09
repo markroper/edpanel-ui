@@ -1,17 +1,17 @@
 <div class="report-builder" layout="row" layout-wrap>
   <div flex="100" layout="row" layout-align="center center">
-    <h3 class="md-headline" style="margin-top:5px; margin-bottom:5px;">Select chart type</h3>
+    <h3 class="md-headline" style="margin-top:5px; margin-bottom:5px;">Choose chart type</h3>
   </div>
   <div flex="100">
     <ul class="chart-types" flex="100">
-      <li class="bar"><md-tooltip>bar chart</md-tooltip></li>
-      <li class="spline"><md-tooltip>line chart</md-tooltip></li>
-      <li class="scatterplot"><md-tooltip>scatter plot</md-tooltip></li>
-      <li class="pie"><md-tooltip>pie chart</md-tooltip></li>
+      <li class="bar" ng-class="{selected: 'bar'==report.type.toLowerCase()}" ng-click="setReportType('BAR')"><md-tooltip>bar chart</md-tooltip></li>
+      <li class="spline" ng-class="{selected: 'spline'==report.type.toLowerCase()}" ng-click="setReportType('SPLINE')"><md-tooltip>line chart</md-tooltip></li>
+      <li class="scatterplot" ng-class="{selected: 'scatterplot'==report.type.toLowerCase()}" ng-click="setReportType('SCATTERPLOT')"><md-tooltip>scatter plot</md-tooltip></li>
+      <li class="pie" ng-class="{selected: 'pie'==report.type.toLowerCase()}" ng-click="setReportType('PIE')"><md-tooltip>pie chart</md-tooltip></li>
     </ul>
   </div>
-  <div flex="100" layout="row" layout-align="center center">
-    <h3 class="md-headline" style="margin-bottom:5px; margin-top:10px;">Define chart details</h3>
+  <div flex="100" layout="row" layout-align="center center" class="chart-details">
+    <h3 class="md-headline" style="margin-top:20px; margin-bottom:5px;">Define chart details</h3>
   </div>
   <div class="builder" layout="row" flex="100" layout-wrap>
     <div flex="100" layout="row" layout-align="center center">
@@ -34,7 +34,19 @@
       </div>
       <div class="x-axis" flex="75">
         <div class="x-container">
-          <div class="svg-container"></div>
+          <div class="svg-container">
+            <div class="legend">
+              <div class="md-subhead" style="margin-top:3px; margin-bottom:5px;">Legend</div>
+              <md-input-container>
+                <label>group by (optional)</label>
+                <md-select ng-model="groupBy">
+                  <md-option ng-repeat="opt in groupByOptions" value="{{opt}}">
+                    {{opt}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+            </div>
+          </div>
           <div layout="row" layout-align="center center" class="md-subhead" style="margin-bottom:5px;">X-Axis</div>
           <div layout="row" layout-align="center center">
             <md-input-container>
@@ -45,26 +57,16 @@
                 </md-option>
               </md-select>
             </md-input-container>
-            <md-input-container>
-              <label>group by (optional)</label>
-              <md-select ng-model="groupBy">
-                <md-option ng-repeat="opt in groupByOptions" value="{{opt}}">
-                  {{opt}}
-                </md-option>
-              </md-select>
-            </md-input-container>
-            <md-button class="md-fab md-mini md-primary" ng-click="addBuckets()">
-              <md-icon>add</md-icon><md-tooltip>Create x-axis ranges (e.g. GPA '1 - 2.5', '2.5 - 3.5', etc)</md-tooltip>
+            <md-button class="md-fab md-mini" ng-click="addBuckets()">
+              <md-icon>add</md-icon><md-tooltip>Create x-axis ranges (e.g. GPA '1 - 2.5', '2.5 - 3.5')</md-tooltip>
             </md-button>
           </div>
         </div>
       </div>
     </div>
-    <div flex="100" layout="row" layout-align="center center">
-      <div class="md-title">Chart Filters</div>
-      <md-button class="md-fab md-mini md-primary" ng-click="addReportFilter()">
-        <md-icon>add</md-icon><md-tooltip>Filter the results to include in the report</md-tooltip>
-      </md-button>
+    <div flex="100" layout="row" layout-align="center center" layout-wrap>
+      <div class="md-title" layout="row" layout-align="center center" flex="100">Chart Filters</div>
+      <expression-editor group="group" query-components="queryComponents"></expression-editor>
     </div>
   </div>
 </div>

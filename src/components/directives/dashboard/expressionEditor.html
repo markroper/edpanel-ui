@@ -1,0 +1,45 @@
+<div class="expression-editor">
+  <div class="form-inline">
+    <md-input-container>
+      <md-select ng-model="group.operator">
+        <md-option ng-repeat="opt in operators" value="{{opt.name}}">
+          {{opt.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+    <button style="margin-left: 5px" ng-click="addCondition()" class="">Add Condition</button>
+    <button style="margin-left: 5px" ng-click="addGroup()" class="">Add Group</button>
+    <button style="margin-left: 5px" ng-click="removeGroup()" class="">Remove Group</button>
+  </div>
+  <div class="group-conditions">
+    <div ng-repeat="rule in group.rules | orderBy:'index'" class="condition">
+      <div ng-switch="rule.hasOwnProperty('group')">
+        <div ng-switch-when="true">
+          <query-builder group="rule.group"></query-builder>
+        </div>
+        <div ng-switch-default="ng-switch-default">
+          <div class="form-inline">
+            <md-input-container>
+              <!--<md-select ng-model="rule.field">-->
+                <!--<md-option ng-repeat="opt in fields" value="{{opt.name}}">-->
+                  <!--{{opt.field}}-->
+                <!--</md-option>-->
+              <!--</md-select>-->
+            </md-input-container>
+            <md-input-container>
+              <md-select ng-model="rule.condition">
+                <md-option ng-repeat="opt in conditions" value="{{opt.name}}">
+                  {{opt.name}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+            <md-input-container>
+              <input ng-model="rule.data">
+            </md-input-container>
+            <button ng-click="removeCondition($index)">delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

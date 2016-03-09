@@ -10,6 +10,17 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/dashboard/createEditDashboard.html',
       replace: true,
       link: function(scope){
+        api.queryComponents.get(
+          { schoolId: statebag.school.id },
+          //Success callback
+          function(data){
+            scope.queryComponents = data;
+          },
+          //Error callback
+          function(){
+            console.log('failed to resolve the school!');
+          });
+
         scope.gridsterOpts = {
           columns: 6,
           swapping: true,
@@ -50,9 +61,9 @@ angular.module('teacherdashboard')
             closeTo: ev.el,
             clickOutsideToClose:true
           }).then(function(answer) {
-            $scope.status = 'You said the information was "' + answer + '".';
+            scope.status = 'You said the information was "' + answer + '".';
           }, function() {
-            $scope.status = 'You cancelled the dialog.';
+            scope.status = 'You cancelled the dialog.';
           });
         };
 
