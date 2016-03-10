@@ -11,6 +11,14 @@ angular.module('teacherdashboard')
       replace: true,
       link: function(scope){
         var EXPR = 'EXPRESSION';
+
+        scope.resolveGroupFieldObject = function(input) {
+          if(input.dimension) {
+            return { table: input.dimension, field: input.field };
+          } else if (input.measure) {
+            return { table: input.measure, field: input.field };
+          }
+        }
         scope.parseGroupFromExpression = function(exp) {
           var grp = {
             'operator': 'AND',
@@ -36,7 +44,7 @@ angular.module('teacherdashboard')
           } else {
             grp.rules.push({
               'condition': exp.operator,
-              'field': exp.leftHandSide,
+              'field': scope.resolveGroupFieldObject(exp.leftHandSide.value),
               'data': exp.rightHandSide
             });
           }
@@ -57,7 +65,7 @@ angular.module('teacherdashboard')
             } else {
               rules.push({
                 'condition': exp.operator,
-                'field': exp.leftHandSide,
+                'field': scope.resolveGroupFieldObject(exp.leftHandSide.value),
                 'data': exp.rightHandSide
               });
             }
@@ -189,61 +197,71 @@ angular.module('teacherdashboard')
         }
 
         var resolveShortestPath = function(start, end) {
-          var g = new dijkstra.Graph();
-          for(var j = 0; j < scope.queryComponents.availableDimensions.length; j++) {
-            var dim = scope.queryComponents.availableDimensions[j];
-            var edges = {};
-            if(dim.parentDimensions) {
-              for (var k = 0; k < dim.parentDimensions.length; k++) {
-                edges[dim.parentDimensions[k]] = 1;
+          if(!scope.g) {
+            scope.g = new dijkstra.Graph();
+            for (var j = 0; j < scope.queryComponents.availableDimensions.length; j++) {
+              var dim = scope.queryComponents.availableDimensions[j];
+              var edges = {};
+              if (dim.parentDimensions) {
+                for (var k = 0; k < dim.parentDimensions.length; k++) {
+                  edges[dim.parentDimensions[k]] = 1;
+                }
               }
+              scope.g.addVertex(dim.type, edges);
             }
-            g.addVertex(dim.type, edges);
-          }
-          for(var j = 0; j < scope.queryComponents.availableMeasures.length; j++) {
-            var meas = scope.queryComponents.availableMeasures[j];
-            var edges = {};
-            if(meas.compatibleDimensions) {
-              for (var k = 0; k < meas.compatibleDimensions.length; k++) {
-                edges[meas.compatibleDimensions[k]] = 1;
+            for (var j = 0; j < scope.queryComponents.availableMeasures.length; j++) {
+              var meas = scope.queryComponents.availableMeasures[j];
+              var edges = {};
+              if (meas.compatibleDimensions) {
+                for (var k = 0; k < meas.compatibleDimensions.length; k++) {
+                  edges[meas.compatibleDimensions[k]] = 1;
+                }
+                for (var k = 0; k < meas.compatibleDimensions.length; k++) {
+                  edges[meas.compatibleMeasures[k]] = 1;
+                }
               }
-              for (var k = 0; k < meas.compatibleDimensions.length; k++) {
-                edges[meas.compatibleMeasures[k]] = 1;
-              }
+              scope.g.addVertex(meas.measure, edges);
             }
-            g.addVertex(meas.measure, edges);
           }
-          return g.shortestPath(start.toUpperCase(), end.toUpperCase()).concat([start.toUpperCase()]).reverse();
+          return scope.g.shortestPath(start.toUpperCase(), end.toUpperCase()).concat([start.toUpperCase()]).reverse();
         }
 
         var resolveFilterFields = function() {
           var dims = [];
           if(scope.xData && scope.yData) {
             dims = resolveShortestPath(scope.xData.table, scope.yData.table);
+            if(!dims || dims.length < 2) {
+              dims = resolveShortestPath(scope.yData.table, scope.xData.table);
+            }
           } else if(scope.xData) {
             dims = [ angular.copy(scope.xData)];
           } else if(scope.yData) {
             dims = [ angular.copy(scope.yData) ];
           }
+          //TODO: resolve eligible parent dimensions outside of the join path from the select
+
           //For each eligible field,
           var dimFields = [];
           for(var i = 0; i < dims.length; i++) {
             var currFields = [];
             var dimObj = scope.dimensionFields[dims[i].toLowerCase()];
             if(dimObj) {
-              currFields = angular.copy(dimObj.fields);
+              if(dimObj.fields) {
+                for(var j = 0; j < dimObj.fields.length; j++) {
+                  currFields.push({ table: dimObj.type, field: dimObj.fields[j] });
+                }
+              }
             } else {
               var measureObj = scope.measureFields[dims[i].toLowerCase()];
               if(measureObj) {
-                currFields = angular.copy(measureObj.fields);
+                if(measureObj.fields) {
+                  for(var j = 0; j < measureObj.fields.length; j++) {
+                    currFields.push({ table: measureObj.measure, field: measureObj.fields[j] });
+                  }
+                }
               }
             }
-            if(currFields) {
-              for(var j = 0; j < currFields.length; j++) {
-                currFields[j] = dims[i] + ' ' + currFields[j];
-              }
-              dimFields = dimFields.concat(currFields);
-            }
+            dimFields = dimFields.concat(currFields);
           }
           return dimFields;
         }

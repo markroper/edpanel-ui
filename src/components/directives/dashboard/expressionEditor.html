@@ -20,9 +20,9 @@
         <div ng-switch-default="ng-switch-default">
           <div class="form-inline">
             <md-input-container>
-              <md-select ng-model="rule.field">
-                <md-option ng-repeat="opt in fields" value="{{opt}}">
-                  {{opt.value}}
+              <md-select ng-model="rule.field.value">
+                <md-option ng-repeat="opt in filterableFields" value="{{opt}}">
+                  {{opt.table + ' ' + opt.field}}
                 </md-option>
               </md-select>
             </md-input-container>
