@@ -51,6 +51,7 @@ angular.module('teacherdashboard')
           sc.api = api;
           sc.theme = statebag.theme;
           sc.report = rpt;
+          sc.queryComponents = scope.queryComponents;
           $mdDialog.show({
             scope: sc,
             controller: DialogController,

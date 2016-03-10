@@ -4,7 +4,7 @@ angular.module('teacherdashboard')
     return {
       scope: {
         group: '=',
-        queryComponents: '='
+        filterableFields: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/dashboard/expressionEditor.html',
@@ -15,14 +15,6 @@ angular.module('teacherdashboard')
           scope.operators = [
             { name: 'AND' },
             { name: 'OR' }
-          ];
-          //TODO: remove this
-          scope.fields = [
-            { name: 'Firstname' },
-            { name: 'Lastname' },
-            { name: 'Birthdate' },
-            { name: 'City' },
-            { name: 'Country' }
           ];
 
           scope.conditions = [
@@ -37,7 +29,7 @@ angular.module('teacherdashboard')
           scope.addCondition = function () {
             scope.group.rules.push({
               condition: '=',
-              field: 'Firstname',
+              field: '',
               data: ''
             });
           };

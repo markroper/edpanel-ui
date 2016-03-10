@@ -82,4 +82,23 @@
       margin-right:30px;
     }
   }
+  .buckets md-input-container {
+    margin-top: 3px;
+    margin-bottom: -15px;
+  }
+  .bucket-header, .x-header {
+    text-align:center;
+  }
+  .x-field-selector {
+    md-input-container {
+      margin-top: 3px;
+      margin-bottom: 10px;
+    }
+  }
+  .add-to-report {
+    background-color: #D0ECF5;
+  }
+  .add-to-report:hover {
+    background-color: #B7E0ED !important;
+  }
 }

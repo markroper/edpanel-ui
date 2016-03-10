@@ -22,11 +22,19 @@
     </div>
     <div class="builder-container" layout="row" flex="100">
       <div class="y-axis" flex="25" layout="column" layout-align="start end">
-        <div class="md-subhead" style="margin-bottom:5px; margin-top:35px;">Y-Axis</div>
+        <div class="md-subhead" style="margin-bottom:5px;">Y-Axis</div>
         <md-input-container>
           <label>Choose axis data</label>
-          <md-select ng-model="yData">
-            <md-option ng-repeat="opt in yOptions" value="{{opt}}">
+          <md-select ng-model="yData.table">
+            <md-option ng-repeat= "opt in yOptions" value="{{opt}}">
+              {{opt}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container>
+          <label>aggregation (optional)</label>
+          <md-select ng-model="yData.aggregation">
+            <md-option ng-repeat="opt in aggregations" value="{{opt}}">
               {{opt}}
             </md-option>
           </md-select>
@@ -48,25 +56,72 @@
             </div>
           </div>
           <div layout="row" layout-align="center center" class="md-subhead" style="margin-bottom:5px;">X-Axis</div>
-          <div layout="row" layout-align="center center">
-            <md-input-container>
-              <label>Choose axis data</label>
-              <md-select ng-model="xData">
-                <md-option ng-repeat="opt in xOptions" value="{{opt}}">
-                  {{opt}}
-                </md-option>
-              </md-select>
-            </md-input-container>
-            <md-button class="md-fab md-mini" ng-click="addBuckets()">
-              <md-icon>add</md-icon><md-tooltip>Create x-axis ranges (e.g. GPA '1 - 2.5', '2.5 - 3.5')</md-tooltip>
-            </md-button>
+          <div layout="row" layout-align="center start">
+            <div flex="50" layout="row" layout-align="center start" layout-wrap class="x-field-selector">
+              <div flex="50">
+                <div class="md-subhead x-header">Table</div>
+                <md-input-container>
+                  <md-select ng-model="xData.table">
+                    <md-option ng-repeat="opt in xOptions" value="{{opt}}">
+                      {{opt}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+              </div>
+              <div flex="50">
+                <div class="md-subhead x-header">Field</div>
+                <md-input-container>
+                  <md-select ng-model="xData.field">
+                    <md-option ng-repeat="opt in resolveTableFields(xData.table)" value="{{opt}}">
+                      {{opt}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+              </div>
+
+              <md-button ng-show="!xData.aggregation" class="md-fab md-mini add-to-report" ng-click="addXAggregation(xData)">
+                <md-icon>add</md-icon><md-tooltip>Add aggregate (e.g. SUM, AVG)</md-tooltip>
+              </md-button>
+              <div flex="33" ng-show="xData.aggregation">
+                <div class="md-subhead x-header">Aggregation</div>
+                <md-input-container>
+                  <md-select ng-model="xData.aggregation">
+                    <md-option ng-repeat="opt in aggregations" value="{{opt}}">
+                      {{opt}}
+                    </md-option>
+                  </md-select>
+                </md-input-container>
+              </div>
+            </div>
+            <div layout="row" flex="50" layout-wrap layout-align="center center">
+              <div layout="row" flex="100" class="bucket-header" layout-wrap>
+                <div flex="100" class="md-subhead">Group Results</div>
+                <div flex="33">start</div>
+                <div flex="33">end</div>
+                <div flex="33">value</div>
+              </div>
+              <div flex="100" layout="row" class="buckets" ng-repeat="bucket in xData.buckets">
+                <md-input-container flex="33">
+                  <input ng-model="bucket.start">
+                </md-input-container>
+                <md-input-container flex="33">
+                  <input ng-model="bucket.end">
+                </md-input-container>
+                <md-input-container flex="33">
+                  <input ng-model="bucket.label">
+                </md-input-container>
+              </div>
+              <md-button class="md-fab md-mini add-to-report" ng-click="addBuckets()">
+                <md-icon>add</md-icon><md-tooltip>Create x-axis ranges (e.g. GPA '1 - 2.5', '2.5 - 3.5')</md-tooltip>
+              </md-button>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div flex="100" layout="row" layout-align="center center" layout-wrap>
       <div class="md-title" layout="row" layout-align="center center" flex="100">Chart Filters</div>
-      <expression-editor group="group" query-components="queryComponents"></expression-editor>
+      <expression-editor group="group" filterable-fields="filterFields"></expression-editor>
     </div>
   </div>
 </div>
