@@ -181,8 +181,8 @@ span.name {
 
 // injector
 @import '../components/directives/attendancetable/attendancetable.scss';
-@import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/behaviorgraph/behaviorgraph.scss';
+@import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/chorocalendar/chorocalendar.scss';
 @import '../components/directives/dashboard/createEditDashboard.scss';
 @import '../components/directives/dashboard/createEditReport.scss';
@@ -203,12 +203,12 @@ span.name {
 @import '../components/directives/stackedbar/stackedbar.scss';
 @import '../components/directives/studentsection/studentsetion.scss';
 @import '../components/directives/studentsoverview/students.grid.scss';
+@import '../components/directives/studenttray/studenttray.scss';
 @import '../components/directives/survey/surveyAggregate.scss';
 @import '../components/directives/survey/surveyBuilder.scss';
 @import '../components/directives/survey/surveyQuestionBuilder.scss';
 @import '../components/directives/survey/surveyResponse.scss';
 @import '../components/directives/teachersections/teacherSections.scss';
-@import '../components/directives/studenttray/studenttray.scss';
 @import '../components/routecontrollers/administration/administration.scss';
 @import '../components/routecontrollers/home/home.scss';
 @import '../components/routecontrollers/login/login.scss';

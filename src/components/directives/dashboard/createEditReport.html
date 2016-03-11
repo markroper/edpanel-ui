@@ -18,7 +18,6 @@
     </div>
     <div class="builder-container" layout="row" flex="100">
       <div class="y-axis" flex="25" layout="column" layout-align="start end">
-        <div class="md-subhead" style="margin-bottom:5px;">Y-Axis</div>
         <md-input-container>
           <label>Choose axis data</label>
           <md-select ng-model="yData.table">
@@ -40,7 +39,7 @@
         <div class="x-container">
           <div class="svg-container">
             <div class="legend">
-              <div class="md-subhead" style="margin-top:3px; margin-bottom:5px;">Legend</div>
+              <div class="md-body-2" style="margin-top:3px; margin-bottom:5px;">Legend</div>
               <md-input-container>
                 <label>Series (optional)</label>
                 <md-select ng-model="groupBy">
@@ -50,12 +49,13 @@
                 </md-select>
               </md-input-container>
             </div>
+            <div style="position:absolute; bottom:0px; right:3px;" class="md-caption">X-Axis</div>
+            <div class="md-caption" style="position:absolute; top:-15px; left:-20px;">Y-Axis</div>
           </div>
-          <div layout="row" layout-align="center center" class="md-subhead" style="margin-bottom:5px;">X-Axis</div>
           <div layout="row" layout-align="center start">
             <div flex="60" layout="row" layout-align="start start" layout-wrap class="x-field-selector">
               <div flex="33">
-                <div class="md-subhead x-header">Table</div>
+                <div class="md-body-2 x-header">Table</div>
                 <md-input-container>
                   <md-select ng-model="xData.table">
                     <md-option ng-repeat="opt in xOptions" value="{{opt}}">
@@ -65,7 +65,7 @@
                 </md-input-container>
               </div>
               <div flex="33">
-                <div class="md-subhead x-header">Field</div>
+                <div class="md-body-2 x-header">Field</div>
                 <md-input-container>
                   <md-select ng-model="xData.field">
                     <md-option ng-repeat="opt in resolveTableFields(xData.table)" value="{{opt}}">
@@ -75,7 +75,7 @@
                 </md-input-container>
               </div>
               <div flex="33" ng-show="xData.aggregation">
-                <div class="md-subhead x-header">Aggregation</div>
+                <div class="md-body-2 x-header">Aggregation</div>
                 <div layout="row">
                   <md-input-container>
                     <md-select ng-model="xData.aggregation">
@@ -111,11 +111,11 @@
             </div>
             <div ng-if="xData.buckets" layout="row" flex="40" layout-wrap layout-align="end center">
               <div layout="row" flex="100" class="bucket-header" layout-wrap>
-                <div flex="100" class="md-subhead">Group Results</div>
-                <div flex="25">start</div>
-                <div flex="25">end</div>
-                <div flex="25">value</div>
-                <div flex="25"></div>
+                <div flex="100" class="md-body-2">Group Results</div>
+                <div flex="25" class="md-caption">start</div>
+                <div flex="25" class="md-caption">end</div>
+                <div flex="25" class="md-caption">value</div>
+                <div flex="25" class="md-caption"></div>
               </div>
               <div flex="100" layout="row" class="buckets" ng-repeat="bucket in xData.buckets">
                 <md-input-container flex="25">
@@ -147,7 +147,7 @@
       </div>
     </div>
     <div flex="100" layout="row" layout-align="center center" layout-wrap>
-      <h3 flex="100" class="md-headline" style="text-align:center; margin-top:5px; margin-bottom:5px;">Filter Results</h3>
+      <h3 flex="100" class="md-body-2" style="text-align:center; margin-top:5px; margin-bottom:5px;">Filters</h3>
       <expression-editor class="top-expression-editor" group="group" filterable-fields="filterFields" filterable-tables="filterableTables" theme="theme"></expression-editor>
     </div>
   </div>
