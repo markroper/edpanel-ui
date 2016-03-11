@@ -1,5 +1,5 @@
 <div class="expression-editor">
-  <div layout="row" layout-align="space-between center">
+  <div layout="row" layout-align="start center">
     <md-input-container>
       <md-select ng-model="group.operator">
         <md-option ng-repeat="opt in operators" value="{{opt.name}}">
@@ -9,7 +9,7 @@
     </md-input-container>
     <md-fab-speed-dial md-open="controls.areOpen" md-direction="right" class="md-fling">
       <md-fab-trigger>
-        <md-button aria-label="menu" md-theme="{{theme}}" class="md-fab md-primary md-mini">
+        <md-button aria-label="menu" class="md-fab md-mini filter-menu">
           <md-icon>menu</md-icon>
           <md-tooltip>filter menu</md-tooltip>
         </md-button>

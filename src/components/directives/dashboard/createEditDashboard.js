@@ -10,6 +10,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/dashboard/createEditDashboard.html',
       replace: true,
       link: function(scope){
+        scope.xMenu = { isOpen: false };
         api.queryComponents.get(
           { schoolId: statebag.school.id },
           //Success callback

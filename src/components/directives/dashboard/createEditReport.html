@@ -1,18 +1,20 @@
 <div class="report-builder" layout="row" layout-wrap>
-  <div flex="100" style="margin-bottom: 3px; margin-top:3px;">
-    <ul class="chart-types" flex="100">
-      <li class="bar" ng-class="{selected: 'bar'==report.type.toLowerCase()}" ng-click="setReportType('BAR')"><md-tooltip>bar chart</md-tooltip></li>
-      <li class="spline" ng-class="{selected: 'spline'==report.type.toLowerCase()}" ng-click="setReportType('SPLINE')"><md-tooltip>line chart</md-tooltip></li>
-      <li class="scatterplot" ng-class="{selected: 'scatterplot'==report.type.toLowerCase()}" ng-click="setReportType('SCATTERPLOT')"><md-tooltip>scatter plot</md-tooltip></li>
-      <li class="pie" ng-class="{selected: 'pie'==report.type.toLowerCase()}" ng-click="setReportType('PIE')"><md-tooltip>pie chart</md-tooltip></li>
-    </ul>
+  <div flex="100" style="margin-top:3px;">
+    <ul class="chart-types" flex="100"><li class="bar" ng-class="{selected: 'bar'==report.type.toLowerCase()}" ng-click="setReportType('BAR')">
+        <md-tooltip>bar chart</md-tooltip>
+      </li><li class="spline" ng-class="{selected: 'spline'==report.type.toLowerCase()}" ng-click="setReportType('SPLINE')">
+        <md-tooltip>line chart</md-tooltip>
+      </li><li class="scatterplot" ng-class="{selected: 'scatterplot'==report.type.toLowerCase()}" ng-click="setReportType('SCATTERPLOT')">
+        <md-tooltip>scatter plot</md-tooltip>
+      </li><li class="pie" ng-class="{selected: 'pie'==report.type.toLowerCase()}" ng-click="setReportType('PIE')">
+        <md-tooltip>pie chart</md-tooltip></li></ul>
   </div>
   <div class="builder" layout="row" flex="100" layout-wrap>
     <div class="report-name-container" flex="100" layout="row" layout-align="center center">
       <div class="report-name" layout="row" layout-align="center center" flex="100">
-        <md-input-container class="report-name">
+        <md-input-container class="report-name" style="width:375px;">
           <label>Report name</label>
-          <input ng-model="report.name">
+          <input class="md-headline" ng-model="report.name">
         </md-input-container>
       </div>
     </div>
@@ -49,8 +51,8 @@
                 </md-select>
               </md-input-container>
             </div>
-            <div style="position:absolute; bottom:0px; right:3px;" class="md-caption">X-Axis</div>
-            <div class="md-caption" style="position:absolute; top:-15px; left:-20px;">Y-Axis</div>
+            <div class="md-caption" style="position:absolute; bottom:0px; right:3px;">x-axis</div>
+            <div class="md-caption" style="position:absolute; top:-15px; left:-20px;">y-axis</div>
           </div>
           <div layout="row" layout-align="center start">
             <div flex="60" layout="row" layout-align="start start" layout-wrap class="x-field-selector">
@@ -91,7 +93,7 @@
                 </div>
               </div>
               <!-- OPTIONS MENU TO ADD GROUP BUCKETS OR AGGREGATE FUNCTIONS-->
-              <md-fab-speed-dial md-open="isOpen" md-direction="right" class="md-fling" flex="33" ng-show="!xData.aggregation || !xData.buckets">
+              <md-fab-speed-dial md-open="xMenu.isOpen" md-direction="right" class="md-fling" flex="33" ng-show="!xData.aggregation || !xData.buckets">
                 <md-fab-trigger>
                   <md-button aria-label="menu" md-theme="{{theme}}" class="md-fab md-primary md-mini">
                     <md-icon>menu</md-icon>
@@ -147,8 +149,8 @@
       </div>
     </div>
     <div flex="100" layout="row" layout-align="center center" layout-wrap>
-      <h3 flex="100" class="md-body-2" style="text-align:center; margin-top:5px; margin-bottom:5px;">Filters</h3>
-      <expression-editor class="top-expression-editor" group="group" filterable-fields="filterFields" filterable-tables="filterableTables" theme="theme"></expression-editor>
+      <h3 flex="100" class="md-body-2" style="text-align:center; margin-top:0px; margin-bottom:0px;">Filters</h3>
+      <expression-editor class="top-expression-editor" group="group" filterable-fields="filterableFields" filterable-tables="filterableTables" theme="theme"></expression-editor>
     </div>
   </div>
 </div>
