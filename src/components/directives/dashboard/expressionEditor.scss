@@ -1,13 +1,18 @@
 .expression-editor {
+  border-left: 1px solid #b9b9b9;
+  background-color: rgba(232, 232, 232, 0.5);
+  md-input-container {
+    margin: 5px 0px 5px 5px;
+  }
   .group {
-    background-color: #fff;
+    //background-color: #fff;
     padding: 15px;
     border-radius: 5px;
     border: solid 1px #666;
   }
 
   .group-conditions {
-    margin-left: 20px;
+    margin-left: 30px;
   }
 
   .alert-group {
@@ -21,5 +26,13 @@
   .condition, .group {
     margin-top: 15px;
     margin-bottom: 15px;
+  }
+
+  .form-inline {
+    md-input-container {
+      margin: 0px 0px 0px 0px;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
   }
 }

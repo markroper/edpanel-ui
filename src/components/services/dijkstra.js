@@ -37,6 +37,10 @@ angular.module('teacherdashboard')
             this.vertices[name] = edges;
           }
 
+          this.getVertex = function(name) {
+            return this.vertices[name];
+          }
+
           this.shortestPath = function (start, finish) {
             var nodes = new PriorityQueue(),
               distances = {},

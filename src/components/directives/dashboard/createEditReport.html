@@ -1,8 +1,5 @@
 <div class="report-builder" layout="row" layout-wrap>
-  <div flex="100" layout="row" layout-align="center center">
-    <h3 class="md-headline" style="margin-top:5px; margin-bottom:5px;">Choose chart type</h3>
-  </div>
-  <div flex="100">
+  <div flex="100" style="margin-bottom: 3px; margin-top:3px;">
     <ul class="chart-types" flex="100">
       <li class="bar" ng-class="{selected: 'bar'==report.type.toLowerCase()}" ng-click="setReportType('BAR')"><md-tooltip>bar chart</md-tooltip></li>
       <li class="spline" ng-class="{selected: 'spline'==report.type.toLowerCase()}" ng-click="setReportType('SPLINE')"><md-tooltip>line chart</md-tooltip></li>
@@ -10,15 +7,14 @@
       <li class="pie" ng-class="{selected: 'pie'==report.type.toLowerCase()}" ng-click="setReportType('PIE')"><md-tooltip>pie chart</md-tooltip></li>
     </ul>
   </div>
-  <div flex="100" layout="row" layout-align="center center" class="chart-details">
-    <h3 class="md-headline" style="margin-top:20px; margin-bottom:5px;">Define chart details</h3>
-  </div>
   <div class="builder" layout="row" flex="100" layout-wrap>
-    <div flex="100" layout="row" layout-align="center center">
-      <md-input-container class="report-name">
-        <label>Report name</label>
-        <input ng-model="report.name">
-      </md-input-container>
+    <div class="report-name-container" flex="100" layout="row" layout-align="center center">
+      <div class="report-name" layout="row" layout-align="center center" flex="100">
+        <md-input-container class="report-name">
+          <label>Report name</label>
+          <input ng-model="report.name">
+        </md-input-container>
+      </div>
     </div>
     <div class="builder-container" layout="row" flex="100">
       <div class="y-axis" flex="25" layout="column" layout-align="start end">
@@ -46,7 +42,7 @@
             <div class="legend">
               <div class="md-subhead" style="margin-top:3px; margin-bottom:5px;">Legend</div>
               <md-input-container>
-                <label>group by (optional)</label>
+                <label>Series (optional)</label>
                 <md-select ng-model="groupBy">
                   <md-option ng-repeat="opt in groupByOptions" value="{{opt}}">
                     {{opt}}
@@ -57,8 +53,8 @@
           </div>
           <div layout="row" layout-align="center center" class="md-subhead" style="margin-bottom:5px;">X-Axis</div>
           <div layout="row" layout-align="center start">
-            <div flex="50" layout="row" layout-align="center start" layout-wrap class="x-field-selector">
-              <div flex="50">
+            <div flex="60" layout="row" layout-align="start start" layout-wrap class="x-field-selector">
+              <div flex="33">
                 <div class="md-subhead x-header">Table</div>
                 <md-input-container>
                   <md-select ng-model="xData.table">
@@ -68,7 +64,7 @@
                   </md-select>
                 </md-input-container>
               </div>
-              <div flex="50">
+              <div flex="33">
                 <div class="md-subhead x-header">Field</div>
                 <md-input-container>
                   <md-select ng-model="xData.field">
@@ -78,50 +74,81 @@
                   </md-select>
                 </md-input-container>
               </div>
-
-              <md-button ng-show="!xData.aggregation" class="md-fab md-mini add-to-report" ng-click="addXAggregation(xData)">
-                <md-icon>add</md-icon><md-tooltip>Add aggregate (e.g. SUM, AVG)</md-tooltip>
-              </md-button>
               <div flex="33" ng-show="xData.aggregation">
                 <div class="md-subhead x-header">Aggregation</div>
-                <md-input-container>
-                  <md-select ng-model="xData.aggregation">
-                    <md-option ng-repeat="opt in aggregations" value="{{opt}}">
-                      {{opt}}
-                    </md-option>
-                  </md-select>
-                </md-input-container>
+                <div layout="row">
+                  <md-input-container>
+                    <md-select ng-model="xData.aggregation">
+                      <md-option ng-repeat="opt in aggregations" value="{{opt}}">
+                        {{opt}}
+                      </md-option>
+                    </md-select>
+                  </md-input-container>
+                  <md-button class="md-fab md-mini md-warn" md-theme="{{theme}}" ng-click="xData.aggregation = null">
+                    <md-icon>remove</md-icon>
+                    <md-tooltip>Remove aggregation</md-tooltip>
+                  </md-button>
+                </div>
               </div>
+              <!-- OPTIONS MENU TO ADD GROUP BUCKETS OR AGGREGATE FUNCTIONS-->
+              <md-fab-speed-dial md-open="isOpen" md-direction="right" class="md-fling" flex="33" ng-show="!xData.aggregation || !xData.buckets">
+                <md-fab-trigger>
+                  <md-button aria-label="menu" md-theme="{{theme}}" class="md-fab md-primary md-mini">
+                    <md-icon>menu</md-icon>
+                    <md-tooltip>options menu</md-tooltip>
+                  </md-button>
+                </md-fab-trigger>
+                <md-fab-actions>
+                  <md-button class="md-fab md-mini md-primary" md-theme="{{theme}}" ng-click="addXAggregation(xData)">
+                    <md-icon>add</md-icon>
+                    <md-tooltip>Add aggregate (SUM, AVG, COUNT)</md-tooltip>
+                  </md-button>
+                  <md-button class="md-fab md-mini md-primary" md-theme="{{theme}}" ng-click="addBucket()">
+                    <md-icon>group_work</md-icon>
+                    <md-tooltip>Group results by range</md-tooltip>
+                  </md-button>
+              </md-fab-speed-dial>
             </div>
-            <div layout="row" flex="50" layout-wrap layout-align="center center">
+            <div ng-if="xData.buckets" layout="row" flex="40" layout-wrap layout-align="end center">
               <div layout="row" flex="100" class="bucket-header" layout-wrap>
                 <div flex="100" class="md-subhead">Group Results</div>
-                <div flex="33">start</div>
-                <div flex="33">end</div>
-                <div flex="33">value</div>
+                <div flex="25">start</div>
+                <div flex="25">end</div>
+                <div flex="25">value</div>
+                <div flex="25"></div>
               </div>
               <div flex="100" layout="row" class="buckets" ng-repeat="bucket in xData.buckets">
-                <md-input-container flex="33">
+                <md-input-container flex="25">
                   <input ng-model="bucket.start">
                 </md-input-container>
-                <md-input-container flex="33">
+                <md-input-container flex="25">
                   <input ng-model="bucket.end">
                 </md-input-container>
-                <md-input-container flex="33">
+                <md-input-container flex="25">
                   <input ng-model="bucket.label">
                 </md-input-container>
+                <md-button class="md-fab md-mini md-warn" md-theme="{{theme}}" ng-click="removeBucket(bucket)">
+                  <md-icon>remove</md-icon>
+                  <md-tooltip>Remove bucket</md-tooltip>
+                </md-button>
               </div>
-              <md-button class="md-fab md-mini add-to-report" ng-click="addBuckets()">
-                <md-icon>add</md-icon><md-tooltip>Create x-axis ranges (e.g. GPA '1 - 2.5', '2.5 - 3.5')</md-tooltip>
-              </md-button>
+              <div flex="100" layout="row">
+                <div flex="75"></div>
+                <div flex="25">
+                  <md-button class="md-fab md-mini md-primary" md-theme="{{theme}}" ng-click="addBucket()">
+                    <md-icon>add</md-icon>
+                    <md-tooltip>Add range</md-tooltip>
+                  </md-button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div flex="100" layout="row" layout-align="center center" layout-wrap>
-      <div class="md-title" layout="row" layout-align="center center" flex="100">Chart Filters</div>
-      <expression-editor group="group" filterable-fields="filterFields"></expression-editor>
+      <h3 flex="100" class="md-headline" style="text-align:center; margin-top:5px; margin-bottom:5px;">Filter Results</h3>
+      <expression-editor class="top-expression-editor" group="group" filterable-fields="filterFields" filterable-tables="filterableTables" theme="theme"></expression-editor>
     </div>
   </div>
 </div>

@@ -4,7 +4,9 @@ angular.module('teacherdashboard')
     return {
       scope: {
         group: '=',
-        filterableFields: '='
+        filterableTables: '=',
+        filterableFields: '=',
+        theme: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/dashboard/expressionEditor.html',
@@ -12,6 +14,7 @@ angular.module('teacherdashboard')
         var content, directive;
         content = element.contents().remove();
         return function (scope, element, attrs) {
+          scope.controls = { areOpen: false };
           scope.operators = [
             { name: 'AND' },
             { name: 'OR' }
@@ -23,7 +26,7 @@ angular.module('teacherdashboard')
             { name: '<', value: 'LESS_THAN' },
             { name: '<=', value: 'LESS_THAN_OR_EQUAL' },
             { name: '>', value: 'GREATER_THAN' },
-            { name: '>=', value: 'LESS_THAN_OR_EQUAL' }
+            { name: '>=', value: 'GREATER_THAN_OR_EQUAL' }
           ];
 
           scope.addCondition = function () {
@@ -48,7 +51,11 @@ angular.module('teacherdashboard')
           };
 
           scope.removeGroup = function () {
-            "group" in scope.$parent && scope.$parent.group.rules.splice(scope.$parent.$index, 1);
+            if(scope.$parent.$index) {
+              'group' in scope.$parent && scope.$parent.group.rules.splice(scope.$parent.$index, 1);
+            } else {
+              scope.group.rules = [];
+            }
           };
 
           directive || (directive = $compile(content));

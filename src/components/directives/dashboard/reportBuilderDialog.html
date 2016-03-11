@@ -3,13 +3,15 @@
     <div class="md-toolbar-tools">
       <h2>Report Builder</h2>
       <span flex></span>
+      <h2 style="font-weight:bold;">Choose chart type, then configure</h2>
+      <span flex></span>
       <md-button class="md-icon-button" ng-click="cancel()">
         <md-icon aria-label="Close dialog">close</md-icon>
       </md-button>
     </div>
   </md-toolbar>
   <md-dialog-content style="padding: 0px 0px;">
-    <create-edit-report report="report" query-components="queryComponents"></create-edit-report>
+    <create-edit-report report="report" query-components="queryComponents" theme="theme"></create-edit-report>
   </md-dialog-content>
   <md-dialog-actions layout="row">
     <span flex></span>
@@ -17,7 +19,7 @@
       Cancel
     </md-button>
     <md-button md-theme="{{theme}}" class="md-raised md-primary" ng-click="answer()" style="margin-right:20px;">
-      Save
+      Save Report
     </md-button>
   </md-dialog-actions>
 </md-dialog>

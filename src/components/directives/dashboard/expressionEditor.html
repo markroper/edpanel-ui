@@ -1,5 +1,5 @@
 <div class="expression-editor">
-  <div class="form-inline">
+  <div layout="row">
     <md-input-container>
       <md-select ng-model="group.operator">
         <md-option ng-repeat="opt in operators" value="{{opt.name}}">
@@ -7,36 +7,71 @@
         </md-option>
       </md-select>
     </md-input-container>
-    <md-button style="margin-left: 5px" ng-click="addCondition()" class="">Add Condition</md-button>
-    <md-button style="margin-left: 5px" ng-click="addGroup()" class="">Add Group</md-button>
-    <md-button style="margin-left: 5px" ng-click="removeGroup()" class="">Remove Group</md-button>
+    <md-fab-speed-dial md-open="controls.areOpen" md-direction="right" class="md-fling">
+      <md-fab-trigger>
+        <md-button aria-label="menu" md-theme="{{theme}}" class="md-fab md-primary md-mini">
+          <md-icon>menu</md-icon>
+          <md-tooltip>filter menu</md-tooltip>
+        </md-button>
+      </md-fab-trigger>
+      <md-fab-actions>
+        <md-button class="md-fab md-mini md-primary" md-theme="{{theme}}" ng-click="addCondition()" class="">
+          <md-icon>add</md-icon>
+          <md-tooltip>add condition</md-tooltip>
+        </md-button>
+        <md-button class="md-fab md-mini md-primary" md-theme="{{theme}}" ng-click="addGroup()" class="">
+          <md-icon>library_add</md-icon>
+          <md-tooltip>add group</md-tooltip>
+        </md-button>
+        <md-button class="md-fab md-mini md-warn" ng-click="removeGroup()" class="">
+          <md-icon>remove</md-icon>
+          <md-tooltip>remove group</md-tooltip>
+        </md-button>
+    </md-fab-speed-dial>
   </div>
   <div class="group-conditions">
     <div ng-repeat="rule in group.rules | orderBy:'index'" class="condition">
       <div ng-switch="rule.hasOwnProperty('group')">
         <div ng-switch-when="true">
-          <query-builder group="rule.group"></query-builder>
+          <expression-editor
+            group="rule.group"
+            filterable-tables="filterableTables"
+            filterable-fields="filterableFields"
+            theme="theme"></expression-editor>
         </div>
         <div ng-switch-default="ng-switch-default">
-          <div class="form-inline">
-            <md-input-container>
-              <md-select ng-model="rule.field.value">
-                <md-option ng-repeat="opt in filterableFields" value="{{opt}}">
-                  {{opt.table + ' ' + opt.field}}
+          <div layout="row" class="form-inline">
+            <md-input-container flex="20">
+              <md-select ng-model="rule.field.table">
+                <md-option ng-repeat="opt in filterableTables" value="{{opt}}">
+                  {{opt.charAt(0).toUpperCase() + opt.toLowerCase().slice(1)}}
                 </md-option>
               </md-select>
             </md-input-container>
-            <md-input-container>
+            <md-input-container flex="20">
+              <md-select ng-model="rule.field.field">
+                <md-option ng-repeat="opt in filterableFields[rule.field.table]" value="{{opt}}">
+                  {{opt}}
+                </md-option>
+              </md-select>
+            </md-input-container>
+
+            <md-input-container flex="15">
               <md-select ng-model="rule.condition">
                 <md-option ng-repeat="opt in conditions" value="{{opt.value}}">
                   {{opt.name}}
                 </md-option>
               </md-select>
             </md-input-container>
-            <md-input-container>
-              <input ng-model="rule.data">
+            <md-input-container flex="35">
+              <input ng-model="rule.data.value">
             </md-input-container>
-            <md-button ng-click="removeCondition($index)">delete</md-button>
+            <div flex="10">
+              <md-button class="md-fab md-mini md-warn" ng-click="removeCondition($index)">
+                <md-icon>remove</md-icon>
+                <md-tooltip>remove condition</md-tooltip>
+              </md-button>
+            </div>
           </div>
         </div>
       </div>

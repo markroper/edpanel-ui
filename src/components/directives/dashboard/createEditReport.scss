@@ -5,11 +5,11 @@
   .report-name {
     margin-bottom: -10px;
   }
-  .builder-container {
+  .builder-container, .report-name-container {
     padding: 0px 30px 0px 30px;
   }
   .chart-details {
-    border-top: 1px solid #F5F5F5;
+    //border-top: 1px solid #F5F5F5;
     margin-top: 10px;
   }
   ul {
@@ -21,7 +21,7 @@
     width:100%;
   }
   .chart-types li:hover {
-    background-color: #F5F5F5;
+    background-color: #FAFAFA;
   }
   .chart-types li.selected {
     background-color: #E8E8E8;
@@ -54,6 +54,15 @@
     background-size: 50px;
   }
 
+  .y-axis, .x-axis, .report-name {
+    background-color:#FAFAFA;
+  }
+  .y-axis, .x-axis, .svg-container {
+    padding-top:20px;
+    padding-bottom:20px;
+  }
+
+
   .svg-container {
     .legend {
       border-radius:3px;
@@ -61,7 +70,7 @@
       text-align:center;
       position:absolute;
       top:30px;
-      right: 15px;
+      right: 50px;
       width: 250px;
       height: 100px;
       background-color:white;
@@ -69,13 +78,13 @@
     position:relative;
     width:100%;
     height: 175px;
-    background-color:#FAFAFA;
+    background-color: white;
     border-left: 3px solid #696969;
     border-bottom: 3px solid #696969;
     border-bottom-left-radius: 3px;
   }
   .x-container {
-    max-width: 700px;
+    max-width: 750px;
   }
   .y-axis {
     .md-subhead, md-input-container {
@@ -100,5 +109,9 @@
   }
   .add-to-report:hover {
     background-color: #B7E0ED !important;
+  }
+  .top-expression-editor {
+    max-width:100%;
+    width:700px;
   }
 }
