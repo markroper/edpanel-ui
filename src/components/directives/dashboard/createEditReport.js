@@ -58,7 +58,9 @@ angular.module('teacherdashboard')
 
           ];
           var op = exp.operator;
-          grp.operator = op;
+          if(op === 'OR') {
+            grp.operator = op;
+          }
           //ADD THE LHS RULES
           if(exp.leftHandSide.type === EXPR) {
             var lhsRules = scope.parseRuleFromExpression(exp.leftHandSide, op);
@@ -285,9 +287,6 @@ angular.module('teacherdashboard')
           }
           if(!parents) {
             parents = [];
-          }
-          if(parents.indexOf(table) !== -1) {
-            return parents;
           }
           var edges = scope.g.getVertex(table);
           if(edges) {

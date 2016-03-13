@@ -32,6 +32,7 @@
       <span md-highlight-text="ySearchText" class="md-subhead">{{yItem.toLowerCase() + 's'}}</span>
     </md-autocomplete>
     <div class="md-headline">by the</div>
+
     <!-- For cases where there is an X-Axis field thats not an aggregate function (e.g. Staff Name)-->
     <div layout layout-align="center center" ng-if="xData.field && aggregations.indexOf(xData.field) === -1">
       <md-input-container class="sentence-select">
@@ -41,6 +42,7 @@
       </md-input-container>
       <div class="md-headline">of each</div>
     </div>
+
     <!-- For cases where there is an X-Axis but it is an aggregate function SUM, AVG, COUNT-->
     <div layout layout-align="center center" ng-if="xData.field && aggregations.indexOf(xData.field) !== -1">
       <md-input-container class="sentence-select">
@@ -50,6 +52,7 @@
       </md-input-container>
       <div class="md-headline">of their</div>
     </div>
+
     <md-autocomplete
       md-selected-item="xData.table"
       md-search-text="xSearchText"
