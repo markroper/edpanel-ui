@@ -11,6 +11,23 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/dashboard/createEditReport.html',
       replace: true,
       link: function(scope){
+        /**
+         * Autocomplete related filters
+         * @param query
+         * @returns {Function}
+         */
+        var createFilterFor = function(query) {
+          var lowercaseQuery = angular.lowercase(query);
+          return function filterFn(vegetable) {
+            return angular.lowercase(vegetable).indexOf(lowercaseQuery) !== -1;
+          };
+        }
+
+        scope.querySearch = function(query) {
+          var results = query ? scope.tableChoices.filter(createFilterFor(query)) : [];
+          return results;
+        };
+
         /*
          *
          *   FUNCTIONS TO CONVERT QUERY FILTERS TO EXPRESSION BUILDER GROUPS
@@ -32,11 +49,13 @@ angular.module('teacherdashboard')
           if(!exp) {
             return grp
           }
-          scope.aggregations = [
-            'COUNT',
-            'SUM',
-            'AVG',
-            'STD_DEV'
+          scope.aggregations = ['COUNT', 'SUM', 'AVG', 'STD_DEV'];
+          scope.aggs = [
+            { aggregation: 'COUNT', label: 'number'},
+            { aggregation: 'SUM', label: 'sum'},
+            { aggregation: 'AVG', label: 'average'},
+            { aggregation: 'STD_DEV', label: 'standard deviation'}
+
           ];
           var op = exp.operator;
           grp.operator = op;
@@ -77,6 +96,18 @@ angular.module('teacherdashboard')
           }
           return rules;
         };
+
+        scope.addRuleToGroup = function() {
+          if(!scope.group.rules) {
+            scope.group.rules = [];
+          }
+          scope.group.rules.push({
+            'condition': null,
+            'field': null,
+            'data': null
+          });
+        };
+
         scope.group = scope.parseGroupFromExpression(scope.report.chartQuery.filter);
 
 
@@ -183,11 +214,38 @@ angular.module('teacherdashboard')
           scope.xData = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[0]);
           scope.yData = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[1]);
         } else if(!query.fields) {
+          var aggMeas = query.aggregateMeasures[0];
           //figure out the y and y column values when there are no dimensions suggested (y column is aggregate function), x is the field value with any buckets
+          scope.xData = {
+            aggregation: aggMeas.bucketAggregation,
+            type: 'MEASURE',
+            table: aggMeas.measure.toLowerCase(),
+            field: aggMeas.bucketAggregation,
+            buckets: aggMeas.buckets
+          }
+         scope.yData = {
+            aggregation: aggMeas.aggregation,
+            type: 'MEASURE',
+            table: aggMeas.measure.toLowerCase(),
+            field: null
+          }
         } else {
           //x axis is the query.fields[0]
+          scope.xData = {
+            aggregation: query.fields[0].bucketAggregation,
+            type: 'DIMENSION',
+            table: query.fields[0].dimension.toLowerCase(),
+            field: query.fields[0].field
+          };
           //group by exists if there is a fields[1]
+          //TODO: figure this out
           //Yaxis field(s) are the aggregate measures.
+          scope.yData = {
+            aggregation: query.aggregateMeasures[0].aggregation,
+            type: 'MEASURE',
+            table: query.aggregateMeasures[0].measure.toLowerCase(),
+            field: null
+          }
         }
 
         //Given the currently selected X and Y axis values, generate the complete set of eligible filter fields

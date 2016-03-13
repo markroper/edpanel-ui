@@ -1,4 +1,21 @@
 .report-builder {
+  .sentence-select {
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: rgb(250,250,250);
+  }
+  md-autocomplete {
+    margin-left: 5px;
+    margin-right: 5px;
+    input {
+      width: 75px;
+    }
+  }
+  .close-cal {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
   md-select {
     max-width:250px;
   }
@@ -8,93 +25,23 @@
   .builder-container, .report-name-container {
     padding: 0px 30px 0px 30px;
   }
-  .chart-details {
-    //border-top: 1px solid #F5F5F5;
-    margin-top: 10px;
-  }
-  ul {
-    text-align:center;
-    list-style:none;
-    margin:0;
-    padding:0;
-    overflow:hidden;
-    width:100%;
-  }
-  .chart-types li:hover {
-    background-color: #FAFAFA;
-  }
-  .chart-types li.selected {
-    background-color: #E8E8E8;
-  }
-  .chart-types li {
-    display:inline-block;
-    width: 125px;
-    height: 50px;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 3px;
-    cursor:pointer;
-    transition: background-color 0.5s ease;
-  }
-  li.bar {
-    background-image: url("../../../assets/images/bar.svg");
-    background-size: 120px;
-    background-position-y: 35%;
-  }
-  li.spline {
-    background-image: url("../../../assets/images/line.svg");
-    background-size: 60px;
-  }
-  li.pie {
-    background-image: url("../../../assets/images/pie.svg");
-    background-size: 50px;
-  }
-  li.scatterplot {
-    background-image: url("../../../assets/images/scatter.svg");
-    background-size: 50px;
-  }
-
-  .y-axis, .x-axis, .report-name {
-    background-color:white;
-  }
-  .y-axis, .x-axis, .svg-container {
-    padding-top:20px;
-    padding-bottom:20px;
-  }
-
-
-  .svg-container {
-    .legend {
-      border-radius:3px;
-      text-align:center;
-      position:absolute;
-      top:30px;
-      right: 40px;
-      width: 225px;
-      height: 100px;
-    }
-    position:relative;
-    width:100%;
-    height: 125px;
-    border-left: 3px solid #696969;
-    border-bottom: 3px solid #696969;
-    border-bottom-left-radius: 3px;
-    margin-bottom:5px;
-  }
-  .x-container {
-    max-width: 750px;
-  }
-  .y-axis {
-    .md-subhead, md-input-container {
-      margin-right:30px;
-    }
-  }
   .buckets md-input-container {
     margin-top: 3px;
     margin-bottom: -15px;
   }
   .bucket-header, .x-header {
     text-align:center;
+  }
+  .bucket-wrapper, .filter-row {
+    h3 {
+      margin-top:10px;
+    }
+    position:relative;
+    background-color: #FAFAFA;
+    margin-top:5px;
+    margin-bottom:5px;
+    padding-left: 20px;
+    padding-right:20px;
   }
   .x-field-selector {
     md-input-container {
