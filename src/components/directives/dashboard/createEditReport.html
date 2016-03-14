@@ -6,7 +6,6 @@
     </md-input-container>
   </div>
   <div flex="100" layout layout-wrap layout-align="center center">
-    <div class="md-headline">A</div>
     <md-input-container class="sentence-select">
       <label>Report type</label>
       <md-select ng-model="report.type" class="md-subhead">
@@ -17,22 +16,27 @@
       </md-select>
     </md-input-container>
     <div class="md-headline"> showing the </div>
-    <md-input-container class="sentence-select">
-      <md-select ng-model="yData.aggregation" class="md-subhead">
-        <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
-      </md-select>
-    </md-input-container>
-    <div class="md-headline"> of </div>
-    <md-autocomplete
-      md-selected-item="yData.table"
-      md-search-text="ySearchText"
-      md-items="yItem in querySearch(ySearchText)"
-      md-item-text="yItem.toLowerCase() + 's'"
-      placeholder="choose table">
-      <span md-highlight-text="ySearchText" class="md-subhead">{{yItem.toLowerCase() + 's'}}</span>
-    </md-autocomplete>
-    <div class="md-headline">by the</div>
 
+    <div ng-repeat="yd in yData" layout layout-align="center center">
+      <div ng-show="!$first" class="md-headline">&nbsp;and the</div>
+      <md-input-container class="sentence-select">
+        <md-select ng-model="yd.aggregation" class="md-subhead">
+          <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
+        </md-select>
+      </md-input-container>
+      <div class="md-headline"> of </div>
+      <md-autocomplete
+        md-min-length="0"
+        md-selected-item="yd.table"
+        md-search-text="ySearchText"
+        md-items="yItem in querySearch(ySearchText)"
+        md-item-text="yItem.toLowerCase() + 's'"
+        placeholder="choose table">
+        <span md-highlight-text="ySearchText" class="md-subhead">{{yItem.toLowerCase() + 's'}}</span>
+      </md-autocomplete>
+    </div>
+
+    <div class="md-headline">by the</div>
     <!-- For cases where there is an X-Axis field thats not an aggregate function (e.g. Staff Name)-->
     <div layout layout-align="center center" ng-if="xData.field && aggregations.indexOf(xData.field) === -1">
       <md-input-container class="sentence-select">
@@ -42,7 +46,6 @@
       </md-input-container>
       <div class="md-headline">of each</div>
     </div>
-
     <!-- For cases where there is an X-Axis but it is an aggregate function SUM, AVG, COUNT-->
     <div layout layout-align="center center" ng-if="xData.field && aggregations.indexOf(xData.field) !== -1">
       <md-input-container class="sentence-select">
@@ -52,8 +55,8 @@
       </md-input-container>
       <div class="md-headline">of their</div>
     </div>
-
     <md-autocomplete
+      md-min-length="0"
       md-selected-item="xData.table"
       md-search-text="xSearchText"
       md-items="xItem in querySearch(xSearchText)"
@@ -67,6 +70,24 @@
     </md-button>
     <div class="md-headline" ng-if="xData.buckets">ranges</div>
     <div class="md-headline">.</div>
+  </div>
+  <div ng-if="series" flex="100" layout layout-wrap layout-align="center center">
+    <div class="md-headline">Group the results by the</div>
+    <md-input-container class="sentence-select">
+      <md-select ng-model="series.field" class="md-subhead">
+        <md-option ng-repeat="opt in dimensionFields[series.table].fields" value="{{opt}}">{{opt}}</md-option>
+      </md-select>
+    </md-input-container>
+    <div class="md-headline">of the</div>
+    <md-autocomplete
+      md-selected-item="series.table"
+      md-search-text="xSearchText"
+      md-items="xItem in querySearch(xSearchText)"
+      md-item-text="xItem.toLowerCase()"
+      placeholder="choose table">
+      <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
+    </md-autocomplete>
+    <div class="md-healine">.</div>
   </div>
   <div ng-if="xData.buckets" flex="100" layout layout-wrap layout-align="center start" class="bucket-row">
     <div layout="row" flex="40" layout-wrap layout-align="end center" class="bucket-wrapper">
@@ -82,7 +103,7 @@
         </h3>
         <div flex="25" class="md-caption">start</div>
         <div flex="25" class="md-caption">end</div>
-        <div flex="25" class="md-caption">range value</div>
+        <div flex="25" class="md-caption">range label</div>
         <div flex="25" class="md-caption"></div>
       </div>
       <div flex="100" layout="row" class="buckets" ng-repeat="bucket in xData.buckets">
@@ -105,7 +126,7 @@
     </div>
   </div>
   <md-button ng-show="!group.rules.length" ng-click="addRuleToGroup()">Add filter conditions</md-button>
-  <div layout="column" layout-align="center center" class="filter-row" ng-if="group.rules.length && xData.table && yData.table">
+  <div layout="column" layout-align="center center" class="filter-row" ng-if="group.rules.length && xData.table && yData[0].table">
     <md-button ng-click="group.rules = []" aria-label="close" class="close-cal md-icon-button">
       <md-icon md-font-set="material-icons">close</md-icon>
     </md-button>

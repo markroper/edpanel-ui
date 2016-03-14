@@ -1,4 +1,10 @@
 <div class="schooldash" layout="column">
-  <!--<edpanel-row ng-repeat="row in dashboard.rows" row-contents="row" terms="terms" flex="100" layout="row" layout-wrap></edpanel-row>-->
-  <create-edit-dashboard dashboard="dashboard"></create-edit-dashboard>
+  <div ng-if="!editDashboard" flex="100">
+    <div class="md-headline" layout layout-align="center center">
+      {{dashboard.name || 'School Dashboard'}}
+      <md-button class="md-icon-button" ng-click="toggleEditMode()"><md-icon>edit</md-icon></md-button>
+    </div>
+    <edpanel-row ng-repeat="row in dashboard.rows" row-contents="row" terms="terms" flex="100" layout="row" layout-wrap></edpanel-row>
+  </div>
+  <create-edit-dashboard ng-show="editDashboard" dashboard="dashboard"></create-edit-dashboard>
 </div>

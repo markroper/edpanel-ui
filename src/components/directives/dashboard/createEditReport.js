@@ -24,7 +24,7 @@ angular.module('teacherdashboard')
         }
 
         scope.querySearch = function(query) {
-          var results = query ? scope.tableChoices.filter(createFilterFor(query)) : [];
+          var results = query ? scope.tableChoices.filter(createFilterFor(query)) : scope.tableChoices;
           return results;
         };
 
@@ -42,13 +42,6 @@ angular.module('teacherdashboard')
           }
         }
         scope.parseGroupFromExpression = function(exp) {
-          var grp = {
-            'operator': 'AND',
-            'rules': []
-          };
-          if(!exp) {
-            return grp
-          }
           scope.aggregations = ['COUNT', 'SUM', 'AVG', 'STD_DEV'];
           scope.aggs = [
             { aggregation: 'COUNT', label: 'number'},
@@ -57,6 +50,13 @@ angular.module('teacherdashboard')
             { aggregation: 'STD_DEV', label: 'standard deviation'}
 
           ];
+          var grp = {
+            'operator': 'AND',
+            'rules': []
+          };
+          if(!exp) {
+            return grp
+          }
           var op = exp.operator;
           if(op === 'OR') {
             grp.operator = op;
@@ -212,24 +212,55 @@ angular.module('teacherdashboard')
 
 
         var query = scope.report.chartQuery;
+        if(!query) {
+          //no query, generate a valid default?
+        }
+
         if(query.subqueryColumnsByPosition) {
-          scope.xData = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[0]);
-          scope.yData = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[1]);
-        } else if(!query.fields) {
-          var aggMeas = query.aggregateMeasures[0];
-          //figure out the y and y column values when there are no dimensions suggested (y column is aggregate function), x is the field value with any buckets
-          scope.xData = {
-            aggregation: aggMeas.bucketAggregation,
-            type: 'MEASURE',
-            table: aggMeas.measure.toLowerCase(),
-            field: aggMeas.bucketAggregation,
-            buckets: aggMeas.buckets
+          var yPos = 1;
+          //If there are 3 subquery columns referenced, the second is the series
+          if(query.subqueryColumnsByPosition.length > 2) {
+            yPos = 2;
+            scope.series = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[1]);
           }
-         scope.yData = {
-            aggregation: aggMeas.aggregation,
-            type: 'MEASURE',
-            table: aggMeas.measure.toLowerCase(),
-            field: null
+          scope.xData = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[0]);
+          scope.yData = [resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[yPos])];
+        } else if(!query.fields) {
+          if (!query.aggregateMeasures) {
+            //New or empty report
+            scope.xData = null;
+            //{
+            //  aggregation: null,
+            //  type: 'DIMENSION',
+            //  table: 'student',
+            //  field: 'Ethnicity',
+            //  buckets: null
+            //};
+            scope.yData = [ {}
+              //{
+              //  aggregation: 'SUM',
+              //  type: 'MEASURE',
+              //  table: 'course_grade',
+              //  field: null,
+              //  buckets: null
+              //}
+            ];
+          } else {
+            var aggMeas = query.aggregateMeasures[0];
+            //figure out the y and y column values when there are no dimensions suggested (y column is aggregate function), x is the field value with any buckets
+            scope.xData = {
+              aggregation: aggMeas.bucketAggregation,
+              type: 'MEASURE',
+              table: aggMeas.measure.toLowerCase(),
+              field: aggMeas.bucketAggregation,
+              buckets: aggMeas.buckets
+            }
+            scope.yData = [{
+              aggregation: aggMeas.aggregation,
+              type: 'MEASURE',
+              table: aggMeas.measure.toLowerCase(),
+              field: null
+            }];
           }
         } else {
           //x axis is the query.fields[0]
@@ -239,20 +270,28 @@ angular.module('teacherdashboard')
             table: query.fields[0].dimension.toLowerCase(),
             field: query.fields[0].field
           };
-          //group by exists if there is a fields[1]
-          //TODO: figure this out
+          //Series exists if there is a fields[1]
+          if(query.fields.length > 1) {
+            scope.series = {
+              aggregation: null,
+              type: 'DIMENSION',
+              table: query.fields[1].dimension.toLowerCase(),
+              field: query.fields[1].field
+            };
+          }
           //Yaxis field(s) are the aggregate measures.
-          scope.yData = {
-            aggregation: query.aggregateMeasures[0].aggregation,
-            type: 'MEASURE',
-            table: query.aggregateMeasures[0].measure.toLowerCase(),
-            field: null
+          scope.yData = [];
+          for(var i = 0; i < query.aggregateMeasures.length; i++) {
+            scope.yData.push({
+              aggregation: query.aggregateMeasures[i].aggregation,
+              type: 'MEASURE',
+              table: query.aggregateMeasures[i].measure.toLowerCase(),
+              field: null
+            });
           }
         }
 
         //Given the currently selected X and Y axis values, generate the complete set of eligible filter fields
-        scope.filterFields = [];
-
         var generateTableGraph = function() {
           var g = new dijkstra.Graph();
           for (var j = 0; j < scope.queryComponents.availableDimensions.length; j++) {
@@ -318,19 +357,19 @@ angular.module('teacherdashboard')
         var setScopeFilterFieldsAndTables = function() {
           var dims = [];
           var parentDims = [];
-          if(scope.xData && scope.yData) {
-            dims = resolveShortestPath(scope.xData.table, scope.yData.table);
+          if(scope.xData && scope.yData && scope.yData.length > 0) {
+            dims = resolveShortestPath(scope.xData.table, scope.yData[0].table);
             if(!dims || dims.length < 2) {
-              dims = resolveShortestPath(scope.yData.table, scope.xData.table);
+              dims = resolveShortestPath(scope.yData[0].table, scope.xData.table);
             }
             parentDims = resolveParents(scope.xData.table.toUpperCase());
-            parentDims = parentDims.concat(resolveParents(scope.yData.table.toUpperCase()));
+            parentDims = parentDims.concat(resolveParents(scope.yData[0].table.toUpperCase()));
           } else if(scope.xData) {
             dims = [ angular.copy(scope.xData)];
             parentDims = resolveParents(scope.xData.table.toUpperCase());
-          } else if(scope.yData) {
-            dims = [ angular.copy(scope.yData) ];
-            parentDims = resolveParents(scope.yData.table.toUpperCase());
+          } else if(scope.yData && scope.yData[0].table) {
+            dims = [ angular.copy(scope.yData[0]) ];
+            parentDims = resolveParents(scope.yData[0].table.toUpperCase());
           }
           angular.forEach(parentDims, function(value) {
             if(value && value !== 'undefined' && dims.indexOf(value) === -1) {

@@ -70,19 +70,33 @@ angular.module('teacherdashboard')
         };
 
         scope.createNewReport = function() {
-          //TODO: implement
+          scope.dashboardReports.unshift({
+            sizeX: 6,
+            row: 0,
+            col:0,
+            report: { name: 'New Report', chartQuery: {} }
+          });
         };
-        scope.deleteReport = function(rpt) {
-          //TODO: implement
+        scope.deleteReport = function($event, rpt) {
+          var idx = scope.dashboardReports.indexOf(rpt);
+          scope.dashboardReports.splice(idx, 1);
         };
 
+        scope.saveDashboard = function() {
+          scope.$parent.editDashboard = false;
+        };
+
+        scope.cancelChanges = function() {
+          scope.dashboardReports = scope.processDashboard();
+          scope.$parent.editDashboard = false;
+        };
         scope.processDashboard = function() {
           var gridsterData = [];
           if(scope.dashboard) {
             for (var m = 0; m < scope.dashboard.rows.length; m++) {
               var currRow = scope.dashboard.rows[m];
               for (var n = 0; n < currRow.reports.length; n++) {
-                var currReport = currRow.reports[n];
+                var currReport = angular.copy(currRow.reports[n]);
                 var gElement = {
                   sizeX: 6 * 1 / currRow.reports.length,
                   //sizeY: 0.5,

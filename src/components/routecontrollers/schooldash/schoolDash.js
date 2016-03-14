@@ -2,6 +2,10 @@
 angular.module('teacherdashboard')
   .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', 'analytics', '$compile', 'authentication',
     function ($scope, api, statebag, $q, $window, analytics, $compile, authentication) {
+      $scope.editDashboard = false;
+      $scope.toggleEditMode = function() {
+        $scope.editDashboard = !$scope.editDashboard;
+      };
       $scope.$on('$viewContentLoaded', function () {
         $window.ga('send', 'pageview', {page: "/ui/schools/*/dashboard"});
       });
