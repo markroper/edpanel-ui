@@ -1,10 +1,15 @@
 <div class="report-builder" layout="row" layout-align="center center" layout-wrap>
+
+  <!-- REPORT NAME SECTION -->
   <div class="report-name" layout="row" layout-align="center center" flex="100">
     <md-input-container class="report-name" style="width:425px;">
       <label>Report name</label>
       <input class="md-headline" ng-model="report.name">
     </md-input-container>
   </div>
+  <!-- END REPORT NAME SECTION -->
+
+  <!-- CHART CORE SENTENCE-->
   <div flex="100" layout layout-wrap layout-align="center center">
     <md-input-container class="sentence-select">
       <label>Report type</label>
@@ -16,7 +21,6 @@
       </md-select>
     </md-input-container>
     <div class="md-headline"> showing the </div>
-
     <div ng-repeat="yd in yData" layout layout-align="center center">
       <div ng-show="!$first" class="md-headline">&nbsp;and the</div>
       <md-input-container class="sentence-select">
@@ -35,17 +39,7 @@
         <span md-highlight-text="ySearchText" class="md-subhead">{{yItem.toLowerCase() + 's'}}</span>
       </md-autocomplete>
     </div>
-
     <div class="md-headline">by the</div>
-    <!-- For cases where there is an X-Axis field thats not an aggregate function (e.g. Staff Name)-->
-    <div layout layout-align="center center" ng-if="xData.field && aggregations.indexOf(xData.field) === -1">
-      <md-input-container class="sentence-select">
-        <md-select ng-model="xData.field" class="md-subhead">
-          <md-option ng-repeat="opt in dimensionFields[xData.table].fields" value="{{opt}}">{{opt}}</md-option>
-        </md-select>
-      </md-input-container>
-      <div class="md-headline">of each</div>
-    </div>
     <!-- For cases where there is an X-Axis but it is an aggregate function SUM, AVG, COUNT-->
     <div layout layout-align="center center" ng-if="xData.field && aggregations.indexOf(xData.field) !== -1">
       <md-input-container class="sentence-select">
@@ -64,13 +58,21 @@
       placeholder="choose table">
       <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
     </md-autocomplete>
-    <md-button ng-if="!xData.buckets && xData.table" class="md-fab md-mini md-primary" md-theme="{{theme}}" ng-click="addBucket()">
-      <md-icon>add</md-icon>
-      <md-tooltip>Define x-axis range groupings (optional)</md-tooltip>
-    </md-button>
+    <!-- For cases where there is an X-Axis field thats not an aggregate function (e.g. Staff Name)-->
+    <div layout layout-align="center center" ng-if="xData.field && aggregations.indexOf(xData.field) === -1">
+      <md-input-container class="sentence-select">
+        <md-select ng-model="xData.field" class="md-subhead">
+          <md-option ng-repeat="opt in dimensionFields[xData.table].fields" value="{{opt}}">{{opt}}</md-option>
+        </md-select>
+      </md-input-container>
+      <div class="md-headline">of each</div>
+    </div>
     <div class="md-headline" ng-if="xData.buckets">ranges</div>
     <div class="md-headline">.</div>
   </div>
+  <!-- END CHART CORE SENTENCE-->
+
+  <!-- SERIES -->
   <div ng-if="series" flex="100" layout layout-wrap layout-align="center center">
     <div class="md-headline">Group the results by the</div>
     <md-input-container class="sentence-select">
@@ -78,7 +80,7 @@
         <md-option ng-repeat="opt in dimensionFields[series.table].fields" value="{{opt}}">{{opt}}</md-option>
       </md-select>
     </md-input-container>
-    <div class="md-headline">of the</div>
+    <div class="md-headline">on the</div>
     <md-autocomplete
       md-selected-item="series.table"
       md-search-text="xSearchText"
@@ -88,7 +90,29 @@
       <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
     </md-autocomplete>
     <div class="md-healine">.</div>
+    <md-button class="md-icon-button" ng-click="removeSeries()">
+      <md-icon aria-label="Close dialog">close</md-icon>
+      <md-tooltip>remove series from chart</md-tooltip>
+    </md-button>
   </div>
+  <!-- END SERIES -->
+
+  <!-- OPTIONS BUTTONS -->
+  <md-button ng-show="!series && xData.table" ng-click="addSeries()">
+    Add chart series
+    <md-tooltip>Define a series to produce multiple {{report.type.toLowerCase()}}s (optional)</md-tooltip>
+  </md-button>
+  <md-button ng-if="!xData.buckets && xData.table" ng-click="addBucket()">
+    Add x-axis ranges
+    <md-tooltip>Group x-axis values together (optional)</md-tooltip>
+  </md-button>
+  <md-button ng-show="!group.rules.length && xData.table && yData[0].table" ng-click="addRuleToGroup()">
+    Add filter
+    <md-tooltip>add a filter to limit the records to include in the chart</md-tooltip>
+  </md-button>
+  <!-- END OPTIONS BUTTONS -->
+
+  <!-- X-AXIS RANGES -->
   <div ng-if="xData.buckets" flex="100" layout layout-wrap layout-align="center start" class="bucket-row">
     <div layout="row" flex="40" layout-wrap layout-align="end center" class="bucket-wrapper">
       <md-button ng-click="xData.buckets = null" aria-label="close" class="close-cal md-icon-button">
@@ -96,7 +120,7 @@
       </md-button>
       <div layout="row" flex="100" class="bucket-header" layout-wrap>
         <h3 flex="100" class="md-headline">{{xData.table}} ranges
-          <md-button class="md-fab md-mini md-primary" md-theme="{{theme}}" ng-click="addBucket()">
+          <md-button class="md-icon-button" ng-click="addBucket()">
             <md-icon>add</md-icon>
             <md-tooltip>Add a range</md-tooltip>
           </md-button>
@@ -125,13 +149,19 @@
       </div>
     </div>
   </div>
-  <md-button ng-show="!group.rules.length" ng-click="addRuleToGroup()">Add filter conditions</md-button>
-  <div layout="column" layout-align="center center" class="filter-row" ng-if="group.rules.length && xData.table && yData[0].table">
-    <md-button ng-click="group.rules = []" aria-label="close" class="close-cal md-icon-button">
-      <md-icon md-font-set="material-icons">close</md-icon>
-    </md-button>
-    <h3 layout layout-align="center center" class="md-headline expression-title">Include only results matching the filter conditions</h3>
-    <expression-editor class="top-expression-editor" group="group" filterable-fields="filterableFields" filterable-tables="filterableTables" theme="theme">
-      </expression-editor>
+  <!-- END X-AXIS RANGES -->
+
+  <!-- CHART FILTERS -->
+  <div flex="100" layout layout-align="center center">
+    <div layout="column" layout-align="center center" class="filter-row" ng-if="group.rules.length && xData.table && yData[0].table">
+      <md-button ng-click="group.rules = []" aria-label="close" class="close-cal md-icon-button">
+        <md-icon md-font-set="material-icons">close</md-icon>
+      </md-button>
+      <h3 layout layout-align="center center" class="md-headline expression-title">Include only results matching the filter conditions</h3>
+      <expression-editor class="top-expression-editor" group="group" filterable-fields="filterableFields" filterable-tables="filterableTables" theme="theme">
+        </expression-editor>
+    </div>
   </div>
+  <!-- CHART FILTERS -->
+
 </div>

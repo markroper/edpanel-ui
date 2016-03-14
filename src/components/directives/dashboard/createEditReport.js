@@ -11,6 +11,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/dashboard/createEditReport.html',
       replace: true,
       link: function(scope){
+        scope.aggregations = ['COUNT', 'SUM', 'AVG', 'STD_DEV'];
         /**
          * Autocomplete related filters
          * @param query
@@ -42,7 +43,6 @@ angular.module('teacherdashboard')
           }
         }
         scope.parseGroupFromExpression = function(exp) {
-          scope.aggregations = ['COUNT', 'SUM', 'AVG', 'STD_DEV'];
           scope.aggs = [
             { aggregation: 'COUNT', label: 'number'},
             { aggregation: 'SUM', label: 'sum'},
@@ -124,13 +124,15 @@ angular.module('teacherdashboard')
         scope.measures = [];
         scope.measureFields = {};
         for(var j = 0; j < scope.queryComponents.availableDimensions.length; j++) {
-          var dim = scope.queryComponents.availableDimensions[j];
+          var dim = angular.copy(scope.queryComponents.availableDimensions[j]);
+          dim.fields = dim.fields.concat(scope.aggregations);
           scope.dimensions.push(dim.type.toLowerCase());
           scope.dimensionFields[dim.type.toLowerCase()] = dim;
         }
         for(var j = 0; j < scope.queryComponents.availableMeasures.length; j++) {
           var meas = scope.queryComponents.availableMeasures[j];
-          scope.measures.push(meas.measure.toLowerCase());
+          meas.fields = scope.aggregations.concat(meas.fields);
+          //scope.measures.push(meas.measure.toLowerCase());
           scope.measureFields[meas.measure.toLowerCase()] = meas;
         }
         scope.tableChoices = angular.copy(scope.dimensions);
@@ -438,7 +440,21 @@ angular.module('teacherdashboard')
 
         scope.addXAggregation = function(xData) {
           xData.aggregation = 'SUM';
-        }
+        };
+
+        scope.addSeries = function() {
+          if(!scope.series) {
+            scope.series = {
+              aggregation: null,
+              type: scope.xData.table.type,
+              table: scope.xData.table,
+              field: null
+            };
+          }
+        };
+        scope.removeSeries = function() {
+          scope.series = null;
+        };
       }
     };
   }]);

@@ -1,5 +1,11 @@
 .schooldash {
   text-align: center;
+  .dashboard-name-row {
+    button { opacity: 0; visbility: hidden; }
+  }
+  .dashboard-name-row:hover {
+    button { opacity: 100; visbility: visible;}
+  }
 }
 .graph {
   padding: 16px 16px 40px 16px;
