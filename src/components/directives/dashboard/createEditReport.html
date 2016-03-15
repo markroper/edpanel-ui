@@ -62,7 +62,7 @@
       <div class="md-headline">of their</div>
     </div>
     <!-- For cases where there is an X-Axis with a field that is a function SUM, AVG, COUNT - for MEASUREs -->
-    <div layout layout-align="center center" ng-if="measures.indexOf(xData.table) !== -1 && !xData.aggregation">
+    <div layout layout-align="center center" ng-if="measures.indexOf(xData.table) !== -1 && !xData.aggregation && aggregations.indexOf(xData.field) !== -1">
       <md-input-container class="sentence-select">
         <label>agg (optional)</label>
         <md-select ng-model="xData.field" class="md-subhead">
