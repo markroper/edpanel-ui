@@ -21,9 +21,11 @@
       </md-select>
     </md-input-container>
     <div class="md-headline"> showing the </div>
+
     <div ng-repeat="yd in yData" layout layout-align="center center">
       <div ng-show="!$first" class="md-headline">&nbsp;and the</div>
       <md-input-container class="sentence-select">
+        <label>aggregation</label>
         <md-select ng-model="yd.aggregation" class="md-subhead">
           <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
         </md-select>
@@ -35,14 +37,34 @@
         md-search-text="ySearchText"
         md-items="yItem in querySearch(ySearchText)"
         md-item-text="yItem.toLowerCase() + 's'"
-        placeholder="choose table">
+        placeholder="y-axis table">
         <span md-highlight-text="ySearchText" class="md-subhead">{{yItem.toLowerCase() + 's'}}</span>
       </md-autocomplete>
+      <div layout layout-align="center center" ng-if="yd.table && measures.indexOf(yd.table) === -1 && yd.aggregation !== 'COUNT'">
+        <md-input-container class="sentence-select">
+          <label>choose field</label>
+          <md-select ng-model="yd.field" class="md-subhead">
+            <md-option ng-repeat="opt in dimensionFields[yd.table].fields" value="{{opt}}">{{opt}}</md-option>
+          </md-select>
+        </md-input-container>
+      </div>
     </div>
-    <div class="md-headline">by the</div>
-    <!-- For cases where there is an X-Axis but it is an aggregate function SUM, AVG, COUNT-->
-    <div layout layout-align="center center" ng-if="xData.field && aggregations.indexOf(xData.field) !== -1">
+
+    <div class="md-headline">over the</div>
+    <!-- For cases where there is an X-Axis that has an aggregate function SUM, AVG, COUNT-->
+    <div layout layout-align="center center" ng-if="xData.aggregation">
       <md-input-container class="sentence-select">
+        <label>agg (optional)</label>
+        <md-select ng-model="xData.aggregation" class="md-subhead">
+          <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
+        </md-select>
+      </md-input-container>
+      <div class="md-headline">of their</div>
+    </div>
+    <!-- For cases where there is an X-Axis with a field that is a function SUM, AVG, COUNT - for MEASUREs -->
+    <div layout layout-align="center center" ng-if="measures.indexOf(xData.table) !== -1 && !xData.aggregation">
+      <md-input-container class="sentence-select">
+        <label>agg (optional)</label>
         <md-select ng-model="xData.field" class="md-subhead">
           <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
         </md-select>
@@ -55,17 +77,17 @@
       md-search-text="xSearchText"
       md-items="xItem in querySearch(xSearchText)"
       md-item-text="xItem.toLowerCase()"
-      placeholder="choose table">
+      placeholder="x-axis table">
       <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
     </md-autocomplete>
     <!-- For cases where there is an X-Axis field thats not an aggregate function (e.g. Staff Name)-->
-    <div layout layout-align="center center" ng-if="xData.field && aggregations.indexOf(xData.field) === -1">
+    <div layout layout-align="center center" ng-if="aggregations.indexOf(xData.field) === -1">
       <md-input-container class="sentence-select">
+        <label>choose field</label>
         <md-select ng-model="xData.field" class="md-subhead">
           <md-option ng-repeat="opt in dimensionFields[xData.table].fields" value="{{opt}}">{{opt}}</md-option>
         </md-select>
       </md-input-container>
-      <div class="md-headline">of each</div>
     </div>
     <div class="md-headline" ng-if="xData.buckets">ranges</div>
     <div class="md-headline">.</div>
@@ -86,7 +108,7 @@
       md-search-text="xSearchText"
       md-items="xItem in querySearch(xSearchText)"
       md-item-text="xItem.toLowerCase()"
-      placeholder="choose table">
+      placeholder="x-axis table">
       <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
     </md-autocomplete>
     <div class="md-healine">.</div>

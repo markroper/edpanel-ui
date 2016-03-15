@@ -11,7 +11,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/dashboard/createEditReport.html',
       replace: true,
       link: function(scope){
-        scope.aggregations = ['COUNT', 'SUM', 'AVG', 'STD_DEV'];
+        scope.aggregations = ['COUNT', 'SUM', 'AVG', 'STD_DEV', 'YEARWEEK'];
         /**
          * Autocomplete related filters
          * @param query
@@ -47,7 +47,8 @@ angular.module('teacherdashboard')
             { aggregation: 'COUNT', label: 'number'},
             { aggregation: 'SUM', label: 'sum'},
             { aggregation: 'AVG', label: 'average'},
-            { aggregation: 'STD_DEV', label: 'standard deviation'}
+            { aggregation: 'STD_DEV', label: 'standard deviation'},
+            { aggregation: 'YEARWEEK', label: 'week grouping'},
 
           ];
           var grp = {
@@ -125,14 +126,20 @@ angular.module('teacherdashboard')
         scope.measureFields = {};
         for(var j = 0; j < scope.queryComponents.availableDimensions.length; j++) {
           var dim = angular.copy(scope.queryComponents.availableDimensions[j]);
+          if(!dim.fields) {
+            dim.fields = [];
+          }
           dim.fields = dim.fields.concat(scope.aggregations);
           scope.dimensions.push(dim.type.toLowerCase());
           scope.dimensionFields[dim.type.toLowerCase()] = dim;
         }
         for(var j = 0; j < scope.queryComponents.availableMeasures.length; j++) {
           var meas = scope.queryComponents.availableMeasures[j];
+          if(!meas.fields) {
+            meas.fields = [];
+          }
           meas.fields = scope.aggregations.concat(meas.fields);
-          //scope.measures.push(meas.measure.toLowerCase());
+          scope.measures.push(meas.measure.toLowerCase());
           scope.measureFields[meas.measure.toLowerCase()] = meas;
         }
         scope.tableChoices = angular.copy(scope.dimensions);
@@ -231,22 +238,7 @@ angular.module('teacherdashboard')
           if (!query.aggregateMeasures) {
             //New or empty report
             scope.xData = null;
-            //{
-            //  aggregation: null,
-            //  type: 'DIMENSION',
-            //  table: 'student',
-            //  field: 'Ethnicity',
-            //  buckets: null
-            //};
-            scope.yData = [ {}
-              //{
-              //  aggregation: 'SUM',
-              //  type: 'MEASURE',
-              //  table: 'course_grade',
-              //  field: null,
-              //  buckets: null
-              //}
-            ];
+            scope.yData = [ {} ];
           } else {
             var aggMeas = query.aggregateMeasures[0];
             //figure out the y and y column values when there are no dimensions suggested (y column is aggregate function), x is the field value with any buckets
@@ -254,7 +246,7 @@ angular.module('teacherdashboard')
               aggregation: aggMeas.bucketAggregation,
               type: 'MEASURE',
               table: aggMeas.measure.toLowerCase(),
-              field: aggMeas.bucketAggregation,
+              field: null,
               buckets: aggMeas.buckets
             }
             scope.yData = [{
