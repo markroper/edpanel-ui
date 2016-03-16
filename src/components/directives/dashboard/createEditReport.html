@@ -154,13 +154,13 @@
       </div>
       <div flex="100" layout="row" class="buckets" ng-repeat="bucket in queryInProgress.x.buckets">
         <md-input-container flex="25">
-          <input ng-model="bucket.start">
+          <input aria-label="start value" ng-model="bucket.start">
         </md-input-container>
         <md-input-container flex="25">
-          <input ng-model="bucket.end">
+          <input aria-label="end value" ng-model="bucket.end">
         </md-input-container>
         <md-input-container flex="30">
-          <input ng-model="bucket.label">
+          <input aria-label="label" ng-model="bucket.label">
         </md-input-container>
         <div flex="20" layout layout-align="center center">
           <md-button class="md-fab md-mini md-warn" md-theme="{{theme}}" ng-click="removeBucket(bucket)">

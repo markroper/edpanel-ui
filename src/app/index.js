@@ -245,6 +245,21 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
     return {
       $get: function () {
         return {
+          aggregations: [
+            'COUNT',
+            'AVG',
+            'SUM',
+            'STD_DEV',
+            'YEARWEEK'
+          ],
+          placeholderValues: {
+            '${schoolId}': 'PLACEHOLDER_NUMERIC',
+            '${startDate}': 'PLACEHOLDER_DATE',
+            '${endDate}': 'PLACEHOLDER_DATE',
+            '${clickValue}': 'PLACEHOLDER_NUMERIC',
+            '${clickValueMin}': 'PLACEHOLDER_NUMERIC',
+            '${clickValueMax}': 'PLACEHOLDER_NUMERIC'
+          },
           notificationTypes: {
             'GPA': 'GPA',
             'SECTION_GRADE': 'Class grade',

@@ -3,9 +3,21 @@ angular.module('teacherdashboard')
   .directive('createEditReport', [ '$window', 'api', 'dijkstra', function($window, api, dijkstra) {
     return {
       scope: {
+        //The Report object, never directly edited by this directive.  Edits stored on the queryInProgress instance
         report: '=',
-        queryComponents: '=',
+        //Array of the available dimension tables
+        dimensions:'=',
+        //Hash map of dimension table to its eligible fields
+        dimensionFields:'=',
+        //An array of the available measure tables
+        measures:'=',
+        //A hash map of the measure tables to eligible fields
+        measureFields:'=',
+        //A directed graph of tables, with a method getShortestPath() that returns join paths between tables
+        tablesGraph: '=',
+        //An object on which the modifications made by the user are stored so that the chart can be updated if the user saves changes
         queryInProgress:'=',
+        //Angular material theme makes the dialog bar and buttons the correct colors
         theme: '='
       },
       restrict: 'E',
@@ -102,7 +114,7 @@ angular.module('teacherdashboard')
         };
 
         scope.addRuleToGroup = function() {
-          if(!scope.queryInProgress.group.rules) {
+            if(!scope.queryInProgress.group.rules) {
             scope.queryInProgress.group.rules = [];
           }
           scope.queryInProgress.group.rules.push({
@@ -121,28 +133,6 @@ angular.module('teacherdashboard')
          *
          */
         scope.tableChoices = [];
-        scope.dimensions = [];
-        scope.dimensionFields = {};
-        scope.measures = [];
-        scope.measureFields = {};
-        for(var j = 0; j < scope.queryComponents.availableDimensions.length; j++) {
-          var dim = angular.copy(scope.queryComponents.availableDimensions[j]);
-          if(!dim.fields) {
-            dim.fields = [];
-          }
-          dim.fields = dim.fields.concat(scope.aggregations);
-          scope.dimensions.push(dim.type.toLowerCase());
-          scope.dimensionFields[dim.type.toLowerCase()] = dim;
-        }
-        for(var j = 0; j < scope.queryComponents.availableMeasures.length; j++) {
-          var meas = scope.queryComponents.availableMeasures[j];
-          if(!meas.fields) {
-            meas.fields = [];
-          }
-          meas.fields = scope.aggregations.concat(meas.fields);
-          scope.measures.push(meas.measure.toLowerCase());
-          scope.measureFields[meas.measure.toLowerCase()] = meas;
-        }
         scope.tableChoices = angular.copy(scope.dimensions);
         for(var j = 0; j < scope.measures.length; j++) {
           if(scope.tableChoices.indexOf(scope.measures[j]) === -1) {
@@ -172,7 +162,8 @@ angular.module('teacherdashboard')
           var query = scope.report.chartQuery;
           returnVals.aggregation = position.function; //aggregate
           if(pos === -1) {
-            returnVals.type = null; // type of field
+            //TODO: is there a bug here if the query has no dimensions?
+            returnVals.type = 'DIMENSION'; // type of field
             returnVals.table = query.fields[0].dimension; // table name
             returnVals.field = '*';  //field name
           } else if(query.fields && query.fields.length > pos) {
@@ -286,43 +277,11 @@ angular.module('teacherdashboard')
           }
         }
 
-        //Given the currently selected X and Y axis values, generate the complete set of eligible filter fields
-        var generateTableGraph = function() {
-          var g = new dijkstra.Graph();
-          for (var j = 0; j < scope.queryComponents.availableDimensions.length; j++) {
-            var dim = scope.queryComponents.availableDimensions[j];
-            var edges = {};
-            if (dim.parentDimensions) {
-              for (var k = 0; k < dim.parentDimensions.length; k++) {
-                edges[dim.parentDimensions[k]] = 1;
-              }
-            }
-            g.addVertex(dim.type, edges);
-          }
-          for (var j = 0; j < scope.queryComponents.availableMeasures.length; j++) {
-            var meas = scope.queryComponents.availableMeasures[j];
-            var edges = {};
-            if (meas.compatibleDimensions) {
-              for (var k = 0; k < meas.compatibleDimensions.length; k++) {
-                edges[meas.compatibleDimensions[k]] = 1;
-              }
-              for (var k = 0; k < meas.compatibleDimensions.length; k++) {
-                edges[meas.compatibleMeasures[k]] = 1;
-              }
-            }
-            g.addVertex(meas.measure, edges);
-          }
-          return g;
-        }
-
         var resolveParents = function(table, parents) {
-          if(!scope.g) {
-            scope.g = generateTableGraph();
-          }
           if(!parents) {
             parents = [];
           }
-          var edges = scope.g.getVertex(table);
+          var edges = scope.tablesGraph.getVertex(table);
           if(edges) {
             angular.forEach(edges, function(value, key) {
               if(key && key !== 'undefined' && parents.indexOf(key) === -1) {
@@ -340,10 +299,7 @@ angular.module('teacherdashboard')
         }
 
         var resolveShortestPath = function(start, end) {
-          if(!scope.g) {
-            scope.g = generateTableGraph();
-          }
-          return scope.g.
+          return scope.tablesGraph.
             shortestPath(start.toUpperCase(), end.toUpperCase()).
             concat([start.toUpperCase()]).
             reverse();

@@ -1,7 +1,7 @@
 <div class="expression-editor">
   <div layout="row" layout-align="start center">
     <md-input-container>
-      <md-select ng-model="group.operator">
+      <md-select aria-label="operators" ng-model="group.operator">
         <md-option ng-repeat="opt in operators" value="{{opt.name}}">
           {{opt.name}}
         </md-option>
@@ -42,14 +42,14 @@
         <div ng-switch-default="ng-switch-default">
           <div layout="row" class="form-inline">
             <md-input-container flex="20">
-              <md-select ng-model="rule.field.table">
+              <md-select aria-label="table name" ng-model="rule.field.table">
                 <md-option ng-repeat="opt in filterableTables" value="{{opt}}">
                   {{opt.charAt(0).toUpperCase() + opt.toLowerCase().slice(1)}}
                 </md-option>
               </md-select>
             </md-input-container>
             <md-input-container flex="20">
-              <md-select ng-model="rule.field.field">
+              <md-select aria-label="table field" ng-model="rule.field.field">
                 <md-option ng-repeat="opt in filterableFields[rule.field.table]" value="{{opt}}">
                   {{opt}}
                 </md-option>
@@ -57,14 +57,14 @@
             </md-input-container>
 
             <md-input-container flex="15">
-              <md-select ng-model="rule.condition">
+              <md-select aria-label="condition" ng-model="rule.condition">
                 <md-option ng-repeat="opt in conditions" value="{{opt.value}}">
                   {{opt.name}}
                 </md-option>
               </md-select>
             </md-input-container>
             <md-input-container flex="35">
-              <input ng-model="rule.data.value">
+              <input aria-label="value" ng-model="rule.data.value">
             </md-input-container>
             <div flex="10">
               <md-button class="md-fab md-mini md-warn" ng-click="removeCondition($index)">
