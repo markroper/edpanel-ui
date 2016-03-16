@@ -1,189 +1,193 @@
-<div class="report-builder" layout="row" layout-align="center center" layout-wrap>
+<div class="report-builder" layout="row" layout-align="center start" layout-wrap>
+  <div layout flex="50" layout-wrap layout-align="center center">
+    <div class="md-headline" layout layout-align="center center">Report Editor</div>
+    <!-- REPORT NAME SECTION -->
+    <div class="report-name" layout="row" layout-align="center center" flex="100">
+      <md-input-container class="report-name" style="width:425px;">
+        <label>Report name</label>
+        <input class="md-headline" ng-model="report.name">
+      </md-input-container>
+    </div>
+    <!-- END REPORT NAME SECTION -->
 
-  <!-- REPORT NAME SECTION -->
-  <div class="report-name" layout="row" layout-align="center center" flex="100">
-    <md-input-container class="report-name" style="width:425px;">
-      <label>Report name</label>
-      <input class="md-headline" ng-model="report.name">
-    </md-input-container>
-  </div>
-  <!-- END REPORT NAME SECTION -->
-
-  <!-- CHART CORE SENTENCE-->
-  <div flex="100" layout layout-wrap layout-align="center center">
-    <md-input-container class="sentence-select">
-      <label>Report type</label>
-      <md-select ng-model="report.type" class="md-subhead">
-        <md-option value="BAR">Bar chart</md-option>
-        <md-option value="SPLINE">Line chart</md-option>
-        <md-option value="SCATTERPLOT" ng-disabled="true">Scatter plot</md-option>
-        <md-option value="PIE" ng-disabled="true">Pie chart</md-option>
-      </md-select>
-    </md-input-container>
-    <div class="md-headline"> showing the </div>
-
-    <div ng-repeat="yd in queryInProgress.y" layout layout-align="center center">
-      <div ng-show="!$first" class="md-headline">&nbsp;and the</div>
+    <!-- CHART CORE SENTENCE-->
+    <div flex="100" layout layout-wrap layout-align="center center" class="core-sentence">
       <md-input-container class="sentence-select">
-        <label>aggregation</label>
-        <md-select ng-model="yd.aggregation" class="md-subhead">
-          <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
+        <label>Report type</label>
+        <md-select ng-model="report.type" class="md-subhead">
+          <md-option value="BAR">Bar chart</md-option>
+          <md-option value="SPLINE">Line chart</md-option>
+          <md-option value="SCATTERPLOT" ng-disabled="true">Scatter plot</md-option>
+          <md-option value="PIE" ng-disabled="true">Pie chart</md-option>
         </md-select>
       </md-input-container>
-      <div class="md-headline"> of </div>
+      <div class="md-subhead"> showing the </div>
+
+      <div ng-repeat="yd in queryInProgress.y" layout layout-align="center center">
+        <div ng-show="!$first" class="md-subhead">&nbsp;and the</div>
+        <md-input-container class="sentence-select">
+          <label>aggregation</label>
+          <md-select ng-model="yd.aggregation" class="md-subhead">
+            <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
+          </md-select>
+        </md-input-container>
+        <div class="md-subhead"> of </div>
+        <md-autocomplete
+          md-min-length="0"
+          md-selected-item="yd.table"
+          md-search-text="ySearchText"
+          md-items="yItem in querySearch(ySearchText)"
+          md-item-text="yItem.toLowerCase() + 's'"
+          placeholder="y-axis table">
+          <span md-highlight-text="ySearchText" class="md-subhead">{{yItem.toLowerCase() + 's'}}</span>
+        </md-autocomplete>
+        <div layout layout-align="center center" ng-if="yd.table && measures.indexOf(yd.table) === -1 && yd.aggregation !== 'COUNT'">
+          <md-input-container class="sentence-select">
+            <label>choose field</label>
+            <md-select ng-model="yd.field" class="md-subhead">
+              <md-option ng-repeat="opt in dimensionFields[yd.table].fields" value="{{opt}}">{{opt}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </div>
+
+      <div class="md-subhead">over the</div>
+      <!-- For cases where there is an X-Axis that has an aggregate function SUM, AVG, COUNT-->
+      <div layout layout-align="center center" ng-if="queryInProgress.x.bucketAggregation">
+        <md-input-container class="sentence-select">
+          <label>agg (optional)</label>
+          <md-select ng-model="queryInProgress.x.bucketAggregation" class="md-subhead">
+            <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
+          </md-select>
+        </md-input-container>
+        <div class="md-subhead">of the</div>
+      </div>
+      <!-- For cases where there is an X-Axis with a field that is a function SUM, AVG, COUNT - for MEASUREs -->
+      <div layout layout-align="center center" ng-if="measures.indexOf(queryInProgress.x.table) !== -1 && !queryInProgress.x.aggregation && aggregations.indexOf(queryInProgress.x.field) !== -1">
+        <md-input-container class="sentence-select">
+          <label>agg (optional)</label>
+          <md-select ng-model="queryInProgress.x.field" class="md-subhead">
+            <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
+          </md-select>
+        </md-input-container>
+        <div class="md-subhead">of their</div>
+      </div>
       <md-autocomplete
         md-min-length="0"
-        md-selected-item="yd.table"
-        md-search-text="ySearchText"
-        md-items="yItem in querySearch(ySearchText)"
-        md-item-text="yItem.toLowerCase() + 's'"
-        placeholder="y-axis table">
-        <span md-highlight-text="ySearchText" class="md-subhead">{{yItem.toLowerCase() + 's'}}</span>
+        md-selected-item="queryInProgress.x.table"
+        md-search-text="xSearchText"
+        md-items="xItem in querySearch(xSearchText)"
+        md-item-text="xItem.toLowerCase()"
+        placeholder="x-axis table">
+        <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
       </md-autocomplete>
-      <div layout layout-align="center center" ng-if="yd.table && measures.indexOf(yd.table) === -1 && yd.aggregation !== 'COUNT'">
+      <!-- For cases where there is an X-Axis field thats not an aggregate function (e.g. Staff Name)-->
+      <div layout layout-align="center center" ng-if="aggregations.indexOf(queryInProgress.x.field) === -1">
         <md-input-container class="sentence-select">
           <label>choose field</label>
-          <md-select ng-model="yd.field" class="md-subhead">
-            <md-option ng-repeat="opt in dimensionFields[yd.table].fields" value="{{opt}}">{{opt}}</md-option>
+          <md-select ng-model="queryInProgress.x.field" class="md-subhead">
+            <md-option ng-repeat="opt in dimensionFields[queryInProgress.x.table].fields" value="{{opt}}">{{opt}}</md-option>
           </md-select>
         </md-input-container>
       </div>
+      <div class="md-subhead" ng-if="queryInProgress.x.buckets">ranges</div>
+      <div class="md-subhead">.</div>
     </div>
+    <!-- END CHART CORE SENTENCE-->
 
-    <div class="md-headline">over the</div>
-    <!-- For cases where there is an X-Axis that has an aggregate function SUM, AVG, COUNT-->
-    <div layout layout-align="center center" ng-if="queryInProgress.x.aggregation">
+    <!-- SERIES -->
+    <div class="series-row" ng-if="queryInProgress.series" flex="100" layout layout-wrap layout-align="center center">
+      <div class="md-headline">Group the results by the</div>
       <md-input-container class="sentence-select">
-        <label>agg (optional)</label>
-        <md-select ng-model="queryInProgress.x.aggregation" class="md-subhead">
-          <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
+        <md-select aria-label="series field" ng-model="queryInProgress.series.field" class="md-subhead">
+          <md-option ng-repeat="opt in dimensionFields[queryInProgress.series.table].fields" value="{{opt}}">{{opt}}</md-option>
         </md-select>
       </md-input-container>
-      <div class="md-headline">of their</div>
-    </div>
-    <!-- For cases where there is an X-Axis with a field that is a function SUM, AVG, COUNT - for MEASUREs -->
-    <div layout layout-align="center center" ng-if="measures.indexOf(queryInProgress.x.table) !== -1 && !queryInProgress.x.aggregation && aggregations.indexOf(queryInProgress.x.field) !== -1">
-      <md-input-container class="sentence-select">
-        <label>agg (optional)</label>
-        <md-select ng-model="queryInProgress.x.field" class="md-subhead">
-          <md-option ng-repeat="opt in aggs" value="{{opt.aggregation}}">{{opt.label}}</md-option>
-        </md-select>
-      </md-input-container>
-      <div class="md-headline">of their</div>
-    </div>
-    <md-autocomplete
-      md-min-length="0"
-      md-selected-item="queryInProgress.x.table"
-      md-search-text="xSearchText"
-      md-items="xItem in querySearch(xSearchText)"
-      md-item-text="xItem.toLowerCase()"
-      placeholder="x-axis table">
-      <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
-    </md-autocomplete>
-    <!-- For cases where there is an X-Axis field thats not an aggregate function (e.g. Staff Name)-->
-    <div layout layout-align="center center" ng-if="aggregations.indexOf(queryInProgress.x.field) === -1">
-      <md-input-container class="sentence-select">
-        <label>choose field</label>
-        <md-select ng-model="queryInProgress.x.field" class="md-subhead">
-          <md-option ng-repeat="opt in dimensionFields[queryInProgress.x.table].fields" value="{{opt}}">{{opt}}</md-option>
-        </md-select>
-      </md-input-container>
-    </div>
-    <div class="md-headline" ng-if="queryInProgress.x.buckets">ranges</div>
-    <div class="md-headline">.</div>
-  </div>
-  <!-- END CHART CORE SENTENCE-->
-
-  <!-- SERIES -->
-  <div ng-if="queryInProgress.series" flex="100" layout layout-wrap layout-align="center center">
-    <div class="md-headline">Group the results by the</div>
-    <md-input-container class="sentence-select">
-      <md-select ng-model="queryInProgress.series.field" class="md-subhead">
-        <md-option ng-repeat="opt in dimensionFields[queryInProgress.series.table].fields" value="{{opt}}">{{opt}}</md-option>
-      </md-select>
-    </md-input-container>
-    <div class="md-headline">on the</div>
-    <md-autocomplete
-      md-selected-item="queryInProgress.series.table"
-      md-search-text="xSearchText"
-      md-items="xItem in querySearch(xSearchText)"
-      md-item-text="xItem.toLowerCase()"
-      placeholder="x-axis table">
-      <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
-    </md-autocomplete>
-    <div class="md-healine">.</div>
-    <md-button class="md-icon-button" ng-click="removeSeries()">
-      <md-icon aria-label="Close dialog">close</md-icon>
-      <md-tooltip>remove series from chart</md-tooltip>
-    </md-button>
-  </div>
-  <!-- END SERIES -->
-
-  <!-- OPTIONS BUTTONS -->
-  <md-button ng-show="!queryInProgress.series && queryInProgress.x.table" ng-click="addSeries()">
-    Add chart series
-    <md-tooltip>Define a series to group results (optional)</md-tooltip>
-  </md-button>
-  <md-button ng-if="!queryInProgress.x.buckets && queryInProgress.x.table" ng-click="addBucket()">
-    Add x-axis ranges
-    <md-tooltip>Bucket x-axis values by range (optional)</md-tooltip>
-  </md-button>
-  <md-button ng-show="!queryInProgress.group.rules.length && queryInProgress.x.table && queryInProgress.y[0].table" ng-click="addRuleToGroup()">
-    Add filter
-    <md-tooltip>Add a filter to limit the records to include in the chart</md-tooltip>
-  </md-button>
-  <!-- END OPTIONS BUTTONS -->
-
-  <!-- X-AXIS RANGES -->
-  <div ng-if="queryInProgress.x.buckets" flex="100" layout layout-wrap layout-align="center start" class="bucket-row">
-    <div layout="row" flex="40" layout-wrap layout-align="end center" class="bucket-wrapper">
-      <md-button ng-click="queryInProgress.x.buckets = null" aria-label="close" class="close-cal md-icon-button">
-        <md-icon md-font-set="material-icons">close</md-icon>
+      <div class="md-headline">on the</div>
+      <md-autocomplete
+        md-selected-item="queryInProgress.series.table"
+        md-search-text="xSearchText"
+        md-items="xItem in querySearch(xSearchText)"
+        md-item-text="xItem.toLowerCase()"
+        placeholder="x-axis table">
+        <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
+      </md-autocomplete>
+      <div class="md-healine">.</div>
+      <md-button class="md-icon-button" ng-click="removeSeries()">
+        <md-icon aria-label="Close dialog">close</md-icon>
+        <md-tooltip>remove series from chart</md-tooltip>
       </md-button>
-      <div layout="row" flex="100" class="bucket-header" layout-wrap>
-        <h3 flex="100" class="md-headline">{{queryInProgress.x.table}} ranges
-          <md-button class="md-icon-button" ng-click="addBucket()">
-            <md-icon>add</md-icon>
-            <md-tooltip>Add a range</md-tooltip>
-          </md-button>
-        </h3>
-        <div flex="25" class="md-caption">start</div>
-        <div flex="25" class="md-caption">end</div>
-        <div flex="25" class="md-caption">range label</div>
-        <div flex="25" class="md-caption"></div>
-      </div>
-      <div flex="100" layout="row" class="buckets" ng-repeat="bucket in queryInProgress.x.buckets">
-        <md-input-container flex="25">
-          <input aria-label="start value" ng-model="bucket.start">
-        </md-input-container>
-        <md-input-container flex="25">
-          <input aria-label="end value" ng-model="bucket.end">
-        </md-input-container>
-        <md-input-container flex="30">
-          <input aria-label="label" ng-model="bucket.label">
-        </md-input-container>
-        <div flex="20" layout layout-align="center center">
-          <md-button class="md-fab md-mini md-warn" md-theme="{{theme}}" ng-click="removeBucket(bucket)">
-            <md-icon>remove</md-icon>
-            <md-tooltip>Remove group bucket</md-tooltip>
-          </md-button>
+    </div>
+    <!-- END SERIES -->
+
+    <!-- OPTIONS BUTTONS -->
+    <md-button ng-show="!queryInProgress.series && queryInProgress.x.table" ng-click="addSeries()">
+      Add chart series
+      <md-tooltip>Define a series to group results (optional)</md-tooltip>
+    </md-button>
+    <md-button ng-if="!queryInProgress.x.buckets && queryInProgress.x.table" ng-click="addBucket()">
+      Add x-axis ranges
+      <md-tooltip>Bucket x-axis values by range (optional)</md-tooltip>
+    </md-button>
+    <md-button ng-show="!queryInProgress.group.rules.length && queryInProgress.x.table && queryInProgress.y[0].table" ng-click="addRuleToGroup()">
+      Add filter
+      <md-tooltip>Add a filter to limit the records to include in the chart</md-tooltip>
+    </md-button>
+    <!-- END OPTIONS BUTTONS -->
+
+    <!-- X-AXIS RANGES -->
+    <div ng-if="queryInProgress.x.buckets" flex="100" layout layout-wrap layout-align="center start" class="bucket-row">
+      <div layout="row" flex="100" layout-wrap layout-align="end center" class="bucket-wrapper">
+        <md-button ng-click="queryInProgress.x.buckets = null" aria-label="close" class="close-cal md-icon-button">
+          <md-icon md-font-set="material-icons">close</md-icon>
+        </md-button>
+        <div layout="row" flex="100" class="bucket-header" layout-wrap>
+          <h3 flex="100" class="md-headline">{{queryInProgress.x.table}} ranges
+            <md-button class="md-icon-button" ng-click="addBucket()">
+              <md-icon>add</md-icon>
+              <md-tooltip>Add a range</md-tooltip>
+            </md-button>
+          </h3>
+          <div flex="25" class="md-caption">start</div>
+          <div flex="25" class="md-caption">end</div>
+          <div flex="25" class="md-caption">range label</div>
+          <div flex="25" class="md-caption"></div>
+        </div>
+        <div flex="100" layout="row" class="buckets" ng-repeat="bucket in queryInProgress.x.buckets">
+          <md-input-container flex="25">
+            <input aria-label="start value" ng-model="bucket.start">
+          </md-input-container>
+          <md-input-container flex="25">
+            <input aria-label="end value" ng-model="bucket.end">
+          </md-input-container>
+          <md-input-container flex="30">
+            <input aria-label="label" ng-model="bucket.label">
+          </md-input-container>
+          <div flex="20" layout layout-align="center center">
+            <md-button class="md-fab md-mini md-warn" md-theme="{{theme}}" ng-click="removeBucket(bucket)">
+              <md-icon>remove</md-icon>
+              <md-tooltip>Remove group bucket</md-tooltip>
+            </md-button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- END X-AXIS RANGES -->
+    <!-- END X-AXIS RANGES -->
 
-  <!-- CHART FILTERS -->
-  <div flex="100" layout layout-align="center center">
-    <div layout="column" layout-align="center center" class="filter-row" ng-if="queryInProgress.group.rules.length && queryInProgress.x.table && queryInProgress.y[0].table">
-      <md-button ng-click="group.rules = []" aria-label="close" class="close-cal md-icon-button">
-        <md-icon md-font-set="material-icons">close</md-icon>
-      </md-button>
-      <h3 layout layout-align="center center" class="md-headline expression-title">Include only results matching the filter conditions</h3>
-      <expression-editor class="top-expression-editor" group="queryInProgress.group" filterable-fields="filterableFields" filterable-tables="filterableTables" theme="theme">
-        </expression-editor>
+    <!-- CHART FILTERS -->
+    <div flex="100" layout layout-align="center center" class="filter-row">
+      <div layout="column" layout-align="center center" class="filter-row" ng-if="queryInProgress.group.rules.length && queryInProgress.x.table && queryInProgress.y[0].table">
+        <md-button ng-click="group.rules = []" aria-label="close" class="close-cal md-icon-button">
+          <md-icon md-font-set="material-icons">close</md-icon>
+        </md-button>
+        <h3 layout layout-align="center center" class="md-headline expression-title">Include only results matching the filter conditions</h3>
+        <expression-editor class="top-expression-editor" group="queryInProgress.group" filterable-fields="filterableFields" filterable-tables="filterableTables" theme="theme">
+          </expression-editor>
+      </div>
     </div>
+    <!-- CHART FILTERS -->
   </div>
-  <!-- CHART FILTERS -->
-
+  <div layout flex="50" class="report-preview" layout-align="center start" layout-wrap>
+    REPORT PREVIEW
+  </div>
 </div>

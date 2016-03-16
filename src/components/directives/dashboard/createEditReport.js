@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('createEditReport', [ '$window', 'api', 'dijkstra', function($window, api, dijkstra) {
+  .directive('createEditReport', [ '$window', 'api', 'consts', 'dijkstra', '$compile', function($window, api, consts, dijkstra, $compile) {
     return {
       scope: {
         //The Report object, never directly edited by this directive.  Edits stored on the queryInProgress instance
@@ -15,21 +15,19 @@ angular.module('teacherdashboard')
         measureFields:'=',
         //A directed graph of tables, with a method getShortestPath() that returns join paths between tables
         tablesGraph: '=',
-        //An object on which the modifications made by the user are stored so that the chart can be updated if the user saves changes
+        //An object on which the modifications made by the user are stored
+        // so that the chart can be updated if the user saves changes
         queryInProgress:'=',
         //Angular material theme makes the dialog bar and buttons the correct colors
-        theme: '='
+        theme: '=',
+        terms:'='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/dashboard/createEditReport.html',
       replace: true,
-      link: function(scope){
-        scope.aggregations = ['COUNT', 'SUM', 'AVG', 'STD_DEV', 'YEARWEEK'];
-        /**
-         * Autocomplete related filters
-         * @param query
-         * @returns {Function}
-         */
+      link: function(scope, el){
+        scope.aggregations = consts.aggregations;
+
         var createFilterFor = function(query) {
           var lowercaseQuery = angular.lowercase(query);
           return function filterFn(vegetable) {
@@ -125,13 +123,6 @@ angular.module('teacherdashboard')
         };
 
         scope.queryInProgress.group = scope.parseGroupFromExpression(scope.report.chartQuery.filter);
-
-
-        /*
-         *
-         *   FUNCTIONS TO CONVERT QUERY MEASURE AND DIMENSIONS INTO  queryInProgress.x and queryInProgress.y
-         *
-         */
         scope.tableChoices = [];
         scope.tableChoices = angular.copy(scope.dimensions);
         for(var j = 0; j < scope.measures.length; j++) {
@@ -165,10 +156,12 @@ angular.module('teacherdashboard')
             //TODO: is there a bug here if the query has no dimensions?
             returnVals.type = 'DIMENSION'; // type of field
             returnVals.table = query.fields[0].dimension; // table name
+            returnVals.bucketAggregation = query.fields[0].bucketAggregation;
             returnVals.field = '*';  //field name
           } else if(query.fields && query.fields.length > pos) {
             var f = query.fields[pos - 1];
             returnVals.type = 'DIMENSION'; //type
+            returnVals.bucketAggregation = f.bucketAggregation,
             returnVals.table = f.dimension.toLowerCase(); //table name
             returnVals.field = f.field; //field name
           } else {
@@ -185,6 +178,7 @@ angular.module('teacherdashboard')
             }
             var meas = query.aggregateMeasures[pos - fieldsLength - bucketNum];
             returnVals.type = 'MEASURE'; //type of field
+            returnVals.bucketAggregation = meas.bucketAggregation;
             returnVals.table = meas.measure.toLowerCase(); //table name
             returnVals.field = meas.aggregation; //field name
             if(meas.buckets) {
@@ -209,14 +203,9 @@ angular.module('teacherdashboard')
           fields.push('COUNT');
           fields.push('AVG');
           return fields;
-        }
-
+        };
 
         var query = scope.report.chartQuery;
-        if(!query) {
-          //no query, generate a valid default?
-        }
-
         if(query.subqueryColumnsByPosition) {
           var yPos = 1;
           //If there are 3 subquery columns referenced, the second is the series
@@ -233,9 +222,11 @@ angular.module('teacherdashboard')
             scope.queryInProgress.y = [ {} ];
           } else {
             var aggMeas = query.aggregateMeasures[0];
-            //figure out the y and y column values when there are no dimensions suggested (y column is aggregate function), x is the field value with any buckets
+            //figure out the y and y column values when there are no dimensions suggested
+            // (y column is aggregate function), x is the field value with any buckets
             scope.queryInProgress.x = {
-              aggregation: aggMeas.bucketAggregation,
+              bucketAggregation: aggMeas.bucketAggregation,
+              aggregation: aggMeas.aggregation,
               type: 'MEASURE',
               table: aggMeas.measure.toLowerCase(),
               field: null,
@@ -251,7 +242,8 @@ angular.module('teacherdashboard')
         } else {
           //x axis is the query.fields[0]
           scope.queryInProgress.x = {
-            aggregation: query.fields[0].bucketAggregation,
+            bucketAggregation: query.fields[0].bucketAggregation,
+            aggregation: query.fields[0].aggregation,
             type: 'DIMENSION',
             table: query.fields[0].dimension.toLowerCase(),
             field: query.fields[0].field
@@ -361,6 +353,36 @@ angular.module('teacherdashboard')
             setScopeFilterFieldsAndTables();
           }
         });
+
+        scope.applyReportChanges = function(q) {
+          if(q.aggregateMeasures && q.aggregateMeasures.length >= 1) {
+            console.log('execute query: ' + JSON.stringify(q));
+            scope.currentReport.chartQuery = q;
+            if(scope.previewScope) {
+              scope.previewScope.$destroy();
+            }
+            scope.previewScope = scope.$new();
+            scope.previewScope.report = scope.currentReport;
+            var compiledHtml = $compile(scope.reportTempl)(scope.previewScope);
+            scope.previewEl.empty().append(compiledHtml);
+          }
+        };
+
+        scope.reportTempl = '<div class="md-headline" style="margin-bottom:50px;">Live Preview</div>' +
+          '<edpanel-report report="currentReport" terms="terms" flex="100"></edpanel-report>';
+        scope.currentReport = angular.copy(scope.report);
+        scope.previewEl = angular.element(el).find('.report-preview');
+        scope.applyReportChanges(scope.currentReport.chartQuery);
+        scope.$watch('queryInProgress', function(newValue, oldValue) {
+          if(newValue && !angular.equals(newValue, oldValue)) {
+            try {
+              var q = scope.$parent.produceQueryFromQueryInProgress(newValue);
+              scope.applyReportChanges(q);
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        }, true);
 
         /*
          *

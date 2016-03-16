@@ -1,4 +1,15 @@
 .report-builder {
+  .core-sentence md-input-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .core-sentence, .series-row, .bucket-row, .filter-row {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #FAFAFA;
+    margin-top:5px;
+    margin-bottom:5px;
+  }
   .sentence-select {
     margin-left: 5px;
     margin-right: 5px;
@@ -37,9 +48,6 @@
       margin-top:10px;
     }
     position:relative;
-    background-color: #FAFAFA;
-    margin-top:5px;
-    margin-bottom:5px;
     padding-left: 20px;
     padding-right:20px;
   }
