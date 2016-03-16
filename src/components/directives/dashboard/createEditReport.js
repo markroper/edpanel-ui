@@ -5,6 +5,7 @@ angular.module('teacherdashboard')
       scope: {
         report: '=',
         queryComponents: '=',
+        queryInProgress:'=',
         theme: '='
       },
       restrict: 'E',
@@ -101,22 +102,22 @@ angular.module('teacherdashboard')
         };
 
         scope.addRuleToGroup = function() {
-          if(!scope.group.rules) {
-            scope.group.rules = [];
+          if(!scope.queryInProgress.group.rules) {
+            scope.queryInProgress.group.rules = [];
           }
-          scope.group.rules.push({
+          scope.queryInProgress.group.rules.push({
             'condition': null,
             'field': null,
             'data': null
           });
         };
 
-        scope.group = scope.parseGroupFromExpression(scope.report.chartQuery.filter);
+        scope.queryInProgress.group = scope.parseGroupFromExpression(scope.report.chartQuery.filter);
 
 
         /*
          *
-         *   FUNCTIONS TO CONVERT QUERY MEASURE AND DIMENSIONS INTO  xData and yData
+         *   FUNCTIONS TO CONVERT QUERY MEASURE AND DIMENSIONS INTO  queryInProgress.x and queryInProgress.y
          *
          */
         scope.tableChoices = [];
@@ -230,26 +231,26 @@ angular.module('teacherdashboard')
           //If there are 3 subquery columns referenced, the second is the series
           if(query.subqueryColumnsByPosition.length > 2) {
             yPos = 2;
-            scope.series = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[1]);
+            scope.queryInProgress.series = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[1]);
           }
-          scope.xData = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[0]);
-          scope.yData = [resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[yPos])];
+          scope.queryInProgress.x = resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[0]);
+          scope.queryInProgress.y = [resolveFieldFromSubqueryPosition(query.subqueryColumnsByPosition[yPos])];
         } else if(!query.fields) {
           if (!query.aggregateMeasures) {
             //New or empty report
-            scope.xData = null;
-            scope.yData = [ {} ];
+            scope.queryInProgress.x = null;
+            scope.queryInProgress.y = [ {} ];
           } else {
             var aggMeas = query.aggregateMeasures[0];
             //figure out the y and y column values when there are no dimensions suggested (y column is aggregate function), x is the field value with any buckets
-            scope.xData = {
+            scope.queryInProgress.x = {
               aggregation: aggMeas.bucketAggregation,
               type: 'MEASURE',
               table: aggMeas.measure.toLowerCase(),
               field: null,
               buckets: aggMeas.buckets
             }
-            scope.yData = [{
+            scope.queryInProgress.y = [{
               aggregation: aggMeas.aggregation,
               type: 'MEASURE',
               table: aggMeas.measure.toLowerCase(),
@@ -258,7 +259,7 @@ angular.module('teacherdashboard')
           }
         } else {
           //x axis is the query.fields[0]
-          scope.xData = {
+          scope.queryInProgress.x = {
             aggregation: query.fields[0].bucketAggregation,
             type: 'DIMENSION',
             table: query.fields[0].dimension.toLowerCase(),
@@ -266,7 +267,7 @@ angular.module('teacherdashboard')
           };
           //Series exists if there is a fields[1]
           if(query.fields.length > 1) {
-            scope.series = {
+            scope.queryInProgress.series = {
               aggregation: null,
               type: 'DIMENSION',
               table: query.fields[1].dimension.toLowerCase(),
@@ -274,9 +275,9 @@ angular.module('teacherdashboard')
             };
           }
           //Yaxis field(s) are the aggregate measures.
-          scope.yData = [];
+          scope.queryInProgress.y = [];
           for(var i = 0; i < query.aggregateMeasures.length; i++) {
-            scope.yData.push({
+            scope.queryInProgress.y.push({
               aggregation: query.aggregateMeasures[i].aggregation,
               type: 'MEASURE',
               table: query.aggregateMeasures[i].measure.toLowerCase(),
@@ -351,19 +352,19 @@ angular.module('teacherdashboard')
         var setScopeFilterFieldsAndTables = function() {
           var dims = [];
           var parentDims = [];
-          if(scope.xData && scope.yData && scope.yData.length > 0) {
-            dims = resolveShortestPath(scope.xData.table, scope.yData[0].table);
+          if(scope.queryInProgress.x && scope.queryInProgress.y && scope.queryInProgress.y.length > 0) {
+            dims = resolveShortestPath(scope.queryInProgress.x.table, scope.queryInProgress.y[0].table);
             if(!dims || dims.length < 2) {
-              dims = resolveShortestPath(scope.yData[0].table, scope.xData.table);
+              dims = resolveShortestPath(scope.queryInProgress.y[0].table, scope.queryInProgress.x.table);
             }
-            parentDims = resolveParents(scope.xData.table.toUpperCase());
-            parentDims = parentDims.concat(resolveParents(scope.yData[0].table.toUpperCase()));
-          } else if(scope.xData) {
-            dims = [ angular.copy(scope.xData)];
-            parentDims = resolveParents(scope.xData.table.toUpperCase());
-          } else if(scope.yData && scope.yData[0].table) {
-            dims = [ angular.copy(scope.yData[0]) ];
-            parentDims = resolveParents(scope.yData[0].table.toUpperCase());
+            parentDims = resolveParents(scope.queryInProgress.x.table.toUpperCase());
+            parentDims = parentDims.concat(resolveParents(scope.queryInProgress.y[0].table.toUpperCase()));
+          } else if(scope.queryInProgress.x) {
+            dims = [ angular.copy(scope.queryInProgress.x)];
+            parentDims = resolveParents(scope.queryInProgress.x.table.toUpperCase());
+          } else if(scope.queryInProgress.y && scope.queryInProgress.y[0].table) {
+            dims = [ angular.copy(scope.queryInProgress.y[0]) ];
+            parentDims = resolveParents(scope.queryInProgress.y[0].table.toUpperCase());
           }
           angular.forEach(parentDims, function(value) {
             if(value && value !== 'undefined' && dims.indexOf(value) === -1) {
@@ -393,13 +394,13 @@ angular.module('teacherdashboard')
         }
 
         setScopeFilterFieldsAndTables();
-        scope.$watch('xData', function(newValue, oldValue) {
+        scope.$watch('queryInProgress.x', function(newValue, oldValue) {
           if(newValue && newValue !== oldValue) {
             setScopeFilterFieldsAndTables();
           }
         });
 
-        scope.$watch('yData', function(newValue, oldValue) {
+        scope.$watch('queryInProgress.y', function(newValue, oldValue) {
           if(newValue && newValue !== oldValue) {
             setScopeFilterFieldsAndTables();
           }
@@ -411,16 +412,16 @@ angular.module('teacherdashboard')
          *
          */
         scope.addBucket = function() {
-          if(!scope.xData.buckets) {
-            scope.xData.buckets = [];
+          if(!scope.queryInProgress.x.buckets) {
+            scope.queryInProgress.x.buckets = [];
           }
-          scope.xData.buckets.push({ start: null, end: null, label: null });
+          scope.queryInProgress.x.buckets.push({ start: null, end: null, label: null });
         };
 
         scope.removeBucket = function(bucket) {
-          var index = scope.xData.buckets.indexOf(bucket);
+          var index = scope.queryInProgress.x.buckets.indexOf(bucket);
           if(-1 !== index) {
-            scope.xData.buckets.splice(index, 1);
+            scope.queryInProgress.x.buckets.splice(index, 1);
           }
         }
 
@@ -430,22 +431,22 @@ angular.module('teacherdashboard')
           }
         }
 
-        scope.addXAggregation = function(xData) {
-          xData.aggregation = 'SUM';
+        scope.addXAggregation = function(x) {
+          x.aggregation = 'SUM';
         };
 
         scope.addSeries = function() {
-          if(!scope.series) {
-            scope.series = {
+          if(!scope.queryInProgress.series) {
+            scope.queryInProgress.series = {
               aggregation: null,
-              type: scope.xData.table.type,
-              table: scope.xData.table,
+              type: scope.queryInProgress.x.table.type,
+              table: scope.queryInProgress.x.table,
               field: null
             };
           }
         };
         scope.removeSeries = function() {
-          scope.series = null;
+          scope.queryInProgress.series = null;
         };
       }
     };

@@ -53,6 +53,7 @@ angular.module('teacherdashboard')
           sc.theme = statebag.theme;
           sc.report = rpt;
           sc.queryComponents = scope.queryComponents;
+          sc.queryInProgress = {};
           $mdDialog.show({
             scope: sc,
             controller: DialogController,
@@ -63,7 +64,27 @@ angular.module('teacherdashboard')
             closeTo: ev.el,
             clickOutsideToClose:true
           }).then(function(answer) {
-            scope.status = 'You said the information was "' + answer + '".';
+            sc.status = 'You said the information was "' + answer + '".';
+            if(sc.queryInProgress.x) {
+              if(sc.queryInProgress.x.aggregation) {
+                //There is a subquery
+              } else {
+                //There is no subquery
+              }
+            }
+            //If the x-axis has no aggregate function, there is no subquery
+
+            //If there are multiple y-axes, they need to be compatible measures
+            //If the y-axis is a dimension, it needs to have a COUNT aggregate function (at present)
+
+            //scope.queryInProgress.y = []
+
+            //scope.queryInProgress.x = {}
+
+            //scope.queryInProgress.series
+
+            //Filter: scope.queryInProgress.group
+
           }, function() {
             scope.status = 'You cancelled the dialog.';
           });
