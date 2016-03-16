@@ -1,6 +1,6 @@
 <div class="report-builder" layout="row" layout-align="center start" layout-wrap>
   <div layout flex="50" layout-wrap layout-align="center center">
-    <div class="md-headline" layout layout-align="center center">Report Editor</div>
+    <div class="md-headline" layout layout-align="center center">Report Definition</div>
     <!-- REPORT NAME SECTION -->
     <div class="report-name" layout="row" layout-align="center center" flex="100">
       <md-input-container class="report-name" style="width:425px;">
@@ -175,8 +175,8 @@
     <!-- END X-AXIS RANGES -->
 
     <!-- CHART FILTERS -->
-    <div flex="100" layout layout-align="center center" class="filter-row">
-      <div layout="column" layout-align="center center" class="filter-row" ng-if="queryInProgress.group.rules.length && queryInProgress.x.table && queryInProgress.y[0].table">
+    <div flex="100" layout layout-align="center center" class="filter-row" ng-if="queryInProgress.group.rules.length && queryInProgress.x.table && queryInProgress.y[0].table">
+      <div layout="column" layout-align="center center" class="filter-row">
         <md-button ng-click="group.rules = []" aria-label="close" class="close-cal md-icon-button">
           <md-icon md-font-set="material-icons">close</md-icon>
         </md-button>
