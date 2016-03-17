@@ -1,12 +1,12 @@
 .report-builder {
-  .core-sentence md-input-container {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  .live-preview-icon {
+    width: 256px;
+    height: 256px;
+    font-size: 256px;
   }
-  .core-sentence, .series-row, .bucket-row, .filter-row {
+  .series-row, .bucket-row, .filter-row {
     padding-top: 15px;
     padding-bottom: 15px;
-    background-color: #FAFAFA;
     margin-top:5px;
     margin-bottom:5px;
   }
@@ -42,6 +42,9 @@
   }
   .bucket-header, .x-header {
     text-align:center;
+  }
+  .bucket-wrapper, .filter-row > div {
+    background-color: #FAFAFA;
   }
   .bucket-wrapper, .filter-row {
     h3 {

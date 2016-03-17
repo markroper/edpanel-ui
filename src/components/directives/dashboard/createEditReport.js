@@ -368,8 +368,7 @@ angular.module('teacherdashboard')
           }
         };
 
-        scope.reportTempl = '<div class="md-headline" style="margin-bottom:50px;">Live Preview</div>' +
-          '<edpanel-report report="currentReport" terms="terms" flex="100"></edpanel-report>';
+        scope.reportTempl = '<edpanel-report report="currentReport" terms="terms" flex="100"></edpanel-report>';
         scope.currentReport = angular.copy(scope.report);
         scope.previewEl = angular.element(el).find('.report-preview');
         scope.applyReportChanges(scope.currentReport.chartQuery);
