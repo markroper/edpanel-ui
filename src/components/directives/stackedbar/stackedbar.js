@@ -42,38 +42,40 @@ angular.module('teacherdashboard')
           for(var i = 0; i < theData.length - 1; i++) {
             groups.push(theData[i][0]);
           }
-          scope.chart = $window.c3.generate({
-            bindto: elem.find('.svg-container')[0],
-            data: {
-              columns: theData.slice(0, theData.length -1),
-              type: scope.chartType,
-              groups: [ groups ],
-              order: 'desc',
-              onclick: function(d, element) {
-                if(scope.onClickCallback) {
-                  scope.onClickCallback(d, element);
+          $timeout(function() {
+            scope.chart = $window.c3.generate({
+              bindto: elem.find('.svg-container')[0],
+              data: {
+                columns: theData.slice(0, theData.length -1),
+                type: scope.chartType,
+                groups: [ groups ],
+                order: 'desc',
+                onclick: function(d, element) {
+                  if(scope.onClickCallback) {
+                    scope.onClickCallback(d, element);
+                  }
+                }
+              },
+              legend: {
+                position: 'inset',
+                inset: {
+                  anchor: insetPosition
+                }
+              },
+              color: {
+                pattern: ['#1f77b4', '#d62728', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728']
+              },
+              axis: {
+                x: {
+                  type: 'category',
+                  categories: xTickValues,
+                  tick: {
+                    fit: true
+                  }
                 }
               }
-            },
-            legend: {
-              position: 'inset',
-              inset: {
-                anchor: insetPosition
-              }
-            },
-            color: {
-              pattern: ['#1f77b4', '#d62728', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728']
-            },
-            axis: {
-              x: {
-                type: 'category',
-                categories: xTickValues,
-                tick: {
-                  fit: true
-                }
-              }
-            }
-          });
+            });
+          }, 50);
         };
       }
     };

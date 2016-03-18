@@ -153,7 +153,6 @@ angular.module('teacherdashboard')
           var year = Math.round(yearWeek/100);
           var week = Number(yearWeek.toString().substring(4)) + 1;
           var dt = $window.moment().year(year).week(week).format('YYYY-MM-DD');
-          console.log('week ' + dt);
           return dt;
         }
 
@@ -324,6 +323,9 @@ angular.module('teacherdashboard')
          * @param exp
          */
         scope.replacePlaceholders = function(exp) {
+          if(!exp || !exp.leftHandSide || !exp.rightHandSide) {
+            return;
+          }
           if(exp.leftHandSide.type === 'EXPRESSION') {
             scope.replacePlaceholders(exp.leftHandSide);
           }

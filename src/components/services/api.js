@@ -135,6 +135,7 @@ angular.module('teacherdashboard')
       //Query execution
       savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
+      queryComponents: $resource(base + '/schools/:schoolId/queries/components'),
       dashboard: $resource(base + '/schools/:schoolId/dashboards/:dashboardId',
         {},
         {

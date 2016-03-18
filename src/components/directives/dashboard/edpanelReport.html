@@ -5,7 +5,7 @@
         <div class="md-headline">{{report.name}}</div>
         <div class="md-subhead">
           <md-input-container ng-show="report.supportDateFilter">
-            <md-select ng-model="currentTerm" ng-model-options="{trackBy: '$value.name'}">
+            <md-select aria-label="term" ng-model="currentTerm" ng-model-options="{trackBy: '$value.name'}">
               <md-option ng-value="term" ng-repeat="term in terms">{{term.name}}</md-option>
             </md-select>
           </md-input-container>

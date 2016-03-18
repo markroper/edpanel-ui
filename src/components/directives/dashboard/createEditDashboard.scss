@@ -1,0 +1,41 @@
+.create-edit-dashboard {
+  .header-items {
+    md-input-container {
+      margin-bottom: 0px;
+    }
+  }
+  .gridster-item {
+    background-color: #F5F2ED;
+  }
+  .handle {
+    cursor: grab;
+  }
+  .handle:active {
+    cursor: move;
+  }
+  .chart-type {
+    background-position: 50% -50%;
+    background-repeat: no-repeat;
+    background-size: 250px 250px;
+    .report-buttons {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.5s, opacity 0.5s ease;
+    }
+  }
+  .chart-type:hover {
+    .report-buttons {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+  .chart-type.bar {
+    background-image: url("../../../assets/images/bar.svg");
+  }
+
+  .chart-type.spline {
+    background-image: url("../../../assets/images/line.svg");
+    background-size: 150px 250px;
+  }
+
+}
