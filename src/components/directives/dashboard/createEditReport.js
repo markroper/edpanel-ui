@@ -343,16 +343,16 @@ angular.module('teacherdashboard')
 
         setScopeFilterFieldsAndTables();
         scope.$watch('queryInProgress.x', function(newValue, oldValue) {
-          if(newValue && newValue !== oldValue) {
+          if(newValue && !angular.equals(newValue, oldValue)) {
             setScopeFilterFieldsAndTables();
           }
-        });
+        }, true);
 
         scope.$watch('queryInProgress.y', function(newValue, oldValue) {
-          if(newValue && newValue !== oldValue) {
+          if(newValue && !angular.equals(newValue, oldValue)) {
             setScopeFilterFieldsAndTables();
           }
-        });
+        }, true);
 
         scope.applyReportChanges = function(q) {
           if(q.aggregateMeasures && q.aggregateMeasures.length >= 1) {

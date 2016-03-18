@@ -323,6 +323,9 @@ angular.module('teacherdashboard')
          * @param exp
          */
         scope.replacePlaceholders = function(exp) {
+          if(!exp || !exp.leftHandSide || !exp.rightHandSide) {
+            return;
+          }
           if(exp.leftHandSide.type === 'EXPRESSION') {
             scope.replacePlaceholders(exp.leftHandSide);
           }

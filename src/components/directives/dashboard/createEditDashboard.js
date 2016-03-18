@@ -172,6 +172,16 @@ angular.module('teacherdashboard')
           });
         };
 
+        scope.setDefaultTypeOnBuckets = function(buckets) {
+          if(buckets) {
+            for(var w = 0; w < buckets.length; w++) {
+              var buck = buckets[w];
+              if(!buck.type) {
+                buck.type = 'NUMERIC';
+              }
+            }
+          }
+        };
         scope.produceQueryFromQueryInProgress = function(qip) {
           var aggregateMeasures = [];
           var fields = [];
@@ -193,12 +203,16 @@ angular.module('teacherdashboard')
              */
             var xField = {};
             var x = q.x;
-            if(x.type === 'MEASURE') {
+            var typeToUse = x.type;
+            if(scope.measures.indexOf(x.table.toLowerCase()) != -1) {
+              typeToUse = 'MEASURE';
+            }
+            if(typeToUse === 'MEASURE') {
               if(consts.aggregations.indexOf(x.field) !== -1) {
                 xField.aggregation = x.field;
               }
-              xField.buckets = x.buckets;
               xField.measure = x.table.toUpperCase();
+              //xField.bucketAggregation = angular.copy(x.buckets);
               aggregateMeasures.push(xField);
             } else {
               //DIMENSION
@@ -207,6 +221,9 @@ angular.module('teacherdashboard')
               xField.field = x.field;
               fields.push(xField);
             }
+            xField.buckets = angular.copy(x.buckets);
+            scope.setDefaultTypeOnBuckets(xField.buckets);
+            //scope.setDefaultTypeOnBuckets(xField.bucketAggregation);
           }
           //replace the series dimension or measure
           if(q.series) {
@@ -215,17 +232,17 @@ angular.module('teacherdashboard')
             var seriesField = {};
             if(s.type === 'MEASURE') {
               seriesField.aggregation = s.aggregation;
-              seriesField.buckets = s.buckets;
               seriesField.measure = s.table.toUpperCase();
+              //seriesField.bucketAggregation = angular.copy(s.bucketAggregation);
               aggregateMeasures.push(seriesField);
             } else {
               //DIMENSIONS
-              seriesField.bucketAggregation = s.bucketAggregation;
-              seriesField.buckets = s.buckets;
               seriesField.dimension = s.table.toUpperCase();
               seriesField.field = s.field;
               fields.push(seriesField);
             }
+            seriesField.buckets = angular.copy(s.buckets);
+            scope.setDefaultTypeOnBuckets(seriesField.buckets);
           }
           //Resolve the yAxis dimensions or measures
           if(q.y) {
@@ -233,25 +250,30 @@ angular.module('teacherdashboard')
             for(var i = 0; i < ys.length; i++) {
               var y = ys[i];
               var yField = {};
-              if(y.type === 'MEASURE') {
+
+              var typeToUse = y.type;
+              if(scope.measures.indexOf(y.table.toLowerCase()) != -1) {
+                typeToUse = 'MEASURE';
+              }
+              if(typeToUse === 'MEASURE') {
                 if(consts.aggregations.indexOf(y.field) !== -1) {
                   yField.aggregation = y.field;
                 }
                 yField.aggregation = y.aggregation;
-                yField.buckets = y.buckets;
                 yField.measure = y.table.toUpperCase();
                 aggregateMeasures.push(yField);
               } else {
                 //TODO:If the y-axis is a dimension, it needs to have a COUNT aggregate function (at present)
-                yField.bucketAggregation = y.bucketAggregation;
                 yField.dimension = y.table.toUpperCase();
                 yField.field = y.field;
                 if(!y.field || y.field === '*') {
                   yField.field = 'ID';
                 }
-                yField.buckets = y.buckets;
                 fields.push(yField);
               }
+              //yField.bucketAggregation = y.bucketAggregation;
+              yField.buckets = angular.copy(y.buckets);
+              scope.setDefaultTypeOnBuckets(yField.buckets);
             }
           }
           //If the x-axis has no aggregate function, there is no subquery
@@ -263,7 +285,7 @@ angular.module('teacherdashboard')
               'position': 0,
               'function': q.x.aggregation
             };
-            if(q.x.type === 'MEASURE') {
+            if( scope.measures.indexOf(q.x.table) !== -1 ) {
               //TODO: Should this be based on the number of measures from the y-cols?
               xCol.position = 1;
               if(q.x.buckets) {
@@ -273,6 +295,10 @@ angular.module('teacherdashboard')
             newQuery.subqueryColumnsByPosition.push(xCol);
             //Handle series columns, if any
             var yPos = xCol.position + 1;
+            //If the ypos field was a measure, the xpos must be the dimension
+            if(xCol.position > 0) {
+              yPos = 0;
+            }
             if(q.series) {
               yPos++;
               var seriesCol = {
@@ -285,12 +311,12 @@ angular.module('teacherdashboard')
             if(q.y) {
               for(var i = 0; i < q.y.length; i++) {
                 var y = q.y[i];
-                if(y.type === 'DIMENSION') {
+                if(scope.measures.indexOf(y.table) === -1) {
                   yPos = 0 + i;
                 }
                 var func = y.aggregation;
                 //At present all dimension y-axis fields are COUNT
-                if(y.type === 'DIMENSION') {
+                if(scope.measures.indexOf(y.table) === -1) {
                   func = 'COUNT';
                 }
                 var yCol = {
@@ -349,7 +375,9 @@ angular.module('teacherdashboard')
                   }
                 }
               }
-              newQuery.filter = currExp;
+              if(currExp.leftHandSide && currExp.rightHandSide && currExp.operator && currExp.type) {
+                newQuery.filter = currExp;
+              }
             }
           }
           return newQuery;

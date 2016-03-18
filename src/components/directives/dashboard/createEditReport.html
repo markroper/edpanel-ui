@@ -12,7 +12,7 @@
     <div class="report-name" layout="row" layout-align="center center" flex="100">
       <md-input-container class="report-name" style="width:425px;">
         <label>Report name</label>
-        <input class="md-headline" ng-model="report.name">
+        <input class="md-headline" ng-model="report.name" style="text-align:center;">
       </md-input-container>
     </div>
     <!-- END REPORT NAME SECTION -->
@@ -88,8 +88,8 @@
         placeholder="x-axis table">
         <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
       </md-autocomplete>
-      <!-- For cases where there is an X-Axis field thats not an aggregate function (e.g. Staff Name)-->
-      <div layout layout-align="center center" ng-if="aggregations.indexOf(queryInProgress.x.field) === -1">
+      <!-- For cases where there is an X-Axis field thats a DIMENSION and not an aggregate function (e.g. Staff Name)-->
+      <div layout layout-align="center center" ng-if="aggregations.indexOf(queryInProgress.x.field) === -1 && queryInProgress.x.table">
         <md-input-container class="sentence-select">
           <label>choose field</label>
           <md-select ng-model="queryInProgress.x.field" class="md-subhead">
@@ -97,6 +97,16 @@
           </md-select>
         </md-input-container>
       </div>
+      <!-- For cases where there is an X-Axis field thats a MEASURE and not an agg function (e.g. demerit date)-->
+      <div layout layout-align="center center" ng-if="aggregations.indexOf(queryInProgress.x.field) === -1 && queryInProgress.x.table && !dimensionFields[queryInProgress.x.table]">
+        <md-input-container class="sentence-select">
+          <label>choose field</label>
+          <md-select ng-model="queryInProgress.x.field" class="md-subhead">
+            <md-option ng-repeat="opt in measureFields[queryInProgress.x.table].fields" value="{{opt}}">{{opt}}</md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+
       <div class="md-subhead" ng-if="queryInProgress.x.buckets">ranges</div>
       <div class="md-subhead">.</div>
     </div>
