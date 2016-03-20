@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra',
-  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra) {
+  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra', '$mdToast',
+  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra, $mdToast) {
     return {
       scope: {
         dashboard: '=',
@@ -174,7 +174,7 @@ angular.module('teacherdashboard')
             closeTo: ev.el,
             clickOutsideToClose:true
           }).then(function(answer) {
-            var newQuery = scope.produceQueryFromQueryInProgress(sc.queryInProgress);
+            sc.report.chartQuery = scope.produceQueryFromQueryInProgress(sc.queryInProgress);
           }, function() {
             scope.status = 'You cancelled the dialog.';
           });
@@ -404,8 +404,45 @@ angular.module('teacherdashboard')
           scope.dashboardReports.splice(idx, 1);
         };
 
+        scope.toast = function(msg) {
+          $mdToast.show(
+            $mdToast.simple()
+              .content(msg)
+              .action('OK')
+              .hideDelay(2000)
+          );
+        }
+
         scope.saveDashboard = function() {
-          scope.$parent.d.editDashboard = false;
+          var newDash = scope.produceUpdatedDashboard();
+          if(newDash.id) {
+            //update
+            api.dashboard.put(
+              { schoolId: newDash.schoolId, dashboardId: newDash.id },
+              newDash,
+              function(success){
+                scope.toast('Dashboard updated');
+                scope.dashboard = newDash;
+                scope.$parent.d.editDashboard = false;
+              },
+              function(err){
+                scope.toast('Update failed');
+              });
+          } else {
+            //create
+            api.dashboard.post(
+              { schoolId: newDash.schoolId },
+              newDash,
+              function(success){
+                scope.toast('Dashboard updated');
+                newDash.id = success.id;
+                scope.dashboard = newDash;
+                scope.$parent.d.editDashboard = false;
+              },
+              function(err){
+                scope.toast('Update failed');
+              });
+          }
         };
 
         scope.cancelChanges = function() {
@@ -431,6 +468,26 @@ angular.module('teacherdashboard')
             }
           }
           return gridsterData;
+        };
+        scope.produceUpdatedDashboard = function() {
+          var newDash = {
+            schoolId: statebag.school.id,
+            name: scope.dashboard.name,
+            id: scope.dashboard.id,
+            rows: []
+          };
+          if(scope.dashboardReports) {
+            for(var i = 0; i < scope.dashboardReports.length; i++) {
+              var gridEl = scope.dashboardReports[i];
+              while(newDash.rows.length <= gridEl.row) {
+                newDash.rows.push({ reports: [] });
+              }
+              var newRpt = angular.copy(gridEl.report);
+              newRpt.type = newRpt.type.toUpperCase();
+              newDash.rows[gridEl.row].reports.unshift(newRpt);
+            }
+          }
+          return newDash;
         };
       }
     };
