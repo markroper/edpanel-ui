@@ -53,6 +53,14 @@ angular.module('teacherdashboard')
             }
           }
         );
+        scope.$watch(
+          '$parent.d.editDashboard',
+          function( newValue, oldValue ) {
+            if(newValue) {
+              scope.dashboardReports = scope.processDashboard();
+            }
+          }
+        );
 
         scope.processQueryComponents = function() {
           scope.dimensions = [];
@@ -288,7 +296,7 @@ angular.module('teacherdashboard')
             if( scope.measures.indexOf(q.x.table) !== -1 ) {
               //TODO: Should this be based on the number of measures from the y-cols?
               xCol.position = 1;
-              if(q.x.buckets) {
+              if(q.x.buckets && q.x.buckets.bucketAggregation) {
                 xCol.position++;
               }
             }
@@ -397,12 +405,12 @@ angular.module('teacherdashboard')
         };
 
         scope.saveDashboard = function() {
-          scope.$parent.editDashboard = false;
+          scope.$parent.d.editDashboard = false;
         };
 
         scope.cancelChanges = function() {
           scope.dashboardReports = scope.processDashboard();
-          scope.$parent.editDashboard = false;
+          scope.$parent.d.editDashboard = false;
         };
         scope.processDashboard = function() {
           var gridsterData = [];

@@ -1,6 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('createEditReport', [ '$window', 'api', 'consts', 'dijkstra', '$compile', function($window, api, consts, dijkstra, $compile) {
+  .directive('createEditReport', [ '$window', 'api', 'consts', 'dijkstra', '$compile', 'debounce',
+    function($window, api, consts, dijkstra, $compile, debounce) {
     return {
       scope: {
         //The Report object, never directly edited by this directive.  Edits stored on the queryInProgress instance
@@ -354,31 +355,41 @@ angular.module('teacherdashboard')
           }
         }, true);
 
-        scope.applyReportChanges = function(q) {
-          if(q.aggregateMeasures && q.aggregateMeasures.length >= 1) {
-            console.log('execute query: ' + JSON.stringify(q));
-            scope.currentReport.chartQuery = q;
-            if(scope.previewScope) {
-              scope.previewScope.$destroy();
-            }
-            scope.previewScope = scope.$new();
-            scope.previewScope.report = scope.currentReport;
-            var compiledHtml = $compile(scope.reportTempl)(scope.previewScope);
-            scope.previewEl.empty().append(compiledHtml);
+        scope.appendToReportPreview = function(templString) {
+          if(scope.previewScope) {
+            scope.previewScope.$destroy();
           }
+          scope.previewScope = scope.$new();
+          var compiledHtml = $compile(templString)(scope.previewScope);
+          scope.previewEl.empty().append(compiledHtml);
         };
 
+        //Debounced to prevent DOM & API thrashing as users type in input
+        scope.applyReportChanges = debounce(1750, function(q) {
+          if(q && q.aggregateMeasures && q.aggregateMeasures.length >= 1) {
+            scope.appendToReportPreview(scope.reportTempl);
+          } else {
+            scope.appendToReportPreview(scope.noReportTempl);
+          }
+        });
+
         scope.reportTempl = '<edpanel-report report="currentReport" terms="terms" flex="100"></edpanel-report>';
+        scope.noReportTempl =
+          '<div class="md-headline" flex="100" layout layout-align="center center">No preview, chart defintion incomplete</div>' +
+          '<md-icon class="live-preview-icon" aria-label="show chart">show_chart</md-icon>';
+
         scope.currentReport = angular.copy(scope.report);
         scope.previewEl = angular.element(el).find('.report-preview');
-        scope.applyReportChanges(scope.currentReport.chartQuery);
+        scope.appendToReportPreview(scope.reportTempl);
         scope.$watch('queryInProgress', function(newValue, oldValue) {
           if(newValue && !angular.equals(newValue, oldValue)) {
             try {
               var q = scope.$parent.produceQueryFromQueryInProgress(newValue);
+              scope.currentReport.chartQuery = q;
+              scope.previewScope.report = scope.currentReport;
               scope.applyReportChanges(q);
             } catch (err) {
-              console.log(err);
+              scope.applyReportChanges(null);
             }
           }
         }, true);

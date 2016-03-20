@@ -1,13 +1,13 @@
 'use strict';
 angular.module('teacherdashboard')
-  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', 'analytics', '$compile', 'authentication',
-    function ($scope, api, statebag, $q, $window, analytics, $compile, authentication) {
-      $scope.editDashboard = false;
+  .controller('SchoolDash', ['$scope', 'api', 'statebag', '$q',  '$window', 'analytics', '$compile', 'authentication', '$element',
+    function ($scope, api, statebag, $q, $window, analytics, $compile, authentication, $element) {
+      $scope.d = { editDashboard: false };
       $scope.toggleEditMode = function() {
-        $scope.editDashboard = !$scope.editDashboard;
+        $scope.d.editDashboard = !$scope.d.editDashboard;
       };
       $scope.$on('$viewContentLoaded', function () {
-        $window.ga('send', 'pageview', {page: "/ui/schools/*/dashboard"});
+        $window.ga('send', 'pageview', { page: "/ui/schools/*/dashboard" });
       });
       statebag.currentPage.name = 'School Dashboard';
       $scope.terms = [];
