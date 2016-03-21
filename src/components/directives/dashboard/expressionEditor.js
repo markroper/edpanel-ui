@@ -10,10 +10,10 @@ angular.module('teacherdashboard')
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/dashboard/expressionEditor.html',
-      compile: function (element, attrs) {
+      compile: function (element) {
         var content, directive;
         content = element.contents().remove();
-        return function (scope, element, attrs) {
+        return function (scope, element) {
           scope.controls = { areOpen: false };
           scope.operators = [
             { name: 'AND' },
@@ -63,7 +63,7 @@ angular.module('teacherdashboard')
           element.append(directive(scope, function ($compile) {
             return $compile;
           }));
-        }
+        };
       }
-    }
+    };
     }]);

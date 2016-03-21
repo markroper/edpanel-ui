@@ -70,15 +70,16 @@ angular.module('teacherdashboard')
            goal,
             function() {
               $scope.resolveGoalDisplay(true);
+              var index = null;
               if(moveToApproved) {
-                var index = $scope.pendingGoals.indexOf(goal);
+                index = $scope.pendingGoals.indexOf(goal);
                 $scope.pendingGoals.splice(index, 1);
                 if(!$scope.approvedGoals) {
                   $scope.approvedGoals = [];
                 }
                 $scope.approvedGoals.push(goal);
               } else if(removeFromActive) {
-                var index = $scope.approvedGoals.indexOf(goal);
+                index = $scope.approvedGoals.indexOf(goal);
                 $scope.approvedGoals.splice(index, 1);
               }
               showSimpleToast('Goal changed successfully');
@@ -96,7 +97,6 @@ angular.module('teacherdashboard')
         var $woopArrowIcon = angular.element(elem).find('.arrow-icon');
         var ROTATE = 'rotate';
         var ROTATE_COUNTERWISE = 'rotateCounterwise';
-        var BEHAVIOR = 'BEHAVIOR';
         var negBehaviors = ['DEMERIT','DETENTION', 'OUT_OF_SCHOOL_SUSPENSION','IN_SCHOOL_SUSPENSION','REFERRAL'];
 
         var evaluateGaugeColor = function(goal) {
@@ -139,7 +139,7 @@ angular.module('teacherdashboard')
           };
           var goal = $scope.goal;
           if (refresh) {
-            angular.element(document).find('#gauge-'+ goal.id).empty();
+            angular.element($document).find('#gauge-'+ goal.id).empty();
             $scope.gage = new $window.JustGage({
               id: 'gauge-'+ goal.id,
               value: goal.calculatedValue,

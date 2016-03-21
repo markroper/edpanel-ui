@@ -1,4 +1,5 @@
 .create-edit-dashboard {
+  position:relative;
   .header-items {
     md-input-container {
       margin-bottom: 0px;
@@ -30,11 +31,11 @@
     }
   }
   .chart-type.bar {
-    background-image: url("../../../assets/images/bar.svg");
+    background-image: url('../../../assets/images/bar.svg');
   }
 
   .chart-type.spline {
-    background-image: url("../../../assets/images/line.svg");
+    background-image: url('../../../assets/images/line.svg');
     background-size: 150px 250px;
   }
 

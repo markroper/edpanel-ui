@@ -12,19 +12,20 @@ angular.module('teacherdashboard')
       this.enqueue = function (priority, key) {
         this._nodes.push({key: key, priority: priority });
         this.sort();
-      }
+      };
       this.dequeue = function () {
         return this._nodes.shift().key;
-      }
+      };
       this.sort = function () {
         this._nodes.sort(function (a, b) {
           return a.priority - b.priority;
         });
-      }
+      };
       this.isEmpty = function () {
         return !this._nodes.length;
-      }
-    }
+      };
+    };
+
     return {
       /**
        * Pathfinding starts here
@@ -35,11 +36,11 @@ angular.module('teacherdashboard')
 
           this.addVertex = function(name, edges){
             this.vertices[name] = edges;
-          }
+          };
 
           this.getVertex = function(name) {
             return this.vertices[name];
-          }
+          };
 
           this.shortestPath = function (start, finish) {
             var nodes = new PriorityQueue(),
@@ -91,7 +92,7 @@ angular.module('teacherdashboard')
               }
             }
             return path;
-          }
+          };
         }
-    }
+    };
   });

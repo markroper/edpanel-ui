@@ -3,7 +3,7 @@ angular.module('teacherdashboard')
 .controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast', '$document', '$window', 'analytics',
   function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document, $window, analytics) {
     $scope.$on('$viewContentLoaded', function() {
-      $window.ga('send', 'pageview', { page: "/ui/schools/*/admin" });
+      $window.ga('send', 'pageview', { page: '/ui/schools/*/admin' });
     });
 
     statebag.currentPage.name = 'System Admin';
@@ -60,7 +60,7 @@ angular.module('teacherdashboard')
       });
 
     $scope.saveSettingsChanges = function() {
-      analytics.sendEvent("Administration",analytics.SAVE_CHANGES, analytics.CUSTOMIZE_LABEL);
+      analytics.sendEvent('Administration',analytics.SAVE_CHANGES, analytics.CUSTOMIZE_LABEL);
       var updatedAttributes = {
         'school': {
           'id': statebag.school.id,

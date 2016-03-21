@@ -4,7 +4,7 @@ angular.module('teacherdashboard')
     function ($scope, api, $state, statebag, $window, $compile, $stateParams) {
       statebag.currentPage.name = 'Survey Results';
       $scope.$on('$viewContentLoaded', function() {
-        $window.ga('send', 'pageview', { page: "ui/surveyresults/*" });
+        $window.ga('send', 'pageview', { page: 'ui/surveyresults/*' });
       });
       var surveyResultsDirective =
         '<survey-aggregate aggregate-survey="aggregateSurvey" survey-aggregates="surveyAggregates"></survey-aggregate>';

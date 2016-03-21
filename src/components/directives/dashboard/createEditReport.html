@@ -89,7 +89,7 @@
         <span md-highlight-text="xSearchText" class="md-subhead">{{ xItem.toLowerCase()}}</span>
       </md-autocomplete>
       <!-- For cases where there is an X-Axis field thats a DIMENSION and not an aggregate function (e.g. Staff Name)-->
-      <div layout layout-align="center center" ng-if="aggregations.indexOf(queryInProgress.x.field) === -1 && queryInProgress.x.table">
+      <div layout layout-align="center center" ng-if="aggregations.indexOf(queryInProgress.x.field) === -1 && dimensions.indexOf(queryInProgress.x.table) !== -1">
         <md-input-container class="sentence-select">
           <label>choose field</label>
           <md-select ng-model="queryInProgress.x.field" class="md-subhead">

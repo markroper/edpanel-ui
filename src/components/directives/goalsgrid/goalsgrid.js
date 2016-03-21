@@ -13,11 +13,7 @@ angular.module('teacherdashboard')
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/goalsgrid/goalsgrid.html',
         replace: true,
-        controller: function ($scope) {
-
-
+        controller: function () {
         }
-
-
-      }
+      };
     }]);

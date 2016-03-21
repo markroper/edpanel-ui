@@ -3,7 +3,7 @@ angular.module('teacherdashboard')
 .controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll','analytics',
   function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll, analytics) {
     $scope.$on('$viewContentLoaded', function() {
-      $window.ga('send', 'pageview', { page: "/ui/schools/*/student/*" });
+      $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*' });
     });
     $scope.behaviorDeferred = $q.defer();
     $scope.behaviorDataPromise = $scope.behaviorDeferred.promise;
@@ -15,7 +15,6 @@ angular.module('teacherdashboard')
     $scope.sections = [];
     $scope.approved = [];
     $scope.pending = [];
-    console.log("Page loading");
     if(!statebag.school || !statebag.currentStudent) {
       //Resolve the school then resolve the student
       statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
