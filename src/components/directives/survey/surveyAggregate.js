@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('surveyAggregate', [ '$window', 'api', '$rootScope', '$state', '$mdToast', 'authentication',
-    function($window, api, $rootScope, $state, $mdToast, authentication) {
+  .directive('surveyAggregate', [ '$window', 'api',
+    function($window, api) {
       return {
         scope: {
           aggregateSurvey: '=',

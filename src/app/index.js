@@ -1,5 +1,5 @@
 'use strict';
-angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.grid', 'ui.grid.pagination', 'angular-sortable-view'])
+angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.grid', 'ui.grid.pagination', 'angular-sortable-view', 'gridster'])
   .config(function ($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider, $httpProvider, $locationProvider, constsProvider) {
     //Forces angular to request that any CORS cookies be sent back by the server
     $httpProvider.defaults.withCredentials = true;
@@ -245,6 +245,21 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
     return {
       $get: function () {
         return {
+          aggregations: [
+            'COUNT',
+            'AVG',
+            'SUM',
+            'STD_DEV',
+            'YEARWEEK'
+          ],
+          placeholderValues: {
+            '${schoolId}': 'PLACEHOLDER_NUMERIC',
+            '${startDate}': 'PLACEHOLDER_DATE',
+            '${endDate}': 'PLACEHOLDER_DATE',
+            '${clickValue}': 'PLACEHOLDER_NUMERIC',
+            '${clickValueMin}': 'PLACEHOLDER_NUMERIC',
+            '${clickValueMax}': 'PLACEHOLDER_NUMERIC'
+          },
           notificationTypes: {
             'GPA': 'GPA',
             'SECTION_GRADE': 'Class grade',

@@ -23,7 +23,7 @@ angular.module('teacherdashboard')
           //TODO: implement me
         };
         $scope.sendMessage = function(m) {
-          if(!n.subjectUserId) {
+          if(!m.subjectUserId) {
             $mdToast.show(
               $mdToast.simple()
                 .content('Group chats not yet supported :(')
@@ -43,7 +43,7 @@ angular.module('teacherdashboard')
           }
           var messageThread = {
             participants: [
-              { participantId: n.subjectUserId },
+              { participantId: m.subjectUserId },
               { participantId: authentication.identity().id }
             ]
           };
@@ -59,7 +59,7 @@ angular.module('teacherdashboard')
                 { threadId: resp.id },
                 message,
                 function() {
-                  n.active = false;
+                  m.active = false;
                   $scope.message.body = '';
                   $mdToast.show(
                     $mdToast.simple()
@@ -77,22 +77,6 @@ angular.module('teacherdashboard')
                   .hideDelay(1500)
               );
             });
-        };
-
-        $scope.toggleDetails = function(notification, $event) {
-          $event.stopPropagation();
-          if(angular.element($event.target).is('textarea')) {
-            return;
-          }
-          if(currentNotification && currentNotification !== notification) {
-            currentNotification.active = false;
-          }
-          currentNotification = notification;
-          if(currentNotification.active) {
-            currentNotification.active = false;
-          } else {
-            currentNotification.active = true;
-          }
         };
       }
     };

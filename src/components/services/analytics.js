@@ -60,5 +60,5 @@ angular.module('teacherdashboard')
       GRADE_LABEL: 'GRADE',
       CUSTOMIZE_LABEL: 'CUSTOMIZE',
       FILTER: 'FILTER'
-    }
+    };
   }]);

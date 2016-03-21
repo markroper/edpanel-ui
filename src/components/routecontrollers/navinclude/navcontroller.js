@@ -9,16 +9,16 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
 
     switch ($scope.userRole.toUpperCase()) {
       case consts.roles.ADMIN:
-        $scope.homePageName = "Student List";
+        $scope.homePageName = 'Student List';
         break;
       case consts.roles.TEACHER:
-        $scope.homePageName = "Section List";
+        $scope.homePageName = 'Section List';
         break;
       case consts.roles.SUPER_ADMIN:
-        $scope.homePageName = "Student List";
+        $scope.homePageName = 'Student List';
         break;
       default:
-        $scope.homePageName = "Student List";
+        $scope.homePageName = 'Student List';
         break;
     }
 
@@ -37,7 +37,7 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
         function(resp){
           //If there are no notifications or the number cached is different than the number returned
           //Reset the collection.
-          if(!$scope.notificationList || $scope.notificationList.length != resp.length) {
+          if(!$scope.notificationList || $scope.notificationList.length !== resp.length) {
             $scope.notificationList = resp;
           }
         });
@@ -73,10 +73,10 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
       $state.go('app.home', { schoolId: $state.params.schoolId });
       $scope.closeSizeNav();
     };
-  $scope.goToTeacherClasses = function() {
-    $state.go('app.teacherHome', {schoolId: statebag.school.id});
-    $scope.closeSizeNav();
-  }
+    $scope.goToTeacherClasses = function() {
+      $state.go('app.teacherHome', {schoolId: statebag.school.id});
+      $scope.closeSizeNav();
+    };
     $scope.goToMySurveys = function() {
       $state.go('app.mySurveys', {});
       $scope.closeSizeNav();
@@ -113,6 +113,7 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
         api.logout.save(
           {},
           function(){
+            statebag.clearState();
             $state.go('login');
           });
     };

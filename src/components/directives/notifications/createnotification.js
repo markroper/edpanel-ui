@@ -246,7 +246,7 @@ angular.module('teacherdashboard')
               (draft.measure === SECTION_GRADE ||
               draft.measure === SECTION_ABSENCE ||
               draft.measure === SECTION_TARDY)) {
-            if(draft.section.name != ALL_SECTIONS) {
+            if(draft.section.name !== ALL_SECTIONS) {
               $scope.notification.section = { id: draft.section.id };
             }
           }
@@ -273,6 +273,7 @@ angular.module('teacherdashboard')
           if(!$scope.notification.subjects) {
             $scope.notification.subjects = {};
           }
+          var value = null;
           $scope.notification.subjects.type = draft.subjects.type;
           if(draft.subjects.type === SECTION_STUDENTS) {
             if(draft.subjects.section && draft.subjects.section.id) {
@@ -281,7 +282,6 @@ angular.module('teacherdashboard')
               };
               $scope.notification.subjects.section = sec;
             }
-
           } else if(draft.subjects.type === SINGLE_STUDENT) {
             $scope.notification.subjects.student = draft.subjects.student;
           } else if(draft.subjects.type === FILTERED_STUDENTS && draft.filters) {
@@ -292,24 +292,24 @@ angular.module('teacherdashboard')
               $scope.notification.subjects.federalRaces = draft.filters.races;
             }
             if(draft.filters.ethnicities && draft.filters.enthnicities.length === 1) {
-              var value = TRUE;
-                if(draft.filters.ethnicities[0] === NON_LATINO) {
-                  value = FALSE;
-                }
+              value = TRUE;
+              if(draft.filters.ethnicities[0] === NON_LATINO) {
+                value = FALSE;
+              }
               $scope.notification.subjects.federalEthnicities = [ value ];
             }
             if(draft.filters.years) {
               $scope.notification.subjects.projectedGraduationYears = draft.filters.years;
             }
             if(draft.filters.ell && draft.filters.ell.length === 1) {
-              var value = true;
+              value = true;
               if(draft.filters.ell === NON_ELL) {
                 value = false;
               }
               $scope.notification.subjects.englishLanguageLearner = value;
             }
             if(draft.filters.sped && draft.filters.sped.length === 1) {
-              var value = true;
+              value = true;
               if(draft.filters.sped === NON_SPED) {
                 value = false;
               }
@@ -328,14 +328,14 @@ angular.module('teacherdashboard')
           }
 
           //SUBSCRIBERS
+          var subscribers = null;
           if(draft.subscribers === SAME_AS_SUBJECTS) {
-            var subscribers = angular.copy($scope.notification.subjects);
+            subscribers = angular.copy($scope.notification.subjects);
             subscribers.id = null;
             $scope.notification.subscribers = subscribers;
           } else if(draft.subscribers === ALERT_ME) {
-            var type = null;
             var userId = authentication.identity().id;
-            var subscribers = {};
+            subscribers = {};
             if(statebag.userRole === 'Student') {
               subscribers.type = SINGLE_STUDENT;
               subscribers.student = { id: userId };
@@ -388,10 +388,9 @@ angular.module('teacherdashboard')
           var results = query ? statebag.students.filter( createFilterFor(query) ) : statebag.students;
           return results;
         };
-        $scope.searchTextChange = function(text) {
+        $scope.searchTextChange = function() {
         };
-
-        $scope.selectedItemChange = function(item) {
+        $scope.selectedItemChange = function() {
         };
         //The stuff that is called on load:
         $scope.sections = [ {name: ALL_SECTIONS } ];
@@ -410,11 +409,11 @@ angular.module('teacherdashboard')
             function() {
               $scope.createDraftFromNotification();
               console.log('Unable to resolve sections');
-            })
+            });
         } else {
           $scope.sections = statebag.currentSections;
           $scope.createDraftFromNotification();
         }
       }
-    }
+    };
   }]);
