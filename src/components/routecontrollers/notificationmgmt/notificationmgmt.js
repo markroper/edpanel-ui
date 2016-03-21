@@ -31,7 +31,7 @@ angular.module('teacherdashboard')
         function(){
           var idx = 0;
           for(var i = 0; i < $scope.notifications.length; i++) {
-            if(n.id = $scope.notifications[i].id) {
+            if(n.id === $scope.notifications[i].id) {
               break;
             }
             idx++;
@@ -48,7 +48,7 @@ angular.module('teacherdashboard')
           $mdToast.simple()
             .content('Notification deletion failed')
             .action('OK')
-            .hideDelay(1500)
+            .hideDelay(1500);
         });
     };
     $scope.saveNotification = function() {

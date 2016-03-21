@@ -1,7 +1,21 @@
 'use strict';
+
+var DialogController = function($scope, $mdDialog) {
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+    //TODO: call API to create the report?
+  };
+};
+
 angular.module('teacherdashboard')
-  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra', '$mdToast',
-  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra, $mdToast) {
+  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra', '$mdToast', '$document',
+  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra, $mdToast, $document) {
     return {
       scope: {
         dashboard: '=',
@@ -55,7 +69,7 @@ angular.module('teacherdashboard')
         );
         scope.$watch(
           '$parent.d.editDashboard',
-          function( newValue, oldValue ) {
+          function( newValue ) {
             if(newValue) {
               scope.dashboardReports = scope.processDashboard();
             }
@@ -76,8 +90,8 @@ angular.module('teacherdashboard')
             scope.dimensions.push(dim.type.toLowerCase());
             scope.dimensionFields[dim.type.toLowerCase()] = dim;
           }
-          for (var j = 0; j < scope.queryComponents.availableMeasures.length; j++) {
-            var meas = scope.queryComponents.availableMeasures[j];
+          for (var k = 0; k < scope.queryComponents.availableMeasures.length; k++) {
+            var meas = scope.queryComponents.availableMeasures[k];
             if (!meas.fields) {
               meas.fields = [];
             }
@@ -90,31 +104,32 @@ angular.module('teacherdashboard')
         //Given the currently selected X and Y axis values, generate the complete set of eligible filter fields
         scope.generateTableGraph = function() {
           var g = new dijkstra.Graph();
-          for (var j = 0; j < scope.queryComponents.availableDimensions.length; j++) {
-            var dim = scope.queryComponents.availableDimensions[j];
-            var edges = {};
+          var edges = {};
+          for (var l = 0; l < scope.queryComponents.availableDimensions.length; l++) {
+            var dim = scope.queryComponents.availableDimensions[l];
+            edges = {};
             if (dim.parentDimensions) {
-              for (var k = 0; k < dim.parentDimensions.length; k++) {
-                edges[dim.parentDimensions[k]] = 1;
+              for (var m = 0; m < dim.parentDimensions.length; m++) {
+                edges[dim.parentDimensions[m]] = 1;
               }
             }
             g.addVertex(dim.type, edges);
           }
-          for (var j = 0; j < scope.queryComponents.availableMeasures.length; j++) {
-            var meas = scope.queryComponents.availableMeasures[j];
-            var edges = {};
+          for (var n = 0; n < scope.queryComponents.availableMeasures.length; n++) {
+            var meas = scope.queryComponents.availableMeasures[n];
+            edges = {};
             if (meas.compatibleDimensions) {
-              for (var k = 0; k < meas.compatibleDimensions.length; k++) {
-                edges[meas.compatibleDimensions[k]] = 1;
+              for (var o = 0; o < meas.compatibleDimensions.length; o++) {
+                edges[meas.compatibleDimensions[o]] = 1;
               }
-              for (var k = 0; k < meas.compatibleDimensions.length; k++) {
-                edges[meas.compatibleMeasures[k]] = 1;
+              for (var p = 0; p < meas.compatibleDimensions.length; p++) {
+                edges[meas.compatibleMeasures[p]] = 1;
               }
             }
             g.addVertex(meas.measure, edges);
           }
           return g;
-        }
+        };
 
         scope.resolveRhsType = function(input) {
           //Figure out the data type of the RHS user entered value
@@ -168,12 +183,12 @@ angular.module('teacherdashboard')
             scope: sc,
             controller: DialogController,
             templateUrl: api.basePrefix + '/components/directives/dashboard/reportBuilderDialog.html',
-            parent: angular.element(document.body),
+            parent: angular.element($document.body),
             targetEvent: ev,
             openFrom: ev.el,
             closeTo: ev.el,
             clickOutsideToClose:true
-          }).then(function(answer) {
+          }).then(function() {
             sc.report.chartQuery = scope.produceQueryFromQueryInProgress(sc.queryInProgress);
           }, function() {
             scope.status = 'You cancelled the dialog.';
@@ -193,6 +208,8 @@ angular.module('teacherdashboard')
         scope.produceQueryFromQueryInProgress = function(qip) {
           var aggregateMeasures = [];
           var fields = [];
+          var typeToUse = null;
+          var y = null;
           var newQuery = {
             aggregateMeasures: aggregateMeasures,
             fields: fields,
@@ -211,8 +228,8 @@ angular.module('teacherdashboard')
              */
             var xField = {};
             var x = q.x;
-            var typeToUse = x.type;
-            if(scope.measures.indexOf(x.table.toLowerCase()) != -1) {
+            typeToUse = x.type;
+            if(scope.measures.indexOf(x.table.toLowerCase()) !== -1) {
               typeToUse = 'MEASURE';
             }
             if(typeToUse === 'MEASURE') {
@@ -256,11 +273,10 @@ angular.module('teacherdashboard')
           if(q.y) {
             var ys = q.y;
             for(var i = 0; i < ys.length; i++) {
-              var y = ys[i];
+              y = ys[i];
               var yField = {};
-
-              var typeToUse = y.type;
-              if(scope.measures.indexOf(y.table.toLowerCase()) != -1) {
+              typeToUse = y.type;
+              if(scope.measures.indexOf(y.table.toLowerCase()) !== -1) {
                 typeToUse = 'MEASURE';
               }
               if(typeToUse === 'MEASURE') {
@@ -317,10 +333,10 @@ angular.module('teacherdashboard')
             }
             //Y axis columns
             if(q.y) {
-              for(var i = 0; i < q.y.length; i++) {
-                var y = q.y[i];
+              for(var e = 0; e < q.y.length; e++) {
+                y = q.y[e];
                 if(scope.measures.indexOf(y.table) === -1) {
-                  yPos = 0 + i;
+                  yPos = 0 + e;
                 }
                 var func = y.aggregation;
                 //At present all dimension y-axis fields are COUNT
@@ -340,9 +356,9 @@ angular.module('teacherdashboard')
             // { operator: 'AND', rules: [ { condition:'', data:'', field:'' }, {...} ]}
             var g = q.group;
             var operator = g.operator;
-            var filter = {};
+            var r = null;
             if(g.rules.length === 1) {
-              var r = g.rules[0];
+              r = g.rules[0];
               newQuery.filter = {
                 leftHandSide: scope.resolveLhs(r.field),
                 operator: r.condition,
@@ -354,8 +370,8 @@ angular.module('teacherdashboard')
               };
             } else {
               var currExp = {};
-              for(var i = 0; i < g.rules.length; i++) {
-                var r = g.rules[i];
+              for(var f = 0; f < g.rules.length; f++) {
+                r = g.rules[f];
                 if(r.condition && r.data && r.field) {
                   //Build the expression!
                   var exp = {
@@ -411,7 +427,7 @@ angular.module('teacherdashboard')
               .action('OK')
               .hideDelay(2000)
           );
-        }
+        };
 
         scope.saveDashboard = function() {
           var newDash = scope.produceUpdatedDashboard();
@@ -420,12 +436,12 @@ angular.module('teacherdashboard')
             api.dashboard.put(
               { schoolId: newDash.schoolId, dashboardId: newDash.id },
               newDash,
-              function(success){
+              function(){
                 scope.toast('Dashboard updated');
                 scope.dashboard = newDash;
                 scope.$parent.d.editDashboard = false;
               },
-              function(err){
+              function(){
                 scope.toast('Update failed');
               });
           } else {
@@ -439,7 +455,7 @@ angular.module('teacherdashboard')
                 scope.dashboard = newDash;
                 scope.$parent.d.editDashboard = false;
               },
-              function(err){
+              function(){
                 scope.toast('Update failed');
               });
           }
@@ -492,16 +508,3 @@ angular.module('teacherdashboard')
       }
     };
   }]);
-
-var DialogController = function($scope, $mdDialog) {
-  $scope.hide = function() {
-    $mdDialog.hide();
-  };
-  $scope.cancel = function() {
-    $mdDialog.cancel();
-  };
-  $scope.answer = function(answer) {
-    $mdDialog.hide(answer);
-    //TODO: call API to create the report?
-  };
-};

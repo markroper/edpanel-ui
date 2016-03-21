@@ -15,14 +15,14 @@ angular.module('teacherdashboard')
 
           if(!statebag.school) {
             statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(function() {
-                retrieveTeacherHomeData();
+                scope.retrieveTeacherHomeData();
             });
           }
 
           scope.showFilter=true;
           scope.hwPromise= {};
-          retrieveTeacherHomeData();
-          function retrieveTeacherHomeData() {
+          scope.retrieveTeacherHomeData();
+          scope.retrieveTeacherHomeData = function() {
             var promises = [];
             var sectionPromise = [];
             //Resolve the sections this teacher teaches
@@ -117,8 +117,7 @@ angular.module('teacherdashboard')
               });
 
             });
-
-          }
+          };
 
           /**
            * This method takes in the maps for sections and students and sets the attributes
@@ -148,7 +147,7 @@ angular.module('teacherdashboard')
               if (!attendanceMap[sectId]) {
                 totalAbsence = 0;
               } else {
-                totalAbsence = attendanceMap[sectId].total
+                totalAbsence = attendanceMap[sectId].total;
               }
               statebag.currentSections[i].Attendance = parseFloat((totalAbsence / numStudentsEnrolled).toFixed(1));
 

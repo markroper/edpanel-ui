@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$window', '$location',
-    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $window, $location) {
+  .controller('HomeCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$window',
+    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $window) {
       $scope.$on('$viewContentLoaded', function() {
-        $window.ga('send', 'pageview', { page: "/ui/schools/*" });
+        $window.ga('send', 'pageview', { page: '/ui/schools/*' });
       });
       statebag.currentPage.name = 'Student List';
       $scope.showFilter=true;

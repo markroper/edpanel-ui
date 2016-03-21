@@ -34,7 +34,7 @@ angular.module('teacherdashboard')
           return function filterFn(vegetable) {
             return angular.lowercase(vegetable).indexOf(lowercaseQuery) !== -1;
           };
-        }
+        };
 
         scope.querySearch = function(query) {
           var results = query ? scope.tableChoices.filter(createFilterFor(query)) : scope.tableChoices;
@@ -53,7 +53,7 @@ angular.module('teacherdashboard')
           } else if (input.measure) {
             return { table: input.measure, field: input.field };
           }
-        }
+        };
         scope.parseGroupFromExpression = function(exp) {
           scope.aggs = [
             { aggregation: 'COUNT', label: 'number'},
@@ -68,7 +68,7 @@ angular.module('teacherdashboard')
             'rules': []
           };
           if(!exp) {
-            return grp
+            return grp;
           }
           var op = exp.operator;
           if(op === 'OR') {
@@ -162,7 +162,7 @@ angular.module('teacherdashboard')
           } else if(query.fields && query.fields.length > pos) {
             var f = query.fields[pos - 1];
             returnVals.type = 'DIMENSION'; //type
-            returnVals.bucketAggregation = f.bucketAggregation,
+            returnVals.bucketAggregation = f.bucketAggregation;
             returnVals.table = f.dimension.toLowerCase(); //table name
             returnVals.field = f.field; //field name
           } else {
@@ -187,7 +187,7 @@ angular.module('teacherdashboard')
             }
           }
           return returnVals;
-        }
+        };
 
         scope.resolveTableFields = function(tableString) {
           var fields = [];
@@ -232,7 +232,7 @@ angular.module('teacherdashboard')
               table: aggMeas.measure.toLowerCase(),
               field: null,
               buckets: aggMeas.buckets
-            }
+            };
             scope.queryInProgress.y = [{
               aggregation: aggMeas.aggregation,
               type: 'MEASURE',
@@ -289,14 +289,14 @@ angular.module('teacherdashboard')
             });
           }
           return parents;
-        }
+        };
 
         var resolveShortestPath = function(start, end) {
           return scope.tablesGraph.
             shortestPath(start.toUpperCase(), end.toUpperCase()).
             concat([start.toUpperCase()]).
             reverse();
-        }
+        };
 
         var setScopeFilterFieldsAndTables = function() {
           var dims = [];
@@ -340,7 +340,7 @@ angular.module('teacherdashboard')
           scope.filterableTables = dims;
           scope.filterableFields = tablesToFields;
           return tablesToFields;
-        }
+        };
 
         setScopeFilterFieldsAndTables();
         scope.$watch('queryInProgress.x', function(newValue, oldValue) {
@@ -411,13 +411,13 @@ angular.module('teacherdashboard')
           if(-1 !== index) {
             scope.queryInProgress.x.buckets.splice(index, 1);
           }
-        }
+        };
 
         scope.setReportType = function(typ) {
           if(typ === 'BAR' || typ === 'SPLINE' || typ === 'PIE' || typ === 'SCATTERPLOT') {
             scope.report.type = typ;
           }
-        }
+        };
 
         scope.addXAggregation = function(x) {
           x.aggregation = 'SUM';

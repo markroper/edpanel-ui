@@ -3,7 +3,7 @@ angular.module('teacherdashboard')
 .controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll','analytics',
   function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll, analytics) {
     $scope.$on('$viewContentLoaded', function() {
-      $window.ga('send', 'pageview', { page: "/ui/schools/*/student/*" });
+      $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*' });
     });
     $scope.behaviorDeferred = $q.defer();
     $scope.behaviorDataPromise = $scope.behaviorDeferred.promise;
@@ -15,7 +15,6 @@ angular.module('teacherdashboard')
     $scope.sections = [];
     $scope.approved = [];
     $scope.pending = [];
-    console.log("Page loading");
     if(!statebag.school || !statebag.currentStudent) {
       //Resolve the school then resolve the student
       statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
@@ -33,19 +32,19 @@ angular.module('teacherdashboard')
                       statebag.currentStudent = d;
                     }
                   });
-                  resolveAllData();
+                  $scope.resolveAllData();
                 });
             });
         });
     } else {
-      resolveAllData();
+      $scope.resolveAllData();
     }
     $scope.scrollToCard = function(idName) {
       $location.hash('section-card-' + idName);
       $anchorScroll();
     };
 
-    function resolveAllData() {
+    $scope.resolveAllData = function() {
       $scope.terms = statebag.currentYear.terms;
       for(var i = 0; i < $scope.terms.length; i++) {
         if($scope.terms[i].id === statebag.currentTerm.id) {
@@ -63,7 +62,7 @@ angular.module('teacherdashboard')
       resolveBehaviorData();
       resolveStudentGpa();
       resolveGoals();
-    }
+    };
 
     function resolveGoals() {
       api.studentGoals.get(

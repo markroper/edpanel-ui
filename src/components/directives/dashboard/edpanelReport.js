@@ -9,7 +9,7 @@ angular.module('teacherdashboard')
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/dashboard/edpanelReport.html',
       replace: true,
-      link: function(scope, elem) {
+      link: function(scope) {
         scope.failureControl = {};
         scope.dataDeferred = $q.defer();
         scope.dataPromise = scope.dataDeferred.promise;
@@ -23,7 +23,7 @@ angular.module('teacherdashboard')
           scope.retrieveChartquery();
         });
         var isFirst = true;
-        scope.$watch('demographic', function(newVal, oldVal) {
+        scope.$watch('demographic', function() {
           if(isFirst) {
             isFirst = false;
           } else {
@@ -89,11 +89,11 @@ angular.module('teacherdashboard')
           } else if(scope.demographic === 'Gender') {
             angular.forEach(resultsObject, function(value, key) {
               var currArray = [];
-              if(key == 0) {
+              if(key === 0) {
                 currArray.push('Male');
-              } else if( key == 1) {
+              } else if( key === 1) {
                 currArray.push('Female');
-              } else if(key == 2) {
+              } else if(key === 2) {
                 currArray.push('Unknown');
               }
               currArray = currArray.concat(value);
@@ -154,12 +154,12 @@ angular.module('teacherdashboard')
           var week = Number(yearWeek.toString().substring(4)) + 1;
           var dt = $window.moment().year(year).week(week).format('YYYY-MM-DD');
           return dt;
-        }
+        };
 
         /**
          * makes the initial request for data and resolves the promise with the chart data
          */
-        scope.retrieveChartquery = function(isUpdate) {
+        scope.retrieveChartquery = function() {
           scope.usableQuery = angular.copy(scope.report.chartQuery);
           scope.dataDeferred = $q.defer();
           scope.dataPromise = scope.dataDeferred.promise;
@@ -201,13 +201,13 @@ angular.module('teacherdashboard')
             }
           }
           if(scope.usableQuery.fields) {
-            for(var i = 0; i < scope.usableQuery.fields.length; i++) {
-              var field = ' ' + scope.usableQuery.fields[i].field.toLowerCase();
+            for(var j = 0; j < scope.usableQuery.fields.length; j++) {
+              var field = ' ' + scope.usableQuery.fields[j].field.toLowerCase();
               if(field === ' id') {
                 field = '';
               }
               scope.chartData.push([
-                scope.usableQuery.fields[i].dimension.toLowerCase() + field + 's' ]);
+                scope.usableQuery.fields[j].dimension.toLowerCase() + field + 's' ]);
             }
           }
           //Fire off the initial chart query
@@ -223,7 +223,7 @@ angular.module('teacherdashboard')
               var xPosition = 0;
               var yPosition = records[0].values.length - 1;
               var seriesPosition = null;
-              if(yPosition > 1 && scope.usableQuery.aggregateMeasures.length == 1) {
+              if(yPosition > 1 && scope.usableQuery.aggregateMeasures.length === 1) {
                 seriesPosition = yPosition - 1;
               }
 
@@ -235,14 +235,15 @@ angular.module('teacherdashboard')
                 }
                 var resultsObject = {};
                 var xAxis = ['counts'];
+                var singleRow = null;
                 if(scope.usableQuery.aggregateMeasures &&
                   scope.usableQuery.aggregateMeasures[0].buckets &&
                   !scope.usableQuery.aggregateMeasures[0].bucketAggregation) {
                   for(var i = 0; i < scope.usableQuery.aggregateMeasures[0].buckets.length; i++) {
                     xAxis.push(scope.usableQuery.aggregateMeasures[0].buckets[i].label);
                   }
-                  for (var i = 0; i < records.length; i++) {
-                    var singleRow = records[i].values;
+                  for (var k = 0; k < records.length; k++) {
+                    singleRow = records[k].values;
                     if (!resultsObject[singleRow[seriesPosition]]) {
                       resultsObject[singleRow[seriesPosition]] = [];
                       while(resultsObject[singleRow[seriesPosition]].length < xAxis.length) {
@@ -257,9 +258,9 @@ angular.module('teacherdashboard')
                   if(200000 < records[0].values[xPosition] && 300000 > records[0].values[xPosition]) {
                     isWeek = true;
                   }
-                  for (var i = 0; i < records.length; i++) {
+                  for (var l = 0; l < records.length; l++) {
                     //If the query has buckets, resolve the x-axis array
-                    var singleRow = records[i].values;
+                    singleRow = records[l].values;
                     if (!resultsObject[singleRow[seriesPosition]]) {
                       resultsObject[singleRow[seriesPosition]] = [];
                     }
@@ -294,15 +295,15 @@ angular.module('teacherdashboard')
                   for(var s = 0; s < scope.usableQuery.subqueryColumnsByPosition.length; s++) {
                     var curr = scope.usableQuery.subqueryColumnsByPosition[s];
                     if(curr.position === -1) {
-                      newChartDataArray.push(scope.chartData[0])
+                      newChartDataArray.push(scope.chartData[0]);
                     } else {
                       newChartDataArray.push(scope.chartData[curr.position]);
                     }
                   }
                   scope.chartData = newChartDataArray;
                 }
-                for (var i = 0; i < results.records.length; i++) {
-                  var row = results.records[i].values;
+                for (var z = 0; z < results.records.length; z++) {
+                  var row = results.records[z].values;
                   var len = scope.chartData.length;
                   for (var j = 0; j < len; j++) {
                     if (j === 0) {
@@ -334,21 +335,21 @@ angular.module('teacherdashboard')
           }
           //LHS
           if(exp.leftHandSide.type === 'PLACEHOLDER_NUMERIC') {
-            exp.leftHandSide = { 'type': 'NUMERIC', 'value': regexValues[exp.leftHandSide.value] }
+            exp.leftHandSide = { 'type': 'NUMERIC', 'value': regexValues[exp.leftHandSide.value] };
           } else if(exp.leftHandSide.type === 'PLACEHOLDER_STRING') {
-            exp.leftHandSide = { 'type': 'STRING', 'value': regexValues[exp.leftHandSide.value] }
+            exp.leftHandSide = { 'type': 'STRING', 'value': regexValues[exp.leftHandSide.value] };
           } else if(exp.leftHandSide.type === 'PLACEHOLDER_DATE') {
-            exp.leftHandSide = { 'type': 'DATE', 'value': regexValues[exp.leftHandSide.value] }
+            exp.leftHandSide = { 'type': 'DATE', 'value': regexValues[exp.leftHandSide.value] };
           }
           //RHS
           if(exp.rightHandSide.type === 'PLACEHOLDER_NUMERIC') {
-            exp.rightHandSide = { 'type': 'NUMERIC', 'value': regexValues[exp.rightHandSide.value] }
+            exp.rightHandSide = { 'type': 'NUMERIC', 'value': regexValues[exp.rightHandSide.value] };
           } else if(exp.rightHandSide.type === 'PLACEHOLDER_STRING') {
-            exp.rightHandSide = { 'type': 'STRING', 'value': regexValues[exp.rightHandSide.value] }
+            exp.rightHandSide = { 'type': 'STRING', 'value': regexValues[exp.rightHandSide.value] };
           } else if(exp.rightHandSide.type === 'PLACEHOLDER_DATE') {
-            exp.rightHandSide = { 'type': 'DATE', 'value': regexValues[exp.rightHandSide.value] }
+            exp.rightHandSide = { 'type': 'DATE', 'value': regexValues[exp.rightHandSide.value] };
           }
-        }
+        };
 
         var resolveRegexReplaceValues = function(d) {
           var index = d.index;
