@@ -1,7 +1,24 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('notificationcard', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile',
-    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile) {
+  //WORKING AROUND ng-click auto closing my menu on click
+  .directive('edpanelClick', function ($parse) {
+    return {
+      restrict: 'A',
+      compile: function ($element, attrs) {
+        var fn = $parse(attrs.edpanelClick, null, true);
+        return function myClick(scope, element) {
+          element.on('click', function (event) {
+            var callback = function () {
+              fn(scope, { $event: event });
+            };
+            scope.$apply(callback);
+          });
+        };
+      }
+    };
+  })
+  .directive('notificationcard', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile','$mdMenu',
+    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile, $mdMenu) {
       return {
         scope: {
           notification: '=',
@@ -170,40 +187,45 @@ angular.module('teacherdashboard')
           $scope.dismissNotification = function() {
             var supressToast = true;
 
-            api.dismissTriggeredNotification.put(
-              {
-                notificationId: $scope.notification.notification.id,
-                triggeredId: $scope.notification.id,
-                userId: authentication.identity().id
-              },
-              {},
-              //Success callback
-              function(){
-                var index = $scope.notificationList.indexOf($scope.notification);
-                if (index != -1) {
-                  $scope.notificationList.splice(index,1);
-                }
+            var index = $scope.notificationList.indexOf($scope.notification);
+            if (index != -1) {
+              $scope.notificationList.splice(index,1);
+            }
 
-                if(!supressToast) {
-                  $mdToast.show(
-                    $mdToast.simple()
-                      .content('Notification dismissed')
-                      .action('OK')
-                      .hideDelay(1500)
-                  );
-                }
-              },
-              //Error callback
-              function() {
-                if(!supressToast) {
-                  $mdToast.show(
-                    $mdToast.simple()
-                      .content('Failed to reach server :(')
-                      .action('OK')
-                      .hideDelay(1500)
-                  );
-                }
-              });
+            //api.dismissTriggeredNotification.put(
+            //  {
+            //    notificationId: $scope.notification.notification.id,
+            //    triggeredId: $scope.notification.id,
+            //    userId: authentication.identity().id
+            //  },
+            //  {},
+            //  //Success callback
+            //  function(){
+            //    var index = $scope.notificationList.indexOf($scope.notification);
+            //    if (index != -1) {
+            //      $scope.notificationList.splice(index,1);
+            //    }
+            //
+            //    if(!supressToast) {
+            //      $mdToast.show(
+            //        $mdToast.simple()
+            //          .content('Notification dismissed')
+            //          .action('OK')
+            //          .hideDelay(1500)
+            //      );
+            //    }
+            //  },
+            //  //Error callback
+            //  function() {
+            //    if(!supressToast) {
+            //      $mdToast.show(
+            //        $mdToast.simple()
+            //          .content('Failed to reach server :(')
+            //          .action('OK')
+            //          .hideDelay(1500)
+            //      );
+            //    }
+            //  });
           };
 
           $scope.dismissAll = function() {
@@ -239,12 +261,18 @@ angular.module('teacherdashboard')
             $state.go('app.myNotifications', { schoolId: $state.params.schoolId});
           };
           $scope.goToNotifLocation = function() {
+            $mdMenu.hide();
+            //Evaluate the notification type, and then send us to the right spot
+
             console.log("TEST");
             console.log($scope.notification);
-            $state.go('app.student', {
-              schoolId: $state.params.schoolId,
-              studentId: $scope.notification.subjectUserId,
-              tab: 4});
+            if (typeof $scope.notification.notification.goal !== 'undefined') {
+              $state.go('app.student', {
+                schoolId: $state.params.schoolId,
+                studentId: $scope.notification.subjectUserId,
+                tab: 4});
+            }
+
           };
 
           $scope.toggleDetails = function(notification, $event) {

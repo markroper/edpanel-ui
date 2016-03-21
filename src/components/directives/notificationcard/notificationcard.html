@@ -1,6 +1,6 @@
 <div class="notificationcard" layout="column" layout-fill edpanel-click="toggleDetails(notification, $event)">
-  <md-card style="margin-top: 4px; margin-bottom: 4px" ng-click="goToNotifLocation()">
-  <div md-prevent-menu-close="md-prevent-menu-close" ng-click="dismissNotification()" aria-label="close" class="close-notification-details md-icon-button">
+  <md-card md-prevent-menu-close="md-prevent-menu-close" style="margin-top: 4px; margin-bottom: 4px" ng-click="goToNotifLocation()">
+  <div md-prevent-menu-close="md-prevent-menu-close" edpanel-click="dismissNotification()" aria-label="close" class="close-notification-details md-icon-button">
     <md-icon md-font-set="material-icons">close</md-icon>
     </div>
   <div ng-show="!notification.notification.goal" style="padding:15px;" layout="column" class="notification-desc" layout-wrap>
