@@ -160,6 +160,13 @@ angular.module('teacherdashboard')
           'get': {isArray: true},
           'post': {method: 'POST', headers: {'Content-Type': 'application/json'}}
         }),
+      createGoalNotifications: $resource(
+        base + '/notifications/schools/:schoolId/students/:studentId/goals/:goalId',
+        {},
+        {
+          'post' : { method:'POST', headers: {'Content-Type': 'application/json'} }
+        }
+      ),
       editStudentGoal: $resource(
         base + '/students/:studentId/goals/:goalId',
         {},

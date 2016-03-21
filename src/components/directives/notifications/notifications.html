@@ -11,7 +11,12 @@
         <span>EdPanel Notifications</span>
         <md-icon class="material-icons md-24 notification-settings-icon" ng-click="dismissAll()">clear_all<md-tooltip>dismiss all</md-tooltip></md-icon>
       </div>
-      <md-list class="notification-list"></md-list>
+      <md-list class="notification-list">
+        <md-list-item style="padding:0px" layout="column" layout-align="start start" ng-repeat="n in notificationList">
+          <notificationcard notification="n" notification-list="notificationList">
+          </notificationcard>
+          </md-list-item>
+      </md-list>
     </md-menu-content>
   </md-menu>
 </md-menu-bar>

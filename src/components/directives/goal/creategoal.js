@@ -128,6 +128,17 @@ angular.module('teacherdashboard')
                 goalToMake.id = results.id;
                 showSimpleToast('Goal created successfully');
                 $scope.pendingGoals.push(goalToMake);
+                api.createGoalNotifications.post(
+                  {
+                    schoolId: statebag.school.id,
+                    studentId: statebag.currentStudent.id,
+                    goalId: results.id
+                  },
+                  {},
+                  function(results) {
+                    console.log(results);
+                  }
+                )
               },
               function() {
                 showSimpleToast('There was a problem creating the goal');

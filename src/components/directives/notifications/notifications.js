@@ -17,8 +17,8 @@ angular.module('teacherdashboard')
       }
     };
   })
-  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile',
-    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile) {
+  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile','$mdMenu',
+    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile,$mdMenu) {
       return {
         scope: {
           notificationList: '='
@@ -27,6 +27,9 @@ angular.module('teacherdashboard')
         templateUrl: api.basePrefix + '/components/directives/notifications/notifications.html',
         replace: true,
         link: function ($scope, $elem) {
+          $scope.removalfunction = function() {
+            console.log("FSDFDSFDS");
+          }
           var currentNotification;
           $scope.notificationTypes = consts.notificationTypes;
           $scope.summaryTypes = {
@@ -50,32 +53,16 @@ angular.module('teacherdashboard')
             return returnVal;
           };
           $scope.message = { body: '' };
-          var listMarkup = '<md-list-item layout="column" layout-align="start start" ng-repeat="n in notificationList">'+
-          '<div flex class="notification md-list-item-text md-whiteframe-1dp" layout="column" layout-fill edpanel-click="toggleDetails(n, $event)">' +
-          '<div edpanel-click="dismissNotification($index, $event)" aria-label="close" class="close-notification-details md-icon-button">' +
-          '<md-icon md-font-set="material-icons">close</md-icon>' +
-          '</div>' +
-          '<div style="padding:15px;" layout="column" class="notification-desc" layout-wrap>' +
-          '<span class="md-subhead no-select">{{::n.notification.name}}</span>' +
-          '<span class="md-body-1">{{::notificationTypes[n.notification.measure]}} for {{::groupTypes(n)}}</span>' +
-          '<span class="md-body-1 notification-detail">The notification threshold of {{::formatNumber(n.notification.triggerValue, n)}} <span ng-show="summaryTypes[n.notification.subjects.type]">{{::aggFunctions[n.notification.aggregateFunction]}}</span>was crossed on {{::n.triggeredDate}} with the value {{::formatNumber(n.valueWhenTriggered, n)}}.</span>'+
-          '</div>' +
-          '<div ng-if="n.active" layout="column" layout-fill>' +
-            '<div class="message-container">' +
-            '<md-input-container class="md-block">'+
-            '<label>Message to {{::groupTypes(n)}}</label>' +
-            '<textarea ng-model="message.body" columns="1" md-maxlength="250" rows="5"></textarea>' +
-            '</md-input-container></div>' +
-          '<!--<div class="detailed-content"ng-show="n.active" layout layout-align="center center">DETAILED CONTENT HERE</div>-->' +
-          '<div layout layout-align="center center">' +
-          '<md-button class="notification-action" ng-click="sendMessage(n)">send message</md-button>' +
-          '<md-button class="notification-action" ng-disabled="true">set related goal</md-button>' +
-          '</div>' +
-          '</div>' +
-          '</div>' +
-          '</md-list-item>';
           $scope.renderNotifications = function() {
-            $elem.find('.notification-list').append($compile(listMarkup)($scope));
+            if ($scope.isOpen) {
+              $scope.isOpen = false;
+              $mdMenu.hide();
+            } else {
+              $scope.isOpen = true;
+            }
+
+            console.log($scope.notificationList);
+            //$elem.find('.notification-list').append($compile(listMarkup)($scope));
           };
           $scope.sendMessage = function(n) {
             if(!n.subjectUserId) {
@@ -163,71 +150,6 @@ angular.module('teacherdashboard')
             }
           };
 
-          $scope.dismissNotification = function(index, $event, supressToast) {
-            if($event) {
-              $event.stopPropagation();
-            }
-            var n = $scope.notificationList[index];
-            api.dismissTriggeredNotification.put(
-              {
-                notificationId: n.notification.id,
-                triggeredId: n.id,
-                userId: authentication.identity().id
-              },
-              {},
-              //Success callback
-              function(){
-                $scope.notificationList.splice(index, 1);
-                if(!supressToast) {
-                  $mdToast.show(
-                    $mdToast.simple()
-                      .content('Notification dismissed')
-                      .action('OK')
-                      .hideDelay(1500)
-                  );
-                }
-              },
-              //Error callback
-              function() {
-                if(!supressToast) {
-                  $mdToast.show(
-                    $mdToast.simple()
-                      .content('Failed to reach server :(')
-                      .action('OK')
-                      .hideDelay(1500)
-                  );
-                }
-              });
-          };
-
-          $scope.dismissAll = function() {
-            if($scope.notificationList) {
-              var remaining = [];
-              for (var i = 0; i < $scope.notificationList.length; i++) {
-                var n = $scope.notificationList[i];
-                api.dismissTriggeredNotification.put(
-                  {
-                    notificationId: n.notification.id,
-                    triggeredId: n.id,
-                    userId: authentication.identity().id
-                  },
-                  {},
-                  //Success callback
-                  function(){},
-                  //Error callback
-                  function() {
-                    remaining.push(n);
-                    $mdToast.show(
-                      $mdToast.simple()
-                        .content('Failed to dismiss notification ' + n.name)
-                        .action('OK')
-                        .hideDelay(1500)
-                    );
-                  });
-              }
-              $scope.notificationList = remaining;
-            }
-          };
 
           $scope.goToNotifications = function() {
             $state.go('app.myNotifications', { schoolId: $state.params.schoolId });
