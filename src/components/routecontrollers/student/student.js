@@ -32,19 +32,19 @@ angular.module('teacherdashboard')
                       statebag.currentStudent = d;
                     }
                   });
-                  $scope.resolveAllData();
+                  resolveAllData();
                 });
             });
         });
     } else {
-      $scope.resolveAllData();
+      resolveAllData();
     }
     $scope.scrollToCard = function(idName) {
       $location.hash('section-card-' + idName);
       $anchorScroll();
     };
 
-    $scope.resolveAllData = function() {
+    function resolveAllData() {
       $scope.terms = statebag.currentYear.terms;
       for(var i = 0; i < $scope.terms.length; i++) {
         if($scope.terms[i].id === statebag.currentTerm.id) {
@@ -62,7 +62,7 @@ angular.module('teacherdashboard')
       resolveBehaviorData();
       resolveStudentGpa();
       resolveGoals();
-    };
+    }
 
     function resolveGoals() {
       api.studentGoals.get(
