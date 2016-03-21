@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra',
-  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra) {
+  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra', '$mdToast',
+  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra, $mdToast) {
     return {
       scope: {
         dashboard: '=',
@@ -49,6 +49,14 @@ angular.module('teacherdashboard')
           'dashboard',
           function( newValue, oldValue ) {
             if(newValue && !angular.equals(newValue, oldValue)) {
+              scope.dashboardReports = scope.processDashboard();
+            }
+          }
+        );
+        scope.$watch(
+          '$parent.d.editDashboard',
+          function( newValue, oldValue ) {
+            if(newValue) {
               scope.dashboardReports = scope.processDashboard();
             }
           }
@@ -166,7 +174,7 @@ angular.module('teacherdashboard')
             closeTo: ev.el,
             clickOutsideToClose:true
           }).then(function(answer) {
-            var newQuery = scope.produceQueryFromQueryInProgress(sc.queryInProgress);
+            sc.report.chartQuery = scope.produceQueryFromQueryInProgress(sc.queryInProgress);
           }, function() {
             scope.status = 'You cancelled the dialog.';
           });
@@ -288,7 +296,7 @@ angular.module('teacherdashboard')
             if( scope.measures.indexOf(q.x.table) !== -1 ) {
               //TODO: Should this be based on the number of measures from the y-cols?
               xCol.position = 1;
-              if(q.x.buckets) {
+              if(q.x.buckets && q.x.buckets.bucketAggregation) {
                 xCol.position++;
               }
             }
@@ -396,13 +404,50 @@ angular.module('teacherdashboard')
           scope.dashboardReports.splice(idx, 1);
         };
 
+        scope.toast = function(msg) {
+          $mdToast.show(
+            $mdToast.simple()
+              .content(msg)
+              .action('OK')
+              .hideDelay(2000)
+          );
+        }
+
         scope.saveDashboard = function() {
-          scope.$parent.editDashboard = false;
+          var newDash = scope.produceUpdatedDashboard();
+          if(newDash.id) {
+            //update
+            api.dashboard.put(
+              { schoolId: newDash.schoolId, dashboardId: newDash.id },
+              newDash,
+              function(success){
+                scope.toast('Dashboard updated');
+                scope.dashboard = newDash;
+                scope.$parent.d.editDashboard = false;
+              },
+              function(err){
+                scope.toast('Update failed');
+              });
+          } else {
+            //create
+            api.dashboard.post(
+              { schoolId: newDash.schoolId },
+              newDash,
+              function(success){
+                scope.toast('Dashboard updated');
+                newDash.id = success.id;
+                scope.dashboard = newDash;
+                scope.$parent.d.editDashboard = false;
+              },
+              function(err){
+                scope.toast('Update failed');
+              });
+          }
         };
 
         scope.cancelChanges = function() {
           scope.dashboardReports = scope.processDashboard();
-          scope.$parent.editDashboard = false;
+          scope.$parent.d.editDashboard = false;
         };
         scope.processDashboard = function() {
           var gridsterData = [];
@@ -423,6 +468,26 @@ angular.module('teacherdashboard')
             }
           }
           return gridsterData;
+        };
+        scope.produceUpdatedDashboard = function() {
+          var newDash = {
+            schoolId: statebag.school.id,
+            name: scope.dashboard.name,
+            id: scope.dashboard.id,
+            rows: []
+          };
+          if(scope.dashboardReports) {
+            for(var i = 0; i < scope.dashboardReports.length; i++) {
+              var gridEl = scope.dashboardReports[i];
+              while(newDash.rows.length <= gridEl.row) {
+                newDash.rows.push({ reports: [] });
+              }
+              var newRpt = angular.copy(gridEl.report);
+              newRpt.type = newRpt.type.toUpperCase();
+              newDash.rows[gridEl.row].reports.unshift(newRpt);
+            }
+          }
+          return newDash;
         };
       }
     };
