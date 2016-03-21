@@ -54,7 +54,7 @@ angular.module('teacherdashboard')
           mobileBreakPoint: 800,
           draggable: {
             enabled: true,
-            handle: '.handle'
+            handle: '.chart-type'
           }
         };
 
