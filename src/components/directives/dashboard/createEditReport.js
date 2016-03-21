@@ -160,7 +160,7 @@ angular.module('teacherdashboard')
             returnVals.bucketAggregation = query.fields[0].bucketAggregation;
             returnVals.field = '*';  //field name
           } else if(query.fields && query.fields.length > pos) {
-            var f = query.fields[pos - 1];
+            var f = query.fields[pos];
             returnVals.type = 'DIMENSION'; //type
             returnVals.bucketAggregation = f.bucketAggregation;
             returnVals.table = f.dimension.toLowerCase(); //table name
@@ -173,7 +173,7 @@ angular.module('teacherdashboard')
             //TODO: subtract extra values for the bucket...
             var bucketNum = 0;
             for(var i = 0; i < query.aggregateMeasures.length; i++) {
-              if(query.aggregateMeasures[i].buckets) {
+              if(query.aggregateMeasures[i].buckets && query.aggregateMeasures[i].bucketAggregation) {
                 bucketNum++;
               }
             }
@@ -375,7 +375,7 @@ angular.module('teacherdashboard')
 
         scope.reportTempl = '<edpanel-report report="currentReport" terms="terms" flex="100"></edpanel-report>';
         scope.noReportTempl =
-          '<div class="md-headline" flex="100" layout layout-align="center center">No preview, chart defintion incomplete</div>' +
+          '<div class="md-headline" flex="100" layout layout-align="center center">No preview, chart definition incomplete</div>' +
           '<md-icon class="live-preview-icon" aria-label="show chart">show_chart</md-icon>';
 
         scope.currentReport = angular.copy(scope.report);

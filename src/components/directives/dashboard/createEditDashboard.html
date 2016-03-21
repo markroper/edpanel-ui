@@ -4,17 +4,19 @@
       <label>Dashboard name</label>
       <input class="md-headline" ng-model="dashboard.name">
     </md-input-container>
-    <md-button class="md-icon-button" ng-click="createNewReport()">
+  </div>
+  <div style="position:fixed; top:65px; right:10px; z-index: 1000">
+    <md-button class="md-fab md-primary" ng-click="createNewReport()">
       <md-icon>add</md-icon>
-      <md-tooltip>add new report to dashboard</md-tooltip>
+      <md-tooltip>add new report</md-tooltip>
     </md-button>
-    <md-button class="md-icon-button" ng-click="saveDashboard()">
+    <md-button class="md-fab md-primary" ng-click="saveDashboard()">
       <md-icon>save</md-icon>
-      <md-tooltip>save changes to dashboard</md-tooltip>
+      <md-tooltip>save dashboard changes</md-tooltip>
     </md-button>
-    <md-button class="md-icon-button md-warn" ng-click="cancelChanges()">
+    <md-button class="md-fab md-warn" ng-click="cancelChanges()">
       <md-icon>cancel</md-icon>
-      <md-tooltip>cancel and do not save changes</md-tooltip>
+      <md-tooltip>cancel, don't save</md-tooltip>
     </md-button>
   </div>
   <div gridster="gridsterOpts">
