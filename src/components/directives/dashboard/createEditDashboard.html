@@ -5,7 +5,7 @@
       <input class="md-headline" ng-model="dashboard.name">
     </md-input-container>
   </div>
-  <div style="position:fixed; top:65px; right:10px; z-index: 1000">
+  <div style="position:fixed; top:65px; right:10px; z-index: 70">
     <md-button class="md-fab md-primary" ng-click="createNewReport()">
       <md-icon>add</md-icon>
       <md-tooltip>add new report</md-tooltip>
@@ -21,17 +21,17 @@
   </div>
   <div gridster="gridsterOpts">
     <ul>
-        <li gridster-item="item"
-            ng-repeat="item in dashboardReports"
-            ng-class="item.report.type.toLowerCase()">
-          <div layout="column" layout-align="space-between center" layout-fill layout-wrap class="chart-type" ng-class="item.report.type.toLowerCase()">
-            <h3 layout="row" class="md-headline handle" layout-align="center start">{{item.report.name}}</h3>
-            <div class="report-buttons" layout="row" layout-align="space-around center">
-              <md-button class="md-raised" ng-click="editReport($event, item.report)">Edit</md-button>
-              <md-button class="md-raised md-warn" ng-click="deleteReport($event, item)">Delete</md-button>
-            </div>
+      <li gridster-item="item"
+          ng-repeat="item in dashboardReports"
+          ng-class="item.report.type.toLowerCase()">
+        <div layout="column" layout-align="space-between center" layout-fill layout-wrap class="chart-type" ng-class="item.report.type.toLowerCase()">
+          <h3 layout="row" class="md-headline handle" layout-align="center start">{{item.report.name}}</h3>
+          <div class="report-buttons" layout="row" layout-align="space-around center">
+            <md-button class="md-raised" ng-click="editReport($event, item.report)">Edit</md-button>
+            <md-button class="md-raised md-warn" ng-click="deleteReport($event, item)">Delete</md-button>
           </div>
-        </li>
+        </div>
+      </li>
     </ul>
   </div>
 </div>
