@@ -366,7 +366,8 @@ angular.module('teacherdashboard')
 
         //Debounced to prevent DOM & API thrashing as users type in input
         scope.applyReportChanges = debounce(1750, function(q) {
-          if(q && q.aggregateMeasures && q.aggregateMeasures.length >= 1) {
+          if((q && q.aggregateMeasures && q.aggregateMeasures.length >= 1) ||
+            (q && q.fields && q.fields.length >= 2)) {
             scope.appendToReportPreview(scope.reportTempl);
           } else {
             scope.appendToReportPreview(scope.noReportTempl);

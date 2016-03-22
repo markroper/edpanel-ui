@@ -8,7 +8,7 @@
         <div layout="row" layout-wrap layout-align="center start" class="grade-container">
           <div flex="none" class="grade-goal" style="position: relative">
             <h3 class="md-subhead">Current Grade</h3>
-            <div id="gauge-{{::section.id}}" class="goal-gauge" style="height: 175px"></div>
+            <div id="gauge-{{::section.id + '-section'}}" class="goal-gauge" style="height: 175px"></div>
             <div layout="row" flex="none" class="current-grade grade-item">
               <div ng-repeat="termGrade in section.termGrades" flex layout="column">
                 <div class="md-subhead">{{::termGrade.name}}</div>
