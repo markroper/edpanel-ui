@@ -192,40 +192,40 @@ angular.module('teacherdashboard')
               $scope.notificationList.splice(index,1);
             }
 
-            //api.dismissTriggeredNotification.put(
-            //  {
-            //    notificationId: $scope.notification.notification.id,
-            //    triggeredId: $scope.notification.id,
-            //    userId: authentication.identity().id
-            //  },
-            //  {},
-            //  //Success callback
-            //  function(){
-            //    var index = $scope.notificationList.indexOf($scope.notification);
-            //    if (index != -1) {
-            //      $scope.notificationList.splice(index,1);
-            //    }
-            //
-            //    if(!supressToast) {
-            //      $mdToast.show(
-            //        $mdToast.simple()
-            //          .content('Notification dismissed')
-            //          .action('OK')
-            //          .hideDelay(1500)
-            //      );
-            //    }
-            //  },
-            //  //Error callback
-            //  function() {
-            //    if(!supressToast) {
-            //      $mdToast.show(
-            //        $mdToast.simple()
-            //          .content('Failed to reach server :(')
-            //          .action('OK')
-            //          .hideDelay(1500)
-            //      );
-            //    }
-            //  });
+            api.dismissTriggeredNotification.put(
+              {
+                notificationId: $scope.notification.notification.id,
+                triggeredId: $scope.notification.id,
+                userId: authentication.identity().id
+              },
+              {},
+              //Success callback
+              function(){
+                var index = $scope.notificationList.indexOf($scope.notification);
+                if (index != -1) {
+                  $scope.notificationList.splice(index,1);
+                }
+
+                if(!supressToast) {
+                  $mdToast.show(
+                    $mdToast.simple()
+                      .content('Notification dismissed')
+                      .action('OK')
+                      .hideDelay(1500)
+                  );
+                }
+              },
+              //Error callback
+              function() {
+                if(!supressToast) {
+                  $mdToast.show(
+                    $mdToast.simple()
+                      .content('Failed to reach server :(')
+                      .action('OK')
+                      .hideDelay(1500)
+                  );
+                }
+              });
           };
 
           $scope.dismissAll = function() {
@@ -263,12 +263,10 @@ angular.module('teacherdashboard')
           $scope.goToNotifLocation = function() {
             $mdMenu.hide();
             //Evaluate the notification type, and then send us to the right spot
-
-            console.log("TEST");
-            console.log($scope.notification);
+            $scope.dismissNotification();
             if (typeof $scope.notification.notification.goal !== 'undefined') {
               $state.go('app.student', {
-                schoolId: $state.params.schoolId,
+                schoolId: $scope.notification.notification.schoolId,
                 studentId: $scope.notification.subjectUserId,
                 tab: 4});
             }
