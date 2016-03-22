@@ -194,7 +194,7 @@
     <!-- CHART FILTERS -->
     <div flex="100" layout layout-align="center center" class="filter-row" ng-if="queryInProgress.group.rules.length && queryInProgress.x.table && queryInProgress.y[0].table">
       <div layout="column" layout-align="center center" class="filter-row">
-        <md-button ng-click="group.rules = []" aria-label="close" class="close-cal md-icon-button">
+        <md-button ng-click="removeFilter()" aria-label="close" class="close-cal md-icon-button">
           <md-icon md-font-set="material-icons">close</md-icon>
         </md-button>
         <h3 layout layout-align="center center" class="md-headline expression-title">Include only results matching the filter conditions</h3>

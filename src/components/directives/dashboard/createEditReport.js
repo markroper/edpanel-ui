@@ -113,7 +113,7 @@ angular.module('teacherdashboard')
         };
 
         scope.addRuleToGroup = function() {
-            if(!scope.queryInProgress.group.rules) {
+          if(!scope.queryInProgress.group.rules) {
             scope.queryInProgress.group.rules = [];
           }
           scope.queryInProgress.group.rules.push({
@@ -437,6 +437,10 @@ angular.module('teacherdashboard')
         scope.removeSeries = function() {
           scope.queryInProgress.series = null;
         };
+
+        scope.removeFilter = function() {
+          scope.queryInProgress.group.rules = null;
+        }
       }
     };
   }]);
