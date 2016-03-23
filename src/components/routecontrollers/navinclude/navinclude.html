@@ -54,6 +54,7 @@
         <md-button ng-show="userRole !== 'Student' && userRole !== 'Guardian'" class="md-primary nav-item md-ink-ripple" ng-click="goToNotifications()"><span>My Notifications</span></md-button>
         <md-button ng-show="userRole !== 'Student' && userRole !== 'Guardian'" class="md-primary nav-item md-ink-ripple" ng-click="goToMySurveys()"><span>My Surveys</span></md-button>
         <md-button ng-show="userRole === 'Student'"class="md-primary nav-item md-ink-ripple" ng-click="goToMySurveyResponses()"><span>My Survey Responses</span></md-button>
+        <md-button ng-show="userRole !== 'Student' && userRole !== 'Guardian'" class="md-primary nav-item md-ink-ripple" ng-click="goToMyStudentsGoals()"><span>My Student's Goals</span></md-button>
         <md-button ng-disabled="true" class="md-primary nav-item md-ink-ripple">Saved Reports</md-button>
         <md-button ng-disabled="true" class="md-primary nav-item md-ink-ripple">Report Builder</md-button>
         <md-divider></md-divider>

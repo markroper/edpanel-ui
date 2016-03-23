@@ -209,7 +209,19 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
             roles.SUPER_ADMIN
           ]
         }
-      });
+      })
+    .state('app.advisorGoals', {
+      url: 'schools/:schoolId/staff/:staffId/goals',
+      templateUrl: rootUrl + '/components/routecontrollers/advisorgoals/advisorgoals.html',
+      controller: 'AdvisorGoalsCtrl',
+      data: {
+        roles: [
+          roles.ADMIN,
+          roles.TEACHER,
+          roles.SUPER_ADMIN
+        ]
+      }
+    });
 
     $urlRouterProvider.otherwise(rootUrl + '/');
 
