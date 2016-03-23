@@ -6,12 +6,15 @@ angular.module('teacherdashboard')
       restrict: 'A',
       compile: function ($element, attrs) {
         var fn = $parse(attrs.edpanelClick, null, true);
+
         return function myClick(scope, element) {
           element.on('click', function (event) {
             var callback = function () {
               fn(scope, { $event: event });
             };
             scope.$apply(callback);
+            event.stopPropagation();
+
           });
         };
       }
@@ -217,10 +220,10 @@ angular.module('teacherdashboard')
               });
           };
           $scope.goToNotifLocation = function() {
-            $mdMenu.hide();
             //Evaluate the notification type, and then send us to the right spot
             $scope.dismissNotification();
             if ($scope.notification.notification.subjects.type === 'SINGLE_STUDENT') {
+              $mdMenu.hide();
               if (typeof $scope.notification.notification.goal !== 'undefined') {
                 $state.go('app.student', {
                   schoolId: $scope.notification.notification.schoolId,

@@ -1,5 +1,5 @@
-<div class="notificationcard" layout="column" layout-fill edpanel-click="toggleDetails(notification, $event)">
-  <md-card md-prevent-menu-close="md-prevent-menu-close" style="margin-top: 4px; margin-bottom: 4px" ng-click="goToNotifLocation()">
+<div class="notificationcard" md-prevent-menu-close="md-prevent-menu-close" layout="column" layout-fill>
+  <md-card md-prevent-menu-close="md-prevent-menu-close" style="margin-top: 4px; margin-bottom: 4px" edpanel-click="goToNotifLocation()">
   <div md-prevent-menu-close="md-prevent-menu-close" edpanel-click="dismissNotification()" aria-label="close" class="close-notification-details md-icon-button">
     <md-icon md-font-set="material-icons">close</md-icon>
     </div>
@@ -20,7 +20,7 @@
         </md-input-container></div>
     <!--<div class="detailed-content"ng-show="n.active" layout layout-align="center center">DETAILED CONTENT HERE</div>-->
     <div layout layout-align="center center">
-      <md-button class="notification-action" ng-click="sendMessage(notification)">send message</md-button>
+      <md-button class="notification-action" md-prevent-menu-close="md-prevent-menu-close" edpanel-click="sendMessage(notification)">send message</md-button>
       <md-button class="notification-action" ng-disabled="true">set related goal</md-button>
       </div>
     </div>
