@@ -33,6 +33,7 @@
         </md-fab-speed-dial>
 
         <div layout="column" layout-align="center center">
+          <div ng-show="advisorView" class="student-name" flex="85">{{goal.student.name}}</div>
           <div class="goal-title" flex="85">{{goal.name}}</div>
           <div ng-show="goal.goalType != 'OPEN'" id="gauge-{{::goal.id}}-{{::goalIdSuffix}}" class="goal-gauge" style="height: 160px"></div>
           <div ng-show="goal.goalType == 'OPEN'" layout='column' layout-align="center center" style="min-height:160px">
