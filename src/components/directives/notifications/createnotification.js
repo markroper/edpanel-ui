@@ -127,13 +127,11 @@ angular.module('teacherdashboard')
           if(n.subscribers.type === n.subjects.type) {
             d.subscribers = SAME_AS_SUBJECTS;
           } else if(n.subscribers.type === SINGLE_STUDENT){
-            console.log(n);
             if(authentication.identity().id === n.subscribers.student.id) {
               d.subscribers = ALERT_ME;
             } else {
               d.subscribers = SINGLE_STUDENT;
             }
-            console.log(n);
           } else if( n.subscribers.type === SINGLE_TEACHER) {
             if(authentication.identity().id === n.subscribers.teacherId) {
               d.subscribers = ALERT_ME;
@@ -231,7 +229,6 @@ angular.module('teacherdashboard')
           }
          */
         $scope.prepareAndSave = function() {
-          console.log(JSON.stringify($scope.notification));
           var draft = $scope.notificationDraft;
 
           //Check if the users input is valid

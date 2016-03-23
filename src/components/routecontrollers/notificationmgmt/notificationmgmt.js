@@ -9,11 +9,8 @@ angular.module('teacherdashboard')
     $scope.notifications = null;
     api.notificationsForUser.get({ userId: authentication.identity().id },
       function(resp){
-        console.log(resp);
         for (var i = resp.length - 1; i >= 0 ; i--) {
-          console.log(resp[i]);
           if (resp[i].oneTime) {
-            console.log("REMOVING");
             resp.splice(i,1);
           }
         }
