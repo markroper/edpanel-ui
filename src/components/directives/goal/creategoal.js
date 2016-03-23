@@ -134,10 +134,7 @@ angular.module('teacherdashboard')
                     studentId: statebag.currentStudent.id,
                     goalId: results.id
                   },
-                  {},
-                  function(results) {
-                    console.log(results);
-                  }
+                  {}
                 )
               },
               function() {
