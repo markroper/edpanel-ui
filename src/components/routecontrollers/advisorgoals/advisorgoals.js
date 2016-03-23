@@ -5,9 +5,12 @@ angular.module('teacherdashboard')
     function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $window) {
       $scope.approved = [];
       $scope.pending = [];
+      $scope.goalsLoaded = false;
       $scope.$on('$viewContentLoaded', function() {
         $window.ga('send', 'pageview', { page: '/ui/schools/*' });
       });
+      console.log($scope.goalsLoaded);
+      $scope.goalsLoaded = false;
       statebag.currentPage.name = 'My Student\'s Goals';
 
       api.advisorGoals.get(
@@ -27,11 +30,11 @@ angular.module('teacherdashboard')
               //TODO how do we display completed goals
             }
           }
-          console.log(data);
+          $scope.goalsLoaded = true;
         },
         //Error callback
         function(){
-          console.log('failed to resolve the students!');
+          console.log('failed to resolve the goals!');
         })
 
     }]);
