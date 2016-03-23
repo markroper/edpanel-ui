@@ -78,9 +78,15 @@ angular.module('teacherdashboard')
 
           $scope.submitCreateGoal = function() {
             $scope.createGoal = false;
+            var staff;
+            if (typeof statebag.currentStudent.student === 'undefined') {
+              staff = statebag.currentStudent.advisor;
+            } else {
+              staff = statebag.currentStudent.student.advisor;
+            }
             var goalToMake = {
               'goalType':uiNamesToApi[$scope.goal.createType],
-              'staff':statebag.currentStudent.student.advisor,
+              'staff':staff,
               'desiredValue':$scope.goal.desiredGrade,
               'obstacles':$scope.goal.obstacle,
               'plan':$scope.goal.plan,

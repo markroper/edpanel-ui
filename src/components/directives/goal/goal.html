@@ -1,10 +1,5 @@
 <div class="goal">
     <md-card style="max-width: 380px" class="student-goal">
-      <md-button ng-show="editable && userRole !== 'Student'" class="md-flat md-button-toggle approve-goal" md-ink-ripple="red" ng-click="approveGoal(goal)">
-        <div layout="row" layout-align="center center">
-          <div class="md-subhead">Approve Goal</div>
-        </div>
-      </md-button>
       <md-card-content>
         <md-fab-speed-dial  md-open="demo.isOpen" md-direction="left" class="md-scale md-fab-top-right menu-button">
           <md-fab-trigger>
@@ -54,6 +49,11 @@
           </div>
         </div>
       </md-card-content>
+      <md-button ng-show="editable && userRole !== 'Student'" class="md-flat md-button-toggle approve-goal" md-ink-ripple="red" ng-click="approveGoal(goal)">
+        <div layout="row" layout-align="center center">
+          <div class="md-subhead">Approve Goal</div>
+        </div>
+      </md-button>
       <md-button class="md-raised md-button-toggle md-ink-ripple woop-toggler" ng-click="showWoop()">
         <div layout="row" layout-align="center center">
           <div class="md-subhead">WOOP</div>
