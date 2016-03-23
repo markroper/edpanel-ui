@@ -124,10 +124,22 @@ angular.module('teacherdashboard')
             api.studentGoals.post(
               { studentId: statebag.currentStudent.id},
               goalToMake,
+              //Success callback from post
               function(results) {
                 goalToMake.id = results.id;
-                showSimpleToast('Goal created successfully');
-                $scope.pendingGoals.push(goalToMake);
+                //Make request to populate the goal
+                api.studentSingleGoal.get(
+                  {
+                    studentId: statebag.currentStudent.id,
+                    goalId:results.id
+                  },{},
+                  //Success callback for goal get
+                  function(results) {
+                    showSimpleToast('Goal created successfully');
+                    $scope.pendingGoals.push(results);
+                  }
+                );
+                //Make goal notifications
                 api.createGoalNotifications.post(
                   {
                     schoolId: statebag.school.id,
@@ -137,6 +149,7 @@ angular.module('teacherdashboard')
                   {}
                 )
               },
+              //Error callback for goal creation
               function() {
                 showSimpleToast('There was a problem creating the goal');
 

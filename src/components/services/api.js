@@ -154,6 +154,12 @@ angular.module('teacherdashboard')
           'get': {isArray: true}
         }
       ),
+      studentSingleGoal: $resource(
+        base + '/students/:studentId/goals/:goalId',
+        {},
+        {
+          'get': {method: 'GET'}
+        }),
       studentGoals: $resource(
         base + '/students/:studentId/goals',
         {},
