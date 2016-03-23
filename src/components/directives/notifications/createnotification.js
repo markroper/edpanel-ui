@@ -127,11 +127,13 @@ angular.module('teacherdashboard')
           if(n.subscribers.type === n.subjects.type) {
             d.subscribers = SAME_AS_SUBJECTS;
           } else if(n.subscribers.type === SINGLE_STUDENT){
+            console.log(n);
             if(authentication.identity().id === n.subscribers.student.id) {
               d.subscribers = ALERT_ME;
             } else {
               d.subscribers = SINGLE_STUDENT;
             }
+            console.log(n);
           } else if( n.subscribers.type === SINGLE_TEACHER) {
             if(authentication.identity().id === n.subscribers.teacherId) {
               d.subscribers = ALERT_ME;
@@ -338,7 +340,7 @@ angular.module('teacherdashboard')
             subscribers = {};
             if(statebag.userRole === 'Student') {
               subscribers.type = SINGLE_STUDENT;
-              subscribers.student = { id: userId };
+              subscribers.student = { id: userId, type:'STUDENT' };
             } else if(statebag.userRole === 'Teacher') {
               subscribers.type = SINGLE_TEACHER;
               subscribers.teacherId = userId;

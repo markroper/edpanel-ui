@@ -127,7 +127,6 @@ angular.module('teacherdashboard')
             var measure = notification.notification.measure;
             var goal = notification.notification.goal;
             var userRole = statebag.userRole;
-            console.log(userRole);
             if (userRole === 'Student') {
               //If student, we want all these to show up in the first person
               if ('GOAL_APPROVED' === measure) {
@@ -264,11 +263,19 @@ angular.module('teacherdashboard')
             $mdMenu.hide();
             //Evaluate the notification type, and then send us to the right spot
             $scope.dismissNotification();
-            if (typeof $scope.notification.notification.goal !== 'undefined') {
-              $state.go('app.student', {
-                schoolId: $scope.notification.notification.schoolId,
-                studentId: $scope.notification.subjectUserId,
-                tab: 4});
+            if ($scope.notification.notification.subjects.type === 'SINGLE_STUDENT') {
+              if (typeof $scope.notification.notification.goal !== 'undefined') {
+                $state.go('app.student', {
+                  schoolId: $scope.notification.notification.schoolId,
+                  studentId: $scope.notification.subjectUserId,
+                  tab: 4});
+              } else if ($scope.notification.notification.measure === 'BEHAVIOR_SCORE') {
+                $state.go('app.student', {
+                  schoolId: $scope.notification.notification.schoolId,
+                  studentId: $scope.notification.subjectUserId,
+                  tab: 1});
+              }
+
             }
 
           };
