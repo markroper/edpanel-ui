@@ -7,7 +7,8 @@ angular.module('teacherdashboard')
         goal: '=',
         pendingGoals: '=',
         approvedGoals:'=',
-        editable: '@'
+        editable: '@',
+        goalIdSuffix: '@'
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/goal/goal.html',
@@ -139,9 +140,9 @@ angular.module('teacherdashboard')
           };
           var goal = $scope.goal;
           if (refresh) {
-            angular.element($document).find('#gauge-'+ goal.id).empty();
+            angular.element($document).find('#gauge-'+ goal.id + '-' + $scope.goalIdSuffix).empty();
             $scope.gage = new $window.JustGage({
-              id: 'gauge-'+ goal.id,
+              id: 'gauge-'+ goal.id + '-' + $scope.goalIdSuffix,
               value: goal.calculatedValue,
               min: 0,
               max: goal.desiredValue,
@@ -159,7 +160,7 @@ angular.module('teacherdashboard')
           if (!refresh) {
             $timeout(function() {
               $scope.gage = new $window.JustGage({
-                id: 'gauge-'+ goal.id,
+                id: 'gauge-'+ goal.id + '-' + $scope.goalIdSuffix,
                 value: goal.calculatedValue,
                 min: 0,
                 max: goal.desiredValue,

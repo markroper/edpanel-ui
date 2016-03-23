@@ -52,7 +52,7 @@ angular.module('teacherdashboard')
 
         $timeout(function() {
           scope.gage = new $window.JustGage({
-            id: 'gauge-'+ scope.section.id,
+            id: 'gauge-'+ scope.section.id + '-section',
             value: scope.section.goal.calculatedValue,
             min: 0,
             max: 100,

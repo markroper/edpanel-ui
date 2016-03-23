@@ -231,6 +231,8 @@ angular.module('teacherdashboard')
             typeToUse = x.type;
             if(scope.measures.indexOf(x.table.toLowerCase()) !== -1) {
               typeToUse = 'MEASURE';
+            } else {
+              typeToUse = 'DIMENSION';
             }
             if(typeToUse === 'MEASURE') {
               if(consts.aggregations.indexOf(x.field) !== -1) {
@@ -278,6 +280,8 @@ angular.module('teacherdashboard')
               typeToUse = y.type;
               if(scope.measures.indexOf(y.table.toLowerCase()) !== -1) {
                 typeToUse = 'MEASURE';
+              } else {
+                typeToUse = 'DIMENSION';
               }
               if(typeToUse === 'MEASURE') {
                 if(consts.aggregations.indexOf(y.field) !== -1) {
@@ -300,8 +304,10 @@ angular.module('teacherdashboard')
               scope.setDefaultTypeOnBuckets(yField.buckets);
             }
           }
-          //If the x-axis has no aggregate function, there is no subquery
-          if(q.x.aggregation || consts.aggregations.indexOf(q.x.field) !== -1) {
+          //If the x-axis has no aggregate function and the Y axis field is a measure, there is no subquery
+          //Otherwise, there is a subquery & superquery
+          if((q.x.aggregation || consts.aggregations.indexOf(q.x.field) !== -1) ||
+              (scope.measures.indexOf(q.y.field) == -1)) {
             //There is a subquery
             newQuery.subqueryColumnsByPosition = [];
             //Handle x-columns
@@ -336,7 +342,7 @@ angular.module('teacherdashboard')
               for(var e = 0; e < q.y.length; e++) {
                 y = q.y[e];
                 if(scope.measures.indexOf(y.table) === -1) {
-                  yPos = 0 + e;
+                  yPos = yPos + e;
                 }
                 var func = y.aggregation;
                 //At present all dimension y-axis fields are COUNT

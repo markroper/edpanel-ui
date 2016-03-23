@@ -113,7 +113,7 @@ angular.module('teacherdashboard')
         };
 
         scope.addRuleToGroup = function() {
-            if(!scope.queryInProgress.group.rules) {
+          if(!scope.queryInProgress.group.rules) {
             scope.queryInProgress.group.rules = [];
           }
           scope.queryInProgress.group.rules.push({
@@ -366,7 +366,8 @@ angular.module('teacherdashboard')
 
         //Debounced to prevent DOM & API thrashing as users type in input
         scope.applyReportChanges = debounce(1750, function(q) {
-          if(q && q.aggregateMeasures && q.aggregateMeasures.length >= 1) {
+          if((q && q.aggregateMeasures && q.aggregateMeasures.length >= 1) ||
+            (q && q.fields && q.fields.length >= 2)) {
             scope.appendToReportPreview(scope.reportTempl);
           } else {
             scope.appendToReportPreview(scope.noReportTempl);
@@ -436,6 +437,10 @@ angular.module('teacherdashboard')
         scope.removeSeries = function() {
           scope.queryInProgress.series = null;
         };
+
+        scope.removeFilter = function() {
+          scope.queryInProgress.group.rules = null;
+        }
       }
     };
   }]);
