@@ -183,11 +183,6 @@ angular.module('teacherdashboard')
           $scope.dismissNotification = function() {
             var supressToast = true;
 
-            var index = $scope.notificationList.indexOf($scope.notification);
-            if (index != -1) {
-              $scope.notificationList.splice(index,1);
-            }
-
             api.dismissTriggeredNotification.put(
               {
                 notificationId: $scope.notification.notification.id,
@@ -213,14 +208,12 @@ angular.module('teacherdashboard')
               },
               //Error callback
               function() {
-                if(!supressToast) {
                   $mdToast.show(
                     $mdToast.simple()
-                      .content('Failed to reach server :(')
+                      .content('Error dismissing notification')
                       .action('OK')
                       .hideDelay(1500)
                   );
-                }
               });
           };
           $scope.goToNotifLocation = function() {
@@ -238,6 +231,11 @@ angular.module('teacherdashboard')
                   schoolId: $scope.notification.notification.schoolId,
                   studentId: $scope.notification.subjectUserId,
                   tab: 1});
+              } else {
+                $state.go('app.student', {
+                  schoolId: $scope.notification.notification.schoolId,
+                  studentId: $scope.notification.subjectUserId,
+                  tab: 0});
               }
 
             }
