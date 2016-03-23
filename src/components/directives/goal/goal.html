@@ -3,20 +3,16 @@
       <md-card-content>
         <md-fab-speed-dial  md-open="demo.isOpen" md-direction="left" class="md-scale md-fab-top-right menu-button">
           <md-fab-trigger>
-            <md-button aria-label="menu" class="goal-menu md-icon-button">
+            <md-button ng-hide="!editable && userRole === 'Student'" aria-label="menu" class="goal-menu md-icon-button">
               <md-icon md-font-set="material-icons">more_vert</md-icon>
             </md-button>
           </md-fab-trigger>
           <md-fab-actions>
-            <md-button ng-show="editable && userRole !== 'Student'" ng-click="approveGoal(goal)" class="md-fab md-primary md-raised md-mini">
-              <md-icon md-font-set="material-icons"> check </md-icon>
-              <md-tooltip>approve goal</md-tooltip>
-            </md-button>
             <md-button ng-show="editable" ng-click="editGoal(goal)" class="md-fab md-primary md-raised md-mini">
               <md-icon md-font-set="material-icons"> mode_edit </md-icon>
               <md-tooltip>edit goal</md-tooltip>
             </md-button>
-            <md-button ng-show="editable" ng-click="deleteGoal(goal)" class="md-fab md-warn md-raised md-mini">
+            <md-button ng-show="editable  && userRole !== 'Student'" ng-click="deleteGoal(goal)" class="md-fab md-warn md-raised md-mini">
               <md-icon md-font-set="material-icons"> delete </md-icon>
               <md-tooltip>delete goal</md-tooltip>
             </md-button>
@@ -45,14 +41,18 @@
           </div>
           <div layout="column" ng-show="goal.editActive">
             <md-headline ng-show="goal.goalType != 'OPEN'">Desired Value?</md-headline>
-            <md-input-container ng-show="goal.goalType != 'OPEN'">
+            <md-input-container class="woop-edit" ng-show="goal.goalType != 'OPEN'">
               <input required name="Grade" type="number" step="1" ng-model="goal.desiredValue"
                      max="100">
             </md-input-container>
           </div>
         </div>
-
       </md-card-content>
+      <md-button ng-show="editable && userRole !== 'Student'" class="md-flat md-button-toggle approve-goal" md-ink-ripple="red" ng-click="approveGoal(goal)">
+        <div layout="row" layout-align="center center">
+          <div class="md-subhead">Approve Goal</div>
+        </div>
+      </md-button>
       <md-button class="md-raised md-button-toggle md-ink-ripple woop-toggler" ng-click="showWoop()">
         <div layout="row" layout-align="center center">
           <div class="md-subhead">WOOP</div>
@@ -65,25 +65,25 @@
       <div layout="column" class="woop-container slide-closed-woop" layout-align="center center">
         <md-headline class="woop-heading">Plan</md-headline>
         <div class="woop-text" ng-show="!goal.editActive">{{goal.plan}}</div>
-        <md-input-container ng-show="goal.editActive">
+        <md-input-container class="woop-edit" ng-show="goal.editActive">
           <textarea ng-model="goal.plan"rows="5" md-select-on-focus></textarea>
         </md-input-container>
         <md-headline class="woop-heading">Obstacles</md-headline>
         <div class="woop-text" ng-show="!goal.editActive">{{goal.obstacles}}</div>
-        <md-input-container ng-show="goal.editActive">
+        <md-input-container class="woop-edit" ng-show="goal.editActive">
           <textarea ng-model="goal.obstacles"rows="5" md-select-on-focus></textarea>
         </md-input-container>
         <md-headline class="woop-heading">Outcome</md-headline>
         <div class="woop-text" ng-show="!goal.editActive">{{goal.outcome}}
         </div>
-        <md-input-container ng-show="goal.editActive">
+        <md-input-container class="woop-edit" ng-show="goal.editActive">
           <textarea ng-model="goal.outcome"rows="5" md-select-on-focus></textarea>
         </md-input-container>
         <div layout="row">
           <md-button ng-show="goal.editActive" ng-click="proposeEdit(goal)" aria-label="menu" class="md-fab md-primary md-raised md-mini">
             <md-icon md-font-set="material-icons">check</md-icon>
           </md-button>
-          <md-button ng-show="goal.editActive" ng-click="goal.editActive = false" aria-label="menu" class="md-fab md-warn md-raised md-mini">
+          <md-button ng-show="goal.editActive" ng-click="goal.editActive = false;showWoop()" aria-label="menu" class="md-fab md-warn md-raised md-mini">
             <md-icon md-font-set="material-icons">close</md-icon>
           </md-button>
         </div>

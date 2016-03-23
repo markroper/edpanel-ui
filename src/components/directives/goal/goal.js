@@ -54,6 +54,9 @@ angular.module('teacherdashboard')
         };
         $scope.editGoal = function(goal) {
           //Call api to edit the goal
+          if (!$scope.woopOpen) {
+            $scope.showWoop();
+          }
           goal.editActive = true;
 
         };
@@ -72,6 +75,7 @@ angular.module('teacherdashboard')
             function() {
               $scope.resolveGoalDisplay(true);
               var index = null;
+              $scope.showWoop();
               if(moveToApproved) {
                 index = $scope.pendingGoals.indexOf(goal);
                 $scope.pendingGoals.splice(index, 1);
@@ -92,6 +96,7 @@ angular.module('teacherdashboard')
         };
       },
       link: function($scope,elem) {
+        $scope.woopOpen = false;
         var $woopContainer = angular.element(elem).find('.woop-container');
         var SLIDE_OPEN_CLASS = 'slide-open-woop';
         var SLIDE_CLOSED_CLASS = 'slide-closed-woop';
@@ -117,7 +122,11 @@ angular.module('teacherdashboard')
         };
 
         $scope.showWoop = function() {
-
+          if ($scope.woopOpen) {
+            $scope.woopOpen = false;
+          } else {
+            $scope.woopOpen = true;
+          }
           $woopContainer.toggleClass(SLIDE_OPEN_CLASS);
           $woopContainer.toggleClass(SLIDE_CLOSED_CLASS);
           if($woopArrowIcon.hasClass(ROTATE)) {

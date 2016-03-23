@@ -9,6 +9,11 @@ angular.module('teacherdashboard')
     $scope.notifications = null;
     api.notificationsForUser.get({ userId: authentication.identity().id },
       function(resp){
+        for (var i = resp.length - 1; i >= 0 ; i--) {
+          if (resp[i].oneTime) {
+            resp.splice(i,1);
+          }
+        }
         $scope.notifications = resp;
       });
 

@@ -1,0 +1,28 @@
+<div class="notificationcard" md-prevent-menu-close="md-prevent-menu-close" layout="column" layout-fill>
+  <md-card md-prevent-menu-close="md-prevent-menu-close" style="margin-top: 4px; margin-bottom: 4px" edpanel-click="goToNotifLocation()">
+  <div md-prevent-menu-close="md-prevent-menu-close" edpanel-click="dismissNotification()" aria-label="close" class="close-notification-details md-icon-button">
+    <md-icon md-font-set="material-icons">close</md-icon>
+    </div>
+  <div ng-show="!notification.notification.goal" style="padding:15px;" layout="column" class="notification-desc" layout-wrap>
+    <span class="md-subhead no-select">{{::notification.notification.name}}</span>
+    <span class="md-body-1">{{::notificationTypes[notification.notification.measure]}} for {{::groupTypes(notification)}}</span>
+    <span  class="md-body-1 notification-detail">The notification threshold of {{::formatNumber(notification.notification.triggerValue, notification)}} <span ng-show="summaryTypes[notification.notification.subjects.type]">{{::aggFunctions[n.notification.aggregateFunction]}}</span>was crossed on {{::n.triggeredDate}} with the value {{::formatNumber(notification.valueWhenTriggered, notification)}}.</span>
+  </div>
+<div ng-show="notification.notification.goal" style="padding:15px;" layout="column" class="notification-desc" layout-wrap>
+  <span class="md-subhead">{{::determineHeading(notification)}}</span>
+  <span class="md-body-1">{{::determineBody(notification)}}</span>
+</div>
+  <div ng-if="notification.isActive && NOT_ENABLED" layout="column" layout-fill>
+    <div class="message-container">
+      <md-input-container class="md-block">
+        <label>Message to {{::groupTypes(notification)}}</label>
+        <textarea ng-model="message.body" columns="1" md-maxlength="250" rows="5"></textarea>
+        </md-input-container></div>
+    <!--<div class="detailed-content"ng-show="n.active" layout layout-align="center center">DETAILED CONTENT HERE</div>-->
+    <div layout layout-align="center center">
+      <md-button class="notification-action" md-prevent-menu-close="md-prevent-menu-close" edpanel-click="sendMessage(notification)">send message</md-button>
+      <md-button class="notification-action" ng-disabled="true">set related goal</md-button>
+      </div>
+    </div>
+  </md-card>
+  </div>

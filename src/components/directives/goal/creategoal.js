@@ -78,9 +78,15 @@ angular.module('teacherdashboard')
 
           $scope.submitCreateGoal = function() {
             $scope.createGoal = false;
+            var staff;
+            if (typeof statebag.currentStudent.student === 'undefined') {
+              staff = statebag.currentStudent.advisor;
+            } else {
+              staff = statebag.currentStudent.student.advisor;
+            }
             var goalToMake = {
               'goalType':uiNamesToApi[$scope.goal.createType],
-              'staff':statebag.currentStudent.student.advisor,
+              'staff':staff,
               'desiredValue':$scope.goal.desiredGrade,
               'obstacles':$scope.goal.obstacle,
               'plan':$scope.goal.plan,
@@ -124,11 +130,32 @@ angular.module('teacherdashboard')
             api.studentGoals.post(
               { studentId: statebag.currentStudent.id},
               goalToMake,
+              //Success callback from post
               function(results) {
                 goalToMake.id = results.id;
-                showSimpleToast('Goal created successfully');
-                $scope.pendingGoals.push(goalToMake);
+                //Make request to populate the goal
+                api.studentSingleGoal.get(
+                  {
+                    studentId: statebag.currentStudent.id,
+                    goalId:results.id
+                  },{},
+                  //Success callback for goal get
+                  function(results) {
+                    showSimpleToast('Goal created successfully');
+                    $scope.pendingGoals.push(results);
+                  }
+                );
+                //Make goal notifications
+                api.createGoalNotifications.post(
+                  {
+                    schoolId: statebag.school.id,
+                    studentId: statebag.currentStudent.id,
+                    goalId: results.id
+                  },
+                  {}
+                )
               },
+              //Error callback for goal creation
               function() {
                 showSimpleToast('There was a problem creating the goal');
 

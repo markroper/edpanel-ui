@@ -21,7 +21,6 @@ angular.module('teacherdashboard')
 
           scope.showFilter=true;
           scope.hwPromise= {};
-          scope.retrieveTeacherHomeData();
           scope.retrieveTeacherHomeData = function() {
             var promises = [];
             var sectionPromise = [];
@@ -118,6 +117,7 @@ angular.module('teacherdashboard')
 
             });
           };
+          scope.retrieveTeacherHomeData();
 
           /**
            * This method takes in the maps for sections and students and sets the attributes

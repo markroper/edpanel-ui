@@ -229,7 +229,6 @@ angular.module('teacherdashboard')
           }
          */
         $scope.prepareAndSave = function() {
-          console.log(JSON.stringify($scope.notification));
           var draft = $scope.notificationDraft;
 
           //Check if the users input is valid
@@ -338,7 +337,7 @@ angular.module('teacherdashboard')
             subscribers = {};
             if(statebag.userRole === 'Student') {
               subscribers.type = SINGLE_STUDENT;
-              subscribers.student = { id: userId };
+              subscribers.student = { id: userId, type:'STUDENT' };
             } else if(statebag.userRole === 'Teacher') {
               subscribers.type = SINGLE_TEACHER;
               subscribers.teacherId = userId;
