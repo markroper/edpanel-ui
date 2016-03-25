@@ -213,6 +213,14 @@ angular.module('teacherdashboard')
             }
           }
         };
+        /**
+         * Given the base query for a report, this method produces the click-through query and returns
+         * null if there is no valid click-through query.  Click through is only supported for queries
+         * related to students.
+         *
+         * @param baseQuery
+         * @returns {*}
+         */
         scope.produceClickQuery = function(baseQuery) {
           var studentFieldPos = undefined;
           if(baseQuery.fields) {
@@ -299,6 +307,14 @@ angular.module('teacherdashboard')
           clickQuery.having = exp;
           return clickQuery;
         };
+
+        /**
+         * Given the UI specific model for a query, or query in progress (paramter qip), this method produces
+         * a server side model for a query, or throws exceptions while trying.
+         *
+         * @param qip
+         * @returns {{aggregateMeasures: Array, fields: Array, filter: null, subqueryColumnsByPosition: null}}
+         */
         scope.produceQueryFromQueryInProgress = function(qip) {
           var aggregateMeasures = [];
           var fields = [];
