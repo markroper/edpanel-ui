@@ -498,15 +498,36 @@ angular.module('teacherdashboard')
             id: scope.dashboard.id,
             rows: []
           };
+          var minPos, maxPos, currRow;
           if(scope.dashboardReports) {
             for(var i = 0; i < scope.dashboardReports.length; i++) {
               var gridEl = scope.dashboardReports[i];
               while(newDash.rows.length <= gridEl.row) {
                 newDash.rows.push({ reports: [] });
               }
+              if(currRow !== gridEl.row) {
+                currRow = gridEl.row;
+                minPos = gridEl.col;
+                maxPos = gridEl.col;
+              }
               var newRpt = angular.copy(gridEl.report);
               newRpt.type = newRpt.type.toUpperCase();
-              newDash.rows[gridEl.row].reports.unshift(newRpt);
+              if(gridEl.col > maxPos) {
+                newDash.rows[gridEl.row].reports.push(newRpt);
+                maxPos = gridEl.col;
+              } else if(gridEl.col < minPos) {
+                newDash.rows[gridEl.row].reports.unshift(newRpt);
+                minPos = gridEl.col;
+              } else {
+                newDash.rows[gridEl.row].reports.unshift(newRpt);
+                //If the position of the current element is in between the min and max,
+                //swap it with the element to its right in the array
+                if(newDash.rows[gridEl.row].reports.length > 1) {
+                  var tmp = newDash.rows[gridEl.row].reports[1];
+                  newDash.rows[gridEl.row].reports[1] = newRpt;
+                  newDash.rows[gridEl.row].reports[0] = tmp;
+                }
+              }
             }
           }
           return newDash;
