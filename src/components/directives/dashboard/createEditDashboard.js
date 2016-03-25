@@ -472,11 +472,20 @@ angular.module('teacherdashboard')
           if(q.group) {
             // { operator: 'AND', rules: [ { condition:'', data:'', field:'' }, {...} ]}
             var g = q.group;
-            var operator = g.operator;
-            var r = null;
-            if(g.rules.length === 1) {
-              r = g.rules[0];
-              newQuery.filter = {
+            newQuery.filter = scope.returnExpressionFromGroup(g);
+          }
+          return newQuery;
+        };
+
+        scope.returnExpressionFromGroup = function(g) {
+          var operator = g.operator;
+          var currExp = {};
+          for(var f = 0; f < g.rules.length; f++) {
+            var r = g.rules[f];
+            var exp = {};
+            if(r.condition && r.data && r.field) {
+              //Build the expression!
+              exp = {
                 leftHandSide: scope.resolveLhs(r.field),
                 operator: r.condition,
                 rightHandSide: {
@@ -486,42 +495,27 @@ angular.module('teacherdashboard')
                 type: 'EXPRESSION'
               };
             } else {
-              var currExp = {};
-              for(var f = 0; f < g.rules.length; f++) {
-                r = g.rules[f];
-                if(r.condition && r.data && r.field) {
-                  //Build the expression!
-                  var exp = {
-                    leftHandSide: scope.resolveLhs(r.field),
-                    operator: r.condition,
-                    rightHandSide: {
-                      type: scope.resolveRhsType(r.data.value),
-                      value: r.data.value
-                    },
-                    type: 'EXPRESSION'
-                  };
-                  //Rebalance the tree if needed
-                  if(!currExp.leftHandSide) {
-                    currExp.leftHandSide = exp;
-                  } else {
-                    currExp.rightHandSide = exp;
-                    currExp.type = 'EXPRESSION';
-                    currExp.operator = operator;
-                    var newCurrExp = {
-                      leftHandSide: currExp,
-                      type: 'EXPRESSION',
-                      operator: g.op
-                    };
-                    currExp = newCurrExp;
-                  }
-                }
-              }
-              if(currExp.leftHandSide && currExp.rightHandSide && currExp.operator && currExp.type) {
-                newQuery.filter = currExp;
-              }
+              exp = scope.returnExpressionFromGroup(r.group);
+            }
+            //Rebalance the tree if needed
+            if(!currExp.leftHandSide) {
+              currExp.leftHandSide = exp;
+            } else {
+              currExp.rightHandSide = exp;
+              currExp.type = 'EXPRESSION';
+              currExp.operator = operator;
+              var newCurrExp = {
+                leftHandSide: currExp,
+                type: 'EXPRESSION',
+                operator: operator
+              };
+              currExp = newCurrExp;
             }
           }
-          return newQuery;
+          if(!currExp.rightHandSide && currExp.leftHandSide) {
+            currExp = currExp.leftHandSide;
+          }
+          return currExp;
         };
 
         scope.createNewReport = function() {
