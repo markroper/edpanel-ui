@@ -193,6 +193,7 @@ angular.module('teacherdashboard')
             var clickTableQuery = scope.produceClickQuery(sc.report.chartQuery);
             if(clickTableQuery) {
               sc.report.clickTableQuery = clickTableQuery;
+              sc.report.supportDemographicFilter = true;
               sc.report.columnDefs = [
                 { field: 'values[1]', displayName: 'Name' },
                 { field: 'values[2]', displayName: '' }
