@@ -190,6 +190,14 @@ angular.module('teacherdashboard')
             clickOutsideToClose:true
           }).then(function() {
             sc.report.chartQuery = scope.produceQueryFromQueryInProgress(sc.queryInProgress);
+            var clickTableQuery = scope.produceClickQuery(sc.report.chartQuery);
+            if(clickTableQuery) {
+              sc.report.clickTableQuery = clickTableQuery;
+              sc.report.columnDefs = [
+                { field: 'values[1]', displayName: 'Name' },
+                { field: 'values[2]', displayName: '' }
+              ];
+            }
           }, function() {
             scope.status = 'You cancelled the dialog.';
           });
@@ -204,6 +212,92 @@ angular.module('teacherdashboard')
               }
             }
           }
+        };
+        scope.produceClickQuery = function(baseQuery) {
+          var studentFieldPos = undefined;
+          if(baseQuery.fields) {
+            for(var i = 0; i < baseQuery.fields.length; i++) {
+              var dim = baseQuery.fields[i];
+              if(dim.dimension === 'STUDENT') {
+                studentFieldPos = i;
+                break;
+              }
+            }
+          }
+          if(studentFieldPos === undefined) {
+            return null;
+          }
+          if(!baseQuery.aggregateMeasures) {
+            return null;
+          }
+
+          //OK, we have a query with a student and we know where the student field is in the query.fields array
+          //Now we resolve whether or not the student field is on the x or the y axis in the chart:
+          var clickQuery = {};
+          clickQuery.schoolId = baseQuery.schoolId;
+          //Resolve the click query dimensions and measures:
+          clickQuery.fields = [];
+          clickQuery.fields.push({ dimension: 'STUDENT', field: 'ID' });
+          clickQuery.fields.push({ dimension: 'STUDENT', field: 'Name' });
+          clickQuery.aggregateMeasures = [];
+          if(baseQuery.aggregateMeasures) {
+            var m = angular.copy(baseQuery.aggregateMeasures[0]);
+            m.buckets = null;
+            m.bucketAggregation = null;
+            clickQuery.aggregateMeasures.push(m)
+          } else {
+            //TODO: there were no aggregate measures in the query... is this a valid case?
+            console.log('Does this ever happen, no aggregate measures on a base query that has student click through?');
+          }
+          //resolve the click query filter:
+          clickQuery.filter = angular.copy(baseQuery.filter);
+          var exp = {};
+          var clickValueField = baseQuery.aggregateMeasures[baseQuery.aggregateMeasures.length - 1];
+          var measureOperand = {
+            type: 'MEASURE',
+            value: {
+              measure: clickValueField.measure,
+              field: clickValueField.aggregation
+            }
+          };
+          if(clickValueField.buckets) {
+            //create a range condition based on the click value
+            //create an equality condition based on the click value
+            exp = {
+              type: 'EXPRESSION',
+              leftHandSide: {
+                type: 'EXPRESSION',
+                leftHandSide: angular.copy(measureOperand),
+                operator: 'GREATER_THAN_OR_EQUAL',
+                rightHandSide: {
+                  type: consts.placeholderValues['${clickValueMin}'],
+                  value: '${clickValueMin}'
+                }
+              },
+              operator: 'OR',
+              rightHandSide: {
+                type: 'EXPRESSION',
+                leftHandSide: angular.copy(measureOperand),
+                operator: 'LESS_THAN',
+                rightHandSide: {
+                  type: consts.placeholderValues['${clickValueMax}'],
+                  value: '${clickValueMax}'
+                }
+              }
+            };
+          } else {
+            exp = {
+              type: 'EXPRESSION',
+              leftHandSide: angular.copy(measureOperand),
+              operator: 'EQUAL',
+              rightHandSide: {
+                type: consts.placeholderValues['${clickValue}'],
+                value: '${clickValue}'
+              }
+            };
+          }
+          clickQuery.having = exp;
+          return clickQuery;
         };
         scope.produceQueryFromQueryInProgress = function(qip) {
           var aggregateMeasures = [];
