@@ -479,7 +479,7 @@ angular.module('teacherdashboard')
 
         scope.returnExpressionFromGroup = function(g) {
           var operator = g.operator;
-          var currExp = {};
+          var currExp = null;
           for(var f = 0; f < g.rules.length; f++) {
             var r = g.rules[f];
             var exp = {};
@@ -497,6 +497,9 @@ angular.module('teacherdashboard')
             } else {
               exp = scope.returnExpressionFromGroup(r.group);
             }
+            if(!currExp) {
+              currExp = {};
+            }
             //Rebalance the tree if needed
             if(!currExp.leftHandSide) {
               currExp.leftHandSide = exp;
@@ -512,7 +515,7 @@ angular.module('teacherdashboard')
               currExp = newCurrExp;
             }
           }
-          if(!currExp.rightHandSide && currExp.leftHandSide) {
+          if(currExp && !currExp.rightHandSide && currExp.leftHandSide) {
             currExp = currExp.leftHandSide;
           }
           return currExp;
