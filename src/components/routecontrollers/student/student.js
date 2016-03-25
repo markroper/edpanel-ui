@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll','analytics',
-  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll, analytics) {
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll','analytics','$stateParams',
+  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll, analytics, $stateParams) {
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*' });
     });
@@ -15,6 +15,7 @@ angular.module('teacherdashboard')
     $scope.sections = [];
     $scope.approved = [];
     $scope.pending = [];
+    $scope.openTab = $stateParams.tab;
     if(!statebag.school || !statebag.currentStudent) {
       //Resolve the school then resolve the student
       statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(

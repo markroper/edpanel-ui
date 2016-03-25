@@ -149,7 +149,7 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         }
       })
       .state('app.student', {
-      	url: 'schools/:schoolId/student/:studentId',
+      	url: 'schools/:schoolId/student/:studentId?tab',
       	templateUrl: rootUrl + '/components/routecontrollers/student/student.html',
       	controller: 'StudentCtrl',
         data: {

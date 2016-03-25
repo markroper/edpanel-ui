@@ -40,6 +40,10 @@
       margin-left: 10px;
       margin-right: 10px;
     }
+    .woop-edit {
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
     .progress {
       height: 30px;
       border-radius:0px;
@@ -89,6 +93,14 @@
 .woop-toggler {
   margin: 0px 0px 0px 0px;
   border-radius:0px;
+}
+.approve-goal {
+  margin: 0px 0px 0px 0px;
+  border-radius:0px;
+  background-color: rgb(250,250,250) !important;
+}
+.approve-goal:hover {
+  background-color: #81C784 !important;
 }
 md-icon {
   transition: color 200ms ease;
