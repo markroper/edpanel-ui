@@ -11,7 +11,7 @@ angular.module('teacherdashboard')
       });
       console.log($scope.goalsLoaded);
       $scope.goalsLoaded = false;
-      statebag.currentPage.name = 'My Student\'s Goals';
+      statebag.currentPage.name = 'My Students\' Goals';
 
       api.advisorGoals.get(
         {
