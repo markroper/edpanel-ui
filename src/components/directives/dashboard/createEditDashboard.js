@@ -283,7 +283,7 @@ angular.module('teacherdashboard')
                   value: '${clickValueMin}'
                 }
               },
-              operator: 'OR',
+              operator: 'AND',
               rightHandSide: {
                 type: 'EXPRESSION',
                 leftHandSide: angular.copy(measureOperand),
