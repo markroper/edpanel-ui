@@ -190,6 +190,15 @@ angular.module('teacherdashboard')
             clickOutsideToClose:true
           }).then(function() {
             sc.report.chartQuery = scope.produceQueryFromQueryInProgress(sc.queryInProgress);
+            var clickTableQuery = scope.produceClickQuery(sc.report.chartQuery);
+            if(clickTableQuery) {
+              sc.report.clickTableQuery = clickTableQuery;
+              sc.report.supportDemographicFilter = true;
+              sc.report.columnDefs = [
+                { field: 'values[1]', displayName: 'Name' },
+                { field: 'values[2]', displayName: '' }
+              ];
+            }
           }, function() {
             scope.status = 'You cancelled the dialog.';
           });
@@ -205,6 +214,108 @@ angular.module('teacherdashboard')
             }
           }
         };
+        /**
+         * Given the base query for a report, this method produces the click-through query and returns
+         * null if there is no valid click-through query.  Click through is only supported for queries
+         * related to students.
+         *
+         * @param baseQuery
+         * @returns {*}
+         */
+        scope.produceClickQuery = function(baseQuery) {
+          var studentFieldPos = undefined;
+          if(baseQuery.fields) {
+            for(var i = 0; i < baseQuery.fields.length; i++) {
+              var dim = baseQuery.fields[i];
+              if(dim.dimension === 'STUDENT') {
+                studentFieldPos = i;
+                break;
+              }
+            }
+          }
+          if(studentFieldPos === undefined) {
+            return null;
+          }
+          if(!baseQuery.aggregateMeasures) {
+            return null;
+          }
+
+          //OK, we have a query with a student and we know where the student field is in the query.fields array
+          //Now we resolve whether or not the student field is on the x or the y axis in the chart:
+          var clickQuery = {};
+          clickQuery.schoolId = baseQuery.schoolId;
+          //Resolve the click query dimensions and measures:
+          clickQuery.fields = [];
+          clickQuery.fields.push({ dimension: 'STUDENT', field: 'ID' });
+          clickQuery.fields.push({ dimension: 'STUDENT', field: 'Name' });
+          clickQuery.aggregateMeasures = [];
+          if(baseQuery.aggregateMeasures) {
+            var m = angular.copy(baseQuery.aggregateMeasures[0]);
+            m.buckets = null;
+            m.bucketAggregation = null;
+            clickQuery.aggregateMeasures.push(m)
+          } else {
+            //TODO: there were no aggregate measures in the query... is this a valid case?
+            console.log('Does this ever happen, no aggregate measures on a base query that has student click through?');
+          }
+          //resolve the click query filter:
+          clickQuery.filter = angular.copy(baseQuery.filter);
+          var exp = {};
+          var clickValueField = baseQuery.aggregateMeasures[baseQuery.aggregateMeasures.length - 1];
+          var measureOperand = {
+            type: 'MEASURE',
+            value: {
+              measure: clickValueField.measure,
+              field: clickValueField.aggregation
+            }
+          };
+          if(clickValueField.buckets) {
+            //create a range condition based on the click value
+            //create an equality condition based on the click value
+            exp = {
+              type: 'EXPRESSION',
+              leftHandSide: {
+                type: 'EXPRESSION',
+                leftHandSide: angular.copy(measureOperand),
+                operator: 'GREATER_THAN_OR_EQUAL',
+                rightHandSide: {
+                  type: consts.placeholderValues['${clickValueMin}'],
+                  value: '${clickValueMin}'
+                }
+              },
+              operator: 'AND',
+              rightHandSide: {
+                type: 'EXPRESSION',
+                leftHandSide: angular.copy(measureOperand),
+                operator: 'LESS_THAN',
+                rightHandSide: {
+                  type: consts.placeholderValues['${clickValueMax}'],
+                  value: '${clickValueMax}'
+                }
+              }
+            };
+          } else {
+            exp = {
+              type: 'EXPRESSION',
+              leftHandSide: angular.copy(measureOperand),
+              operator: 'EQUAL',
+              rightHandSide: {
+                type: consts.placeholderValues['${clickValue}'],
+                value: '${clickValue}'
+              }
+            };
+          }
+          clickQuery.having = exp;
+          return clickQuery;
+        };
+
+        /**
+         * Given the UI specific model for a query, or query in progress (paramter qip), this method produces
+         * a server side model for a query, or throws exceptions while trying.
+         *
+         * @param qip
+         * @returns {{aggregateMeasures: Array, fields: Array, filter: null, subqueryColumnsByPosition: null}}
+         */
         scope.produceQueryFromQueryInProgress = function(qip) {
           var aggregateMeasures = [];
           var fields = [];
@@ -361,11 +472,20 @@ angular.module('teacherdashboard')
           if(q.group) {
             // { operator: 'AND', rules: [ { condition:'', data:'', field:'' }, {...} ]}
             var g = q.group;
-            var operator = g.operator;
-            var r = null;
-            if(g.rules.length === 1) {
-              r = g.rules[0];
-              newQuery.filter = {
+            newQuery.filter = scope.returnExpressionFromGroup(g);
+          }
+          return newQuery;
+        };
+
+        scope.returnExpressionFromGroup = function(g) {
+          var operator = g.operator;
+          var currExp = null;
+          for(var f = 0; f < g.rules.length; f++) {
+            var r = g.rules[f];
+            var exp = {};
+            if(r.condition && r.data && r.field) {
+              //Build the expression!
+              exp = {
                 leftHandSide: scope.resolveLhs(r.field),
                 operator: r.condition,
                 rightHandSide: {
@@ -375,42 +495,30 @@ angular.module('teacherdashboard')
                 type: 'EXPRESSION'
               };
             } else {
-              var currExp = {};
-              for(var f = 0; f < g.rules.length; f++) {
-                r = g.rules[f];
-                if(r.condition && r.data && r.field) {
-                  //Build the expression!
-                  var exp = {
-                    leftHandSide: scope.resolveLhs(r.field),
-                    operator: r.condition,
-                    rightHandSide: {
-                      type: scope.resolveRhsType(r.data.value),
-                      value: r.data.value
-                    },
-                    type: 'EXPRESSION'
-                  };
-                  //Rebalance the tree if needed
-                  if(!currExp.leftHandSide) {
-                    currExp.leftHandSide = exp;
-                  } else {
-                    currExp.rightHandSide = exp;
-                    currExp.type = 'EXPRESSION';
-                    currExp.operator = operator;
-                    var newCurrExp = {
-                      leftHandSide: currExp,
-                      type: 'EXPRESSION',
-                      operator: g.op
-                    };
-                    currExp = newCurrExp;
-                  }
-                }
-              }
-              if(currExp.leftHandSide && currExp.rightHandSide && currExp.operator && currExp.type) {
-                newQuery.filter = currExp;
-              }
+              exp = scope.returnExpressionFromGroup(r.group);
+            }
+            if(!currExp) {
+              currExp = {};
+            }
+            //Rebalance the tree if needed
+            if(!currExp.leftHandSide) {
+              currExp.leftHandSide = exp;
+            } else {
+              currExp.rightHandSide = exp;
+              currExp.type = 'EXPRESSION';
+              currExp.operator = operator;
+              var newCurrExp = {
+                leftHandSide: currExp,
+                type: 'EXPRESSION',
+                operator: operator
+              };
+              currExp = newCurrExp;
             }
           }
-          return newQuery;
+          if(currExp && !currExp.rightHandSide && currExp.leftHandSide) {
+            currExp = currExp.leftHandSide;
+          }
+          return currExp;
         };
 
         scope.createNewReport = function() {
@@ -498,15 +606,36 @@ angular.module('teacherdashboard')
             id: scope.dashboard.id,
             rows: []
           };
+          var minPos, maxPos, currRow;
           if(scope.dashboardReports) {
             for(var i = 0; i < scope.dashboardReports.length; i++) {
               var gridEl = scope.dashboardReports[i];
               while(newDash.rows.length <= gridEl.row) {
                 newDash.rows.push({ reports: [] });
               }
+              if(currRow !== gridEl.row) {
+                currRow = gridEl.row;
+                minPos = gridEl.col;
+                maxPos = gridEl.col;
+              }
               var newRpt = angular.copy(gridEl.report);
               newRpt.type = newRpt.type.toUpperCase();
-              newDash.rows[gridEl.row].reports.unshift(newRpt);
+              if(gridEl.col > maxPos) {
+                newDash.rows[gridEl.row].reports.push(newRpt);
+                maxPos = gridEl.col;
+              } else if(gridEl.col < minPos) {
+                newDash.rows[gridEl.row].reports.unshift(newRpt);
+                minPos = gridEl.col;
+              } else {
+                newDash.rows[gridEl.row].reports.unshift(newRpt);
+                //If the position of the current element is in between the min and max,
+                //swap it with the element to its right in the array
+                if(newDash.rows[gridEl.row].reports.length > 1) {
+                  var tmp = newDash.rows[gridEl.row].reports[1];
+                  newDash.rows[gridEl.row].reports[1] = newRpt;
+                  newDash.rows[gridEl.row].reports[0] = tmp;
+                }
+              }
             }
           }
           return newDash;
