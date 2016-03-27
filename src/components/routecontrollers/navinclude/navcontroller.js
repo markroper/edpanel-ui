@@ -81,6 +81,13 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
       $state.go('app.mySurveys', {});
       $scope.closeSizeNav();
     };
+  $scope.goToMyStudentsGoals = function() {
+    $state.go('app.advisorGoals', {
+      schoolId: statebag.school.id,
+      staffId: authentication.identity().id
+    });
+    $scope.closeSizeNav();
+  };
     $scope.goToMySurveyResponses = function() {
       $state.go('app.mySurveyResponses', {});
       $scope.closeSizeNav();

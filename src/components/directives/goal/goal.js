@@ -8,7 +8,8 @@ angular.module('teacherdashboard')
         pendingGoals: '=',
         approvedGoals:'=',
         editable: '@',
-        goalIdSuffix: '@'
+        goalIdSuffix: '@',
+        advisorView:'='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/goal/goal.html',

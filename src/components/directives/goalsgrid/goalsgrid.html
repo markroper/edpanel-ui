@@ -1,24 +1,25 @@
 <div class="goalsgrid" layout="row" layout-wrap>
-  <div flex="100" flex-gt-md="50">
+  <div flex="100">
     <md-card>
       <md-card-content>
         <div layout="column" flex="100"layout-align="center center">
-          <creategoal pending-goals="pgoals" sections="sections"></creategoal>
+          <md-headline ng-show="isAdvisorView" style="margin-bottom: 10px;font-size: 30px; margin-right: 20px">Proposed Goals</md-headline>
+          <creategoal ng-show="!isAdvisorView" pending-goals="pgoals" sections="sections"></creategoal>
         </div>
         <div layout="row" class="goals-container">
-          <goal ng-repeat="pgoal in pgoals" goal="pgoal" pending-goals="pgoals" approved-goals="agoals" goal-id-suffix="grid" editable="true"></goal>
+          <goal advisor-view="isAdvisorView" ng-repeat="pgoal in pgoals" goal="pgoal" pending-goals="pgoals" approved-goals="agoals" goal-id-suffix="grid" editable="true"></goal>
         </div>
       </md-card-content>
     </md-card>
   </div>
-  <div flex="100" flex-gt-md="50">
+  <div flex="100">
     <md-card>
       <md-card-content>
         <div layout="column" layout-align="center center">
           <md-headline style="margin-bottom: 10px;font-size: 30px">Approved Goals</md-headline>
         </div>
         <div layout="row" class="goals-container">
-          <goal ng-repeat="agoal in agoals" goal="agoal" approved-goals="agoals" goal-id-suffix="grid"></goal>
+          <goal advisor-view="isAdvisorView" ng-repeat="agoal in agoals" goal="agoal" approved-goals="agoals" goal-id-suffix="grid"></goal>
         </div>
       </md-card-content>
     </md-card>
