@@ -1,15 +1,22 @@
 'use strict';
 
 angular.module('teacherdashboard')
-  .controller('AdvisorGoalsCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$window',
-    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $window) {
+  .controller('AdvisorGoalsCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$window','$mdToast',
+    function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $window, mdToast) {
       $scope.approved = [];
       $scope.pending = [];
       $scope.goalsLoaded = false;
       $scope.$on('$viewContentLoaded', function() {
         $window.ga('send', 'pageview', { page: '/ui/schools/*' });
       });
-      console.log($scope.goalsLoaded);
+      var showSimpleToast = function(msg) {
+        mdToast.show(
+          mdToast.simple()
+            .content(msg)
+            .action('OK')
+            .hideDelay(2000)
+        );
+      };
       $scope.goalsLoaded = false;
       statebag.currentPage.name = 'My Students\' Goals';
 
@@ -34,6 +41,7 @@ angular.module('teacherdashboard')
         },
         //Error callback
         function(){
+          showSimpleToast("An error occurred loading goals");
           console.log('failed to resolve the goals!');
         })
 
