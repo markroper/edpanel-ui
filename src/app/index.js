@@ -1,5 +1,5 @@
 'use strict';
-angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.grid', 'ui.grid.pagination', 'angular-sortable-view', 'gridster'])
+angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngResource', 'ui.router', 'ngMaterial', 'ui.grid', 'ui.grid.pagination', 'angular-sortable-view', 'gridster','gantt','angular-timeline'])
   .config(function ($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider, $httpProvider, $locationProvider, constsProvider) {
     //Forces angular to request that any CORS cookies be sent back by the server
     $httpProvider.defaults.withCredentials = true;
@@ -176,6 +176,20 @@ angular.module('teacherdashboard', ['ngAnimate', 'ngCookies', 'ngSanitize', 'ngR
         url: 'schools/:schoolId/student/:studentId/sections/:sectionId/assignments',
         templateUrl: rootUrl + '/components/routecontrollers/studentSectDrill/studentSectDrill.html',
         controller: 'StudentSectDrillCtrl',
+        data: {
+          roles: [
+            roles.ADMIN,
+            roles.TEACHER,
+            roles.STUDENT,
+            roles.GUARDIAN,
+            roles.SUPER_ADMIN
+          ]
+        }
+      })
+      .state('app.test',{
+        url: 'test',
+        templateUrl: rootUrl + '/components/routecontrollers/test/test.html',
+        controller: 'TestCtrl',
         data: {
           roles: [
             roles.ADMIN,

@@ -100,6 +100,10 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
       $state.go('app.myNotifications', { schoolId: $state.params.schoolId });
       $scope.closeSizeNav();
     };
+  $scope.goToTest = function() {
+    $state.go('app.test');
+    $scope.closeSizeNav();
+  };
     $scope.goToAdmin = function() {
       $state.go('app.admin', { schoolId: $state.params.schoolId });
       $scope.closeSizeNav();
