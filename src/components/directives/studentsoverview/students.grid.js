@@ -6,6 +6,7 @@ angular.module('teacherdashboard')
       scope: {
         studentsData: '=',
         showFilter: '=',
+        school: '=',
         cellWidth: '@'
       },
       restrict: 'E',
@@ -29,6 +30,25 @@ angular.module('teacherdashboard')
         //Use the name as the sort field for the list, to start
         $scope.order = 'name';
         $scope.sortElement = null;
+        if($scope.school) {
+          $scope.settings = {
+            showGpa: ($scope.school.disableGpa !== true),
+            showBehavior: ($scope.school.disableBehavior !== true)
+          };
+        } else if(statebag.school) {
+          $scope.settings = {
+            showGpa: (statebag.school.disableGpa !== true),
+            showBehavior: (statebag.school.disableBehavior !== true)
+          };
+        }
+        $scope.$watch('school', function(newSchool, oldSchool) {
+          if(newSchool && !angular.equals(newSchool, oldSchool)) {
+            $scope.settings = {
+              showGpa: ($scope.school.disableGpa !== true),
+              showBehavior: ($scope.school.disableBehavior !== true)
+            };
+          }
+        });
 
         $scope.kpiTallies = {};
         var RED_CLASS = '40-50';

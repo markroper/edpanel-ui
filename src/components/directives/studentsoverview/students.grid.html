@@ -38,7 +38,7 @@
       </div>
 			<div hide-sm hide-xs layout="row" style="font-size: 16px; width:100%;" ng-show="studentsData">
 				<div flex="{{::cellWidth}}" layout layout-align="center center" class="table-cell" ng-show="showFilter"></div>
-				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'behavior')">
+				<div ng-show="::settings.showBehavior" flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'behavior')">
           <div layout layout-align="center center">
             <div class="kpi-tally band-90-100" layout layout-align="center center">{{kpiTallies.behavior[0]}}</div>
             <div class="kpi-tally band-70-80" layout layout-align="center center">{{kpiTallies.behavior[1]}}</div>
@@ -65,7 +65,7 @@
           <span class="md-title">Attendance</span>
           <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
         </div>
-				<div flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'gpa')">
+				<div ng-show="::settings.showGpa" flex="{{::cellWidth}}" class="table-cell list-filter no-select" ng-click="setOrder($event, 'gpa')">
           <div layout layout-align="center center">
             <div class="kpi-tally band-90-100" layout layout-align="center center">{{kpiTallies.gpa[0]}}</div>
             <div class="kpi-tally band-70-80" layout layout-align="center center">{{kpiTallies.gpa[1]}}</div>
@@ -75,8 +75,9 @@
           <md-icon md-font-set="material-icons" class="material-icons sort-icon">keyboard_arrow_up</md-icon>
         </div>
 			</div>
+
       <div class="table-row" layout="row" layout-wrap ng-repeat="student in (filteredStudentData = (studentsData | orderBy:order | filter:search:strict | filter:filterStudents) | limitTo: limit) track by student.id">
-        <div class="table-cell" flex="20" flex-sm="100" ng-show="showFilter">
+        <div class="table-cell" flex="{{::cellWidth}}" flex-sm="100" ng-show="showFilter">
           <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
             <md-button md-no-ink class="md-primary student-name" ng-click="goToStudent(student)">
             {{::student.name}}
@@ -84,7 +85,7 @@
           </md-button>
           </section>
         </div>
-        <div hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showBehaviorTray($event, student)">
+        <div ng-show="::settings.showBehavior" hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showBehaviorTray($event, student)">
           <div class="choropleth band-{{::student.behaviorClass}}" layout="row" layout-align="center center">
             <span class="mobile-label md-subhead" hide-gt-sm>Behavior</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">
@@ -111,7 +112,7 @@
             <md-tooltip>{{::student.attendance || 0}} absenses this {{::student.attendancePeriod || 'period'}}</md-tooltip>
           </div>
         </div>
-        <div hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showGpaTray($event, student)">
+        <div ng-show="::settings.showGpa" hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showGpaTray($event, student)">
           <div class="choropleth band-{{::student.gpaClass}}" layout="row" layout-align="center center">
             <span class="mobile-label md-subhead" hide-gt-sm>GPA</span>
             <div class="toggle-icon-wrapper" layout="column" layout-align="center center">

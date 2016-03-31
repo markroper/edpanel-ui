@@ -5,7 +5,7 @@ angular.module('teacherdashboard')
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: '/ui/schools/*/admin' });
     });
-
+    $scope.school = angular.copy(statebag.school);
     statebag.currentPage.name = 'System Admin';
     //Resolve the invalidated users
     api.unverifiedUsers.get(
@@ -70,6 +70,22 @@ angular.module('teacherdashboard')
           'jsonNode': $scope.rgb
         }
       };
+
+      if($scope.school.disableGpa !== statebag.school.disableGpa ||
+          $scope.school.disableBehavior !== statebag.school.disableBehavior) {
+        api.school.put(
+          { schoolId: statebag.school.id },
+          $scope.school,
+          function() {
+            statebag.school = $scope.school;
+            showSimpleToast('Updated GPA & behavior flags');
+          },
+          function() {
+            showSimpleToast('Failed to update GPA & behavior flags');
+          }
+        );
+      }
+
       if($scope.attributesId) {
         updatedAttributes.id = $scope.attributesId;
         //Use PUT
