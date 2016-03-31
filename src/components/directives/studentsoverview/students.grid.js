@@ -35,6 +35,11 @@ angular.module('teacherdashboard')
             showGpa: ($scope.school.disableGpa !== true),
             showBehavior: ($scope.school.disableBehavior !== true)
           };
+        } else if(statebag.school) {
+          $scope.settings = {
+            showGpa: (statebag.school.disableGpa !== true),
+            showBehavior: (statebag.school.disableBehavior !== true)
+          };
         }
         $scope.$watch('school', function(newSchool, oldSchool) {
           if(newSchool && !angular.equals(newSchool, oldSchool)) {
