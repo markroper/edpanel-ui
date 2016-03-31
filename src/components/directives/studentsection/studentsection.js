@@ -54,7 +54,7 @@ angular.module('teacherdashboard')
           scope.gage = new $window.JustGage({
             id: 'gauge-'+ scope.section.id + '-section',
             value: scope.section.goal.calculatedValue,
-            min: 0,
+            min: 50,
             max: 100,
             textRenderer: statebagApiManager.resolveGrade,
             valueMinFontSize: 50,

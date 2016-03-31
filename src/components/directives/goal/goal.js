@@ -149,14 +149,19 @@ angular.module('teacherdashboard')
             }
           };
           var goal = $scope.goal;
+
+          var min = 0;
+          if (goal.goalType === 'SECTION_GRADE' && goal.desiredValue > 50) {
+            min = 50;
+          }
           if (refresh) {
             angular.element($document).find('#gauge-'+ goal.id + '-' + $scope.goalIdSuffix).empty();
             $scope.gage = new $window.JustGage({
               id: 'gauge-'+ goal.id + '-' + $scope.goalIdSuffix,
               value: goal.calculatedValue,
-              min: 0,
+              min: min,
               max: goal.desiredValue,
-              minTxt:0,
+              minTxt:min,
               maxTest:100,
               valueMinFontSize: 50,
               textRenderer: renderFunction,
@@ -172,9 +177,9 @@ angular.module('teacherdashboard')
               $scope.gage = new $window.JustGage({
                 id: 'gauge-'+ goal.id + '-' + $scope.goalIdSuffix,
                 value: goal.calculatedValue,
-                min: 0,
+                min: min,
                 max: goal.desiredValue,
-                minTxt:0,
+                minTxt:min,
                 maxTest:100,
                 valueMinFontSize: 50,
                 textRenderer: renderFunction,
