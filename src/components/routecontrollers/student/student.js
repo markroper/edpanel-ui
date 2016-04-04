@@ -49,6 +49,10 @@ angular.module('teacherdashboard')
     };
 
     function resolveAllData() {
+      $scope.settings={
+        showGpa: (statebag.school.disableGpa != true),
+        showBehavior: (statebag.school.disableBehavior != true)
+      };
       $scope.terms = statebag.currentYear.terms;
       for(var i = 0; i < $scope.terms.length; i++) {
         if($scope.terms[i].id === statebag.currentTerm.id) {

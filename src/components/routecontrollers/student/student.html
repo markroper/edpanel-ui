@@ -3,7 +3,7 @@
 		<md-tab label="Grades">
 			<div class="tab-contents">
 				<div class="summary-row" layout="row" layout-align="center center" layout-wrap ng-cloak>
-          <div class="gpa-summary grade-summary" layout="column" layout-align="center center">
+          <div ng-show="::settings.showGpa" class="gpa-summary grade-summary" layout="column" layout-align="center center">
             <div class="grade-summary-title md-body-1">GPA</div>
             <h2 class="grade-summary-grade md-headline">{{gpa.score || '--'}}</h2>
           </div>
@@ -29,7 +29,7 @@
 				</div>
 			</div>
 		</md-tab>
-		<md-tab label="behavior">
+		<md-tab ng-disabled="!settings.showBehavior" label="behavior">
 			<div class="tab-contents">
         <md-card>
           <md-card-content>

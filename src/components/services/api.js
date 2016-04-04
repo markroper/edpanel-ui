@@ -70,7 +70,8 @@ angular.module('teacherdashboard')
         {'put': { method:'PUT', headers: {'Content-Type': 'application/json'} }}),
       authCheck: $resource(base + '/auth'),
       //School endpoints
-      school: $resource(base + '/schools/:schoolId'),
+      school: $resource(base + '/schools/:schoolId', {},
+        { put: { method: 'PUT', headers: { 'Content-Type': 'application/json' } } }),
       schools: $resource(base + '/schools', {}, { 'get': { isArray: true }}),
       //students enpoints
       student: $resource(base + '/students/:studentId'),

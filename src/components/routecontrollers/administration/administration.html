@@ -62,6 +62,14 @@
               undo changes
             </md-button>
           </div>
+          <div layout="row" flex="100" layout-align="center center" style="margin-top:25px; margin-bottom:25px;">
+            <md-checkbox ng-model="school.disableGpa" aria-label="Disable GPA?">
+              Hide GPA related UI?
+            </md-checkbox>
+            <md-checkbox ng-model="school.disableBehavior" aria-label="Disable Behavior?">
+              Hide Behavior related UI?
+            </md-checkbox>
+          </div>
           <div layout="row" layout-wrap layout-align="center start">
             <settings-card name="Behavior" threshold-char="#" is-temporal="true" green="rgb.behavior.green"  yellow="rgb.behavior.yellow" period="rgb.behavior.period"></settings-card>
             <settings-card name="Homework" threshold-char="%" is-temporal="true" green="rgb.homework.green"  yellow="rgb.homework.yellow" period="rgb.homework.period"></settings-card>
