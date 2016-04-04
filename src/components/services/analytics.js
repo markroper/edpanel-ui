@@ -35,7 +35,11 @@ angular.module('teacherdashboard')
       $window.ga('set', 'UserRole', role);
     },
 
+      //Categories
+      NOTIFICATIONS: 'Notifications',
+
       //Actions
+      GO_TO_NOTIFICATION_LOCATION: 'Go To Not. Location',
       CHANGE_TERM: 'Change Term',
       CHANGE_BREAKDOWN: 'Change Breakdown',
       SHOW_STUDENTS: 'Show Students',
