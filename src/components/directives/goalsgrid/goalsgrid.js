@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goalsgrid', ['$state', 'statebag', 'api','$compile','$timeout','$document','moment',
-    function($state, statebag, api,$compile,$timeout,$document,moment) {
+  .directive('goalsgrid', ['$state', 'statebag', 'api','$compile','$timeout','$document',
+    function($state, statebag, api,$compile,$timeout,$document) {
       return {
         scope: {
           pgoals: '=',
@@ -14,7 +14,7 @@ angular.module('teacherdashboard')
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/goalsgrid/goalsgrid.html',
         replace: true,
-        link: function ($scope, element) {
+        link: function ($scope) {
           var resolveColor = function(goal) {
             if (goal.goalProgress === 'MET') {
               return '#4CAF50';
