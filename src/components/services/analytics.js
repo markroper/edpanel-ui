@@ -20,6 +20,8 @@ angular.module('teacherdashboard')
         return -1;
       }
     }
+
+
     return {
       sendEvent: function(category, action, label) {
         $window.ga('send', {
@@ -30,6 +32,9 @@ angular.module('teacherdashboard')
           eventValue: resolveUserRole(statebag.role)
         });
       },
+      setUserRoleDimension: function(role) {
+      $window.ga('set', 'UserRole', role);
+    },
 
       //Actions
       CHANGE_TERM: 'Change Term',

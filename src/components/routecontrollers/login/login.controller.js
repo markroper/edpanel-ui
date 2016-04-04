@@ -18,8 +18,8 @@ angular.module('teacherdashboard')
         });
     };
   })
-  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager', 'consts', '$window',
-    function ($scope, api, $state, authentication, statebag, statebagapimanager, consts, $window) {
+  .controller('LoginController', ['$scope', 'api', '$state', 'authentication', 'statebag','statebagApiManager', 'consts', '$window','analytics',
+    function ($scope, api, $state, authentication, statebag, statebagapimanager, consts, $window, analytics) {
       $scope.$on('$viewContentLoaded', function() {
         $window.ga('send', 'pageview', { page: '/ui/login' });
       });
@@ -50,6 +50,8 @@ angular.module('teacherdashboard')
               schoolId: data.currentSchoolId
             };
         		authentication.authenticate(identity);
+            
+            analytics.setUserRoleDimension(data.type);
 
             //If the user logged in with a one time use password, redirect them to password
             // reset otherwise all subsequent API calls on this cookie will fail.
@@ -60,6 +62,7 @@ angular.module('teacherdashboard')
 
 
             //Resolve the school
+
             if(data.currentSchoolId) {
 
               //TODO Filter or for teacher vs addmin home pages
