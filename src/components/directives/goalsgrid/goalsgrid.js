@@ -100,15 +100,6 @@ angular.module('teacherdashboard')
           //  )
           //  $scope.dada = $scope.dada.concat(objectList);
           //}
-
-
-
-
-
-
-
-
-
         }
       };
     }]);

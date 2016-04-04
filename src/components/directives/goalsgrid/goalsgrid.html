@@ -7,7 +7,7 @@
           <creategoal ng-show="!isAdvisorView" pending-goals="pgoals" sections="sections"></creategoal>
         </div>
         <div layout="row" class="goals-container">
-          <goal not-tooltip="true" advisor-view="isAdvisorView" ng-repeat="pgoal in pgoals" goal="pgoal" pending-goals="pgoals" approved-goals="agoals" goal-id-suffix="grid" editable="true"></goal>
+          <goal advisor-view="isAdvisorView" ng-repeat="pgoal in pgoals" goal="pgoal" pending-goals="pgoals" approved-goals="agoals" goal-id-suffix="grid" editable="true"></goal>
         </div>
       </md-card-content>
     </md-card>
@@ -19,7 +19,7 @@
           <md-headline style="margin-bottom: 10px;font-size: 30px">Approved Goals</md-headline>
         </div>
         <div layout="row" class="goals-container">
-          <goal not-tooltip="true" advisor-view="isAdvisorView" ng-repeat="agoal in agoals" goal="agoal" approved-goals="agoals" goal-id-suffix="grid"></goal>
+          <goal advisor-view="isAdvisorView" ng-repeat="agoal in agoals" goal="agoal" approved-goals="agoals" goal-id-suffix="grid"></goal>
         </div>
       </md-card-content>
     </md-card>

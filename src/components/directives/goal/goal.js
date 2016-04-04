@@ -9,8 +9,7 @@ angular.module('teacherdashboard')
         approvedGoals:'=',
         editable: '@',
         goalIdSuffix: '@',
-        advisorView:'=',
-        notTooltip: '@'
+        advisorView:'='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/goal/goal.html',
