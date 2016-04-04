@@ -21,7 +21,7 @@
     "moment":"2.10.6",
     "justgage":"git://github.com/toorshia/justgage#master",
     "angular-gantt":"1.2.13",
-    "angular-timeline":"git://github.com/rpocklin/angular-timeline#master"
+    "angular-ui-tree":"x.x.x"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.4"

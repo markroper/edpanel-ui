@@ -1,38 +1,109 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goalsgrid', ['$state', 'statebag', 'api','$compile','$timeout','$document',
-    function($state, statebag, api,$compile,$timeout,$document) {
+  .directive('goalsgrid', ['$state', 'statebag', 'api','$compile','$timeout','$document','moment',
+    function($state, statebag, api,$compile,$timeout,$document,moment) {
       return {
         scope: {
-          approvedGoals: '=',
-          pendingGoals: '=',
           pgoals: '=',
           agoals: '=',
+          completeGoals: '=',
           sections: '=',
           isAdvisorView: '=',
-          test: '='
+          goalsPromise: '='
         },
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/goalsgrid/goalsgrid.html',
         replace: true,
         link: function ($scope, element) {
-          $scope.dada = [
-            // Order is optional. If not specified it will be assigned automatically
-            {name: 'row1', tasks: [
-              {name: 'task1', from: new Date(2013, 8, 18), to: new Date(2013, 9, 18)},
-          {name: 'task2', from: new Date(2013, 9, 19), to: new Date(2013, 10, 18)}
-          ]
-        },
-          {name: 'row2', tasks: [
-            {name: 'task3', from: new Date(2013, 7, 18), to: new Date(2013, 8, 18)},
-            {name: 'task4', from: new Date(2013, 9, 18), to: new Date(2013, 10, 18)}
-          ]
-          }
+          var resolveColor = function(goal) {
+            if (goal.goalProgress === 'MET') {
+              return '#4CAF50';
+            }
+            else {
+              return '#F44336';
+            }
+          };
 
-          ];
-          var body = $document.find('#test');
-          var template = '<div gantt data="dada"></div>';
-          body.append($compile(template)($scope));
+          $scope.today = new Date();
+          $scope.lastyear = new Date();
+          //Show up to three months ago
+          $scope.lastyear.setFullYear($scope.today.getFullYear(),$scope.today.getMonth()-3);
+          var body = $document.find('#completed');
+          var template = '<div class="chart" ' +
+            'time-frames-non-working-mode="hidden" ' +
+            'gantt data="ganttInfo" ' +
+            'headers="[\'month\']" ' +
+            'allow-side-resizing="false"' +
+            'from-date="lastyear">' +
+            '<gantt-table></gantt-table>' +
+            '<gantt-groups></gantt-groups></div>';
+
+          $scope.goalsPromise.then(function(value) {
+            $scope.ganttInfo = [];
+            $scope.dates = ['month'];
+            var nameMap = {};
+            for (var i= 0; i < $scope.completeGoals.length; i++) {
+              if (typeof nameMap[$scope.completeGoals[i].student.name] === 'undefined') {
+                nameMap[$scope.completeGoals[i].student.name] = [];
+              }
+              nameMap[$scope.completeGoals[i].student.name].push($scope.completeGoals[i]);
+            }
+
+            for (var key in nameMap) {
+              for (var i = 0; i < nameMap[key].length; i++) {
+                $scope.ganttInfo.push(
+                  {
+                    name: nameMap[key][i].student.name + ': ' + nameMap[key][i].name, tasks: [ {
+                    name: nameMap[key][i].student.name + ': ' + nameMap[key][i].name,
+                    from: nameMap[key][i].startDate,
+                    to: nameMap[key][i].endDate,
+                    color: resolveColor(nameMap[key][i]),
+                    goal: nameMap[key][i],
+                    content: '<div></div>'
+                  } ]
+                  }
+
+                );
+              }
+            }
+
+            body.append($compile(template)($scope));
+          });
+
+          //THIS SHOULD STAY SO WHEN WE CAHGNE THIS I DON'T FORGET TEH RANDOM DATA FORMAT NECESSARY FOR TREES
+          //for (var key in nameMap) {
+          //  var nameList = [];
+          //  var objectList = [];
+          //  for (var i = 0; i < nameMap[key].length; i++) {
+          //    nameList.push(nameMap[key][i].name);
+          //    objectList.push(
+          //      {
+          //        name: nameMap[key][i].name, tasks: [ {
+          //        name: nameMap[key][i].name,
+          //        from: nameMap[key][i].startDate,
+          //        to: nameMap[key][i].endDate,
+          //        color: resolveColor(nameMap[key][i]),
+          //        goal: nameMap[key][i],
+          //        content: '<div></div>'
+          //      } ]
+          //      }
+          //
+          //    );
+          //    console.log(nameList);
+          //    console.log(objectList);
+          //  }
+          //  $scope.dada.push(
+          //    {
+          //      name: key,
+          //      children: nameList
+          //    }
+          //  )
+          //  $scope.dada = $scope.dada.concat(objectList);
+          //}
+
+
+
+
 
 
 
