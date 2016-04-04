@@ -28,8 +28,7 @@ angular.module('teacherdashboard')
           hitType: 'event',
           eventCategory: category,
           eventAction: action,
-          eventLabel: label,
-          eventValue: resolveUserRole(statebag.role)
+          eventLabel: label
         });
       },
       setUserRoleDimension: function(role) {

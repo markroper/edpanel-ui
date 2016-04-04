@@ -50,7 +50,7 @@ angular.module('teacherdashboard')
               schoolId: data.currentSchoolId
             };
         		authentication.authenticate(identity);
-            
+
             analytics.setUserRoleDimension(data.type);
 
             //If the user logged in with a one time use password, redirect them to password
