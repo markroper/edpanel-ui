@@ -40,6 +40,10 @@ angular.module('teacherdashboard')
 
       //Actions
       GO_TO_NOTIFICATION_LOCATION: 'Go To Not. Location',
+      NOTIFICATION_OPEN_MENU: 'Open Notif. Menu',
+      NOTIFICATION_DISMISS_ALL: 'Dismiss All Notifs.',
+      NOTIFICATION_SETUP: 'Setup Notifications',
+      NOTIFICATION_DISMISS: 'Dismiss Notification',
       CHANGE_TERM: 'Change Term',
       CHANGE_BREAKDOWN: 'Change Breakdown',
       SHOW_STUDENTS: 'Show Students',

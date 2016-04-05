@@ -185,6 +185,7 @@ angular.module('teacherdashboard')
 
           $scope.dismissNotification = function() {
             var supressToast = true;
+            analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_DISMISS, $scope.notification.notification.measure );
 
             api.dismissTriggeredNotification.put(
               {
