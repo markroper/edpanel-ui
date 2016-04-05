@@ -18,9 +18,15 @@ angular.module('teacherdashboard')
                 scope.retrieveTeacherHomeData();
             });
           }
-
+          scope.teacherToUse = null;
+          scope.$watch('teacherToUse', function(before, after) {
+            if(before && !angular.equals(before, after)) {
+              scope.retrieveTeacherHomeData();
+            }
+          });
           scope.showFilter=true;
           scope.hwPromise= {};
+
           scope.retrieveTeacherHomeData = function() {
             var promises = [];
             var sectionPromise = [];
@@ -198,6 +204,11 @@ angular.module('teacherdashboard')
              */
           function resolveSections() {
             var identity = authentication.identity();
+            if(scope.teacherToUse) {
+              identity = {
+                id: scope.teacherToUse.id
+              }
+            }
             //retrieve the teachers current sections
             return api.teacherSections.get(
               {
@@ -210,8 +221,17 @@ angular.module('teacherdashboard')
               function(data){
                 if (data.length === 0) {
                   scope.isNotTeacher = true;
-                }
-                else {
+                  if(!scope.teachers) {
+                    api.teachersInSchool.get(
+                      { schoolId: statebag.school.id },
+                      function (teachers) {
+                        scope.teachers = teachers;
+                      },
+                      function () {
+
+                      });
+                  }
+                } else {
                   statebag.currentSections = data;
                   scope.isNotTeacher = false;
                 }
@@ -291,6 +311,11 @@ angular.module('teacherdashboard')
            */
           function  getStudentsDemeritCount() {
             var identity = authentication.identity();
+            if(scope.teacherToUse) {
+              identity = {
+                id: scope.teacherToUse.id
+              };
+            }
             var personQuery = {
               'aggregateMeasures':[
                 {

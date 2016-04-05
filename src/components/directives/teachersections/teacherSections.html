@@ -1,11 +1,17 @@
 <div class="teacher-sections">
-  <div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!sections">
+  <div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!sections && !teachers">
     <h3 flex="50">Loading...</h3>
     <br/>
     <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
   </div>
   <section-grid ng-show="!isNotTeacher" ng-repeat="section in sections" section="section" promise="hwPromise" students="section.enrolledStudents"></section-grid>
   <div ng-show="isNotTeacher">
-    Sorry, it appears you don't teach any classes.
+    Sorry, it appears you don't teach any classes. Choose a teacher to view their classes:
+    <md-input-container class="teacher-picker">
+      <label>Teachers</label>
+      <md-select ng-model="teacherToUse" class="md-subhead">
+        <md-option ng-repeat="opt in teachers" value="{{opt}}">{{opt.name}}</md-option>
+      </md-select>
+    </md-input-container>
   </div>
 </div>

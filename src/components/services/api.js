@@ -111,6 +111,9 @@ angular.module('teacherdashboard')
       studentSectionsData: $resource(base + '/ui/students/:studentId/schools/:schoolId/years/:yearId/terms/:termId', {}, { 'get': { isArray: true }}),
       //Other endpoints
       teacher: $resource(base + '/teachers/:teacherId'),
+      teachersInSchool: $resource(base + '/schools/:schoolId/teachers',
+        {},
+        { 'get': { isArray: true }}),
       teacherSections: $resource(base + '/schools/:schoolId/years/:yearId/terms/:termId/teachers/:teacherId/sections',
         {},
         {'get': {isArray:true}}),
