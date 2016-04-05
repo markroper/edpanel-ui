@@ -34,11 +34,23 @@ angular.module('teacherdashboard')
       setUserRoleDimension: function(role) {
       $window.ga('set', 'UserRole', role);
     },
+      //Pages
+      GOALS_TAB: 'GOALS_TAB',
+      GOALS_ADVISOR: 'GOALS_ADVISOR',
 
       //Categories
       NOTIFICATIONS: 'Notifications',
+      GOALS: 'Goals',
 
       //Actions
+      GOAL_MET: 'Goal Met',
+      GOAL_NOT_MET: 'Goal Not Met',
+      GOAL_APPROVE: 'Goal Approve',
+      GOAL_EDIT_START: 'Start Edit Goal',
+      GOAL_EDIT_COMPLETE: 'Finish Edit Goal',
+      GOAL_DELETE: 'Delete Goal',
+      GOAL_SHOW_MORE: 'Goal Menu Open',
+      GOAL_SHOW_WOOP: 'Show Woop',
       GO_TO_NOTIFICATION_LOCATION: 'Go To Not. Location',
       NOTIFICATION_OPEN_MENU: 'Open Notif. Menu',
       NOTIFICATION_DISMISS_ALL: 'Dismiss All Notifs.',
@@ -56,7 +68,6 @@ angular.module('teacherdashboard')
       SAVE_CHANGES: 'Save Custom Changes',
       ADD_FILTER: 'Add Filter',
       TOGGLE_FILTER: 'Toggle Filter',
-      EDIT_GOAL: 'Edit Goal',
       STUDENT_SORT: 'Student Sort',
       OPEN_STUDENT: 'Go to Student',
 

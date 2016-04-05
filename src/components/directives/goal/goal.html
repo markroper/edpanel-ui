@@ -3,7 +3,7 @@
       <md-card-content>
         <md-fab-speed-dial  md-open="demo.isOpen" md-direction="left" class="md-scale md-fab-top-right menu-button">
           <md-fab-trigger>
-            <md-button ng-hide="!editable && userRole === 'Student'" aria-label="menu" class="goal-menu md-icon-button">
+            <md-button ng-click="openVert()" ng-hide="!editable && userRole === 'Student'" aria-label="menu" class="goal-menu md-icon-button">
               <md-icon md-font-set="material-icons">more_vert</md-icon>
             </md-button>
           </md-fab-trigger>
@@ -54,7 +54,7 @@
           <div class="md-subhead">Approve Goal</div>
         </div>
       </md-button>
-      <md-button class="md-raised md-button-toggle md-ink-ripple woop-toggler" ng-click="showWoop()">
+      <md-button class="md-raised md-button-toggle md-ink-ripple woop-toggler" ng-click="showWoopUser()">
         <div layout="row" layout-align="center center">
           <div class="md-subhead">WOOP</div>
           <div style="width:40px;"></div>
