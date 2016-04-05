@@ -5,7 +5,11 @@ angular.module('teacherdashboard')
     function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $window, mdToast) {
       $scope.approved = [];
       $scope.pending = [];
+      $scope.completed = [];
       $scope.goalsLoaded = false;
+      var deferred = $q.defer();
+      $scope.goalsPromise = deferred.promise;
+
       $scope.$on('$viewContentLoaded', function() {
         $window.ga('send', 'pageview', { page: '/ui/schools/*' });
       });
@@ -34,9 +38,10 @@ angular.module('teacherdashboard')
                 $scope.pending.push(data[i]);
               }
             } else {
-              //TODO how do we display completed goals
+              $scope.completed.push(data[i]);
             }
           }
+          deferred.resolve();
           $scope.goalsLoaded = true;
         },
         //Error callback

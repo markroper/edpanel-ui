@@ -15,7 +15,10 @@ angular.module('teacherdashboard')
     $scope.sections = [];
     $scope.approved = [];
     $scope.pending = [];
+    $scope.completed = [];
     $scope.openTab = $stateParams.tab;
+    var deferred = $q.defer();
+    $scope.goalsPromise = deferred.promise;
     if(!statebag.school || !statebag.currentStudent) {
       //Resolve the school then resolve the student
       statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(
@@ -81,9 +84,10 @@ angular.module('teacherdashboard')
                 $scope.pending.push(results[i]);
               }
             } else {
-              //TODO how do we display completed goals
+              $scope.completed.push(results[i]);
             }
           }
+          deferred.resolve();
         });
     }
 
