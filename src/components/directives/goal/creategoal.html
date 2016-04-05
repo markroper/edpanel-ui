@@ -39,7 +39,7 @@
             <div layout="column" layout-align="start center">
               <md-headline flex>What Assignment?</md-headline>
               <md-input-container flex>
-                <input ng-required="goal.createType == 'Assignment'" name="assignment" ng-model="goal.assignment" placeholder="Assignment">
+                <input aria-label="What assignment?" ng-required="goal.createType == 'Assignment'" name="assignment" ng-model="goal.assignment" placeholder="Assignment">
               </md-input-container>
             </div>
           </div>
@@ -47,7 +47,7 @@
             <div layout="column" layout-align="start center">
               <md-headline flex>What grade would you like to get?</md-headline>
               <md-input-container flex>
-                <input ng-required="goal.createType == 'Assignment'" name="Grade" type="number" step="1" ng-model="goal.desiredGrade"
+                <input aria-label="What grade would you like to get?" ng-required="goal.createType == 'Assignment'" name="Grade" type="number" step="1" ng-model="goal.desiredGrade"
                        max="100">
               </md-input-container>
             </div>
@@ -70,7 +70,7 @@
             <div layout="column" layout-align="start center">
               <md-headline flex>How many would you like to get?</md-headline>
               <md-input-container flex>
-                <input ng-required="goal.createType == 'Behavior'" name="Grade" type="number" step="1" ng-model="goal.desiredGrade"
+                <input aria-label="How many would you like to get?" ng-required="goal.createType == 'Behavior'" name="Grade" type="number" step="1" ng-model="goal.desiredGrade"
                        max="1000">
               </md-input-container>
             </div>

@@ -4,3 +4,11 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+.chart {
+  margin: 40px;
+}
+.gantt-body-columns {
+  .gantt-column {
+    border-right: white;
+  }
+}
