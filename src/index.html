@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="../bower_components/angular-ui-grid/ui-grid.css" />
     <link rel="stylesheet" href="../bower_components/angular-gridster/dist/angular-gridster.min.css" />
     <link rel="stylesheet" href="../bower_components/c3/c3.css" />
+    <link rel="stylesheet" href="../bower_components/angular-gantt/assets/angular-gantt.css" />
+    <link rel="stylesheet" href="../bower_components/angular-gantt/assets/angular-gantt-plugins.css" />
+    <link rel="stylesheet" href="../bower_components/angular-ui-tree/dist/angular-ui-tree.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -66,17 +69,20 @@
     <script src="../bower_components/moment/moment.js"></script>
     <script src="../bower_components/raphael/raphael.js"></script>
     <script src="../bower_components/justgage/justgage.js"></script>
+    <script src="../bower_components/angular-moment/angular-moment.js"></script>
+    <script src="../bower_components/angular-gantt/assets/angular-gantt.js"></script>
+    <script src="../bower_components/angular-gantt/assets/angular-gantt-plugins.js"></script>
+    <script src="../bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,src}) scripts/app.js -->
     <!-- inject:js -->
     <script src="/app/index.js"></script>
-    <script src="/components/routecontrollers/test/test.js"></script>
     <script src="/components/routecontrollers/teacherhome/teacherhome.controller.js"></script>
     <script src="/components/routecontrollers/surveyresults/surveyResults.js"></script>
     <script src="/components/routecontrollers/student/student.js"></script>
-    <script src="/components/routecontrollers/schoolselector/schoolselector.js"></script>
     <script src="/components/routecontrollers/schooldash/schoolDash.js"></script>
+    <script src="/components/routecontrollers/schoolselector/schoolselector.js"></script>
     <script src="/components/routecontrollers/resetpassword/resetpassword.js"></script>
     <script src="/components/routecontrollers/notificationmgmt/notificationmgmt.js"></script>
     <script src="/components/routecontrollers/navinclude/navcontroller.js"></script>
@@ -86,6 +92,9 @@
     <script src="/components/routecontrollers/home/home.controller.js"></script>
     <script src="/components/routecontrollers/advisorgoals/advisorgoals.js"></script>
     <script src="/components/routecontrollers/administration/administration.js"></script>
+    <script src="/components/directives/goal/goal.js"></script>
+    <script src="/components/directives/goal/creategoal.js"></script>
+    <script src="/components/directives/messages/messages.js"></script>
     <script src="/components/directives/teachersections/teacherSections.js"></script>
     <script src="/components/directives/survey/surveyResponse.js"></script>
     <script src="/components/directives/survey/surveyQuestionBuilder.js"></script>
@@ -101,13 +110,10 @@
     <script src="/components/directives/notifications/notifications.js"></script>
     <script src="/components/directives/notifications/createnotification.js"></script>
     <script src="/components/directives/notificationcard/notificationcard.js"></script>
-    <script src="/components/directives/messages/messages.js"></script>
     <script src="/components/directives/gradedonut/gradedonut.js"></script>
     <script src="/components/directives/goalsgrid/goalsgrid.js"></script>
-    <script src="/components/directives/goal/goal.js"></script>
-    <script src="/components/directives/goal/creategoal.js"></script>
-    <script src="/components/directives/datetimechart/datetimechart.js"></script>
     <script src="/components/directives/filterchip/filterChip.js"></script>
+    <script src="/components/directives/datetimechart/datetimechart.js"></script>
     <script src="/components/directives/dashboard/expressionEditor.js"></script>
     <script src="/components/directives/dashboard/edpanelReport.js"></script>
     <script src="/components/directives/dashboard/edPanelRow.js"></script>
