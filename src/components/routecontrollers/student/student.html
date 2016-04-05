@@ -1,6 +1,6 @@
 <div class="student-detail">
 	<md-tabs ng-show="!sections.length < 1" md-center-tabs md-dynamic-height md-border-bottom class="tabs-header" md-selected="openTab">
-		<md-tab label="Grades">
+		<md-tab ng-click="logTabOpen('grades')" label="Grades">
 			<div class="tab-contents">
 				<div class="summary-row" layout="row" layout-align="center center" layout-wrap ng-cloak>
           <div ng-show="::settings.showGpa" class="gpa-summary grade-summary" layout="column" layout-align="center center">
@@ -29,7 +29,7 @@
 				</div>
 			</div>
 		</md-tab>
-		<md-tab ng-disabled="!settings.showBehavior" label="behavior">
+		<md-tab ng-click="logTabOpen('behavior')" ng-disabled="!settings.showBehavior" label="behavior">
 			<div class="tab-contents">
         <md-card>
           <md-card-content>
@@ -55,17 +55,17 @@
         </md-card>
 			</div>
 		</md-tab>
-		<md-tab label="State Exams">
+		<md-tab ng-click="logTabOpen('exams')" label="State Exams">
 			<div class="tab-contents">
         <h3 class="md-subhead">Under construction</h3>
 			</div>
 		</md-tab>
-		<md-tab label="Graduation">
+		<md-tab ng-click="logTabOpen('graduation')" label="Graduation">
 			<div class="tab-contents">
         <h3 class="md-subhead">Under construction</h3>
 			</div>
 		</md-tab>
-    <md-tab label="Goals">
+    <md-tab ng-click="logTabOpen('goals')" label="Goals">
       <div class="tab-contents">
         <!--<creategoal pending-goals="pending" sections="sections"></creategoal>-->
         <goalsgrid pgoals="pending" agoals="approved" sections="sections"></goalsgrid>

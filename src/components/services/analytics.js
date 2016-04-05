@@ -43,7 +43,7 @@ angular.module('teacherdashboard')
       GOALS: 'Goals',
 
       //Actions
-      GOAL_MET: 'S',
+      GOAL_MET: 'Goal Met',
       GOAL_NOT_MET: 'Goal Not Met',
       GOAL_APPROVE: 'Goal Approve',
       GOAL_EDIT_START: 'Start Edit Goal',
