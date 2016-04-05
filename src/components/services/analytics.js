@@ -43,7 +43,7 @@ angular.module('teacherdashboard')
       GOALS: 'Goals',
 
       //Actions
-      GOAL_MET: 'Goal Met',
+      GOAL_MET: 'S',
       GOAL_NOT_MET: 'Goal Not Met',
       GOAL_APPROVE: 'Goal Approve',
       GOAL_EDIT_START: 'Start Edit Goal',
@@ -51,6 +51,9 @@ angular.module('teacherdashboard')
       GOAL_DELETE: 'Delete Goal',
       GOAL_SHOW_MORE: 'Goal Menu Open',
       GOAL_SHOW_WOOP: 'Show Woop',
+      GOAL_START_CREATE: 'Start Goal Create',
+      GOAL_CANCEL_CREATE: 'Cancel Goal Create',
+      GOAL_FINISH_CREATE: 'Finish Goal Create',
       GO_TO_NOTIFICATION_LOCATION: 'Go To Not. Location',
       NOTIFICATION_OPEN_MENU: 'Open Notif. Menu',
       NOTIFICATION_DISMISS_ALL: 'Dismiss All Notifs.',

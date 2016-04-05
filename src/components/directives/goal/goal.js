@@ -109,12 +109,6 @@ angular.module('teacherdashboard')
         };
       },
       link: function($scope,elem) {
-        var ga_pageName;
-        if ($scope.advisorView) {
-          ga_pageName = analytics.GOALS_ADVISOR;
-        } else {
-          ga_pageName = analytics.GOALS_TAB;
-        }
         $scope.woopOpen = false;
         var $woopContainer = angular.element(elem).find('.woop-container');
         var SLIDE_OPEN_CLASS = 'slide-open-woop';
