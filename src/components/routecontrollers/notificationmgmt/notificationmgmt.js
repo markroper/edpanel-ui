@@ -4,7 +4,7 @@ angular.module('teacherdashboard')
   function ($scope, api, $state, statebag, $window, $location, authentication, $mdToast, consts, analytics) {
     statebag.currentPage.name = 'My Notifications';
     $scope.$on('$viewContentLoaded', function () {
-      $window.ga('send', 'pageview', { page: $location.url() });
+      $window.ga('send', 'pageview', { page: 'ui/schools/*/notifications' });
     });
     $scope.notifications = null;
     api.notificationsForUser.get({ userId: authentication.identity().id },
