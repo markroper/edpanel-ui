@@ -30,7 +30,7 @@
         <div layout="column" layout-align="center center">
           <div ng-show="advisorView" class="student-name" flex="85">{{goal.student.name}}</div>
           <div class="goal-title" flex="85">{{goal.name}}</div>
-          <div ng-show="goal.goalType != 'OPEN'" id="gauge-{{::goal.id}}-{{::goalIdSuffix}}" class="goal-gauge" style="height: 160px"></div>
+          <div ng-show="goal.goalType != 'OPEN'" id="gauge-{{::goal.id}}-{{::goalIdSuffix}}" class="goal-gauge" style="height: 160px; width:100%;"></div>
           <div ng-show="goal.goalType == 'OPEN'" layout='column' layout-align="center center" style="min-height:160px">
             <div style="font-size: 18px; margin-bottom: 20px" ng-show="!goal.editActive">{{goal.message}}</div>
             <div layout="column" ng-show="goal.editActive">
