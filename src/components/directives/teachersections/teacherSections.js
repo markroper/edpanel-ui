@@ -11,17 +11,26 @@ angular.module('teacherdashboard')
         templateUrl: api.basePrefix + '/components/directives/teachersections/teacherSections.html',
         replace: true,
         link: function(scope) {
-          statebag.currentPage.name = 'My Sections';
+          statebag.currentPage.name = 'Classes';
+          scope.loading = true;
+          scope.adminPerms = authentication.isInAnyRole([ 'ADMINISTRATOR', 'SUPER_ADMINISTRATOR' ]);
 
           if(!statebag.school) {
             statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(function() {
                 scope.retrieveTeacherHomeData();
             });
           }
-
+          scope.teacherToUse = authentication.identity().id;
+          scope.$watch('teacherToUse', function(before, after) {
+            if(before && !angular.equals(before, after)) {
+              scope.retrieveTeacherHomeData();
+            }
+          });
           scope.showFilter=true;
           scope.hwPromise= {};
+
           scope.retrieveTeacherHomeData = function() {
+            scope.loading = true;
             var promises = [];
             var sectionPromise = [];
             //Resolve the sections this teacher teaches
@@ -104,17 +113,19 @@ angular.module('teacherdashboard')
                   attendanceMap[result[1]].total += result[2];
                   attendanceMap[result[1]].count += 1;
                 }
-
                 resolvedSectionStudentInfo(hwCompletions, attendanceMap, demeritMap);
-
-
               });
 
               //Put it on the statebag
               $q.all(sectionPromise).then(function() {
                 scope.sections = statebag.currentSections;
+                scope.loading = false;
+              }, function() {
+                scope.loading = false;
               });
 
+            }, function(){
+              scope.loading = false;
             });
           };
           scope.retrieveTeacherHomeData();
@@ -198,6 +209,11 @@ angular.module('teacherdashboard')
              */
           function resolveSections() {
             var identity = authentication.identity();
+            if(scope.teacherToUse) {
+              identity = {
+                id: parseInt(scope.teacherToUse)
+              }
+            }
             //retrieve the teachers current sections
             return api.teacherSections.get(
               {
@@ -210,8 +226,17 @@ angular.module('teacherdashboard')
               function(data){
                 if (data.length === 0) {
                   scope.isNotTeacher = true;
-                }
-                else {
+                  if(!scope.teachers) {
+                    api.teachersInSchool.get(
+                      { schoolId: statebag.school.id },
+                      function (teachers) {
+                        scope.teachers = teachers;
+                      },
+                      function () {
+
+                      });
+                  }
+                } else {
                   statebag.currentSections = data;
                   scope.isNotTeacher = false;
                 }
@@ -291,6 +316,11 @@ angular.module('teacherdashboard')
            */
           function  getStudentsDemeritCount() {
             var identity = authentication.identity();
+            if(scope.teacherToUse) {
+              identity = {
+                id: parseInt(scope.teacherToUse)
+              };
+            }
             var personQuery = {
               'aggregateMeasures':[
                 {

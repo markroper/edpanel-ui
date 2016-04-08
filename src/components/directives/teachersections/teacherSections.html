@@ -1,11 +1,25 @@
 <div class="teacher-sections">
-  <div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!sections">
+  <div ng-show="adminPerms" layout layout-align="center center">
+    <div class="md-subhead" style="margin-right:10px;">View classes taught by:</div>
+    <md-input-container class="teacher-picker">
+      <label>teacher</label>
+      <md-select ng-model="teacherToUse" class="md-subhead">
+        <md-option ng-repeat="opt in teachers" value="{{opt.id}}">{{opt.name}}</md-option>
+      </md-select>
+    </md-input-container>
+  </div>
+
+  <div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="(!sections && !teachers) || loading">
     <h3 flex="50">Loading...</h3>
     <br/>
     <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
   </div>
-  <section-grid ng-show="!isNotTeacher" ng-repeat="section in sections" section="section" promise="hwPromise" students="section.enrolledStudents"></section-grid>
-  <div ng-show="isNotTeacher">
-    Sorry, it appears you don't teach any classes.
+  <section-grid ng-show="!isNotTeacher && !loading"
+                ng-repeat="section in sections"
+                section="section"
+                promise="hwPromise"
+                students="section.enrolledStudents"></section-grid>
+  <div ng-show="isNotTeacher" layout layout-align="center center">
+    No current classes found
   </div>
 </div>
