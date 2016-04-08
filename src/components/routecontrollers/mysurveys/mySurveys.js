@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication','$compile', '$mdToast', 'statebagApiManager',
-  function ($scope, api, $state, statebag, $window, $location, authentication, $compile, $mdToast, statebagapimanager) {
+.controller('MySurveys', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication','$compile', '$mdToast', 'statebagApiManager','analytics',
+  function ($scope, api, $state, statebag, $window, $location, authentication, $compile, $mdToast, statebagapimanager, analytics) {
     statebag.currentPage.name = 'My Surveys';
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: '/ui/mysurveys' });
@@ -54,7 +54,7 @@ angular.module('teacherdashboard')
       resolveSurveysAndSections();
     }
     $scope.createNewSurvey = function(s) {
-      $window.ga('send', 'event', 'Survey', 'CreateSurvey', 'Create a new survey');
+      analytics.sendEvent(analytics.SURVEYS, analytics.SURVEY_CREATE, null);
       $scope.surveyAggregates = null;
       $scope.aggregateSurvey = null;
       $scope.school = statebag.school;
@@ -91,6 +91,7 @@ angular.module('teacherdashboard')
     };
 
     $scope.deleteSurvey = function(survey) {
+      analytics.sendEvent(analytics.SURVEYS, analytics.SURVEY_DELETE, null);
       api.survey.delete({surveyId: survey.id},
         function(){
           for(var i = 0; i < $scope.surveys.length; i++) {

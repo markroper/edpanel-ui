@@ -14,8 +14,8 @@ var DialogController = function($scope, $mdDialog) {
 };
 
 angular.module('teacherdashboard')
-  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra', '$mdToast', '$document',
-  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra, $mdToast, $document) {
+  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra', '$mdToast', '$document','analytics',
+  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra, $mdToast, $document, analytics) {
     return {
       scope: {
         dashboard: '=',
@@ -168,6 +168,7 @@ angular.module('teacherdashboard')
         };
 
         scope.editReport = function(ev, rpt) {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_EDIT_CHART, null);
           var sc = scope.$new();
           sc.api = api;
           sc.theme = statebag.theme;
@@ -530,6 +531,7 @@ angular.module('teacherdashboard')
           });
         };
         scope.deleteReport = function($event, rpt) {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_DELETE_CHART, null);
           var idx = scope.dashboardReports.indexOf(rpt);
           scope.dashboardReports.splice(idx, 1);
         };

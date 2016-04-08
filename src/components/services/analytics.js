@@ -41,8 +41,30 @@ angular.module('teacherdashboard')
       //Categories
       NOTIFICATIONS: 'Notifications',
       GOALS: 'Goals',
+      SCHOOL_DASHBOARD: 'School Dashboard',
+      SURVEYS: 'Survey',
 
       //Actions
+      DASH_EDIT: 'Dash Edit',
+      DASH_CHANGE_TERM: 'Change Term',
+      DASH_CHANGE_BREAKDOWN: 'Change Breakdown',
+      DASH_ADD_FILTER: 'Dash Add Filter',
+      DASH_EDIT_CHART: 'Dash Chart Edit',
+      DASH_DELETE_CHART: 'Dash Delete Chart',
+      DASH_ADD_CHART: 'Dash Add Chart',
+      DASH_SAVE_CHANGES: 'Dash Save Changes',
+      DASH_CANCEL_CHANGES: 'Dash Cancel Changes',
+      DASH_PREVIEW_EDIT: 'Dash Preview Edits',
+      DASH_SAVE_CHART: 'Dash Save Chart',
+      DASH_CANCEL_CHART: 'Dash Cancel Chart',
+      SURVEY_CREATE: 'Create Survey',
+      SURVEY_DELETE: 'Delete Survey',
+      SURVEY_ADD_QUESTION: 'Add Survey Question',
+      SURVEY_FINISH_CREATE: 'Finish Create Survey',
+      SURVEY_CANCEL_CREATE: 'Cancel Create Survey',
+
+
+
       GOAL_MET: 'Goal Met',
       GOAL_NOT_MET: 'Goal Not Met',
       GOAL_APPROVE: 'Goal Approve',

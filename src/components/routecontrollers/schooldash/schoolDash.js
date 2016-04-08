@@ -8,6 +8,9 @@ angular.module('teacherdashboard')
       statebag.currentPage.name = 'School Dashboard';
       $scope.d = { editDashboard: false };
       $scope.toggleEditMode = function() {
+        if (!$scope.d.editDashboard) {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_EDIT, null);
+        }
         $scope.d.editDashboard = !$scope.d.editDashboard;
       };
       $scope.resolveDashAndTerms = function() {
