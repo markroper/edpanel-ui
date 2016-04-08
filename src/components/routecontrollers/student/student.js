@@ -19,6 +19,9 @@ angular.module('teacherdashboard')
          case 4:
            $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/goals' });
                break;
+         default:
+           $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/grades' });
+           break;
        }
 
     });
