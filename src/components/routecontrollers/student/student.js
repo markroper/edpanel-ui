@@ -3,26 +3,28 @@ angular.module('teacherdashboard')
 .controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll','analytics','$stateParams',
   function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll, analytics, $stateParams) {
     $scope.$on('$viewContentLoaded', function() {
-       switch ($stateParams.tab) {
-         case 0:
-           $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/grades' });
-               break;
-         case 1:
-           $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/behavior' });
-               break;
-         case 2:
-           $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/exams' });
-               break;
-         case 3:
-           $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/graduation' });
-               break;
-         case 4:
-           $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/goals' });
-               break;
-         default:
-           $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/grades' });
-           break;
-       }
+      if (typeof  $stateParams.tab === 'undefined') {
+        $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/grades' });
+      } else  {
+        switch ($stateParams.tab) {
+          case 0:
+            $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/grades' });
+            break;
+          case 1:
+            $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/behavior' });
+            break;
+          case 2:
+            $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/exams' });
+            break;
+          case 3:
+            $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/graduation' });
+            break;
+          case 4:
+            $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/goals' });
+            break;
+        }
+      }
+
 
     });
     $scope.behaviorDeferred = $q.defer();

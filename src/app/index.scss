@@ -181,7 +181,6 @@ span.name {
 
 // injector
 @import '../components/directives/attendancetable/attendancetable.scss';
-@import '../components/directives/behaviorgraph/behaviorgraph.scss';
 @import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/chorocalendar/chorocalendar.scss';
 @import '../components/directives/dashboard/createEditDashboard.scss';
@@ -189,12 +188,11 @@ span.name {
 @import '../components/directives/dashboard/edpanelReport.scss';
 @import '../components/directives/dashboard/expressionEditor.scss';
 @import '../components/directives/dashboard/reportBuilderDialog.scss';
+@import '../components/directives/behaviorgraph/behaviorgraph.scss';
 @import '../components/directives/datetimechart/datetimechart.scss';
 @import '../components/directives/filterchip/filterChip.scss';
 @import '../components/directives/goal/goal.scss';
-@import '../components/directives/goalsgrid/goalsgrid.scss';
 @import '../components/directives/gradedonut/gradedonut.scss';
-@import '../components/directives/messages/messages.scss';
 @import '../components/directives/notificationcard/notificationcard.scss';
 @import '../components/directives/notifications/createnotification.scss';
 @import '../components/directives/notifications/notifications.scss';
@@ -218,9 +216,11 @@ span.name {
 @import '../components/routecontrollers/navinclude/navinclude.scss';
 @import '../components/routecontrollers/notificationmgmt/notificationmgmt.scss';
 @import '../components/routecontrollers/resetpassword/resetpassword.scss';
+@import '../components/directives/messages/messages.scss';
 @import '../components/routecontrollers/schooldash/schooldash.scss';
 @import '../components/routecontrollers/schoolselector/schoolselector.scss';
 @import '../components/routecontrollers/student/student.scss';
-@import '../components/routecontrollers/surveyresults/surveyResults.scss';
 @import '../components/routecontrollers/teacherhome/teacherhome.scss';
+@import '../components/routecontrollers/surveyresults/surveyResults.scss';
+@import '../components/directives/goalsgrid/goalsgrid.scss';
 // endinjector
