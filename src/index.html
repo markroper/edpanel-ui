@@ -1,0 +1,141 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <title>EdPanel</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+  <!-- build:css({.tmp,src}) styles/vendor.css -->
+  <link rel="stylesheet" href="/app/vendor.css">
+  <!-- bower:css -->
+  <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css" />
+  <link rel="stylesheet" href="../bower_components/angular-ui-grid/ui-grid.css" />
+  <link rel="stylesheet" href="../bower_components/angular-gridster/dist/angular-gridster.min.css" />
+  <link rel="stylesheet" href="../bower_components/c3/c3.css" />
+  <link rel="stylesheet" href="../bower_components/angular-gantt/assets/angular-gantt.css" />
+  <link rel="stylesheet" href="../bower_components/angular-gantt/assets/angular-gantt-plugins.css" />
+  <link rel="stylesheet" href="../bower_components/angular-ui-tree/dist/angular-ui-tree.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+
+
+  <!-- build:css({.tmp,src}) styles/app.css -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="/app/index.css">
+  <!-- endinject -->
+  <!-- endbuild -->
+
+  <!-- build:js scripts/modernizr.js -->
+  <script src="../bower_components/modernizr/modernizr.js"></script>
+  <!-- endbuild -->
+</head>
+<body layout="column" ng-app="teacherdashboard">
+<!--[if lt IE 10]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+<md-content layout="column" flex ui-view></md-content>
+
+<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71047873-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- build:js scripts/vendor.js -->
+<!-- bower:js -->
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/angular/angular.js"></script>
+<script src="../bower_components/angular-animate/angular-animate.js"></script>
+<script src="../bower_components/angular-aria/angular-aria.js"></script>
+<script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="../bower_components/angular-messages/angular-messages.js"></script>
+<script src="../bower_components/angular-material/angular-material.js"></script>
+<script src="../bower_components/angular-resource/angular-resource.js"></script>
+<script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="../bower_components/angular-ui-grid/ui-grid.js"></script>
+<script src="../bower_components/angular-sortable-view/src/angular-sortable-view.js"></script>
+<script src="../bower_components/javascript-detect-element-resize/detect-element-resize.js"></script>
+<script src="../bower_components/angular-gridster/src/angular-gridster.js"></script>
+<script src="../bower_components/d3/d3.js"></script>
+<script src="../bower_components/c3/c3.js"></script>
+<script src="../bower_components/moment/moment.js"></script>
+<script src="../bower_components/raphael/raphael.js"></script>
+<script src="../bower_components/justgage/justgage.js"></script>
+<script src="../bower_components/angular-moment/angular-moment.js"></script>
+<script src="../bower_components/angular-gantt/assets/angular-gantt.js"></script>
+<script src="../bower_components/angular-gantt/assets/angular-gantt-plugins.js"></script>
+<script src="../bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+<!-- build:js({.tmp,src}) scripts/app.js -->
+<!-- inject:js -->
+<script src="/app/index.js"></script>
+<script src="/components/routecontrollers/teacherhome/teacherhome.controller.js"></script>
+<script src="/components/routecontrollers/surveyresults/surveyResults.js"></script>
+<script src="/components/routecontrollers/student/student.js"></script>
+<script src="/components/routecontrollers/schoolselector/schoolselector.js"></script>
+<script src="/components/routecontrollers/schooldash/schoolDash.js"></script>
+<script src="/components/routecontrollers/resetpassword/resetpassword.js"></script>
+<script src="/components/routecontrollers/notificationmgmt/notificationmgmt.js"></script>
+<script src="/components/routecontrollers/navinclude/navcontroller.js"></script>
+<script src="/components/routecontrollers/mysurveys/mySurveys.js"></script>
+<script src="/components/routecontrollers/mysurveyresponses/mySurveyResponses.js"></script>
+<script src="/components/routecontrollers/login/login.controller.js"></script>
+<script src="/components/routecontrollers/home/home.controller.js"></script>
+<script src="/components/routecontrollers/advisorgoals/advisorgoals.js"></script>
+<script src="/components/routecontrollers/administration/administration.js"></script>
+<script src="/components/directives/teachersections/teacherSections.js"></script>
+<script src="/components/directives/survey/surveyResponse.js"></script>
+<script src="/components/directives/survey/surveyQuestionBuilder.js"></script>
+<script src="/components/directives/survey/surveyBuilder.js"></script>
+<script src="/components/directives/survey/surveyAggregate.js"></script>
+<script src="/components/directives/studenttray/studenttray.js"></script>
+<script src="/components/directives/studentsoverview/students.grid.js"></script>
+<script src="/components/directives/studentsection/studentsection.js"></script>
+<script src="/components/directives/stackedbar/stackedbar.js"></script>
+<script src="/components/directives/settingscard/settingscard.js"></script>
+<script src="/components/directives/sectiongrid/sections.grid.js"></script>
+<script src="/components/directives/scatterplot/scatterplot.js"></script>
+<script src="/components/directives/notifications/notifications.js"></script>
+<script src="/components/directives/notifications/createnotification.js"></script>
+<script src="/components/directives/notificationcard/notificationcard.js"></script>
+<script src="/components/directives/messages/messages.js"></script>
+<script src="/components/directives/gradedonut/gradedonut.js"></script>
+<script src="/components/directives/goalsgrid/goalsgrid.js"></script>
+<script src="/components/directives/goal/goal.js"></script>
+<script src="/components/directives/goal/creategoal.js"></script>
+<script src="/components/directives/filterchip/filterChip.js"></script>
+<script src="/components/directives/datetimechart/datetimechart.js"></script>
+<script src="/components/directives/dashboard/expressionEditor.js"></script>
+<script src="/components/directives/dashboard/edpanelReport.js"></script>
+<script src="/components/directives/dashboard/edPanelRow.js"></script>
+<script src="/components/directives/dashboard/createEditReport.js"></script>
+<script src="/components/directives/dashboard/createEditDashboard.js"></script>
+<script src="/components/directives/chorocalendar/chorocalendar.js"></script>
+<script src="/components/directives/behaviortable/behaviortable.js"></script>
+<script src="/components/directives/behaviorgraph/behaviorgraph.js"></script>
+<script src="/components/directives/attendancetable/attendancetable.js"></script>
+<script src="/components/services/svgpolyfill.js"></script>
+<script src="/components/services/statebagapimanager.js"></script>
+<script src="/components/services/statebag.js"></script>
+<script src="/components/services/dijkstra.js"></script>
+<script src="/components/services/debounce.js"></script>
+<script src="/components/services/authorization.js"></script>
+<script src="/components/services/authentication.js"></script>
+<script src="/components/services/api.js"></script>
+<script src="/components/services/analytics.js"></script>
+<!-- endinject -->
+<!-- inject:partials -->
+<!-- angular templates will be automatically converted in js and inserted here -->
+<!-- endinject -->
+<!-- endbuild -->
+</body>
+</html>

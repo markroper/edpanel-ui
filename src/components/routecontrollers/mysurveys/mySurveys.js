@@ -79,6 +79,7 @@ angular.module('teacherdashboard')
     };
 
     $scope.cloneSurvey = function(survey) {
+      analytics.sendEvent(analytics.SURVEYS, analytics.SURVEY_CLONE, null);
         var newSurvey = angular.copy(survey);
         newSurvey.id = null;
         if(newSurvey.sectionFk) {
@@ -120,6 +121,7 @@ angular.module('teacherdashboard')
     };
 
     $scope.selectSurveyResponse = function(survey) {
+      analytics.sendEvent(analytics.SURVEYS, analytics.SURVEY_VIEW_RESPONSE, null);
       statebag.currentSurvey = survey;
       $state.go('app.surveyResults', { surveyId: survey.id });
     };

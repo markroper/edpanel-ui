@@ -62,6 +62,8 @@ angular.module('teacherdashboard')
       SURVEY_ADD_QUESTION: 'Add Survey Question',
       SURVEY_FINISH_CREATE: 'Finish Create Survey',
       SURVEY_CANCEL_CREATE: 'Cancel Create Survey',
+      SURVEY_CLONE: 'Clone Survey',
+      SURVEY_VIEW_RESPONSE: 'View Survey Response',
 
 
 

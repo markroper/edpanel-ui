@@ -16,6 +16,11 @@ angular.module('teacherdashboard')
         link: function($scope){
           $scope.minDate = $window.moment().toDate();
           $scope.maxDate = $window.moment().add(1, 'years').toDate();
+          //used for tracking analytics for dismissing surveys
+          $scope.userDismiss = function() {
+            analytics.sendEvent(analytics.SURVEYS, analytics.SURVEY_CANCEL_CREATE, null);
+            $scope.dismiss();
+          };
           $scope.addQuestion = function() {
             analytics.sendEvent(analytics.SURVEYS, analytics.SURVEY_ADD_QUESTION, null);
             if(!$scope.survey.questions) {
@@ -24,11 +29,7 @@ angular.module('teacherdashboard')
             $scope.survey.questions.push(
               { question:'', responseRequired: false, type: 'OPEN_RESPONSE' });
           };
-          //used for tracking analytics for dismissing surveys
-          $scope.userDismiss = function() {
-            analytics.sendEvent(analytics.SURVEYS, analytics.SURVEY_CANCEL_CREATE, null);
-            $scope.dismiss
-          };
+
           $scope.createSurvey = function() {
             analytics.sendEvent(analytics.SURVEYS, analytics.SURVEY_FINISH_CREATE, $scope.surveyType.type);
             var surveyToCreate = {};

@@ -8,6 +8,7 @@ var DialogController = function($scope, $mdDialog) {
     $mdDialog.cancel();
   };
   $scope.answer = function(answer) {
+    analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_SAVE_CHART, null);
     $mdDialog.hide(answer);
     //TODO: call API to create the report?
   };
@@ -523,6 +524,7 @@ angular.module('teacherdashboard')
         };
 
         scope.createNewReport = function() {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_ADD_CHART, null);
           scope.dashboardReports.unshift({
             sizeX: 6,
             row: 0,
@@ -546,6 +548,7 @@ angular.module('teacherdashboard')
         };
 
         scope.saveDashboard = function() {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_SAVE_CHANGES, null);
           var newDash = scope.produceUpdatedDashboard();
           if(newDash.id) {
             //update
@@ -578,6 +581,7 @@ angular.module('teacherdashboard')
         };
 
         scope.cancelChanges = function() {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_CANCEL_CHART, null);
           scope.dashboardReports = scope.processDashboard();
           scope.$parent.d.editDashboard = false;
         };
