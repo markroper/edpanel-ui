@@ -11,14 +11,16 @@ angular.module('teacherdashboard')
         templateUrl: api.basePrefix + '/components/directives/teachersections/teacherSections.html',
         replace: true,
         link: function(scope) {
-          statebag.currentPage.name = 'My Sections';
+          statebag.currentPage.name = 'Classes';
+          scope.loading = true;
+          scope.adminPerms = authentication.isInAnyRole([ 'ADMINISTRATOR', 'SUPER_ADMINISTRATOR' ]);
 
           if(!statebag.school) {
             statebagApiManager.retrieveAndCacheSchool($state.params.schoolId).then(function() {
                 scope.retrieveTeacherHomeData();
             });
           }
-          scope.teacherToUse = null;
+          scope.teacherToUse = authentication.identity().id;
           scope.$watch('teacherToUse', function(before, after) {
             if(before && !angular.equals(before, after)) {
               scope.retrieveTeacherHomeData();
@@ -28,6 +30,7 @@ angular.module('teacherdashboard')
           scope.hwPromise= {};
 
           scope.retrieveTeacherHomeData = function() {
+            scope.loading = true;
             var promises = [];
             var sectionPromise = [];
             //Resolve the sections this teacher teaches
@@ -110,17 +113,19 @@ angular.module('teacherdashboard')
                   attendanceMap[result[1]].total += result[2];
                   attendanceMap[result[1]].count += 1;
                 }
-
                 resolvedSectionStudentInfo(hwCompletions, attendanceMap, demeritMap);
-
-
               });
 
               //Put it on the statebag
               $q.all(sectionPromise).then(function() {
                 scope.sections = statebag.currentSections;
+                scope.loading = false;
+              }, function() {
+                scope.loading = false;
               });
 
+            }, function(){
+              scope.loading = false;
             });
           };
           scope.retrieveTeacherHomeData();
@@ -206,7 +211,7 @@ angular.module('teacherdashboard')
             var identity = authentication.identity();
             if(scope.teacherToUse) {
               identity = {
-                id: scope.teacherToUse.id
+                id: parseInt(scope.teacherToUse)
               }
             }
             //retrieve the teachers current sections
@@ -313,7 +318,7 @@ angular.module('teacherdashboard')
             var identity = authentication.identity();
             if(scope.teacherToUse) {
               identity = {
-                id: scope.teacherToUse.id
+                id: parseInt(scope.teacherToUse)
               };
             }
             var personQuery = {
