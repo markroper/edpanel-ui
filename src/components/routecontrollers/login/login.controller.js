@@ -40,6 +40,7 @@ angular.module('teacherdashboard')
         	authBody,
           //Success callback
         	function(data) {
+            $window.ga('set', 'userId', data.analyticsId);
             statebag.userRole = data.type.charAt(0) + data.type.toLowerCase().slice(1);
             statebag.theme = statebag.resolveTheme(data.type);
             var identity = {
