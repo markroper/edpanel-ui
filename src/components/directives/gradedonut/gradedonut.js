@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('gradedonut', ['$window', 'api', '$timeout', function($window, api, $timeout) {
+  .directive('gradedonut', ['$window', 'api', function($window, api) {
     return {
       scope: {
         courseTitle: '@',
