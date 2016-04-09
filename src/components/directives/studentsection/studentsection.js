@@ -12,6 +12,7 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/studentsection/studentsection.html',
       replace: true,
       link: function(scope, elem) {
+        scope.assignmentTypeWeights = null;
         var GA_PAGE_NAME = 'StudentSection';
         var scatterPlotHtml = '<scatterplot chart-data-promise="section.assignmentsPromise" section="section"></scatterplot>';
         var $assignmentsContainer = angular.element(elem).find('.assignment-scores');
@@ -31,6 +32,45 @@ angular.module('teacherdashboard')
           currentGrade: scope.section.grade,
           components: componentGrades
         };
+
+        scope.resolveCurrentTermsFormula = function(formula) {
+          if (formula.children && formula.children.length > 0) {
+            for (var i = 0; i < formula.children.length; i++) {
+              var newFormula = scope.resolveCurrentTermsFormula(formula.children[i]);
+              if (newFormula) {
+                return newFormula;
+                break;
+              }
+            }
+          } else if (formula.startDate && formula.endDate) {
+            var start = $window.moment(formula.startDate);
+            var end = $window.moment(formula.endDate);
+            var now = $window.moment().startOf('day');
+            if ((start.isSame(now) || start.isBefore(now)) && (end.isSame(now) || end.isAfter(now))) {
+              return formula;
+            }
+          }
+          return null;
+        };
+        scope.resolveAssignmentTypeWeights = function(formulaToUse) {
+          if(!formulaToUse.assignmentTypeWeights) {
+            return null;
+          }
+          var returnVal = [];
+          angular.forEach(formulaToUse.assignmentTypeWeights, function(value, key) {
+            var childArray = [];
+            childArray.push(key);
+            childArray.push(value);
+            returnVal.push(childArray);
+          });
+          return returnVal;
+
+        };
+        scope.formulaToUse = scope.resolveCurrentTermsFormula(scope.section.gradeFormula);
+        if(!scope.formulaToUse) {
+          scope.formulaToUse = scope.section.gradeFormula;
+        }
+        scope.assignmentTypeWeights = scope.resolveAssignmentTypeWeights(scope.formulaToUse);
 
         scope.showAssignments = function() {
           analytics.sendEvent(GA_PAGE_NAME, analytics.SHOW_ASSIGNMENTS, analytics.ASSIGNMENT_LABEL);

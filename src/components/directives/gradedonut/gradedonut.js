@@ -1,6 +1,6 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('gradedonut', ['$window', 'api', function($window, api) {
+  .directive('gradedonut', ['$window', 'api', '$timeout', function($window, api, $timeout) {
     return {
       scope: {
         courseTitle: '@',
@@ -28,12 +28,12 @@ angular.module('teacherdashboard')
                   parseInt(result[3], 16) + ', 0.8);'
               : null;
           };
-
-          scope.chart = $window.c3.generate({
+          scope.createChart = function() {
+            scope.chart = $window.c3.generate({
               bindto: elem[0],
               data: {
                 columns: scope.gradeWeights,
-                type : 'pie'
+                type: 'pie'
               },
               pie: {
                 label: {
@@ -46,7 +46,7 @@ angular.module('teacherdashboard')
               },
               legend: {
                 item: {
-                  onclick: function() {
+                  onclick: function () {
                     //no op
                   }
                 }
@@ -57,7 +57,7 @@ angular.module('teacherdashboard')
                   var prefix = '';
                   //If we're dealing with singular, prefix 'The',
                   //otherwise, capitalize the first letter
-                  if(el.id === 'midterm' || el.id === 'final') {
+                  if (el.id === 'midterm' || el.id === 'final') {
                     prefix = 'The ';
                   } else {
                     el.id = el.id.charAt(0).toUpperCase() + el.id.slice(1);
@@ -67,7 +67,19 @@ angular.module('teacherdashboard')
                     el.value + '%<br/>of the grade</div>';
                 }
               }
-          });
+            });
+          };
+        scope.rendered = false;
+        scope.$watch('gradeWeights', function(newVal){
+          if(newVal && !scope.rendered) {
+            scope.createChart();
+            scope.rendered = true;
+          }
+        });
+        if(scope.gradeWeights) {
+          scope.createChart();
+          scope.rendered = true;
+        }
       }
     };
   }]);
