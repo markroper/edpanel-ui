@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$document','$timeout','$window','statebagApiManager',
-    function($state, statebag, api, $q, mdToast, $document, $timeout,$window, statebagApiManager) {
+  .directive('goal', ['$state', 'statebag', 'api','$q', '$mdToast', '$document','$timeout','$window','statebagApiManager','analytics',
+    function($state, statebag, api, $q, mdToast, $document, $timeout,$window, statebagApiManager, analytics) {
     return {
       scope: {
         goal: '=',
@@ -15,6 +15,12 @@ angular.module('teacherdashboard')
       templateUrl: api.basePrefix + '/components/directives/goal/goal.html',
       replace: true,
       controller: function($scope) {
+        var ga_pageName;
+        if ($scope.advisorView) {
+          ga_pageName = analytics.GOALS_ADVISOR;
+        } else {
+          ga_pageName = analytics.GOALS_TAB;
+        }
         $scope.userRole = statebag.userRole;
         $scope.sectionsResolved = false;
 
@@ -28,18 +34,21 @@ angular.module('teacherdashboard')
         };
 
         $scope.markAchieved = function(goal) {
+          analytics.sendEvent(analytics.GOALS, analytics.GOAL_MET, ga_pageName );
           goal.goalProgress = 'MET';
           goal.endDate = $window.moment().format('YYYY-MM-DD');
           goal.finalValue = goal.calculatedValue;
           $scope.proposeEdit(goal, false, true);
         };
         $scope.markFailed = function(goal) {
+          analytics.sendEvent(analytics.GOALS, analytics.GOAL_NOT_MET, ga_pageName );
           goal.goalProgress = 'UNMET';
           goal.endDate = $window.moment().format('YYYY-MM-DD');
           goal.finalValue = goal.calculatedValue;
           $scope.proposeEdit(goal, false, true);
         };
         $scope.deleteGoal = function(goal) {
+          analytics.sendEvent(analytics.GOALS, analytics.GOAL_DELETE, ga_pageName );
           api.editStudentGoal.delete(
             { studentId: goal.student.id,
               goalId: goal.id},
@@ -54,6 +63,7 @@ angular.module('teacherdashboard')
           //Call api to delete the goal
         };
         $scope.editGoal = function(goal) {
+          analytics.sendEvent(analytics.GOALS, analytics.GOAL_EDIT_START, ga_pageName );
           //Call api to edit the goal
           if (!$scope.woopOpen) {
             $scope.showWoop();
@@ -63,11 +73,13 @@ angular.module('teacherdashboard')
         };
 
         $scope.approveGoal = function(goal) {
+          analytics.sendEvent(analytics.GOALS, analytics.GOAL_APPROVE, ga_pageName );
           goal.approved = statebagApiManager.resolveCurrentDate();
           $scope.proposeEdit(goal, true);
         };
 
         $scope.proposeEdit = function(goal, moveToApproved, removeFromActive) {
+          analytics.sendEvent(analytics.GOALS, analytics.GOAL_EDIT_COMPLETE, ga_pageName );
           delete goal.editActive;
           api.editStudentGoal.patch(
             { studentId: goal.student.id,
@@ -122,6 +134,14 @@ angular.module('teacherdashboard')
 
         };
 
+        //Created for analytics to distinguish between a user open and a forced open
+        $scope.showWoopUser = function(){
+          analytics.sendEvent(analytics.GOALS, analytics.GOAL_SHOW_WOOP, $scope.goal.goalProgress );
+          $scope.showWoop();
+        };
+        $scope.openVert = function() {
+          analytics.sendEvent(analytics.GOALS, analytics.GOAL_SHOW_MORE, $scope.goal.goalProgress );
+        }
         $scope.showWoop = function() {
           if ($scope.woopOpen) {
             $scope.woopOpen = false;

@@ -20,8 +20,8 @@ angular.module('teacherdashboard')
       }
     };
   })
-  .directive('notificationcard', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile','$mdMenu',
-    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile, $mdMenu) {
+  .directive('notificationcard', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile','$mdMenu','analytics',
+    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile, $mdMenu, analytics) {
       return {
         scope: {
           notification: '=',
@@ -185,6 +185,7 @@ angular.module('teacherdashboard')
 
           $scope.dismissNotification = function() {
             var supressToast = true;
+            analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_DISMISS, $scope.notification.notification.measure );
 
             api.dismissTriggeredNotification.put(
               {
@@ -225,16 +226,19 @@ angular.module('teacherdashboard')
             if ($scope.notification.notification.subjects.type === 'SINGLE_STUDENT') {
               $mdMenu.hide();
               if (typeof $scope.notification.notification.goal !== 'undefined') {
+                analytics.sendEvent(analytics.NOTIFICATIONS, analytics.GO_TO_NOTIFICATION_LOCATION, analytics.GOAL_LABEL);
                 $state.go('app.student', {
                   schoolId: $scope.notification.notification.schoolId,
                   studentId: $scope.notification.subjectUserId,
                   tab: 4});
               } else if ($scope.notification.notification.measure === 'BEHAVIOR_SCORE') {
+                analytics.sendEvent(analytics.NOTIFICATIONS, analytics.GO_TO_NOTIFICATION_LOCATION, analytics.BEHAVIOR_LABEL);
                 $state.go('app.student', {
                   schoolId: $scope.notification.notification.schoolId,
                   studentId: $scope.notification.subjectUserId,
                   tab: 1});
               } else {
+                analytics.sendEvent(analytics.NOTIFICATIONS, analytics.GO_TO_NOTIFICATION_LOCATION, analytics.STUDENT_LABEL);
                 $state.go('app.student', {
                   schoolId: $scope.notification.notification.schoolId,
                   studentId: $scope.notification.subjectUserId,

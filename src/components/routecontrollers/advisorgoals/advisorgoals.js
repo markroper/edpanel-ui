@@ -11,7 +11,7 @@ angular.module('teacherdashboard')
       $scope.goalsPromise = deferred.promise;
 
       $scope.$on('$viewContentLoaded', function() {
-        $window.ga('send', 'pageview', { page: '/ui/schools/*' });
+        $window.ga('send', 'pageview', { page: '/ui/schools/*/staff/*/goals' });
       });
       var showSimpleToast = function(msg) {
         mdToast.show(

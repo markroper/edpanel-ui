@@ -8,14 +8,15 @@ var DialogController = function($scope, $mdDialog) {
     $mdDialog.cancel();
   };
   $scope.answer = function(answer) {
+    analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_SAVE_CHART, null);
     $mdDialog.hide(answer);
     //TODO: call API to create the report?
   };
 };
 
 angular.module('teacherdashboard')
-  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra', '$mdToast', '$document',
-  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra, $mdToast, $document) {
+  .directive('createEditDashboard', [ '$window', 'api', '$mdDialog', '$mdMedia', 'statebag', 'consts', 'dijkstra', '$mdToast', '$document','analytics',
+  function($window, api, $mdDialog, $mdMedia, statebag, consts, dijkstra, $mdToast, $document, analytics) {
     return {
       scope: {
         dashboard: '=',
@@ -168,6 +169,7 @@ angular.module('teacherdashboard')
         };
 
         scope.editReport = function(ev, rpt) {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_EDIT_CHART, null);
           var sc = scope.$new();
           sc.api = api;
           sc.theme = statebag.theme;
@@ -522,6 +524,7 @@ angular.module('teacherdashboard')
         };
 
         scope.createNewReport = function() {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_ADD_CHART, null);
           scope.dashboardReports.unshift({
             sizeX: 6,
             row: 0,
@@ -530,6 +533,7 @@ angular.module('teacherdashboard')
           });
         };
         scope.deleteReport = function($event, rpt) {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_DELETE_CHART, null);
           var idx = scope.dashboardReports.indexOf(rpt);
           scope.dashboardReports.splice(idx, 1);
         };
@@ -544,6 +548,7 @@ angular.module('teacherdashboard')
         };
 
         scope.saveDashboard = function() {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_SAVE_CHANGES, null);
           var newDash = scope.produceUpdatedDashboard();
           if(newDash.id) {
             //update
@@ -576,6 +581,7 @@ angular.module('teacherdashboard')
         };
 
         scope.cancelChanges = function() {
+          analytics.sendEvent(analytics.SCHOOL_DASHBOARD, analytics.DASH_CANCEL_CHART, null);
           scope.dashboardReports = scope.processDashboard();
           scope.$parent.d.editDashboard = false;
         };

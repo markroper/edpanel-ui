@@ -1,10 +1,10 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('NotificationMgmt', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication', '$mdToast', 'consts',
-  function ($scope, api, $state, statebag, $window, $location, authentication, $mdToast, consts) {
+.controller('NotificationMgmt', ['$scope', 'api', '$state', 'statebag', '$window', '$location', 'authentication', '$mdToast', 'consts','analytics',
+  function ($scope, api, $state, statebag, $window, $location, authentication, $mdToast, consts, analytics) {
     statebag.currentPage.name = 'My Notifications';
     $scope.$on('$viewContentLoaded', function () {
-      $window.ga('send', 'pageview', { page: $location.url() });
+      $window.ga('send', 'pageview', { page: 'ui/schools/*/notifications' });
     });
     $scope.notifications = null;
     api.notificationsForUser.get({ userId: authentication.identity().id },
@@ -20,8 +20,10 @@ angular.module('teacherdashboard')
     $scope.currentNotification = null;
     $scope.editNotification = function(n) {
       $scope.currentNotification = n;
+      analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_START_EDIT, $scope.currentNotification.measure);
     };
     $scope.createNewNotification = function() {
+      analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_START_CREATE, null);
       $scope.currentNotification = {};
     };
     $scope.dismissNotification = function() {
@@ -31,6 +33,7 @@ angular.module('teacherdashboard')
       return consts.notificationTypes[type];
     };
     $scope.deleteNotification = function(n) {
+      analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_DELETE, $scope.currentNotification.measure);
       api.notifications.delete(
         { notificationId: n.id },
         function(){
@@ -60,6 +63,7 @@ angular.module('teacherdashboard')
       if ($scope.currentNotification) {
         if ($scope.currentNotification.id) {
           //update
+          analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_FINISH_EDIT, $scope.currentNotification.measure);
           api.notifications.put(
             {notificationId: $scope.currentNotification.id},
             $scope.currentNotification,
@@ -81,6 +85,7 @@ angular.module('teacherdashboard')
             });
         } else {
           //create
+          analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_FINISH_CREATE, $scope.currentNotification.measure);
           api.notifications.post(
             {},
             $scope.currentNotification,

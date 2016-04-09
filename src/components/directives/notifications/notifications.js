@@ -17,8 +17,8 @@ angular.module('teacherdashboard')
       }
     };
   })
-  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile','$mdMenu',
-    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile,$mdMenu) {
+  .directive('notifications', [ '$window', 'statebagApiManager', 'api', 'authentication', '$mdToast', '$state', 'consts', 'statebag','$compile','$mdMenu','analytics',
+    function($window, statebagApiManager, api, authentication, $mdToast, $state, consts, statebag, $compile,$mdMenu,analytics) {
       return {
         scope: {
           notificationList: '='
@@ -32,12 +32,14 @@ angular.module('teacherdashboard')
               $scope.isOpen = false;
               $mdMenu.hide();
             } else {
+              analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_OPEN_MENU, null);
               $scope.isOpen = true;
             }
           };
 
           $scope.dismissAll = function() {
             if($scope.notificationList) {
+              analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_DISMISS_ALL, null);
               var remaining = [];
               for (var i = 0; i < $scope.notificationList.length; i++) {
                 var n = $scope.notificationList[i];
@@ -67,6 +69,7 @@ angular.module('teacherdashboard')
 
 
           $scope.goToNotifications = function() {
+            analytics.sendEvent(analytics.NOTIFICATIONS, analytics.NOTIFICATION_SETUP, null);
             $state.go('app.myNotifications', { schoolId: $state.params.schoolId });
           };
         }

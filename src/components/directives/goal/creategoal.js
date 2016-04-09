@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast','statebagApiManager', '$window',
-    function($state, statebag, api, $q, mdToast, statebagApiManager, $window) {
+  .directive('creategoal', ['$state', 'statebag', 'api','$q', '$mdToast','statebagApiManager', '$window', 'analytics',
+    function($state, statebag, api, $q, mdToast, statebagApiManager, $window, analytics) {
       return {
         scope: {
           sections: '=',
@@ -67,16 +67,19 @@ angular.module('teacherdashboard')
           };
 
           $scope.openCreateGoal = function() {
+            analytics.sendEvent(analytics.GOALS, analytics.GOAL_START_CREATE, null);
             $scope.createGoal = true;
           };
 
           $scope.cancelGoal = function() {
+            analytics.sendEvent(analytics.GOALS, analytics.GOAL_CANCEL_CREATE, null);
             $scope.createGoal = false;
           };
 
 
 
           $scope.submitCreateGoal = function() {
+            analytics.sendEvent(analytics.GOALS, analytics.GOAL_FINISH_CREATE, $scope.goal.createType);
             $scope.createGoal = false;
             var staff;
             if (typeof statebag.currentStudent.student === 'undefined') {
