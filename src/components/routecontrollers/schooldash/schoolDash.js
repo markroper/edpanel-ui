@@ -32,7 +32,7 @@ angular.module('teacherdashboard')
       };
       $scope.$watch(
         'd.editDashboard',
-        function( newValue, oldValue ) {
+        function( newValue   ) {
           if(newValue === false) {
             $scope.resolveDashAndTerms();
           }

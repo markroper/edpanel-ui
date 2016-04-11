@@ -212,7 +212,7 @@ angular.module('teacherdashboard')
             if(scope.teacherToUse) {
               identity = {
                 id: parseInt(scope.teacherToUse)
-              }
+              };
             }
             //retrieve the teachers current sections
             return api.teacherSections.get(

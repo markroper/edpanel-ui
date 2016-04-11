@@ -71,12 +71,48 @@ angular.module('teacherdashboard')
     };
     $scope.logTabOpen = function(tab) {
       $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/' + tab });
-    }
+    };
+
+    $scope.tableConfig = {
+      data: 'mcasResults',
+      enableColumnMenus: false,
+      paginationPageSize: 2,
+      enablePaginationControls: false,
+      minRowsToShow: 1,
+      columnDefs: [
+        { field: 'student.name', name:'Student' },
+        { field: 'adminYear', name:'Year' },
+        { field: 'examGradeLevel', name: 'Exam Grade Level' },
+        { field: 'studentGradeLevel', name: 'Student Grade Level' },
+        { field: 'mathScore.performanceLevel', name: 'Math Performance' },
+        { field: 'mathScore.rawScore', name: 'Math Score' },
+        { field: 'mathScore.scaledScore', name: 'Math Scaled Score' },
+        { field: 'englishScore.performanceLevel', name: 'English Performance' },
+        { field: 'englishScore.rawScore', name: 'English Score' },
+        { field: 'englishScore.scaledScore', name: 'English Scaled Score' },
+        { field: 'scienceScore.performanceLevel', name: 'Science Performance' },
+        { field: 'scienceScore.rawScore', name: 'Science Score' },
+        { field: 'scienceScore.scaledScore', name: 'Science Scaled Score' }
+      ]
+    };
+
+    $scope.examsSelected = function() {
+      if(!$scope.mcasResults) {
+        api.mcasForStudent.get(
+          {schoolId: $state.params.schoolId, studentId: $state.params.studentId},
+          function (results) {
+            $scope.mcasResults = results;
+          },
+          function () {
+            //TODO: TOAST?
+          });
+      }
+    };
 
     function resolveAllData() {
       $scope.settings={
-        showGpa: (statebag.school.disableGpa != true),
-        showBehavior: (statebag.school.disableBehavior != true)
+        showGpa: (statebag.school.disableGpa !== true),
+        showBehavior: (statebag.school.disableBehavior !== true)
       };
       $scope.terms = statebag.currentYear.terms;
       for(var i = 0; i < $scope.terms.length; i++) {
