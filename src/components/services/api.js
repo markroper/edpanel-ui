@@ -147,6 +147,8 @@ angular.module('teacherdashboard')
           'put': { method:'PUT', headers: {'Content-Type': 'application/json'} },
           'post': { method:'POST', headers: {'Content-Type': 'application/json'} }
         }),
+      //MCAS
+      mcasForStudent: $resource(base + '/schools/:schoolId/students/:studentId/mcas', {}, { 'get':{ isArray: true }}),
       //GPA
       gpa: $resource(base + '/schools/:schoolId/gpas'),
       gpasInSchool: $resource(base + '/gpas', {}, { 'get': { isArray: true } }),

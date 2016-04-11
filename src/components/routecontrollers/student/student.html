@@ -55,9 +55,12 @@
         </md-card>
 			</div>
 		</md-tab>
-		<md-tab ng-click="logTabOpen('exams')" label="State Exams">
+		<md-tab label="Exams" ng-click="logTabOpen('exams')" md-on-select="examsSelected()">
 			<div class="tab-contents">
-        <h3 class="md-subhead">Under construction</h3>
+        <div style="margin-left:10px; margin-right:10px;">
+          <h3>MCAS Results</h3>
+          <div ui-grid="tableConfig" class="grade-component-grid"></div>
+        </div>
 			</div>
 		</md-tab>
 		<md-tab ng-click="logTabOpen('graduation')" label="Graduation">
