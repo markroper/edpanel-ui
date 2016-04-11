@@ -71,7 +71,7 @@ angular.module('teacherdashboard')
     };
     $scope.logTabOpen = function(tab) {
       $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/' + tab });
-    }
+    };
 
     $scope.tableConfig = {
       data: 'mcasResults',
@@ -111,8 +111,8 @@ angular.module('teacherdashboard')
 
     function resolveAllData() {
       $scope.settings={
-        showGpa: (statebag.school.disableGpa != true),
-        showBehavior: (statebag.school.disableBehavior != true)
+        showGpa: (statebag.school.disableGpa !== true),
+        showBehavior: (statebag.school.disableBehavior !== true)
       };
       $scope.terms = statebag.currentYear.terms;
       for(var i = 0; i < $scope.terms.length; i++) {

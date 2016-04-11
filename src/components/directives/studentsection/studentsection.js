@@ -39,7 +39,6 @@ angular.module('teacherdashboard')
               var newFormula = scope.resolveCurrentTermsFormula(formula.children[i]);
               if (newFormula) {
                 return newFormula;
-                break;
               }
             }
           } else if (formula.startDate && formula.endDate) {
