@@ -239,6 +239,16 @@ angular.module('teacherdashboard')
                 } else {
                   statebag.currentSections = data;
                   scope.isNotTeacher = false;
+                  if(!scope.teachers) {
+                    api.teachersInSchool.get(
+                      { schoolId: statebag.school.id },
+                      function (teachers) {
+                        scope.teachers = teachers;
+                      },
+                      function () {
+
+                      });
+                  }
                 }
               },
               //Error callback

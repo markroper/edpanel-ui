@@ -6,7 +6,11 @@ angular.module('teacherdashboard')
       $scope.approved = [];
       $scope.pending = [];
       $scope.completed = [];
+      $scope.teachers = [];
+      $scope.activeTeacher = false;
+      $scope.teachersLoaded = false;
       $scope.goalsLoaded = false;
+      $scope.newTeacher = false;
       var deferred = $q.defer();
       $scope.goalsPromise = deferred.promise;
 
@@ -24,30 +28,63 @@ angular.module('teacherdashboard')
       $scope.goalsLoaded = false;
       statebag.currentPage.name = 'My Students\' Goals';
 
-      api.advisorGoals.get(
-        {
-          staffId: authentication.identity().id
-        },
-        //Success callback
-        function(data){
-          for (var i = 0; i < data.length; i++) {
-            if (data[i].goalProgress === 'IN_PROGRESS') {
-              if (data[i].approved) {
-                $scope.approved.push(data[i]);
-              } else {
-                $scope.pending.push(data[i]);
-              }
-            } else {
-              $scope.completed.push(data[i]);
+
+      api.teachersInSchool.get(
+        { schoolId: statebag.school.id },
+        function (teachers) {
+          $scope.teachers = teachers;
+          for (var i = 0; i < teachers.length; i++) {
+            if (teachers[i].id === authentication.identity().id ) {
+              $scope.activeTeacher = teachers[i].id;
             }
           }
-          deferred.resolve();
-          $scope.goalsLoaded = true;
+          //When we cahnge the active teacher, reload the goals.
+          $scope.$watch('activeTeacher', function(after, before) {
+            if(before && !angular.equals(before, after)) {
+              $scope.newTeacher = false;
+              $scope.goalsLoaded = false;
+              $scope.approved = [];
+              $scope.pending = [];
+              $scope.completed = [];
+              resolveGoals(after);
+            }
+          });
         },
-        //Error callback
-        function(){
-          showSimpleToast("An error occurred loading goals");
-          console.log('failed to resolve the goals!');
-        })
+        function () {
+
+        });
+
+      function resolveGoals(teacherId) {
+        api.advisorGoals.get(
+          {
+            staffId: teacherId
+          },
+          //Success callback
+          function(data){
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].goalProgress === 'IN_PROGRESS') {
+                if (data[i].approved) {
+                  $scope.approved.push(data[i]);
+                } else {
+                  $scope.pending.push(data[i]);
+                }
+              } else {
+                $scope.completed.push(data[i]);
+              }
+            }
+            deferred.resolve();
+            $scope.newTeacher = true;
+            $scope.goalsLoaded = true;
+          },
+          //Error callback
+          function(){
+            showSimpleToast("An error occurred loading goals");
+            console.log('failed to resolve the goals!');
+          })
+      };
+
+      resolveGoals(authentication.identity().id);
+
+
 
     }]);

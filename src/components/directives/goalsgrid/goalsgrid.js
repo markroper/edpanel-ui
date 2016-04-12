@@ -9,7 +9,8 @@ angular.module('teacherdashboard')
           completeGoals: '=',
           sections: '=',
           isAdvisorView: '=',
-          goalsPromise: '='
+          goalsPromise: '=',
+          needsRefresh: '='
         },
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/goalsgrid/goalsgrid.html',
@@ -38,7 +39,19 @@ angular.module('teacherdashboard')
             '<gantt-table></gantt-table>' +
             '<gantt-groups></gantt-groups></div>';
 
+          //This needs to be called when the advisor page updates a new advisor.
+          $scope.$watch('needsRefresh', function(after, before) {
+            if(after && !angular.equals(before, after)) {
+              populateGanttInfo();
+            }
+          });
+
           $scope.goalsPromise.then(function(value) {
+            populateGanttInfo();
+            body.append($compile(template)($scope));
+          });
+
+          function populateGanttInfo() {
             $scope.ganttInfo = [];
             $scope.dates = ['month'];
             var nameMap = {};
@@ -66,9 +79,8 @@ angular.module('teacherdashboard')
                 );
               }
             }
+          };
 
-            body.append($compile(template)($scope));
-          });
 
           //THIS SHOULD STAY SO WHEN WE CAHGNE THIS I DON'T FORGET TEH RANDOM DATA FORMAT NECESSARY FOR TREES
           //for (var key in nameMap) {
