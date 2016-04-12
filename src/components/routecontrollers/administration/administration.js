@@ -11,11 +11,13 @@ angular.module('teacherdashboard')
 
     $scope.resolveUsers = function() {
       //Resolve the invalidated users
-      api.unverifiedUsers.get(
-        { schoolId: statebag.school.id },
-        function(data) {
-          $scope.firstTimeUsers = data;
-        });
+      if(!$scope.firstTimeUsers) {
+        api.unverifiedUsers.get(
+          {schoolId: statebag.school.id},
+          function (data) {
+            $scope.firstTimeUsers = data;
+          });
+      }
     };
 
     var defaultRgb = {
