@@ -149,6 +149,7 @@ angular.module('teacherdashboard')
         }),
       //MCAS
       mcasForStudent: $resource(base + '/schools/:schoolId/students/:studentId/mcas', {}, { 'get':{ isArray: true }}),
+      uploadMcasFiles: base + '/schools/:schoolId/mcas/files',
       //GPA
       gpa: $resource(base + '/schools/:schoolId/gpas'),
       gpasInSchool: $resource(base + '/gpas', {}, { 'get': { isArray: true } }),

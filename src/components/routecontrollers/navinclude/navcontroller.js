@@ -41,7 +41,7 @@ function($scope, $state, $mdSidenav, api, statebag, statebagapimanager, authenti
             $scope.notificationList = resp;
           }
         });
-    }, 30000);
+    }, 240000);
 
     //This base state should always redirect home...
     if($state.current.name === 'app') {
