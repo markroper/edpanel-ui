@@ -1,7 +1,35 @@
 <div class="administration">
   <md-content class="md-padding">
     <md-tabs md-dynamic-height md-border-bottom>
-      <md-tab label="Users">
+      <md-tab label="Settings">
+        <md-content class="md-padding settings">
+          <h2>Colors & Date Ranges</h2>
+          <p>On dashboards, values for attendance, homework completion, behavior and GPA are expressed as the colors green, yellow, and red. The colors indicate level of conern. Green means the value on the metric is positive, yellow is cautionary, and red warning. In the case of behavior, homework completion and attendance, these metrics also have customizable time period. You may configure these default values below.</p>
+          <div class="save-settings">
+            <md-button ng-click="saveSettingsChanges()" class="md-raised md-primary">
+              save changes
+            </md-button>
+            <md-button ng-click="revertSettingsChanges()" class="md-raised md-warn">
+              undo changes
+            </md-button>
+          </div>
+          <div layout="row" flex="100" layout-align="center center" style="margin-top:25px; margin-bottom:25px;">
+            <md-checkbox ng-model="school.disableGpa" aria-label="Disable GPA?">
+              Hide GPA related UI?
+            </md-checkbox>
+            <md-checkbox ng-model="school.disableBehavior" aria-label="Disable Behavior?">
+              Hide Behavior related UI?
+            </md-checkbox>
+          </div>
+          <div layout="row" layout-wrap layout-align="center start">
+            <settings-card name="Behavior" threshold-char="#" is-temporal="true" green="rgb.behavior.green"  yellow="rgb.behavior.yellow" period="rgb.behavior.period"></settings-card>
+            <settings-card name="Homework" threshold-char="%" is-temporal="true" green="rgb.homework.green"  yellow="rgb.homework.yellow" period="rgb.homework.period"></settings-card>
+            <settings-card name="Attendance" threshold-char="#" is-temporal="true" green="rgb.attendance.green" yellow="rgb.attendance.yellow" period="rgb.attendance.period"></settings-card>
+            <settings-card name="GPA" threshold-char="#" is-temporal="false" green="rgb.gpa.green" yellow="rgb.gpa.yellow"></settings-card>
+          </div>
+        </md-content>
+      </md-tab>
+      <md-tab label="Users" md-on-select="resolveUsers()">
         <md-content class="md-padding">
           <h2>Unverified Users</h2>
           <p>We do not have email addresses for the users below, which means we don't have a way to share an EdPanel user verification link with them. As an administrator using this page, you can choose to add en email address for the users below and we'll automatically email an invite link to those users or for users without email accounts, you can manually share the username and one time use passwords listed below.</p>
@@ -50,44 +78,25 @@
 
         </md-content>
       </md-tab>
-      <md-tab label="Settings">
-        <md-content class="md-padding settings">
-          <h2>Colors & Date Ranges</h2>
-          <p>On dashboards, values for attendance, homework completion, behavior and GPA are expressed as the colors green, yellow, and red. The colors indicate level of conern. Green means the value on the metric is positive, yellow is cautionary, and red warning. In the case of behavior, homework completion and attendance, these metrics also have customizable time period. You may configure these default values below.</p>
-          <div class="save-settings">
-            <md-button ng-click="saveSettingsChanges()" class="md-raised md-primary">
-              save changes
-            </md-button>
-            <md-button ng-click="revertSettingsChanges()" class="md-raised md-warn">
-              undo changes
-            </md-button>
-          </div>
-          <div layout="row" flex="100" layout-align="center center" style="margin-top:25px; margin-bottom:25px;">
-            <md-checkbox ng-model="school.disableGpa" aria-label="Disable GPA?">
-              Hide GPA related UI?
-            </md-checkbox>
-            <md-checkbox ng-model="school.disableBehavior" aria-label="Disable Behavior?">
-              Hide Behavior related UI?
-            </md-checkbox>
-          </div>
-          <div layout="row" layout-wrap layout-align="center start">
-            <settings-card name="Behavior" threshold-char="#" is-temporal="true" green="rgb.behavior.green"  yellow="rgb.behavior.yellow" period="rgb.behavior.period"></settings-card>
-            <settings-card name="Homework" threshold-char="%" is-temporal="true" green="rgb.homework.green"  yellow="rgb.homework.yellow" period="rgb.homework.period"></settings-card>
-            <settings-card name="Attendance" threshold-char="#" is-temporal="true" green="rgb.attendance.green" yellow="rgb.attendance.yellow" period="rgb.attendance.period"></settings-card>
-            <settings-card name="GPA" threshold-char="#" is-temporal="false" green="rgb.gpa.green" yellow="rgb.gpa.yellow"></settings-card>
-          </div>
-        </md-content>
-      </md-tab>
-      <md-tab label="Defaults">
+      <md-tab label="Upload Exam Results">
         <md-content class="md-padding">
-          <h2>Default Goals</h2>
-          <p>In EdPanel, students and teachers can create custom goals.  However, you may want to start students off with some default goals. You can create default goals here!</p>
-          <br/>
-          <md-button aria-label="menu" class="md-fab md-warn">
-            <md-icon>add</md-icon>
-          </md-button>
+          <h2>Upload MCAS result .csv files</h2>
+          <button class="md-button md-primary" ngf-select="uploadFiles($files, $invalidFiles)" multiple
+                  accept=".csv" ngf-max-height="1000" ngf-max-size="50MB">
+            Select Files</button>
+          <ul>
+            <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$errorParam}}
+              <span class="progress" ng-show="f.progress >= 0">
+                <div style="width:{{f.progress}}%"
+                  ng-bind="f.progress + '%'"></div>
+              </span>
+            </li>
+            <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+            </li>
+          </ul>
+          {{errorMsg}}
+
         </md-content>
       </md-tab>
-    </md-tabs>
   </md-content>
 </div>

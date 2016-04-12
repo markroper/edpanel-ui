@@ -1,18 +1,22 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager', 'authentication', 'consts', '$mdToast', '$document', '$window', 'analytics',
-  function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document, $window, analytics) {
+.controller('AdministrationCtrl', ['$scope', 'api', 'statebag', '$q', '$state', 'statebagApiManager',
+    'authentication', 'consts', '$mdToast', '$document', '$window', 'analytics', 'Upload', '$timeout',
+  function ($scope, api, statebag, $q, $state, statebagApiManager, authentication, consts, $mdToast, $document, $window, analytics, Upload, $timeout) {
     $scope.$on('$viewContentLoaded', function() {
       $window.ga('send', 'pageview', { page: '/ui/schools/*/admin' });
     });
     $scope.school = angular.copy(statebag.school);
     statebag.currentPage.name = 'System Admin';
-    //Resolve the invalidated users
-    api.unverifiedUsers.get(
-      { schoolId: statebag.school.id },
-      function(data) {
-        $scope.firstTimeUsers = data;
-      });
+
+    $scope.resolveUsers = function() {
+      //Resolve the invalidated users
+      api.unverifiedUsers.get(
+        { schoolId: statebag.school.id },
+        function(data) {
+          $scope.firstTimeUsers = data;
+        });
+    };
 
     var defaultRgb = {
       'attendance': {
@@ -186,5 +190,29 @@ angular.module('teacherdashboard')
       popupWin.document.close();
       return true;
     };
+
+    var urlToUse = api.uploadMcasFiles.replace(":schoolId", statebag.school.id);
+    $scope.uploadFiles = function(files, errFiles) {
+      $scope.files = files;
+      $scope.errFiles = errFiles;
+      angular.forEach(files, function(file) {
+        file.upload = Upload.upload({
+          url: urlToUse,
+          data: {file: file}
+        });
+
+        file.upload.then(function (response) {
+          $timeout(function () {
+            file.result = response.data;
+          });
+        }, function (response) {
+          if (response.status > 0)
+            $scope.errorMsg = response.status + ': ' + response.data;
+        }, function (evt) {
+          file.progress = Math.min(100, parseInt(100.0 *
+            evt.loaded / evt.total));
+        });
+      });
+    }
 
   }]);
