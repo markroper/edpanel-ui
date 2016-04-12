@@ -10,6 +10,7 @@ angular.module('teacherdashboard')
       $scope.activeTeacher = false;
       $scope.teachersLoaded = false;
       $scope.goalsLoaded = false;
+      $scope.newTeacher = false;
       var deferred = $q.defer();
       $scope.goalsPromise = deferred.promise;
 
@@ -37,10 +38,11 @@ angular.module('teacherdashboard')
               $scope.activeTeacher = teachers[i].id;
             }
           }
-          $scope.$watch('activeTeacher', function(before, after) {
+          $scope.$watch('activeTeacher', function(after, before) {
             console.log(after);
             console.log(before);
             if(before && !angular.equals(before, after)) {
+              $scope.newTeacher = false;
               $scope.goalsLoaded = false;
               $scope.approved = [];
               $scope.pending = [];
@@ -68,10 +70,12 @@ angular.module('teacherdashboard')
                   $scope.pending.push(data[i]);
                 }
               } else {
+                console.log(data[i]);
                 $scope.completed.push(data[i]);
               }
             }
             deferred.resolve();
+            $scope.newTeacher = true;
             $scope.goalsLoaded = true;
           },
           //Error callback

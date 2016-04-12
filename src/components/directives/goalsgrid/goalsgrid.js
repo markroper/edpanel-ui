@@ -9,7 +9,8 @@ angular.module('teacherdashboard')
           completeGoals: '=',
           sections: '=',
           isAdvisorView: '=',
-          goalsPromise: '='
+          goalsPromise: '=',
+          needsRefresh: '='
         },
         restrict: 'E',
         templateUrl: api.basePrefix + '/components/directives/goalsgrid/goalsgrid.html',
@@ -38,7 +39,20 @@ angular.module('teacherdashboard')
             '<gantt-table></gantt-table>' +
             '<gantt-groups></gantt-groups></div>';
 
+          $scope.$watch('needsRefresh', function(after, before) {
+            console.log(after);
+            console.log(before);
+            if(after && !angular.equals(before, after)) {
+              recompilePastChart();
+            }
+          });
+
           $scope.goalsPromise.then(function(value) {
+            recompilePastChart();
+          });
+
+          function recompilePastChart() {
+            body.empty();
             $scope.ganttInfo = [];
             $scope.dates = ['month'];
             var nameMap = {};
@@ -68,7 +82,7 @@ angular.module('teacherdashboard')
             }
 
             body.append($compile(template)($scope));
-          });
+          }
 
           //THIS SHOULD STAY SO WHEN WE CAHGNE THIS I DON'T FORGET TEH RANDOM DATA FORMAT NECESSARY FOR TREES
           //for (var key in nameMap) {
