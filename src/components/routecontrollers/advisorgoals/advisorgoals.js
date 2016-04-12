@@ -69,7 +69,6 @@ angular.module('teacherdashboard')
                   $scope.pending.push(data[i]);
                 }
               } else {
-                console.log(data[i]);
                 $scope.completed.push(data[i]);
               }
             }
