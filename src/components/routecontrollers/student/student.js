@@ -101,6 +101,7 @@ angular.module('teacherdashboard')
         api.mcasForStudent.get(
           {schoolId: $state.params.schoolId, studentId: $state.params.studentId},
           function (results) {
+            $scope.tableConfig.minRowsToShow = results.length;
             $scope.mcasResults = results;
           },
           function () {
