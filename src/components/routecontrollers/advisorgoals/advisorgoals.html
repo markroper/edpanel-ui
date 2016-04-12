@@ -1,5 +1,17 @@
 <div>
-  <goalsgrid goals-promise="goalsPromise" ng-show="goalsLoaded" is-advisor-view="true" pgoals="pending" agoals="approved" complete-goals="completed" sections="sections"></goalsgrid>
+    <div layout layout-align="center center">
+      <div class="md-subhead" style="margin-right:10px;">View goals for advisees of:</div>
+      <md-input-container class="teacher-picker">
+        <label>teacher</label>
+        <md-select ng-model="activeTeacher" class="md-subhead">
+          <md-option ng-repeat="opt in teachers" value="{{opt.id}}">{{opt.name}}</md-option>
+        </md-select>
+</md-input-container>
+  </div>
+  <goalsgrid needs-refresh="newTeacher" ng-show="pending.length > 0 || approved.length > 0 || completed.length > 0" goals-promise="goalsPromise" ng-show="goalsLoaded" is-advisor-view="true" pgoals="pending" agoals="approved" complete-goals="completed" sections="sections"></goalsgrid>
+  <div ng-show="pending.length === 0 && approved.length === 0 && completed.length === 0 && goalsLoaded" layout layout-align="center center">
+    There are no goals to show.
+  </div>
   <div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!goalsLoaded">
     <h3 flex="50">Loading...</h3>
     <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
