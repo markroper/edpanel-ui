@@ -77,8 +77,8 @@ angular.module('teacherdashboard')
       data: 'mcasResults',
       enableColumnMenus: false,
       paginationPageSize: 2,
-      enablePaginationControls: false,
-      minRowsToShow: 1,
+      enablePaginationControls: true,
+      minRowsToShow: 4,
       columnDefs: [
         { field: 'student.name', name:'Student' },
         { field: 'adminYear', name:'Year' },
@@ -101,7 +101,6 @@ angular.module('teacherdashboard')
         api.mcasForStudent.get(
           {schoolId: $state.params.schoolId, studentId: $state.params.studentId},
           function (results) {
-            $scope.tableConfig.minRowsToShow = results.length;
             $scope.mcasResults = results;
           },
           function () {
