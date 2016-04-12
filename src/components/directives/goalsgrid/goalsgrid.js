@@ -39,20 +39,19 @@ angular.module('teacherdashboard')
             '<gantt-table></gantt-table>' +
             '<gantt-groups></gantt-groups></div>';
 
+          //This needs to be called when the advisor page updates a new advisor.
           $scope.$watch('needsRefresh', function(after, before) {
-            console.log(after);
-            console.log(before);
             if(after && !angular.equals(before, after)) {
-              recompilePastChart();
+              populateGanttInfo();
             }
           });
 
           $scope.goalsPromise.then(function(value) {
-            recompilePastChart();
+            populateGanttInfo();
+            body.append($compile(template)($scope));
           });
 
-          function recompilePastChart() {
-            body.empty();
+          function populateGanttInfo() {
             $scope.ganttInfo = [];
             $scope.dates = ['month'];
             var nameMap = {};
@@ -80,9 +79,8 @@ angular.module('teacherdashboard')
                 );
               }
             }
+          };
 
-            body.append($compile(template)($scope));
-          }
 
           //THIS SHOULD STAY SO WHEN WE CAHGNE THIS I DON'T FORGET TEH RANDOM DATA FORMAT NECESSARY FOR TREES
           //for (var key in nameMap) {

@@ -38,9 +38,8 @@ angular.module('teacherdashboard')
               $scope.activeTeacher = teachers[i].id;
             }
           }
+          //When we cahnge the active teacher, reload the goals.
           $scope.$watch('activeTeacher', function(after, before) {
-            console.log(after);
-            console.log(before);
             if(before && !angular.equals(before, after)) {
               $scope.newTeacher = false;
               $scope.goalsLoaded = false;
