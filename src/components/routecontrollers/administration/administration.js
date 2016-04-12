@@ -204,10 +204,18 @@ angular.module('teacherdashboard')
         file.upload.then(function (response) {
           $timeout(function () {
             file.result = response.data;
+            $mdToast.show(
+              $mdToast.simple()
+                .content('Success.' + response.data.length + ' MCAS results saved.')
+                .hideDelay(2000));
           });
         }, function (response) {
-          if (response.status > 0)
-            $scope.errorMsg = response.status + ': ' + response.data;
+          if (response.status > 0) {
+            $mdToast.show(
+              $mdToast.simple()
+                .content('Failed to parse MCAS from file. ' + response.status)
+                .hideDelay(2000));
+          }
         }, function (evt) {
           file.progress = Math.min(100, parseInt(100.0 *
             evt.loaded / evt.total));
