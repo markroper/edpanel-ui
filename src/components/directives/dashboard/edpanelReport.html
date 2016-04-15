@@ -3,15 +3,30 @@
     <md-card flex="100" >
       <md-card-content class="graph">
         <div class="md-headline">{{report.name}}</div>
-        <div class="md-subhead">
-          <md-input-container ng-show="report.supportDateFilter">
-            <md-select aria-label="term" ng-model="currentTerm" ng-model-options="{trackBy: '$value.name'}">
-              <md-option ng-value="term" ng-repeat="term in terms">{{term.name}}</md-option>
-            </md-select>
-          </md-input-container>
-          <div class="static-term" ng-show="!report.supportDateFilter">{{currentTerm.name}}</div>
+        <div ng-if="report.type==='assignment_analysis' || report.type==='ASSIGNMENT_ANALYSIS'" class="histogram-container">
+          <div layout layout-align="center center" class="md-body-2" layout-wrap>
+            <div flex="100">{{studentToggle}}</div>
+            <div flex="20">low score: <b>{{quartiles.min}}%</b></div>
+            <div flex="20">1st quartile: <b>{{quartiles.quartile1}}%</b></div>
+            <div flex="20">median: <b>{{quartiles.median}}%</b></div>
+            <div flex="20">3rd quartile: <b>{{quartiles.quartile3}}%</b></div>
+            <div flex="20">high score: <b>{{quartiles.max}}%</b></div>
+          </div>
+          <stackedbar chart-type="bar" new-data="newData" sb-legend-pos="top-left" on-click-callback="histogramCallback" colors="['#FF7F0E']"></stackedbar>
         </div>
-        <stackedbar chart-type="report.type" new-data="newData" sb-legend-pos="top-left" on-click-callback="clickCallback"></stackedbar>
+
+        <div ng-if="report.type!=='assignment_analysis' && report.type !=='ASSIGNMENT_ANALYSIS'">
+          <div class="md-subhead">
+            <md-input-container ng-show="report.supportDateFilter">
+              <md-select aria-label="term" ng-model="currentTerm" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-value="term" ng-repeat="term in terms">{{term.name}}</md-option>
+              </md-select>
+            </md-input-container>
+            <div class="static-term" ng-show="!report.supportDateFilter">{{currentTerm.name}}</div>
+          </div>
+          <stackedbar chart-type="report.type" new-data="newData" sb-legend-pos="top-left" on-click-callback="clickCallback"></stackedbar>
+        </div>
+
         <div class="details-table" flex="100"></div>
       </md-card-content>
     </md-card>
@@ -19,6 +34,19 @@
        <md-icon md-font-set="material-icons">settings</md-icon>
        <md-tooltip>chart filters</md-tooltip>
     </md-button>
+
+    <md-button ng-show="studentToggle" aria-label="menu" class="demographic-button md-icon-button" ng-click="toggleRadioButtons()">
+      <md-icon md-font-set="material-icons">settings</md-icon>
+      <md-tooltip>chart filters</md-tooltip>
+    </md-button>
+    <div class="chart-filters" style="background:white; padding:10px;" ng-show="showRadioButtons">
+      <md-radio-group ng-model="studentToggle" class="md-primary">
+        <md-radio-button ng-repeat="d in toggleData"
+                         ng-value="d">
+          {{d}}
+          </md-radio-button>
+      </md-radio-group>
+    </div>
     <div class="chart-filters" ng-show="showFilter">
      <md-input-container>
         <md-select ng-model="demographic" placeholder="Select a filter">

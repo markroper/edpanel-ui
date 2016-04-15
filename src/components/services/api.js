@@ -139,6 +139,10 @@ angular.module('teacherdashboard')
       //Query execution
       savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
+      assignmentAnalysis: $resource(base + '/ui/school/:schoolId/assignmentanalyses', {},
+        {
+          'post': { method: 'POST', headers: {'Content-Type': 'application/json'} }
+        }),
       queryComponents: $resource(base + '/schools/:schoolId/queries/components'),
       dashboard: $resource(base + '/schools/:schoolId/dashboards/:dashboardId',
         {},
