@@ -156,11 +156,11 @@ angular.module('teacherdashboard')
           return dt;
         };
 
-        var ALL_STUDENTS = "All Students";
-        var SPED = "SPED Students";
-        var ELL = "ELL Students";
-        var MALE = "Male Students";
-        var FEMALE =  "Female Students";
+        var ALL_STUDENTS = "All students";
+        var SPED = "SPED students";
+        var ELL = "ELL students";
+        var MALE = "Male students";
+        var FEMALE =  "Female students";
         var NEW_TO_DISTRICT = "Students new to district";
 
         scope.toggleRadioButtons = function() {
