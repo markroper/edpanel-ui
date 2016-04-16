@@ -163,6 +163,11 @@ angular.module('teacherdashboard')
         var FEMALE =  "Female students";
         var NEW_TO_DISTRICT = "Students new to district";
 
+
+
+        /*
+            ASSIGNMENT CHART SUBTYPE METHODS
+         */
         scope.toggleRadioButtons = function() {
           scope.showRadioButtons = !scope.showRadioButtons;
         };
@@ -241,7 +246,6 @@ angular.module('teacherdashboard')
         };
 
         scope.retrieveAssignmentAnalysisResults = function() {
-          //rgb(255, 127, 14)
           scope.studentToggle = ALL_STUDENTS;
           api.assignmentAnalysis.post(
             { schoolId: statebag.school.id },
@@ -280,8 +284,8 @@ angular.module('teacherdashboard')
           console.log('called back on the histogram');
         };
 
-        /**
-         * makes the initial request for data and resolves the promise with the chart data
+        /*
+         * GENERAL REPORT TYPE METHODS
          */
         scope.retrieveChartquery = function() {
           if(scope.report.type === 'assignment_analysis' || scope.report.type === 'ASSIGNMENT_ANALYSIS') {
