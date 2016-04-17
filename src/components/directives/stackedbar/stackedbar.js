@@ -16,7 +16,8 @@ angular.module('teacherdashboard')
         columnsPromise: '=',
         onClickCallback: '=',
         chartType: '=',
-        newData: '='
+        newData: '=',
+        colors: '='
       },
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/stackedbar/stackedbar.html',
@@ -43,6 +44,10 @@ angular.module('teacherdashboard')
             groups.push(theData[i][0]);
           }
           $timeout(function() {
+            var colors = ['#1f77b4', '#d62728', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728'];
+            if(scope.colors) {
+              colors = scope.colors;
+            }
             scope.chart = $window.c3.generate({
               bindto: elem.find('.svg-container')[0],
               data: {
@@ -63,7 +68,7 @@ angular.module('teacherdashboard')
                 }
               },
               color: {
-                pattern: ['#1f77b4', '#d62728', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728']
+                pattern: colors
               },
               axis: {
                 x: {

@@ -9,7 +9,7 @@ angular.module('teacherdashboard')
       restrict: 'E',
       templateUrl: api.basePrefix + '/components/directives/dashboard/edpanelReport.html',
       replace: true,
-      link: function(scope) {
+      link: function(scope, elem) {
         scope.failureControl = {};
         scope.dataDeferred = $q.defer();
         scope.dataPromise = scope.dataDeferred.promise;
@@ -156,10 +156,143 @@ angular.module('teacherdashboard')
           return dt;
         };
 
-        /**
-         * makes the initial request for data and resolves the promise with the chart data
+        var ALL_STUDENTS = "All students";
+        var SPED = "SPED students";
+        var ELL = "ELL students";
+        var MALE = "Male students";
+        var FEMALE =  "Female students";
+        var NEW_TO_DISTRICT = "Students new to district";
+
+
+
+        /*
+            ASSIGNMENT CHART SUBTYPE METHODS
+         */
+        scope.toggleRadioButtons = function() {
+          scope.showRadioButtons = !scope.showRadioButtons;
+        };
+
+        scope.calculateHistogramResults = function() {
+          var filter = scope.studentToggle;
+          var min = 100;
+          var max = 0;
+          var scores = ["Score", "<50%", "50-60%", "60-70%", "70-80%", "80-90%", "90-100%", "100-110%", "110%+"];
+          var numberOf = ["Number of Students", 0, 0, 0, 0, 0, 0, 0, 0];
+          var count = 0;
+          var allValidResults = [];
+          for(var i = 0; i < scope.assignmentAnalysisResults.results.length; i++){
+            var entry = scope.assignmentAnalysisResults.results[i];
+            var s = entry.student;
+            //If the record should be filtered out, filter it out
+            if(filter === SPED && !s.sped) {
+              continue;
+            } else if(filter === ELL && !s.ell) {
+              continue
+            } else if(filter === MALE && s.gender !== 'MALE') {
+              continue;
+            } else if(filter === FEMALE && s.gender !== 'FEMALE') {
+              continue;
+            } else if(filter === NEW_TO_DISTRICT && s.previousSchoolId) {
+              continue;
+            }
+            var val = entry.score * 100;
+            allValidResults.push(val);
+            count++;
+            if(val < min) {
+              min = val;
+            }
+            if(val > max) {
+              max = val;
+            }
+            if(val < 50) {
+              numberOf[1]++;
+            } else if(val < 60) {
+              numberOf[2]++;
+            } else if(val < 70) {
+              numberOf[3]++;
+            } else if(val < 80) {
+              numberOf[4]++;
+            } else if(val < 90) {
+              numberOf[5]++;
+            } else if(val < 100) {
+              numberOf[6]++;
+            } else if(val < 110) {
+              numberOf[7]++;
+            } else {
+              numberOf[8]++;
+            }
+          }
+          var medianPos = Math.round((count-1)/2);
+          var q1Pos = Math.round(medianPos / 2);
+          var q3Pos = medianPos + q1Pos;
+          var q1 = Math.round(allValidResults[q1Pos]);
+          var q3 = Math.round(allValidResults[q3Pos]);
+          var med = Math.round(allValidResults[medianPos]);
+          if(count < 4) {
+            q1 = '--';
+            q3 = '--';
+          }
+          if(count < 3) {
+            med = '--';
+          }
+          scope.quartiles = {
+            min: Math.round(min),
+            quartile1: q1,
+            median: med,
+            quartile3: q3,
+            max: Math.round(max)
+          };
+          scope.newData = [numberOf, scores];
+        };
+
+        scope.retrieveAssignmentAnalysisResults = function() {
+          scope.studentToggle = ALL_STUDENTS;
+          api.assignmentAnalysis.post(
+            { schoolId: statebag.school.id },
+            scope.report.assignmentIds,
+            function(results) {
+              scope.assignmentAnalysisResults = results;
+              scope.calculateHistogramResults();
+              scope.quartiles = {
+                min: Math.round(results.min * 100),
+                quartile1: Math.round(results.quartile1 * 100),
+                median: Math.round(results.median * 100),
+                quartile3: Math.round(results.quartile3 * 100),
+                max: Math.round(results.max * 100)
+              };
+              scope.$watch('studentToggle', function(newVal, oldVal){
+                if(newVal && !angular.equals(newVal, oldVal)) {
+                  scope.showRadioButtons = false;
+                  scope.calculateHistogramResults();
+                }
+              });
+              scope.toggleData = [
+                ALL_STUDENTS,
+                SPED,
+                ELL,
+                MALE,
+                FEMALE,
+                NEW_TO_DISTRICT
+              ];
+            },
+            function(){
+              //TODO: toast
+            });
+        };
+
+        scope.histogramCallback = function(callbackVal) {
+          console.log('called back on the histogram');
+        };
+
+        /*
+         * GENERAL REPORT TYPE METHODS
          */
         scope.retrieveChartquery = function() {
+          if(scope.report.type === 'assignment_analysis' || scope.report.type === 'ASSIGNMENT_ANALYSIS') {
+            scope.retrieveAssignmentAnalysisResults();
+            return;
+          }
+
           scope.usableQuery = angular.copy(scope.report.chartQuery);
           scope.dataDeferred = $q.defer();
           scope.dataPromise = scope.dataDeferred.promise;
