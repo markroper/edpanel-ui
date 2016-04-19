@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll','analytics','$stateParams',
-  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll, analytics, $stateParams) {
+.controller('StudentCtrl', ['$scope','statebag', 'api', '$q', '$state', 'statebagApiManager', '$window', '$location', '$anchorScroll','analytics','$stateParams','authentication',
+  function ($scope, statebag, api, $q, $state, statebagApiManager, $window, $location, $anchorScroll, analytics, $stateParams, authentication) {
     $scope.$on('$viewContentLoaded', function() {
       if (typeof  $stateParams.tab === 'undefined') {
         $window.ga('send', 'pageview', { page: '/ui/schools/*/student/*/grades' });
@@ -38,6 +38,7 @@ angular.module('teacherdashboard')
     $scope.approved = [];
     $scope.pending = [];
     $scope.completed = [];
+    $scope.isWatched = false;
     $scope.openTab = $stateParams.tab;
     var deferred = $q.defer();
     $scope.goalsPromise = deferred.promise;
@@ -107,6 +108,42 @@ angular.module('teacherdashboard')
             //TODO: TOAST?
           });
       }
+    };
+
+    $scope.createWatch = function() {
+      api.createWatch.post(
+        { },
+        {
+          staff: {
+            "id": authentication.identity().id,
+            "type": statebag.userRole.toUpperCase() },
+          student: {
+            "id": statebag.currentStudent.id,
+            "type":'STUDENT'
+          }
+        },
+        function() {
+          $scope.students[0].watched = true;
+          $scope.students[0].watchId = data.id;
+          statebagApiManager.showSimpleToast('You are now watching this student');
+        },
+        function() {
+          statebagApiManager.showSimpleToast('Error attempting to watch this student');
+
+        });
+
+    };
+
+    $scope.deleteWatch = function() {
+      api.deleteWatch.delete(
+        { watchId: $scope.students[0].watchId },
+        function(){
+          $scope.students[0].watched = false;
+          statebagApiManager.showSimpleToast('You are no longer watching this student');
+        },
+        function(){
+          statebagApiManager.showSimpleToast('There was an error unwatching this student');
+        });
     };
 
     function resolveAllData() {

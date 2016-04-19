@@ -6,11 +6,16 @@ angular.module('teacherdashboard')
       $scope.approved = [];
       $scope.pending = [];
       $scope.completed = [];
+      $scope.pinApproved = [];
+      $scope.pinPending = [];
+      $scope.pinCompleted = [];
       $scope.teachers = [];
       $scope.activeTeacher = false;
       $scope.teachersLoaded = false;
       $scope.goalsLoaded = false;
       $scope.newTeacher = false;
+      var pinDeferred = $q.defer();
+      $scope.pinnedPromise = pinDeferred.promise;
       var deferred = $q.defer();
       $scope.goalsPromise = deferred.promise;
 
@@ -83,7 +88,39 @@ angular.module('teacherdashboard')
           })
       };
 
+      function resolvePinnedGoals() {
+        api.watchedGoals.get(
+          {
+            staffId: authentication.identity().id
+          },
+          //Success callback
+
+          function(data){
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].goalProgress === 'IN_PROGRESS') {
+                if (data[i].approved) {
+                  $scope.pinApproved.push(data[i]);
+                } else {
+                  $scope.pinPending.push(data[i]);
+                }
+              } else {
+                $scope.pinCompleted.push(data[i]);
+              }
+            }
+            pinnedPromise.resolve();
+            $scope.newTeacher = true;
+            $scope.goalsLoaded = true;
+          },
+          //Error callback
+          function(){
+            showSimpleToast("An error occurred loading goals");
+            console.log('failed to resolve the goals!');
+          });
+
+      }
+
       resolveGoals(authentication.identity().id);
+      resolvePinnedGoals();
 
 
 

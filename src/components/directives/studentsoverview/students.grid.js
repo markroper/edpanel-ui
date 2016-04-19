@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api','$compile', '$timeout', 'analytics', 'consts','$window',
-  function($state, statebag, api, $compile, $timeout, analytics, consts, $window) {
+  .directive('studentGrid', ['$state', 'statebag', 'api','$compile', '$timeout', 'analytics', 'consts','$window','statebagApiManager','authentication',
+  function($state, statebag, api, $compile, $timeout, analytics, consts, $window, statebagApiManager, authentication) {
     return {
       scope: {
         studentsData: '=',
@@ -93,6 +93,41 @@ angular.module('teacherdashboard')
             );
           }
         }, true);
+
+        $scope.createWatch = function(student) {
+          api.createWatch.post(
+            { },
+            {
+              staff: {
+                "id": authentication.identity().id,
+                "type": statebag.userRole.toUpperCase() },
+              student: {
+                "id": student.id,
+                "type":'STUDENT'
+              }
+            },
+            function(data) {
+              student.watched = true;
+              student.watchId = data.id;
+              statebagApiManager.showSimpleToast('You are now watching this student');
+            },
+            function() {
+              statebagApiManager.showSimpleToast('Error attempting to watch this student');
+
+            });
+
+        };
+        $scope.deleteWatch = function(student) {
+          api.deleteWatch.delete(
+            { watchId: student.watchId },
+            function(){
+              student.watched = false;
+              statebagApiManager.showSimpleToast('You are no longer watching this student');
+            },
+            function(){
+              statebagApiManager.showSimpleToast('There was an error unwatching this student');
+        });
+        };
 
         //FILTER RELATED
         $scope.showfilters = false;

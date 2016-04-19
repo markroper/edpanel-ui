@@ -78,12 +78,25 @@
 
       <div class="table-row" layout="row" layout-wrap ng-repeat="student in (filteredStudentData = (studentsData | orderBy:order | filter:search:strict | filter:filterStudents) | limitTo: limit) track by student.id">
         <div class="table-cell" flex="{{::cellWidth}}" flex-sm="100" ng-show="showFilter">
-          <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+          <div layout="row" layout-align="center center">
+            <section flex="30">
+              <md-button ng-show="!student.watched" style="height: 36px;margin-top:0px;margin-bottom:0px" ng-click="createWatch(student)" class="md-mini md-primary" hide-sm hide-xs>
+                <md-icon md-svg-src="../../../assets/images/pin.svg"></md-icon>
+                <md-tooltip>pin student</md-tooltip>
+              </md-button>
+              <md-button ng-show="student.watched" ng-click="deleteWatch(student)" style="height: 36px;margin-top:0px;margin-bottom:0px" class="md-mini md-primary" hide-sm hide-xs>
+                <md-icon md-svg-src="../../../assets/images/pin-off.svg"></md-icon>
+                <md-tooltip>unpin student</md-tooltip>
+              </md-button>
+            </section>
+          <section layout="row" flex="70" layout-sm="column" layout-align="center center" layout-wrap>
             <md-button md-no-ink class="md-primary student-name" ng-click="goToStudent(student)">
             {{::student.name}}
             <md-tooltip>Click for student dashboard</md-tooltip>
           </md-button>
           </section>
+
+          </div>
         </div>
         <div ng-show="::settings.showBehavior" hide-sm hide-xs class="table-cell" flex="{{::cellWidth}}" flex-sm="50" ng-click="showBehaviorTray($event, student)">
           <div class="choropleth band-{{::student.behaviorClass}}" layout="row" layout-align="center center">

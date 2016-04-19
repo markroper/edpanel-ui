@@ -12,6 +12,15 @@ angular.module('teacherdashboard')
     return {
       login: $resource(base + '/login'),
       logout: $resource(base + '/logout'),
+      createWatch: $resource(base + '/watches', {}, {
+        'post': { method: 'POST', headers: {'Content-Type': 'application/json' }
+      }}),
+      deleteWatch: $resource(base + '/watches/:watchId', {}, {
+        'delete': { method: 'DELETE' }
+        }),
+      getStaffWatches: $resource(base + '/watches/staff/:staffId', {}, {
+        'get': { isArray: true }
+      }),
       //Notifications
       getTriggeredNotifications: $resource(base + '/notifications/users/:userId/triggerednotifications', {}, {
         'get': { isArray: true }
@@ -179,6 +188,13 @@ angular.module('teacherdashboard')
         {
           'get': {isArray: true}
         }),
+      watchedGoals: $resource(
+        base + '/watches/teacher/:staffId/goals',
+        {},
+        {
+          'get': {isArray:true}
+        }
+      ),
       createGoalNotifications: $resource(
         base + '/notifications/schools/:schoolId/students/:studentId/goals/:goalId',
         {},

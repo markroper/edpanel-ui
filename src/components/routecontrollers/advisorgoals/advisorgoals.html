@@ -1,4 +1,5 @@
-<div>
+<div layout="row">
+<div flex="50">
     <div layout layout-align="center center">
       <div class="md-subhead" style="margin-right:10px;">View goals for advisees of:</div>
       <md-input-container class="teacher-picker">
@@ -17,3 +18,11 @@
     <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
   </div>
 </div>
+  <div flex="50" ng-show="pinPending.length > 0 || pinApproved.length > 0 || pinCompleted.length > 0">
+    <div layout layout-align="center center">
+      <div class="md-headline" style="margin-top:15px;margin-bottom: 20px">View goals for your pinned students</div>
+      </div>
+    <goalsgrid needs-refresh="newTeacher" ng-show="pinPending.length > 0 || pinApproved.length > 0 || pinCompleted.length > 0" goals-promise="pinnedPromise" ng-show="goalsLoaded" is-advisor-view="true" pgoals="pinPending" agoals="pinApproved" complete-goals="pinCompleted" sections="sections"></goalsgrid>
+  </div>
+</div>
+s

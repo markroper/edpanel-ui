@@ -17,15 +17,36 @@ angular.module('teacherdashboard')
          */
         var promises = [];
         //Resolve the students!
+        promises.push(resolveWatchedStudents());
         promises.push(resolveStudents());
         //After the school and students are resolved, resolve the student performance data
         $q.all(promises).then(function() {
           statebagApiManager.retrieveAndCacheStudentPerfData()
             .then(function(){
+              for (var i = 0; i  < $scope.watches.length; i++) {
+                for (var j = 0; j < statebag.studentPerfData.length; j++) {
+                  if ($scope.watches[i].student.id === statebag.studentPerfData[j].id) {
+                    statebag.studentPerfData[j].watchId = $scope.watches[i].id;
+                    statebag.studentPerfData[j].watched = true;
+                  }
+                }
+              }
               $scope.students = statebag.studentPerfData;
               $scope.school = statebag.school;
             });
         });
+      }
+
+      function resolveWatchedStudents() {
+        return api.getStaffWatches.get(
+          {staffId: authentication.identity().id},
+          function(data) {
+            $scope.watches = data;
+          },
+          function() {
+
+          }
+        ).$promise;
       }
 
       function resolveStudents() {
