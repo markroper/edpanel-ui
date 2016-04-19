@@ -3,31 +3,59 @@
     <md-card flex="100" >
       <md-card-content class="graph">
         <div class="md-headline">{{report.name}}</div>
-        <div class="md-subhead">
-          <md-input-container ng-show="report.supportDateFilter">
-            <md-select aria-label="term" ng-model="currentTerm" ng-model-options="{trackBy: '$value.name'}">
-              <md-option ng-value="term" ng-repeat="term in terms">{{term.name}}</md-option>
-            </md-select>
-          </md-input-container>
-          <div class="static-term" ng-show="!report.supportDateFilter">{{currentTerm.name}}</div>
+        <!-- ASSIGNMENT REPORT TYPE -->
+        <div ng-if="report.type==='assignment_analysis' || report.type==='ASSIGNMENT_ANALYSIS'" class="histogram-container">
+          <stackedbar chart-type="bar" new-data="newData" sb-legend-pos="top-left" on-click-callback="histogramCallback" colors="['#FF7F0E']"></stackedbar>
+          <div layout layout-align="center center" class="md-body-2" layout-wrap style="padding-top:10px;">
+            <div flex="20">low score: <b>{{quartiles.min}}%</b></div>
+            <div flex="20">1st quartile: <b>{{quartiles.quartile1}}%</b></div>
+            <div flex="20">median: <b>{{quartiles.median}}%</b></div>
+            <div flex="20">3rd quartile: <b>{{quartiles.quartile3}}%</b></div>
+            <div flex="20">high score: <b>{{quartiles.max}}%</b></div>
+          </div>
         </div>
-        <stackedbar chart-type="report.type" new-data="newData" sb-legend-pos="top-left" on-click-callback="clickCallback"></stackedbar>
+        <!-- GENERAL REPORT TYPES -->
+        <div ng-if="report.type!=='assignment_analysis' && report.type !=='ASSIGNMENT_ANALYSIS'">
+          <div class="md-subhead">
+            <md-input-container ng-show="report.supportDateFilter">
+              <md-select aria-label="term" ng-model="currentTerm" ng-model-options="{trackBy: '$value.name'}">
+                <md-option ng-value="term" ng-repeat="term in terms">{{term.name}}</md-option>
+              </md-select>
+            </md-input-container>
+            <div class="static-term" ng-show="!report.supportDateFilter">{{currentTerm.name}}</div>
+          </div>
+          <stackedbar chart-type="report.type" new-data="newData" sb-legend-pos="top-left" on-click-callback="clickCallback"></stackedbar>
+        </div>
         <div class="details-table" flex="100"></div>
       </md-card-content>
     </md-card>
+    <!-- GENERAL REPORT CONTROLS-->
     <md-button ng-show="report.supportDemographicFilter" aria-label="menu" class="demographic-button md-icon-button" ng-click="toggleFilters()">
        <md-icon md-font-set="material-icons">settings</md-icon>
        <md-tooltip>chart filters</md-tooltip>
     </md-button>
     <div class="chart-filters" ng-show="showFilter">
-     <md-input-container>
+      <md-input-container>
         <md-select ng-model="demographic" placeholder="Select a filter">
-             <md-option  value="Race">Race</md-option>
-             <md-option  value="Gender">Gender</md-option>
-             <md-option ng-disabled value="ELL">ELL</md-option>
-             <md-option ng-disabled value="SPED">Special Ed</md-option>
-           </md-select>
-       </md-input-container>
+          <md-option  value="Race">Race</md-option>
+          <md-option  value="Gender">Gender</md-option>
+          <md-option ng-disabled value="ELL">ELL</md-option>
+          <md-option ng-disabled value="SPED">Special Ed</md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+    <!-- ASSIGNMENT REPORT CONTROLS -->
+    <div ng-show="studentToggle" flex="100" style="position:absolute; bottom:30px; left:40%; margin:auto;">{{studentToggle}} results</div>
+    <md-button ng-show="studentToggle" aria-label="menu" class="demographic-button md-icon-button" ng-click="toggleRadioButtons()">
+      <md-icon md-font-set="material-icons">settings</md-icon>
+      <md-tooltip>chart filters</md-tooltip>
+    </md-button>
+    <div class="chart-filters" style="background:white; padding:10px;" ng-show="showRadioButtons">
+      <md-radio-group ng-model="studentToggle" class="md-primary">
+        <md-radio-button ng-repeat="d in toggleData"  
+                         ng-value="d">{{d}}
+        </md-radio-button>
+      </md-radio-group>
     </div>
   </div>
 </div>

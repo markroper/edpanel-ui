@@ -148,6 +148,10 @@ angular.module('teacherdashboard')
       //Query execution
       savedQuery: $resource(base + '/schools/:schoolId/queries/:queryId/results', {}, { 'results': { isArray: true }}),
       query: $resource(base + '/schools/:schoolId/queries/results', {}),
+      assignmentAnalysis: $resource(base + '/ui/school/:schoolId/assignmentanalyses', {},
+        {
+          'post': { method: 'POST', headers: {'Content-Type': 'application/json'} }
+        }),
       queryComponents: $resource(base + '/schools/:schoolId/queries/components'),
       dashboard: $resource(base + '/schools/:schoolId/dashboards/:dashboardId',
         {},
@@ -158,6 +162,7 @@ angular.module('teacherdashboard')
         }),
       //MCAS
       mcasForStudent: $resource(base + '/schools/:schoolId/students/:studentId/mcas', {}, { 'get':{ isArray: true }}),
+      uploadMcasFiles: base + '/schools/:schoolId/mcas/files',
       //GPA
       gpa: $resource(base + '/schools/:schoolId/gpas'),
       gpasInSchool: $resource(base + '/gpas', {}, { 'get': { isArray: true } }),

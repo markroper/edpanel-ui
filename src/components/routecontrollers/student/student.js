@@ -78,8 +78,8 @@ angular.module('teacherdashboard')
       data: 'mcasResults',
       enableColumnMenus: false,
       paginationPageSize: 2,
-      enablePaginationControls: false,
-      minRowsToShow: 1,
+      enablePaginationControls: true,
+      minRowsToShow: 4,
       columnDefs: [
         { field: 'student.name', name:'Student' },
         { field: 'adminYear', name:'Year' },
