@@ -109,6 +109,7 @@ angular.module('teacherdashboard')
               }
             },
             function(data) {
+              analytics.sendEvent(analytics.PINNING, analytics.CREATE_PIN, analytics.PIN_STUDENT_LIST);
               student.watched = true;
               student.watchId = data.id;
               statebagApiManager.showSimpleToast('You are now watching this student');
@@ -124,6 +125,7 @@ angular.module('teacherdashboard')
             { watchId: student.watchId },
             function(){
               student.watched = false;
+              analytics.sendEvent(analytics.PINNING, analytics.DELETE_PIN, analytics.PIN_STUDENT_LIST);
               statebagApiManager.showSimpleToast('You are no longer watching this student');
             },
             function(){
