@@ -23,12 +23,14 @@ angular.module('teacherdashboard')
         var ABSENCES = 'Absences';
         var ELL = 'ELL';
         var SPED = 'SPED';
+        var PINNED = 'PINNED';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" y-data-label="Homework Completion" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
         var gpaChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" y-data-label="GPA" key-to-x="calculationDate" key-to-y="score" date-time-data-promise="gpaDataPromise"></datetimechart></div>';
         //Use the name as the sort field for the list, to start
         $scope.order = 'name';
+        $scope.userRole = statebag.userRole;
         $scope.sortElement = null;
         if($scope.school) {
           $scope.settings = {

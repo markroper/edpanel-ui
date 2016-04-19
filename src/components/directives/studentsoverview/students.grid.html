@@ -80,11 +80,11 @@
         <div class="table-cell" flex="{{::cellWidth}}" flex-sm="100" ng-show="showFilter">
           <div layout="row" layout-align="center center">
             <section flex="30">
-              <md-button ng-show="!student.watched" style="height: 36px;margin-top:0px;margin-bottom:0px" ng-click="createWatch(student)" class="md-mini md-primary" hide-sm hide-xs>
+              <md-button ng-show="!student.watched && userRole !== 'Student' && userRole !== 'Guardian'" style="height: 36px;margin-top:0px;margin-bottom:0px" ng-click="createWatch(student)" class="md-mini md-primary" hide-sm hide-xs>
                 <md-icon md-svg-src="../../../assets/images/pin.svg"></md-icon>
                 <md-tooltip>pin student</md-tooltip>
               </md-button>
-              <md-button ng-show="student.watched" ng-click="deleteWatch(student)" style="height: 36px;margin-top:0px;margin-bottom:0px" class="md-mini md-primary" hide-sm hide-xs>
+              <md-button ng-show="student.watched && userRole !== 'Student' && userRole !== 'Guardian'" ng-click="deleteWatch(student)" style="height: 36px;margin-top:0px;margin-bottom:0px" class="md-mini md-primary" hide-sm hide-xs>
                 <md-icon md-svg-src="../../../assets/images/pin-off.svg"></md-icon>
                 <md-tooltip>unpin student</md-tooltip>
               </md-button>

@@ -39,6 +39,7 @@ angular.module('teacherdashboard')
     $scope.pending = [];
     $scope.completed = [];
     $scope.isWatched = false;
+    $scope.userRole = statebag.userRole;
     $scope.openTab = $stateParams.tab;
     var deferred = $q.defer();
     $scope.goalsPromise = deferred.promise;
@@ -122,7 +123,7 @@ angular.module('teacherdashboard')
             "type":'STUDENT'
           }
         },
-        function() {
+        function(data) {
           $scope.students[0].watched = true;
           $scope.students[0].watchId = data.id;
           statebagApiManager.showSimpleToast('You are now watching this student');
