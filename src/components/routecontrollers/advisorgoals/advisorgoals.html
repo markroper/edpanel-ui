@@ -1,3 +1,4 @@
+<div>
 <div layout="row">
 <div flex="50">
     <div layout layout-align="center center">
@@ -13,16 +14,22 @@
   <div ng-show="pending.length === 0 && approved.length === 0 && completed.length === 0 && goalsLoaded" layout layout-align="center center">
     There are no goals to show.
   </div>
-  <div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!goalsLoaded">
-    <h3 flex="50">Loading...</h3>
-    <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
-  </div>
 </div>
-  <div flex="50" ng-show="pinPending.length > 0 || pinApproved.length > 0 || pinCompleted.length > 0">
+  <div flex="50">
     <div layout layout-align="center center">
       <div class="md-headline" style="margin-top:15px;margin-bottom: 20px">View goals for your pinned students</div>
       </div>
-    <goalsgrid needs-refresh="newTeacher" ng-show="pinPending.length > 0 || pinApproved.length > 0 || pinCompleted.length > 0" goals-promise="pinnedPromise" ng-show="goalsLoaded" is-advisor-view="true" pgoals="pinPending" agoals="pinApproved" complete-goals="pinCompleted" sections="sections"></goalsgrid>
+    <goalsgrid needs-refresh="newTeacher" ng-show="pinPending.length > 0 || pinApproved.length > 0 || pinCompleted.length > 0" goals-promise="pinnedPromise" ng-show="pinnedGoalsLoaded" is-advisor-view="true" pgoals="pinPending" agoals="pinApproved" complete-goals="pinCompleted" sections="sections"></goalsgrid>
+    <div ng-show="pinPending.length === 0 && pinApproved.length === 0 && pinCompleted.length === 0 && pinnedGoalsLoaded" layout layout-align="center center">
+      There are no goals to show.
+      <md-tooltip>You can pin a student by clicking on the pin next to their name!</md-tooltip>
   </div>
+
+  </div>
+
 </div>
-s
+<div style="padding-left:20%; padding-right:20%;" layout="column" layout-align="center center" ng-show="!goalsLoaded ||!pinnedGoalsLoaded ">
+  <h3 flex="50">Loading...</h3>
+  <md-progress-linear md-mode="indeterminate" flex="50"></md-progress-linear>
+</div>
+</div>

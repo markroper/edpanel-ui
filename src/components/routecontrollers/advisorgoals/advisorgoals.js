@@ -13,6 +13,7 @@ angular.module('teacherdashboard')
       $scope.activeTeacher = false;
       $scope.teachersLoaded = false;
       $scope.goalsLoaded = false;
+      $scope.pinnedGoalsLoaded = false;
       $scope.newTeacher = false;
       var pinDeferred = $q.defer();
       $scope.pinnedPromise = pinDeferred.promise;
@@ -107,9 +108,9 @@ angular.module('teacherdashboard')
                 $scope.pinCompleted.push(data[i]);
               }
             }
-            pinnedPromise.resolve();
+            pinDeferred.resolve();
             $scope.newTeacher = true;
-            $scope.goalsLoaded = true;
+            $scope.pinnedGoalsLoaded = true;
           },
           //Error callback
           function(){
