@@ -13,6 +13,7 @@ angular.module('teacherdashboard')
         }
         $scope.d.editDashboard = !$scope.d.editDashboard;
       };
+      $scope.school = statebag.school;
       $scope.resolveQuarterlyExamResults = function() {
         if (!$scope.quarterlyExams) {
           $scope.quarterlyExams = {

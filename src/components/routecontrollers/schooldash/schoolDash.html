@@ -6,7 +6,8 @@
           <edpanel-row ng-repeat="row in dashboard.rows" row-contents="row" terms="terms" flex="100" layout="row" layout-wrap></edpanel-row>
         </md-content>
       </md-tab>
-      <md-tab label="Quarterly Exams" md-on-select="resolveQuarterlyExamResults()">
+      <md-tab label="Quarterly Exams" md-on-select="resolveQuarterlyExamResults()"
+              ng-disabled="!statebag.school || statebag.school.name != 'Excel Academy Charter High School'">
         <md-content class="md-padding settings">
           <div class="md-headline">Quarterly Interim Assessments</div>
           <edpanel-row ng-repeat="row in quarterlyExams.rows" row-contents="row" terms="terms" flex="100" layout="row" layout-wrap></edpanel-row>
