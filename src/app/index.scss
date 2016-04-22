@@ -180,10 +180,10 @@ span.name {
 }
 
 // injector
-@import '../components/directives/attendancetable/attendancetable.scss';
 @import '../components/directives/behaviorgraph/behaviorgraph.scss';
 @import '../components/directives/behaviortable/behaviortable.scss';
 @import '../components/directives/chorocalendar/chorocalendar.scss';
+@import '../components/directives/attendancetable/attendancetable.scss';
 @import '../components/directives/dashboard/createEditDashboard.scss';
 @import '../components/directives/dashboard/createEditReport.scss';
 @import '../components/directives/dashboard/edpanelReport.scss';
@@ -212,10 +212,10 @@ span.name {
 @import '../components/directives/teachersections/teacherSections.scss';
 @import '../components/routecontrollers/administration/administration.scss';
 @import '../components/routecontrollers/home/home.scss';
-@import '../components/routecontrollers/login/login.scss';
 @import '../components/routecontrollers/mysurveyresponses/mySurveyResponses.scss';
-@import '../components/routecontrollers/mysurveys/mySurveys.scss';
+@import '../components/routecontrollers/login/login.scss';
 @import '../components/routecontrollers/navinclude/navinclude.scss';
+@import '../components/routecontrollers/mysurveys/mySurveys.scss';
 @import '../components/routecontrollers/notificationmgmt/notificationmgmt.scss';
 @import '../components/routecontrollers/resetpassword/resetpassword.scss';
 @import '../components/routecontrollers/schooldash/schooldash.scss';
