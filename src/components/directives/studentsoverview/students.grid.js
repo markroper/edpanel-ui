@@ -271,6 +271,14 @@ angular.module('teacherdashboard')
           return true;
         };
 
+        $scope.showPin = function(student) {
+          student.highlighted = true;
+        };
+
+        $scope.hidePin = function(student) {
+          student.highlighted = false;
+        };
+
         //SORT RELATED
         $scope.setOrder = function(ev, keyToUse) {
           analytics.sendEvent(PAGENAME, analytics.STUDENT_SORT, keyToUse.toUpperCase());
