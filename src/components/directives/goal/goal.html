@@ -1,6 +1,6 @@
 <div class="goal">
-    <md-card style="max-width: 300px" class="student-goal">
-      <md-card-content>
+    <md-card style="max-width: 280px" class="student-goal">
+      <md-card-content style="padding-left: 0px;padding-right: 0px">
         <md-fab-speed-dial  md-open="demo.isOpen" md-direction="left" class="md-scale md-fab-top-right menu-button">
           <md-fab-trigger>
             <md-button ng-click="openVert()" ng-hide="!editable && userRole === 'Student'" aria-label="menu" class="goal-menu md-icon-button">
@@ -30,20 +30,20 @@
         <div layout="column" layout-align="center center">
           <div ng-show="advisorView" class="student-name" flex="85">{{goal.student.name}}</div>
           <div class="goal-title" flex="85">{{goal.name}}</div>
-          <div ng-show="goal.goalType != 'OPEN'" id="gauge-{{::goal.id}}-{{::goalIdSuffix}}" class="goal-gauge" style="height: 160px; width:268px;"></div>
+          <div ng-show="goal.goalType != 'OPEN'" id="gauge-{{::goal.id}}-{{::goalIdSuffix}}" class="goal-gauge" style="height: 160px; width:248px;"></div>
           <div ng-show="goal.goalType == 'OPEN'" layout='column' layout-align="center center" style="min-height:160px">
             <div style="font-size: 18px; margin-bottom: 20px" ng-show="!goal.editActive">{{goal.message}}</div>
             <div layout="column" ng-show="goal.editActive">
               <md-headline> What is your goal?</md-headline>
               <md-input-container>
-                <textarea ng-model="goal.message"rows="5" md-select-on-focus></textarea>
+                <textarea aria-label="What is your goal?" ng-model="goal.message"rows="5" md-select-on-focus></textarea>
               </md-input-container>
             </div>
           </div>
           <div layout="column" ng-show="goal.editActive">
             <md-headline ng-show="goal.goalType != 'OPEN'">Desired Value?</md-headline>
             <md-input-container class="woop-edit" ng-show="goal.goalType != 'OPEN'">
-              <input required name="Grade" type="number" step="1" ng-model="goal.desiredValue"
+              <input aria-label="Desired Value" required name="Grade" type="number" step="1" ng-model="goal.desiredValue"
                      max="100">
             </md-input-container>
           </div>
@@ -67,18 +67,18 @@
         <md-headline class="woop-heading">Plan</md-headline>
         <div class="woop-text" ng-show="!goal.editActive">{{goal.plan}}</div>
         <md-input-container class="woop-edit" ng-show="goal.editActive">
-          <textarea ng-model="goal.plan"rows="5" md-select-on-focus></textarea>
+          <textarea aria-label="Plan" ng-model="goal.plan"rows="5" md-select-on-focus></textarea>
         </md-input-container>
         <md-headline class="woop-heading">Obstacles</md-headline>
         <div class="woop-text" ng-show="!goal.editActive">{{goal.obstacles}}</div>
         <md-input-container class="woop-edit" ng-show="goal.editActive">
-          <textarea ng-model="goal.obstacles"rows="5" md-select-on-focus></textarea>
+          <textarea aria-label="Obstacles" ng-model="goal.obstacles"rows="5" md-select-on-focus></textarea>
         </md-input-container>
         <md-headline class="woop-heading">Outcome</md-headline>
         <div class="woop-text" ng-show="!goal.editActive">{{goal.outcome}}
         </div>
         <md-input-container class="woop-edit" ng-show="goal.editActive">
-          <textarea ng-model="goal.outcome"rows="5" md-select-on-focus></textarea>
+          <textarea aria-label="Outcome" ng-model="goal.outcome"rows="5" md-select-on-focus></textarea>
         </md-input-container>
         <div layout="row">
           <md-button ng-show="goal.editActive" ng-click="proposeEdit(goal)" aria-label="menu" class="md-fab md-primary md-raised md-mini">

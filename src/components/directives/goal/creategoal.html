@@ -11,7 +11,7 @@
             <md-headline flex>Select Goal Type</md-headline>
             <md-input-container flex class="md-block">
               <label>Goal Type</label>
-              <md-select required ng-model="goal.createType">
+              <md-select aria-label="Goal Type" required ng-model="goal.createType">
                 <md-option ng-repeat="type in goalTypes" value="{{type.uiName}}">
                   {{type.uiName}}
                 </md-option>
@@ -25,7 +25,7 @@
             <div layout="column" layout-align="start center">
               <md-headline flex>For what class?</md-headline>
               <md-input-container flex>
-                <md-select ng-required="goal.createType == 'Assignment'" ng-model="goal.class">
+                <md-select aria-label="Assignment Goal" ng-required="goal.createType == 'Assignment'" ng-model="goal.class">
                   <md-option  ng-repeat="section in sections" value="{{section.id}}">
                     {{section.course.name}}
                   </md-option>
@@ -58,7 +58,7 @@
             <div layout="column" layout-align="start center">
               <md-headline flex>What behavior category?</md-headline>
               <md-input-container flex>
-                <md-select ng-required="goal.createType == 'Behavior'" ng-model="goal.behaviorCat">
+                <md-select aria-label="What behavior category?" ng-required="goal.createType == 'Behavior'" ng-model="goal.behaviorCat">
                   <md-option ng-repeat="cat in behaviorCategories" value="{{cat.uiName}}">
                     {{cat.uiName}}
                   </md-option>
@@ -81,7 +81,7 @@
             <div layout="column" layout-align="start center">
               <md-headline flex>What class?</md-headline>
               <md-input-container flex>
-                <md-select ng-required="goal.createType == 'Class Grade'" ng-model="goal.class">
+                <md-select aria-label="Class Grade" ng-required="goal.createType == 'Class Grade'" ng-model="goal.class">
                   <md-option ng-repeat="section in sections" value="{{section.id}}">
                     {{section.course.name}}
                   </md-option>
@@ -93,8 +93,7 @@
             <div layout="column" layout-align="start center">
               <md-headline flex>What grade would you like to get?</md-headline>
               <md-input-container flex>
-                <input ng-required="goal.createType == 'Class Grade'" name="grade" type="number" min="0" step="1" ng-model="goal.desiredGrade"
-                       >
+                <input aria-label="What grade would you like to get?" ng-required="goal.createType == 'Class Grade'" name="grade" type="number" min="0" step="1" ng-model="goal.desiredGrade">
               </md-input-container>
             </div>
           </div>
@@ -106,7 +105,7 @@
                 <md-headline> What is your goal?</md-headline>
                 <md-input-container>
                   <label>Goal</label>
-                  <textarea ng-required="goal.createType == 'Other'" ng-model="goal.message"rows="5" md-select-on-focus></textarea>
+                  <textarea aria-label="What is your goal?" ng-required="goal.createType == 'Other'" ng-model="goal.message"rows="5" md-select-on-focus></textarea>
                 </md-input-container>
               </div>
             </div>

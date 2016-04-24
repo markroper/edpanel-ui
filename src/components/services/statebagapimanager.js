@@ -1,9 +1,17 @@
 'use strict';
 angular.module('teacherdashboard')
-.service('statebagApiManager', ['statebag', '$q', 'api', '$window', function(statebag, $q, api, $window){
+.service('statebagApiManager', ['statebag', '$q', 'api', '$window','$mdToast', function(statebag, $q, api, $window, mdToast){
   var DATE_FORMAT = 'YYYY-MM-DD';
   //Returns a promise
   return {
+    showSimpleToast: function(msg) {
+      mdToast.show(
+        mdToast.simple()
+          .content(msg)
+          .action('OK')
+          .hideDelay(2000)
+      );
+    },
     resolveCurrentYear: function() {
       var currentTime = new Date().getTime();
       for(var i = 0; i < statebag.school.years.length; i++) {

@@ -1,8 +1,16 @@
 <div class="student-detail">
 	<md-tabs ng-show="!sections.length < 1" md-center-tabs md-dynamic-height md-border-bottom class="tabs-header" md-selected="openTab">
-		<md-tab ng-click="logTabOpen('grades')" label="Grades">
+    <md-tab ng-click="logTabOpen('grades')" label="Grades">
 			<div class="tab-contents">
 				<div class="summary-row" layout="row" layout-align="center center" layout-wrap ng-cloak>
+          <md-button ng-show="!students[0].watched && userRole !== 'Student' && userRole !== 'Guardian'" class="md-fab md-primary md-raised md-mini" ng-click="createWatch()">
+            <md-icon md-svg-src="../../../assets/images/pin.svg"></md-icon>
+            <md-tooltip>Watch Student</md-tooltip>
+          </md-button>
+          <md-button ng-show="students[0].watched && userRole !== 'Student' && userRole !== 'Guardian'" class="md-fab md-primary md-raised md-mini" ng-click="deleteWatch()">
+            <md-icon md-svg-src="../../../assets/images/pin-off.svg"></md-icon>
+            <md-tooltip>Stop Watching Student</md-tooltip>
+          </md-button>
           <div ng-show="::settings.showGpa" class="gpa-summary grade-summary" layout="column" layout-align="center center">
             <div class="grade-summary-title md-body-1">GPA</div>
             <h2 class="grade-summary-grade md-headline">{{gpa.score || '--'}}</h2>

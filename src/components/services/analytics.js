@@ -43,8 +43,11 @@ angular.module('teacherdashboard')
       GOALS: 'Goals',
       SCHOOL_DASHBOARD: 'School Dashboard',
       SURVEYS: 'Survey',
+      PINNING: 'Pinning',
 
       //Actions
+      CREATE_PIN: 'Create Pin',
+      DELETE_PIN: 'Delete Pin',
       DASH_EDIT: 'Dash Edit',
       DASH_CHANGE_TERM: 'Change Term',
       DASH_CHANGE_BREAKDOWN: 'Change Breakdown',
@@ -104,6 +107,8 @@ angular.module('teacherdashboard')
       OPEN_STUDENT: 'Go to Student',
 
       //Labels below here
+      PIN_STUDENT_PAGE: 'Student Page',
+      PIN_STUDENT_LIST: 'Student List',
       FAILURE_LABEL: 'FAILURE',
       ATTENDANCE_LABEL: 'ATTENDANCE',
       BEHAVIOR_LABEL: 'BEHAVIOR',

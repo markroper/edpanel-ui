@@ -1,7 +1,7 @@
 'use strict';
 angular.module('teacherdashboard')
-  .directive('studentGrid', ['$state', 'statebag', 'api','$compile', '$timeout', 'analytics', 'consts','$window',
-  function($state, statebag, api, $compile, $timeout, analytics, consts, $window) {
+  .directive('studentGrid', ['$state', 'statebag', 'api','$compile', '$timeout', 'analytics', 'consts','$window','statebagApiManager','authentication',
+  function($state, statebag, api, $compile, $timeout, analytics, consts, $window, statebagApiManager, authentication) {
     return {
       scope: {
         studentsData: '=',
@@ -23,12 +23,14 @@ angular.module('teacherdashboard')
         var ABSENCES = 'Absences';
         var ELL = 'ELL';
         var SPED = 'SPED';
+        var PINNED = 'PINNED';
         var behaviorCalendarHtml = '<div flex="100" class="slidercontainer chorocontainer"><chorocalendar slide-closed="hideTray" calendar-data-promise="behaviorDataPromise"></chorocalendar></div>';
         var hwCompletionChartHtml = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" y-data-label="Homework Completion" key-to-x="weekEnding" key-to-y="score" date-time-data-promise="dateTimeDataPromise"></datetimechart></div>';
         var attendanceTableHtml = '<div flex="100" class="slidercontainer"><attendancetable slide-closed="hideTray" attendance-data-promise="attendanceDataPromise"></attendancetable></div>';
         var gpaChartTemplate = '<div flex="100" class="slidercontainer datetimechartcontainer"><datetimechart slide-closed="hideTray" y-data-label="GPA" key-to-x="calculationDate" key-to-y="score" date-time-data-promise="gpaDataPromise"></datetimechart></div>';
         //Use the name as the sort field for the list, to start
         $scope.order = 'name';
+        $scope.userRole = statebag.userRole;
         $scope.sortElement = null;
         if($scope.school) {
           $scope.settings = {
@@ -93,6 +95,43 @@ angular.module('teacherdashboard')
             );
           }
         }, true);
+
+        $scope.createWatch = function(student) {
+          api.createWatch.post(
+            { },
+            {
+              staff: {
+                "id": authentication.identity().id,
+                "type": statebag.userRole.toUpperCase() },
+              student: {
+                "id": student.id,
+                "type":'STUDENT'
+              }
+            },
+            function(data) {
+              analytics.sendEvent(analytics.PINNING, analytics.CREATE_PIN, analytics.PIN_STUDENT_LIST);
+              student.watched = true;
+              student.watchId = data.id;
+              statebagApiManager.showSimpleToast('You are now watching this student');
+            },
+            function() {
+              statebagApiManager.showSimpleToast('Error attempting to watch this student');
+
+            });
+
+        };
+        $scope.deleteWatch = function(student) {
+          api.deleteWatch.delete(
+            { watchId: student.watchId },
+            function(){
+              student.watched = false;
+              analytics.sendEvent(analytics.PINNING, analytics.DELETE_PIN, analytics.PIN_STUDENT_LIST);
+              statebagApiManager.showSimpleToast('You are no longer watching this student');
+            },
+            function(){
+              statebagApiManager.showSimpleToast('There was an error unwatching this student');
+        });
+        };
 
         //FILTER RELATED
         $scope.showfilters = false;
@@ -230,6 +269,14 @@ angular.module('teacherdashboard')
             return false;
           }
           return true;
+        };
+
+        $scope.showPin = function(student) {
+          student.highlighted = true;
+        };
+
+        $scope.hidePin = function(student) {
+          student.highlighted = false;
         };
 
         //SORT RELATED
