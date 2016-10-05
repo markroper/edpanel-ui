@@ -15,7 +15,7 @@ angular.module('teacherdashboard')
     resolveCurrentYear: function() {
       var currentTime = new Date().getTime();
       for(var i = 0; i < statebag.school.years.length; i++) {
-        if($window.moment(statebag.school.years[i].startDate).valueOf() <= currentTime ||
+        if($window.moment(statebag.school.years[i].startDate).valueOf() <= currentTime &&
           $window.moment(statebag.school.years[i].endDate).valueOf() >= currentTime) {
           return statebag.school.years[i];
         }
